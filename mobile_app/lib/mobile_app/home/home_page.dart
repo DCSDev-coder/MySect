@@ -25,16 +25,6 @@ class _HomePageState extends State<HomePage> {
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
 
-  // Mock tasks
-  final Map<DateTime, List<String>> _tasks = {
-    DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day): ['Review mockups', 'Team Meeting'],
-    DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day).add(const Duration(days: 1)): ['Submit expense report'],
-  };
-
-  List<String> _getTasksForDay(DateTime day) {
-    final normalizedDay = DateTime(day.year, day.month, day.day);
-    return _tasks[normalizedDay] ?? [];
-  }
 
   @override
   void initState() {
@@ -109,6 +99,184 @@ class _HomePageState extends State<HomePage> {
           Icon(Icons.chevron_right, color: Colors.blue.shade900),
         ],
       ),
+      ),
+    );
+  }
+
+  Widget _buildDeadlineCard({
+    required String month,
+    required String day,
+    required String title,
+    required String subtitle,
+    required String timeRemaining,
+    Color pillBgColor = const Color(0xFFFFF7A3),
+    Color pillTextColor = const Color(0xFFFF8A00),
+    VoidCallback? onTap,
+  }) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.08),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+        border: Border.all(color: Colors.grey.shade200),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Calendar Date Icon
+              Container(
+                width: 48,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: Colors.grey.shade200),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.05),
+                      blurRadius: 4,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(vertical: 4),
+                      decoration: const BoxDecoration(
+                        color: Color(0xFFD71920), // Red header
+                        borderRadius: BorderRadius.vertical(top: Radius.circular(8)),
+                      ),
+                      child: Text(
+                        month,
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.poppins(
+                          color: Colors.white,
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(vertical: 6),
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.vertical(bottom: Radius.circular(8)),
+                      ),
+                      child: Text(
+                        day,
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.poppins(
+                          color: Colors.black,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 12),
+              // Text Details
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: GoogleFonts.poppins(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      subtitle,
+                      style: GoogleFonts.poppins(
+                        fontSize: 12,
+                        color: Colors.black87,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Divider(color: Colors.grey.shade300, height: 1),
+          const SizedBox(height: 16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              // Pill
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                decoration: BoxDecoration(
+                  color: pillBgColor,
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                child: Row(
+                  children: [
+                    Container(
+                      width: 6,
+                      height: 6,
+                      decoration: BoxDecoration(
+                        color: pillTextColor,
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                    const SizedBox(width: 6),
+                    Text(
+                      timeRemaining,
+                      style: GoogleFonts.poppins(
+                        color: pillTextColor,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              // File Now ->
+              InkWell(
+                onTap: onTap,
+                borderRadius: BorderRadius.circular(4),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 4.0),
+                  child: Row(
+                    children: [
+                      Text(
+                        'File Now',
+                        style: GoogleFonts.poppins(
+                          color: const Color(0xFF006D67), // Teal
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                      const Icon(
+                        Icons.arrow_forward,
+                        color: Color(0xFF006D67),
+                        size: 18,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -281,7 +449,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  if (_selectedDay != null && _getTasksForDay(_selectedDay!).isNotEmpty)
+                  if (_selectedDay != null)
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: Column(
@@ -295,29 +463,40 @@ class _HomePageState extends State<HomePage> {
                               color: Colors.black,
                             ),
                           ),
-                          const SizedBox(height: 8),
-                          ..._getTasksForDay(_selectedDay!).map((task) => Container(
-                                margin: const EdgeInsets.only(bottom: 8),
-                                padding: const EdgeInsets.all(12),
-                                decoration: BoxDecoration(
-                                  color: Colors.grey.shade50,
-                                  borderRadius: BorderRadius.circular(12),
-                                  border: Border.all(color: Colors.grey.shade200),
+                          const SizedBox(height: 16),
+                          _buildDeadlineCard(
+                            month: 'NOV',
+                            day: '30',
+                            title: 'Complete Tax Return (C/C-s)',
+                            subtitle: 'Filling to IRAS for the year\nending 2025',
+                            timeRemaining: 'In 18 days',
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const DocumentNeededPage(),
                                 ),
-                                child: Row(
-                                  children: [
-                                    const Icon(Icons.check_circle_outline,
-                                        color: Color(0xFF062AAE), size: 20),
-                                    const SizedBox(width: 12),
-                                    Expanded(
-                                      child: Text(
-                                        task,
-                                        style: GoogleFonts.poppins(fontSize: 14),
-                                      ),
-                                    ),
-                                  ],
+                              );
+                            },
+                          ),
+                          const SizedBox(height: 16),
+                          _buildDeadlineCard(
+                            month: 'DEC',
+                            day: '15',
+                            title: 'Annual Return Submission',
+                            subtitle: 'Filing to ACRA for the year\nending 2024',
+                            timeRemaining: 'In 33 days',
+                            pillBgColor: const Color(0xFFE8F5E9),
+                            pillTextColor: const Color(0xFF2E7D32),
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const DocumentNeededPage(),
                                 ),
-                              )),
+                              );
+                            },
+                          ),
                         ],
                       ),
                     ),
