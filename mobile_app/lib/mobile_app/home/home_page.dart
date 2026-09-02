@@ -25,7 +25,6 @@ class _HomePageState extends State<HomePage> {
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
 
-
   @override
   void initState() {
     super.initState();
@@ -57,48 +56,51 @@ class _HomePageState extends State<HomePage> {
           border: Border.all(color: Colors.grey.shade300),
         ),
         child: Row(
-        children: [
-          Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              color: color.withValues(alpha: 0.2),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Center(
-              child: Text(
-                number,
-                style: GoogleFonts.poppins(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: color,
+          children: [
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: color.withValues(alpha: 0.2),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Center(
+                child: Text(
+                  number,
+                  style: GoogleFonts.poppins(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: color,
+                  ),
                 ),
               ),
             ),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: GoogleFonts.poppins(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black,
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: GoogleFonts.poppins(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black,
+                    ),
                   ),
-                ),
-                Text(
-                  subtitle,
-                  style: GoogleFonts.poppins(fontSize: 12, color: Colors.black),
-                ),
-              ],
+                  Text(
+                    subtitle,
+                    style: GoogleFonts.poppins(
+                      fontSize: 12,
+                      color: Colors.black,
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-          Icon(Icons.chevron_right, color: Colors.blue.shade900),
-        ],
-      ),
+            Icon(Icons.chevron_right, color: Colors.blue.shade900),
+          ],
+        ),
       ),
     );
   }
@@ -120,7 +122,7 @@ class _HomePageState extends State<HomePage> {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.08),
+            color: Colors.black.withValues(alpha: 0.08),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -141,7 +143,7 @@ class _HomePageState extends State<HomePage> {
                   border: Border.all(color: Colors.grey.shade200),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.05),
+                      color: Colors.black.withValues(alpha: 0.05),
                       blurRadius: 4,
                       offset: const Offset(0, 2),
                     ),
@@ -154,7 +156,9 @@ class _HomePageState extends State<HomePage> {
                       padding: const EdgeInsets.symmetric(vertical: 4),
                       decoration: const BoxDecoration(
                         color: Color(0xFFD71920), // Red header
-                        borderRadius: BorderRadius.vertical(top: Radius.circular(8)),
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(8),
+                        ),
                       ),
                       child: Text(
                         month,
@@ -171,7 +175,9 @@ class _HomePageState extends State<HomePage> {
                       padding: const EdgeInsets.symmetric(vertical: 6),
                       decoration: const BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.vertical(bottom: Radius.circular(8)),
+                        borderRadius: BorderRadius.vertical(
+                          bottom: Radius.circular(8),
+                        ),
                       ),
                       child: Text(
                         day,
@@ -221,7 +227,10 @@ class _HomePageState extends State<HomePage> {
             children: [
               // Pill
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 4,
+                ),
                 decoration: BoxDecoration(
                   color: pillBgColor,
                   borderRadius: BorderRadius.circular(6),
@@ -253,7 +262,10 @@ class _HomePageState extends State<HomePage> {
                 onTap: onTap,
                 borderRadius: BorderRadius.circular(4),
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 4.0),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 4.0,
+                    vertical: 4.0,
+                  ),
                   child: Row(
                     children: [
                       Text(
@@ -418,32 +430,38 @@ class _HomePageState extends State<HomePage> {
                   const SizedBox(height: 16),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: TableCalendar(
-                      firstDay: DateTime.utc(2020, 10, 16),
-                      lastDay: DateTime.utc(2030, 3, 14),
-                      focusedDay: _focusedDay,
-                      selectedDayPredicate: (day) {
-                        return isSameDay(_selectedDay, day);
-                      },
-                      onDaySelected: (selectedDay, focusedDay) {
-                        setState(() {
-                          _selectedDay = selectedDay;
-                          _focusedDay = focusedDay;
-                        });
-                      },
-                      calendarFormat: CalendarFormat.month,
-                      headerStyle: const HeaderStyle(
-                        formatButtonVisible: false,
-                        titleCentered: true,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey.shade300),
+                        borderRadius: BorderRadius.circular(16),
                       ),
-                      calendarStyle: const CalendarStyle(
-                        selectedDecoration: BoxDecoration(
-                          color: Color(0xFF062AAE),
-                          shape: BoxShape.circle,
+                      child: TableCalendar(
+                        firstDay: DateTime.utc(2020, 10, 16),
+                        lastDay: DateTime.utc(2030, 3, 14),
+                        focusedDay: _focusedDay,
+                        selectedDayPredicate: (day) {
+                          return isSameDay(_selectedDay, day);
+                        },
+                        onDaySelected: (selectedDay, focusedDay) {
+                          setState(() {
+                            _selectedDay = selectedDay;
+                            _focusedDay = focusedDay;
+                          });
+                        },
+                        calendarFormat: CalendarFormat.month,
+                        headerStyle: const HeaderStyle(
+                          formatButtonVisible: false,
+                          titleCentered: true,
                         ),
-                        todayDecoration: BoxDecoration(
-                          color: Colors.black26,
-                          shape: BoxShape.circle,
+                        calendarStyle: const CalendarStyle(
+                          selectedDecoration: BoxDecoration(
+                            color: Color(0xFF062AAE),
+                            shape: BoxShape.circle,
+                          ),
+                          todayDecoration: BoxDecoration(
+                            color: Colors.black26,
+                            shape: BoxShape.circle,
+                          ),
                         ),
                       ),
                     ),
@@ -468,13 +486,15 @@ class _HomePageState extends State<HomePage> {
                             month: 'NOV',
                             day: '30',
                             title: 'Complete Tax Return (C/C-s)',
-                            subtitle: 'Filling to IRAS for the year\nending 2025',
+                            subtitle:
+                                'Filling to IRAS for the year\nending 2025',
                             timeRemaining: 'In 18 days',
                             onTap: () {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const DocumentNeededPage(),
+                                  builder: (context) =>
+                                      const DocumentNeededPage(),
                                 ),
                               );
                             },
@@ -484,7 +504,8 @@ class _HomePageState extends State<HomePage> {
                             month: 'DEC',
                             day: '15',
                             title: 'Annual Return Submission',
-                            subtitle: 'Filing to ACRA for the year\nending 2024',
+                            subtitle:
+                                'Filing to ACRA for the year\nending 2024',
                             timeRemaining: 'In 33 days',
                             pillBgColor: const Color(0xFFE8F5E9),
                             pillTextColor: const Color(0xFF2E7D32),
@@ -492,7 +513,8 @@ class _HomePageState extends State<HomePage> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const DocumentNeededPage(),
+                                  builder: (context) =>
+                                      const DocumentNeededPage(),
                                 ),
                               );
                             },

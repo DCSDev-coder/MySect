@@ -11,6 +11,9 @@ import 'company_page.dart';
 import 'settings_page.dart';
 import 'logout_page.dart';
 import 'profile_page.dart';
+import 'ecommerce_integrations_page.dart';
+import 'mailbox_page.dart';
+import 'advisory_calls_page.dart';
 
 class MorePage extends StatelessWidget {
   const MorePage({super.key});
@@ -112,7 +115,12 @@ class MorePage extends StatelessWidget {
                           iconData: Icons.shopping_bag_outlined,
                           iconColor: Colors.black,
                           iconBgColor: Colors.grey.shade200,
-                          onTap: () {},
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const EcommerceIntegrationsPage(),
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -126,7 +134,12 @@ class MorePage extends StatelessWidget {
                           iconData: Icons.mail_outline,
                           iconColor: Colors.black,
                           iconBgColor: Colors.grey.shade200,
-                          onTap: () {},
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const MailboxPage(),
+                            ),
+                          ),
                         ),
                         _buildDivider(),
                         _buildMoreItem(
@@ -149,7 +162,12 @@ class MorePage extends StatelessWidget {
                           iconData: Icons.call_outlined,
                           iconColor: Colors.black,
                           iconBgColor: Colors.grey.shade200,
-                          onTap: () {},
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const AdvisoryCallsPage(),
+                            ),
+                          ),
                         ),
                         _buildDivider(),
                         _buildMoreItem(

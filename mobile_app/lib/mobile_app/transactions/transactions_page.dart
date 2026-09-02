@@ -104,7 +104,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
     );
   }
 
-  Widget _buildTransactionCard(Map<String, dynamic> transaction) {
+  Widget _buildTransactionCard(BuildContext context, Map<String, dynamic> transaction) {
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       padding: const EdgeInsets.all(16),
@@ -122,15 +122,24 @@ class _TransactionsPageState extends State<TransactionsPage> {
       child: Row(
         children: [
           Container(
-            padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
               color: Colors.blue.shade50,
               borderRadius: BorderRadius.circular(12),
             ),
-            child: Icon(
-              Icons.download_rounded,
-              color: Colors.blue.shade700,
-              size: 24,
+            child: IconButton(
+              icon: Icon(
+                Icons.download_rounded,
+                color: Colors.blue.shade700,
+                size: 24,
+              ),
+              onPressed: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Downloading receipt...', style: GoogleFonts.poppins()),
+                    backgroundColor: const Color(0xFF062AAE),
+                  ),
+                );
+              },
             ),
           ),
           const SizedBox(width: 16),
@@ -245,7 +254,17 @@ class _TransactionsPageState extends State<TransactionsPage> {
                               color: Colors.black,
                             ),
                           ),
-                          const Icon(Icons.tune, color: Colors.black),
+                          IconButton(
+                            icon: const Icon(Icons.tune, color: Colors.black),
+                            onPressed: () {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text('Advanced filters coming soon', style: GoogleFonts.poppins()),
+                                  backgroundColor: const Color(0xFF062AAE),
+                                ),
+                              );
+                            },
+                          ),
                         ],
                       ),
                     ),
@@ -446,7 +465,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
                           const SizedBox(height: 16),
 
                           ..._filteredTransactions.map(
-                            (t) => _buildTransactionCard(t),
+                            (t) => _buildTransactionCard(context, t),
                           ),
                           const SizedBox(height: 40),
                         ],

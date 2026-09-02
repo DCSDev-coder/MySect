@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import '../notifications/notifications_page.dart';
 import '../home/home_page.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:table_calendar/table_calendar.dart';
-import 'package:intl/intl.dart';
 import '../tasks/document_needed_page.dart';
 
 class CalendarPage extends StatefulWidget {
@@ -16,33 +14,6 @@ class CalendarPage extends StatefulWidget {
 class _CalendarPageState extends State<CalendarPage> {
   final int _selectedIndex = 4;
   String _selectedTab = 'Current';
-  DateTime _focusedDay = DateTime.now();
-  DateTime? _selectedDay;
-
-  final Map<DateTime, List<String>> _tasks = {
-    DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day): [
-      'Team Meeting at 10 AM',
-      'Review mockups',
-    ],
-    DateTime(
-      DateTime.now().year,
-      DateTime.now().month,
-      DateTime.now().day,
-    ).add(const Duration(days: 2)): [
-      'Submit expense report',
-    ],
-  };
-
-  List<String> _getTasksForDay(DateTime day) {
-    final normalizedDay = DateTime(day.year, day.month, day.day);
-    return _tasks[normalizedDay] ?? [];
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _selectedDay = _focusedDay;
-  }
 
   void _onItemTapped(int index) {
     if (index == _selectedIndex) return;
@@ -148,119 +119,76 @@ class _CalendarPageState extends State<CalendarPage> {
 
                     const SizedBox(height: 24),
 
-                    TableCalendar(
-                      firstDay: DateTime.utc(2020, 10, 16),
-                      lastDay: DateTime.utc(2030, 3, 14),
-                      focusedDay: _focusedDay,
-                      selectedDayPredicate: (day) {
-                        return isSameDay(_selectedDay, day);
-                      },
-                      onDaySelected: (selectedDay, focusedDay) {
-                        setState(() {
-                          _selectedDay = selectedDay;
-                          _focusedDay = focusedDay;
-                        });
-                      },
-                      calendarFormat: CalendarFormat.month,
-                      headerStyle: const HeaderStyle(
-                        formatButtonVisible: false,
-                        titleCentered: true,
-                      ),
-                      calendarStyle: const CalendarStyle(
-                        selectedDecoration: BoxDecoration(
-                          color: Color(0xFF062AAE),
-                          shape: BoxShape.circle,
-                        ),
-                        todayDecoration: BoxDecoration(
-                          color: Colors.black26,
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 24),
-                    _buildDeadlineCard(
-                      month: 'NOV',
-                      day: '30',
-                      title: 'Complete Tax Return (C/C-s)',
-                      subtitle: 'Filling to IRAS for the year\nending 2025',
-                      timeRemaining: 'In 18 days',
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const DocumentNeededPage(),
-                          ),
-                        );
-                      },
-                    ),
-                    const SizedBox(height: 16),
-                    _buildDeadlineCard(
-                      month: 'DEC',
-                      day: '15',
-                      title: 'Annual Return Submission',
-                      subtitle: 'Filing to ACRA for the year\nending 2024',
-                      timeRemaining: 'In 33 days',
-                      pillBgColor: const Color(0xFFE8F5E9),
-                      pillTextColor: const Color(0xFF2E7D32),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const DocumentNeededPage(),
-                          ),
-                        );
-                      },
-                    ),
-                    const SizedBox(height: 24),
-
-                    if (_selectedDay != null) ...[
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          'Tasks for ${DateFormat.yMMMd().format(_selectedDay!)}',
-                          style: GoogleFonts.poppins(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      ..._getTasksForDay(_selectedDay!)
-                          .map(
-                            (task) => Container(
-                              margin: const EdgeInsets.only(bottom: 12),
-                              padding: const EdgeInsets.all(16),
-                              decoration: BoxDecoration(
-                                color: Colors.grey.shade50,
-                                borderRadius: BorderRadius.circular(12),
-                                border: Border.all(color: Colors.grey.shade200),
-                              ),
-                              child: Row(
-                                children: [
-                                  const Icon(
-                                    Icons.check_circle_outline,
-                                    color: Color(0xFF062AAE),
-                                  ),
-                                  const SizedBox(width: 12),
-                                  Expanded(
-                                    child: Text(
-                                      task,
-                                      style: GoogleFonts.poppins(fontSize: 14),
-                                    ),
-                                  ),
-                                ],
-                              ),
+                    if (_selectedTab == 'Current') ...[
+                      _buildDeadlineCard(
+                        month: 'NOV',
+                        day: '30',
+                        title: 'Complete Tax Return (C/C-s)',
+                        subtitle: 'Filling to IRAS for the year\nending 2025',
+                        timeRemaining: 'In 18 days',
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const DocumentNeededPage(),
                             ),
-                          )
-                          .toList(),
-                      if (_getTasksForDay(_selectedDay!).isEmpty)
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 24),
-                          child: Text(
-                            'No tasks for today',
-                            style: GoogleFonts.poppins(color: Colors.grey),
-                          ),
-                        ),
+                          );
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      _buildDeadlineCard(
+                        month: 'DEC',
+                        day: '15',
+                        title: 'Annual Return Submission',
+                        subtitle: 'Filing to ACRA for the year\nending 2024',
+                        timeRemaining: 'In 33 days',
+                        pillBgColor: const Color(0xFFE8F5E9),
+                        pillTextColor: const Color(0xFF2E7D32),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const DocumentNeededPage(),
+                            ),
+                          );
+                        },
+                      ),
+                    ] else if (_selectedTab == 'Past') ...[
+                      _buildDeadlineCard(
+                        month: 'OCT',
+                        day: '15',
+                        title: 'Q3 GST Return',
+                        subtitle: 'Filing to IRAS for Q3 2024',
+                        timeRemaining: 'Completed',
+                        pillBgColor: Colors.grey.shade200,
+                        pillTextColor: Colors.grey.shade700,
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const DocumentNeededPage(),
+                            ),
+                          );
+                        },
+                      ),
+                    ] else if (_selectedTab == 'Upcoming') ...[
+                      _buildDeadlineCard(
+                        month: 'JAN',
+                        day: '31',
+                        title: 'Q4 GST Return',
+                        subtitle: 'Filing to IRAS for Q4 2024',
+                        timeRemaining: 'In 80 days',
+                        pillBgColor: const Color(0xFFE3F2FD),
+                        pillTextColor: const Color(0xFF1565C0),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const DocumentNeededPage(),
+                            ),
+                          );
+                        },
+                      ),
                     ],
 
                     const SizedBox(height: 40),
@@ -320,24 +248,6 @@ class _CalendarPageState extends State<CalendarPage> {
       onTap: () {
         setState(() {
           _selectedTab = title;
-          if (title == 'Current') {
-            _focusedDay = DateTime.now();
-            _selectedDay = _focusedDay;
-          } else if (title == 'Past') {
-            _focusedDay = DateTime(
-              DateTime.now().year,
-              DateTime.now().month - 1,
-              1,
-            );
-            _selectedDay = null;
-          } else if (title == 'Upcoming') {
-            _focusedDay = DateTime(
-              DateTime.now().year,
-              DateTime.now().month + 1,
-              1,
-            );
-            _selectedDay = null;
-          }
         });
       },
       child: Container(

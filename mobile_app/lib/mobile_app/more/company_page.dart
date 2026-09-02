@@ -3,6 +3,9 @@ import '../notifications/notifications_page.dart';
 import '../home/home_page.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'calendar_page.dart';
+import 'company_shares_page.dart';
+import 'company_documents_page.dart';
 
 class CompanyPage extends StatefulWidget {
   const CompanyPage({super.key});
@@ -121,19 +124,40 @@ class _CompanyPageState extends State<CompanyPage> {
                           _buildQuickLinkItem(
                             icon: Icons.calendar_today_outlined,
                             title: 'Calendar',
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const CalendarPage(),
+                                ),
+                              );
+                            },
                           ),
                           Divider(color: Colors.grey.shade200, height: 1),
                           _buildQuickLinkItem(
                             icon: Icons.pie_chart_outline,
                             title: 'Shares',
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const CompanySharesPage(),
+                                ),
+                              );
+                            },
                           ),
                           Divider(color: Colors.grey.shade200, height: 1),
                           _buildQuickLinkItem(
                             icon: Icons.folder_outlined,
                             title: 'Documents',
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const CompanyDocumentsPage(),
+                                ),
+                              );
+                            },
                           ),
                         ],
                       ),
