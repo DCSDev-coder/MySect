@@ -260,7 +260,7 @@ class MorePage extends StatelessWidget {
               radius: 28,
               backgroundColor: Colors.indigo.shade50,
               child: Text(
-                'JD',
+                'EM',
                 style: GoogleFonts.poppins(
                   color: Colors.indigo.shade700,
                   fontSize: 20,
