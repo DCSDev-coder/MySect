@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:table_calendar/table_calendar.dart';
+import 'package:intl/intl.dart';
 import '../notifications/notifications_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../transactions/transactions_page.dart';
@@ -20,11 +22,25 @@ class _HomePageState extends State<HomePage> {
   late int _selectedIndex;
   String _selectedCompany = 'Data Center Specialists Sdn Bhd (M)';
   bool _isDropdownOpen = false;
+  DateTime _focusedDay = DateTime.now();
+  DateTime? _selectedDay;
+
+  // Mock tasks
+  final Map<DateTime, List<String>> _tasks = {
+    DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day): ['Review mockups', 'Team Meeting'],
+    DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day).add(const Duration(days: 1)): ['Submit expense report'],
+  };
+
+  List<String> _getTasksForDay(DateTime day) {
+    final normalizedDay = DateTime(day.year, day.month, day.day);
+    return _tasks[normalizedDay] ?? [];
+  }
 
   @override
   void initState() {
     super.initState();
     _selectedIndex = widget.initialIndex;
+    _selectedDay = _focusedDay;
   }
 
   final List<String> _companies = [
@@ -233,14 +249,78 @@ class _HomePageState extends State<HomePage> {
                   ),
                   const SizedBox(height: 16),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 100.0),
-                    child: Center(
-                      child: Image.asset(
-                        'assets/dateline.png',
-                        fit: BoxFit.contain,
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: TableCalendar(
+                      firstDay: DateTime.utc(2020, 10, 16),
+                      lastDay: DateTime.utc(2030, 3, 14),
+                      focusedDay: _focusedDay,
+                      selectedDayPredicate: (day) {
+                        return isSameDay(_selectedDay, day);
+                      },
+                      onDaySelected: (selectedDay, focusedDay) {
+                        setState(() {
+                          _selectedDay = selectedDay;
+                          _focusedDay = focusedDay;
+                        });
+                      },
+                      calendarFormat: CalendarFormat.month,
+                      headerStyle: const HeaderStyle(
+                        formatButtonVisible: false,
+                        titleCentered: true,
+                      ),
+                      calendarStyle: const CalendarStyle(
+                        selectedDecoration: BoxDecoration(
+                          color: Color(0xFF062AAE),
+                          shape: BoxShape.circle,
+                        ),
+                        todayDecoration: BoxDecoration(
+                          color: Colors.black26,
+                          shape: BoxShape.circle,
+                        ),
                       ),
                     ),
                   ),
+                  const SizedBox(height: 16),
+                  if (_selectedDay != null && _getTasksForDay(_selectedDay!).isNotEmpty)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Tasks for ${DateFormat.yMMMd().format(_selectedDay!)}',
+                            style: GoogleFonts.poppins(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          ..._getTasksForDay(_selectedDay!).map((task) => Container(
+                                margin: const EdgeInsets.only(bottom: 8),
+                                padding: const EdgeInsets.all(12),
+                                decoration: BoxDecoration(
+                                  color: Colors.grey.shade50,
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(color: Colors.grey.shade200),
+                                ),
+                                child: Row(
+                                  children: [
+                                    const Icon(Icons.check_circle_outline,
+                                        color: Color(0xFF062AAE), size: 20),
+                                    const SizedBox(width: 12),
+                                    Expanded(
+                                      child: Text(
+                                        task,
+                                        style: GoogleFonts.poppins(fontSize: 14),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              )),
+                        ],
+                      ),
+                    ),
                   const SizedBox(height: 24),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),

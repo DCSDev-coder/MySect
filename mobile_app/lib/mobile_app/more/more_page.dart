@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../notifications/notifications_page.dart';
 import 'invoices_page.dart';
 import 'report_page.dart';
 import 'calendar_page.dart';
@@ -20,6 +21,38 @@ class MorePage extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
+            Padding(
+              padding: const EdgeInsets.only(
+                left: 16.0,
+                top: 16.0,
+                right: 16.0,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Image.asset(
+                    'assets/YourSectComp.png',
+                    width: 150,
+                    fit: BoxFit.contain,
+                  ),
+                  IconButton(
+                    icon: const Icon(
+                      Icons.notifications_none,
+                      color: Colors.black,
+                      size: 28,
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const NotificationsPage(),
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ),
             _buildProfileHeader(),
             Expanded(
               child: SingleChildScrollView(
@@ -112,7 +145,7 @@ class MorePage extends StatelessWidget {
                             ),
                             child: Text(
                               'EARN \$200',
-                              style: GoogleFonts.inter(
+                              style: GoogleFonts.poppins(
                                 fontSize: 10,
                                 fontWeight: FontWeight.w700,
                                 color: Colors.green.shade600,
@@ -169,7 +202,7 @@ class MorePage extends StatelessWidget {
 
   Widget _buildProfileHeader() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(24, 24, 24, 16),
+      padding: const EdgeInsets.fromLTRB(24, 8, 24, 16),
       child: Row(
         children: [
           CircleAvatar(
@@ -177,7 +210,7 @@ class MorePage extends StatelessWidget {
             backgroundColor: Colors.indigo.shade50,
             child: Text(
               'JD',
-              style: GoogleFonts.inter(
+              style: GoogleFonts.poppins(
                 color: Colors.indigo.shade700,
                 fontSize: 20,
                 fontWeight: FontWeight.w600,
@@ -191,7 +224,7 @@ class MorePage extends StatelessWidget {
               children: [
                 Text(
                   'John Doe',
-                  style: GoogleFonts.inter(
+                  style: GoogleFonts.poppins(
                     fontSize: 20,
                     fontWeight: FontWeight.w600,
                     color: Colors.black87,
@@ -199,7 +232,7 @@ class MorePage extends StatelessWidget {
                 ),
                 Text(
                   'Personal Account • Active',
-                  style: GoogleFonts.inter(
+                  style: GoogleFonts.poppins(
                     fontSize: 14,
                     color: Colors.grey.shade600,
                   ),
@@ -225,7 +258,7 @@ class MorePage extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8.0),
       child: Text(
         title,
-        style: GoogleFonts.inter(
+        style: GoogleFonts.poppins(
           fontSize: 13,
           fontWeight: FontWeight.w600,
           color: Colors.grey.shade600,
@@ -289,7 +322,7 @@ class MorePage extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: GoogleFonts.inter(
+                    style: GoogleFonts.poppins(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
                       color: isDestructive ? Colors.red : Colors.black87,

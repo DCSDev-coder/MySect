@@ -272,26 +272,34 @@ class _CalendarPageState extends State<CalendarPage> {
       onTap: () {
         setState(() {
           _selectedTab = title;
+          if (title == 'Current') {
+            _focusedDay = DateTime.now();
+            _selectedDay = _focusedDay;
+          } else if (title == 'Past') {
+            _focusedDay = DateTime(DateTime.now().year, DateTime.now().month - 1, 1);
+            _selectedDay = null;
+          } else if (title == 'Upcoming') {
+            _focusedDay = DateTime(DateTime.now().year, DateTime.now().month + 1, 1);
+            _selectedDay = null;
+          }
         });
       },
       child: Container(
         alignment: Alignment.center,
         decoration: BoxDecoration(
           color: isSelected
-              ? Colors.transparent
-              : Colors.transparent, // They all look transparent in UI
+              ? const Color(0xFF062AAE)
+              : Colors.transparent,
           borderRadius: BorderRadius.horizontal(
-            left: title == 'Current' ? const Radius.circular(25) : Radius.zero,
-            right: title == 'Upcoming'
-                ? const Radius.circular(25)
-                : Radius.zero,
+            left: title == 'Current' ? const Radius.circular(23) : Radius.zero,
+            right: title == 'Upcoming' ? const Radius.circular(23) : Radius.zero,
           ),
         ),
         child: Text(
           title,
           style: GoogleFonts.poppins(
-            color: Colors.black,
-            fontWeight: FontWeight.w600,
+            color: isSelected ? Colors.white : Colors.black,
+            fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
             fontSize: 14,
           ),
         ),
