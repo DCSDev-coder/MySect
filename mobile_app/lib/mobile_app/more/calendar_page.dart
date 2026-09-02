@@ -18,10 +18,18 @@ class _CalendarPageState extends State<CalendarPage> {
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
 
-  // Mock tasks
   final Map<DateTime, List<String>> _tasks = {
-    DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day): ['Team Meeting at 10 AM', 'Review mockups'],
-    DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day).add(const Duration(days: 2)): ['Submit expense report'],
+    DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day): [
+      'Team Meeting at 10 AM',
+      'Review mockups',
+    ],
+    DateTime(
+      DateTime.now().year,
+      DateTime.now().month,
+      DateTime.now().day,
+    ).add(const Duration(days: 2)): [
+      'Submit expense report',
+    ],
   };
 
   List<String> _getTasksForDay(DateTime day) {
@@ -183,28 +191,34 @@ class _CalendarPageState extends State<CalendarPage> {
                         ),
                       ),
                       const SizedBox(height: 12),
-                      ..._getTasksForDay(_selectedDay!).map((task) => Container(
-                            margin: const EdgeInsets.only(bottom: 12),
-                            padding: const EdgeInsets.all(16),
-                            decoration: BoxDecoration(
-                              color: Colors.grey.shade50,
-                              borderRadius: BorderRadius.circular(12),
-                              border: Border.all(color: Colors.grey.shade200),
-                            ),
-                            child: Row(
-                              children: [
-                                const Icon(Icons.check_circle_outline,
-                                    color: Color(0xFF062AAE)),
-                                const SizedBox(width: 12),
-                                Expanded(
-                                  child: Text(
-                                    task,
-                                    style: GoogleFonts.poppins(fontSize: 14),
+                      ..._getTasksForDay(_selectedDay!)
+                          .map(
+                            (task) => Container(
+                              margin: const EdgeInsets.only(bottom: 12),
+                              padding: const EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                color: Colors.grey.shade50,
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(color: Colors.grey.shade200),
+                              ),
+                              child: Row(
+                                children: [
+                                  const Icon(
+                                    Icons.check_circle_outline,
+                                    color: Color(0xFF062AAE),
                                   ),
-                                ),
-                              ],
+                                  const SizedBox(width: 12),
+                                  Expanded(
+                                    child: Text(
+                                      task,
+                                      style: GoogleFonts.poppins(fontSize: 14),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                          )).toList(),
+                          )
+                          .toList(),
                       if (_getTasksForDay(_selectedDay!).isEmpty)
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 24),
@@ -276,10 +290,18 @@ class _CalendarPageState extends State<CalendarPage> {
             _focusedDay = DateTime.now();
             _selectedDay = _focusedDay;
           } else if (title == 'Past') {
-            _focusedDay = DateTime(DateTime.now().year, DateTime.now().month - 1, 1);
+            _focusedDay = DateTime(
+              DateTime.now().year,
+              DateTime.now().month - 1,
+              1,
+            );
             _selectedDay = null;
           } else if (title == 'Upcoming') {
-            _focusedDay = DateTime(DateTime.now().year, DateTime.now().month + 1, 1);
+            _focusedDay = DateTime(
+              DateTime.now().year,
+              DateTime.now().month + 1,
+              1,
+            );
             _selectedDay = null;
           }
         });
@@ -287,12 +309,12 @@ class _CalendarPageState extends State<CalendarPage> {
       child: Container(
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: isSelected
-              ? const Color(0xFF062AAE)
-              : Colors.transparent,
+          color: isSelected ? const Color(0xFF062AAE) : Colors.transparent,
           borderRadius: BorderRadius.horizontal(
             left: title == 'Current' ? const Radius.circular(23) : Radius.zero,
-            right: title == 'Upcoming' ? const Radius.circular(23) : Radius.zero,
+            right: title == 'Upcoming'
+                ? const Radius.circular(23)
+                : Radius.zero,
           ),
         ),
         child: Text(

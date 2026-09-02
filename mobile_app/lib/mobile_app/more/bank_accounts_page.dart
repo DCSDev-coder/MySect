@@ -193,7 +193,6 @@ class _BankAccountsPageState extends State<BankAccountsPage> {
                     ),
                     const SizedBox(height: 32),
 
-                    // Bank Account Card
                     Container(
                       padding: const EdgeInsets.all(20),
                       decoration: BoxDecoration(
