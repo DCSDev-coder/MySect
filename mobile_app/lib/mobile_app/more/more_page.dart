@@ -10,6 +10,7 @@ import 'referral_page.dart';
 import 'company_page.dart';
 import 'settings_page.dart';
 import 'logout_page.dart';
+import 'profile_page.dart';
 
 class MorePage extends StatelessWidget {
   const MorePage({super.key});
@@ -53,7 +54,7 @@ class MorePage extends StatelessWidget {
                 ],
               ),
             ),
-            _buildProfileHeader(),
+            _buildProfileHeader(context),
             Expanded(
               child: SingleChildScrollView(
                 child: Column(
@@ -69,7 +70,12 @@ class MorePage extends StatelessWidget {
                           iconData: Icons.description_outlined,
                           iconColor: Colors.blue,
                           iconBgColor: Colors.blue.shade50,
-                          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const InvoicesPage())),
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const InvoicesPage(),
+                            ),
+                          ),
                         ),
                         _buildDivider(),
                         _buildMoreItem(
@@ -78,7 +84,12 @@ class MorePage extends StatelessWidget {
                           iconData: Icons.bar_chart,
                           iconColor: Colors.green,
                           iconBgColor: Colors.green.shade50,
-                          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const ReportPage())),
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const ReportPage(),
+                            ),
+                          ),
                         ),
                         _buildDivider(),
                         _buildMoreItem(
@@ -87,7 +98,12 @@ class MorePage extends StatelessWidget {
                           iconData: Icons.credit_card_outlined,
                           iconColor: Colors.orange,
                           iconBgColor: Colors.orange.shade50,
-                          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const BankAccountsPage())),
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const BankAccountsPage(),
+                            ),
+                          ),
                         ),
                         _buildDivider(),
                         _buildMoreItem(
@@ -119,7 +135,12 @@ class MorePage extends StatelessWidget {
                           iconData: Icons.calendar_today_outlined,
                           iconColor: Colors.purple,
                           iconBgColor: Colors.purple.shade50,
-                          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const CalendarPage())),
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const CalendarPage(),
+                            ),
+                          ),
                         ),
                         _buildDivider(),
                         _buildMoreItem(
@@ -138,7 +159,10 @@ class MorePage extends StatelessWidget {
                           iconColor: Colors.pink,
                           iconBgColor: Colors.pink.shade50,
                           trailing: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 4,
+                            ),
                             decoration: BoxDecoration(
                               color: Colors.green.shade50,
                               borderRadius: BorderRadius.circular(12),
@@ -152,7 +176,12 @@ class MorePage extends StatelessWidget {
                               ),
                             ),
                           ),
-                          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const ReferralPage())),
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const ReferralPage(),
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -166,7 +195,12 @@ class MorePage extends StatelessWidget {
                           iconData: Icons.business_center_outlined,
                           iconColor: Colors.indigo,
                           iconBgColor: Colors.indigo.shade50,
-                          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const CompanyPage())),
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const CompanyPage(),
+                            ),
+                          ),
                         ),
                         _buildDivider(),
                         _buildMoreItem(
@@ -175,7 +209,12 @@ class MorePage extends StatelessWidget {
                           iconData: Icons.settings_outlined,
                           iconColor: Colors.grey.shade700,
                           iconBgColor: Colors.grey.shade200,
-                          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const SettingsPage())),
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const SettingsPage(),
+                            ),
+                          ),
                         ),
                         _buildDivider(),
                         _buildMoreItem(
@@ -185,7 +224,12 @@ class MorePage extends StatelessWidget {
                           iconColor: Colors.red,
                           iconBgColor: Colors.red.shade50,
                           isDestructive: true,
-                          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LogoutPage())),
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const LogoutPage(),
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -200,55 +244,67 @@ class MorePage extends StatelessWidget {
     );
   }
 
-  Widget _buildProfileHeader() {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(24, 8, 24, 16),
-      child: Row(
-        children: [
-          CircleAvatar(
-            radius: 28,
-            backgroundColor: Colors.indigo.shade50,
-            child: Text(
-              'JD',
-              style: GoogleFonts.poppins(
-                color: Colors.indigo.shade700,
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
+  Widget _buildProfileHeader(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const ProfilePage()),
+        );
+      },
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(24, 8, 24, 16),
+        child: Row(
+          children: [
+            CircleAvatar(
+              radius: 28,
+              backgroundColor: Colors.indigo.shade50,
+              child: Text(
+                'JD',
+                style: GoogleFonts.poppins(
+                  color: Colors.indigo.shade700,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'John Doe',
-                  style: GoogleFonts.poppins(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black87,
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Elly Melissa',
+                    style: GoogleFonts.poppins(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black87,
+                    ),
                   ),
-                ),
-                Text(
-                  'Personal Account • Active',
-                  style: GoogleFonts.poppins(
-                    fontSize: 14,
-                    color: Colors.grey.shade600,
+                  Text(
+                    'Personal Account • Active',
+                    style: GoogleFonts.poppins(
+                      fontSize: 14,
+                      color: Colors.grey.shade600,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          Container(
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: Colors.grey.shade200,
-              shape: BoxShape.circle,
+            Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: Colors.grey.shade200,
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(
+                Icons.qr_code_scanner,
+                color: Colors.black87,
+                size: 24,
+              ),
             ),
-            child: const Icon(Icons.qr_code_scanner, color: Colors.black87, size: 24),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -275,9 +331,7 @@ class MorePage extends StatelessWidget {
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
       ),
-      child: Column(
-        children: children,
-      ),
+      child: Column(children: children),
     );
   }
 
@@ -312,9 +366,7 @@ class MorePage extends StatelessWidget {
                 color: iconBgColor,
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: Center(
-                child: Icon(iconData, color: iconColor, size: 22),
-              ),
+              child: Center(child: Icon(iconData, color: iconColor, size: 22)),
             ),
             const SizedBox(width: 16),
             Expanded(
@@ -331,7 +383,7 @@ class MorePage extends StatelessWidget {
                   if (trailing != null) ...[
                     const SizedBox(width: 12),
                     trailing,
-                  ]
+                  ],
                 ],
               ),
             ),

@@ -44,7 +44,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
     },
     {
       'title': 'CLIENT PAYMENT',
-      'subtitle': 'John Doe',
+      'subtitle': 'Mira',
       'amount': '+RM150.00',
       'account': 'OCBC SGD-9001',
       'type': 'Income',

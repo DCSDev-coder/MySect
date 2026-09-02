@@ -74,7 +74,7 @@ class _SignupPageState extends State<SignupPage> {
                     const SizedBox(height: 8),
                     TextField(
                       decoration: InputDecoration(
-                        hintText: 'John Doe',
+                        hintText: 'Elly Melissa',
                         hintStyle: GoogleFonts.poppins(color: Colors.grey[400]),
                         prefixIcon: Icon(
                           Icons.person_outline,
