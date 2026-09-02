@@ -54,12 +54,12 @@ class MorePage extends StatelessWidget {
                 ],
               ),
             ),
-            _buildProfileHeader(context),
             Expanded(
               child: SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    _buildProfileHeader(context),
                     const SizedBox(height: 16),
                     _buildSectionHeader('FINANCIAL TOOLS'),
                     _buildSectionContainer(
@@ -68,8 +68,8 @@ class MorePage extends StatelessWidget {
                           context: context,
                           title: 'Invoices',
                           iconData: Icons.description_outlined,
-                          iconColor: Colors.blue,
-                          iconBgColor: Colors.blue.shade50,
+                          iconColor: Colors.black,
+                          iconBgColor: Colors.grey.shade200,
                           onTap: () => Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -82,8 +82,8 @@ class MorePage extends StatelessWidget {
                           context: context,
                           title: 'Reports',
                           iconData: Icons.bar_chart,
-                          iconColor: Colors.green,
-                          iconBgColor: Colors.green.shade50,
+                          iconColor: Colors.black,
+                          iconBgColor: Colors.grey.shade200,
                           onTap: () => Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -96,8 +96,8 @@ class MorePage extends StatelessWidget {
                           context: context,
                           title: 'Bank accounts',
                           iconData: Icons.credit_card_outlined,
-                          iconColor: Colors.orange,
-                          iconBgColor: Colors.orange.shade50,
+                          iconColor: Colors.black,
+                          iconBgColor: Colors.grey.shade200,
                           onTap: () => Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -110,8 +110,8 @@ class MorePage extends StatelessWidget {
                           context: context,
                           title: 'E-commerce integrations',
                           iconData: Icons.shopping_bag_outlined,
-                          iconColor: Colors.purple,
-                          iconBgColor: Colors.purple.shade50,
+                          iconColor: Colors.black,
+                          iconBgColor: Colors.grey.shade200,
                           onTap: () {},
                         ),
                       ],
@@ -124,8 +124,8 @@ class MorePage extends StatelessWidget {
                           context: context,
                           title: 'Mailbox',
                           iconData: Icons.mail_outline,
-                          iconColor: Colors.teal,
-                          iconBgColor: Colors.teal.shade50,
+                          iconColor: Colors.black,
+                          iconBgColor: Colors.grey.shade200,
                           onTap: () {},
                         ),
                         _buildDivider(),
@@ -133,8 +133,8 @@ class MorePage extends StatelessWidget {
                           context: context,
                           title: 'Calendar',
                           iconData: Icons.calendar_today_outlined,
-                          iconColor: Colors.purple,
-                          iconBgColor: Colors.purple.shade50,
+                          iconColor: Colors.black,
+                          iconBgColor: Colors.grey.shade200,
                           onTap: () => Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -147,8 +147,8 @@ class MorePage extends StatelessWidget {
                           context: context,
                           title: 'Advisory calls',
                           iconData: Icons.call_outlined,
-                          iconColor: Colors.blue,
-                          iconBgColor: Colors.blue.shade50,
+                          iconColor: Colors.black,
+                          iconBgColor: Colors.grey.shade200,
                           onTap: () {},
                         ),
                         _buildDivider(),
@@ -156,8 +156,8 @@ class MorePage extends StatelessWidget {
                           context: context,
                           title: 'Referrals',
                           iconData: Icons.card_giftcard_outlined,
-                          iconColor: Colors.pink,
-                          iconBgColor: Colors.pink.shade50,
+                          iconColor: Colors.black,
+                          iconBgColor: Colors.grey.shade200,
                           trailing: Container(
                             padding: const EdgeInsets.symmetric(
                               horizontal: 8,
@@ -193,8 +193,8 @@ class MorePage extends StatelessWidget {
                           context: context,
                           title: 'Company',
                           iconData: Icons.business_center_outlined,
-                          iconColor: Colors.indigo,
-                          iconBgColor: Colors.indigo.shade50,
+                          iconColor: Colors.black,
+                          iconBgColor: Colors.grey.shade200,
                           onTap: () => Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -207,7 +207,7 @@ class MorePage extends StatelessWidget {
                           context: context,
                           title: 'Settings',
                           iconData: Icons.settings_outlined,
-                          iconColor: Colors.grey.shade700,
+                          iconColor: Colors.black,
                           iconBgColor: Colors.grey.shade200,
                           onTap: () => Navigator.push(
                             context,
