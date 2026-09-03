@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class NotificationsPage extends StatelessWidget {
+class NotificationsPage extends StatefulWidget {
   const NotificationsPage({super.key});
+
+  @override
+  State<NotificationsPage> createState() => _NotificationsPageState();
+}
+
+class _NotificationsPageState extends State<NotificationsPage> {
+  bool _hasUnread = true;
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +68,12 @@ class NotificationsPage extends StatelessWidget {
                         ),
                         const Spacer(),
                         TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            setState(() {
+                              _hasUnread = false;
+                            });
+                          },
+                          focusNode: FocusNode(canRequestFocus: false),
                           child: Text(
                             'Mark all as read',
                             style: GoogleFonts.poppins(
@@ -87,7 +99,14 @@ class NotificationsPage extends StatelessWidget {
                           message:
                               'Please upload the latest bank statement for FY2026.',
                           time: '2 hours ago',
-                          isUnread: true,
+                          isUnread: _hasUnread,
+                          onTap: () {
+                            if (_hasUnread) {
+                              setState(() {
+                                _hasUnread = false;
+                              });
+                            }
+                          },
                         ),
                         _buildNotificationItem(
                           icon: Icons.check_circle_outline,
@@ -126,8 +145,11 @@ class NotificationsPage extends StatelessWidget {
     required String message,
     required String time,
     required bool isUnread,
+    VoidCallback? onTap,
   }) {
-    return Container(
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -201,6 +223,7 @@ class NotificationsPage extends StatelessWidget {
             ),
           ),
         ],
+      ),
       ),
     );
   }

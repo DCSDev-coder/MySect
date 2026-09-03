@@ -121,8 +121,8 @@ class _CalendarPageState extends State<CalendarPage> {
 
                     if (_selectedTab == 'Current') ...[
                       _buildDeadlineCard(
-                        month: 'NOV',
-                        day: '30',
+                        month: 'AUG',
+                        day: '3',
                         title: 'Complete Tax Return (C/C-s)',
                         subtitle: 'Filling to IRAS for the year\nending 2025',
                         timeRemaining: 'In 18 days',
@@ -137,8 +137,8 @@ class _CalendarPageState extends State<CalendarPage> {
                       ),
                       const SizedBox(height: 16),
                       _buildDeadlineCard(
-                        month: 'DEC',
-                        day: '15',
+                        month: 'AUG',
+                        day: '3',
                         title: 'Annual Return Submission',
                         subtitle: 'Filing to ACRA for the year\nending 2024',
                         timeRemaining: 'In 33 days',

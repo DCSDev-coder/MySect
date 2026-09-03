@@ -483,8 +483,8 @@ class _HomePageState extends State<HomePage> {
                           ),
                           const SizedBox(height: 16),
                           _buildDeadlineCard(
-                            month: 'NOV',
-                            day: '30',
+                            month: 'AUG',
+                            day: '3',
                             title: 'Complete Tax Return (C/C-s)',
                             subtitle:
                                 'Filling to IRAS for the year\nending 2025',
@@ -501,8 +501,8 @@ class _HomePageState extends State<HomePage> {
                           ),
                           const SizedBox(height: 16),
                           _buildDeadlineCard(
-                            month: 'DEC',
-                            day: '15',
+                            month: 'AUG',
+                            day: '3',
                             title: 'Annual Return Submission',
                             subtitle:
                                 'Filing to ACRA for the year\nending 2024',
