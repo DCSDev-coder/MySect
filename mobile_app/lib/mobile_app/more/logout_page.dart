@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../notifications/notifications_page.dart';
 import '../home/home_page.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../authentication/login_page.dart';
 
 class LogoutPage extends StatefulWidget {
   const LogoutPage({super.key});
@@ -138,7 +139,14 @@ class _LogoutPageState extends State<LogoutPage> {
                       width: double.infinity,
                       height: 50,
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(
+                              builder: (context) => const LoginPage(),
+                            ),
+                            (route) => false,
+                          );
+                        },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF062AAE),
                           shape: RoundedRectangleBorder(
