@@ -37,7 +37,7 @@ dependencies:
   flutter_highlight: ^0.7.0
   path_provider: ^2.1.6
   google_fonts: ^8.2.1
-  file_picker: any
+  file_picker: ^12.2.0
   image_picker: ^1.2.3
   table_calendar: ^3.2.1
   intl: ^0.20.3
@@ -55,9 +55,13 @@ dev_dependencies:
   flutter_launcher_icons: ^0.13.1
 
 flutter_launcher_icons:
+  image_path: "assets/MySect Main Logo.png"
   android: "launcher_icon"
   ios: true
-  image_path: "assets/MySect Main Logo.png"
+  windows:
+    generate: true
+    image_path: "assets/MySect Main Logo.png"
+    icon_size: 256
   min_sdk_android: 21
   web:
     generate: true

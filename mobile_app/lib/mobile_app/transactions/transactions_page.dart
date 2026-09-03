@@ -289,17 +289,6 @@ class _TransactionsPageState extends State<TransactionsPage> {
                               color: Colors.black,
                             ),
                           ),
-                          IconButton(
-                            icon: const Icon(Icons.tune, color: Colors.black),
-                            onPressed: () {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text('Advanced filters coming soon', style: GoogleFonts.poppins()),
-                                  backgroundColor: const Color(0xFF062AAE),
-                                ),
-                              );
-                            },
-                          ),
                         ],
                       ),
                     ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:file_picker/file_picker.dart';
 import '../notifications/notifications_page.dart';
 
 class DocumentNeededPage extends StatelessWidget {
@@ -86,11 +87,13 @@ class DocumentNeededPage extends StatelessWidget {
                       ),
                       children: [
                         _buildDocItem(
+                          context,
                           title: 'Bank Statement (FY2026)',
                           subtitle: 'Please upload the latest bank statement.',
                           dueDate: 'Due: 15 Oct 2026',
                         ),
                         _buildDocItem(
+                          context,
                           title: 'Director Identity Card',
                           subtitle: 'Clear copy of NRIC or Passport.',
                           dueDate: 'Due: 15 Oct 2026',
@@ -107,7 +110,8 @@ class DocumentNeededPage extends StatelessWidget {
     );
   }
 
-  Widget _buildDocItem({
+  Widget _buildDocItem(
+    BuildContext context, {
     required String title,
     required String subtitle,
     required String dueDate,
@@ -174,7 +178,23 @@ class DocumentNeededPage extends StatelessWidget {
                 ),
               ),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () async {
+                  PlatformFile? file = await FilePicker.pickFile(
+                    type: FileType.custom,
+                    allowedExtensions: ['jpg', 'jpeg', 'png', 'pdf', 'doc', 'docx'],
+                  );
+
+                  if (file != null) {
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Selected: ${file.name}'),
+                          backgroundColor: Colors.green,
+                        ),
+                      );
+                    }
+                  }
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF062AAE),
                   shape: RoundedRectangleBorder(
