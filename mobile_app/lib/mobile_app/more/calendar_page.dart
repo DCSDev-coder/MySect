@@ -290,7 +290,7 @@ class _CalendarPageState extends State<CalendarPage> {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.08),
+            color: Colors.black.withValues(alpha: 0.08),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -311,7 +311,7 @@ class _CalendarPageState extends State<CalendarPage> {
                   border: Border.all(color: Colors.grey.shade200),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.05),
+                      color: Colors.black.withValues(alpha: 0.05),
                       blurRadius: 4,
                       offset: const Offset(0, 2),
                     ),
@@ -324,7 +324,9 @@ class _CalendarPageState extends State<CalendarPage> {
                       padding: const EdgeInsets.symmetric(vertical: 4),
                       decoration: const BoxDecoration(
                         color: Color(0xFFD71920), // Red header
-                        borderRadius: BorderRadius.vertical(top: Radius.circular(8)),
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(8),
+                        ),
                       ),
                       child: Text(
                         month,
@@ -341,7 +343,9 @@ class _CalendarPageState extends State<CalendarPage> {
                       padding: const EdgeInsets.symmetric(vertical: 6),
                       decoration: const BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.vertical(bottom: Radius.circular(8)),
+                        borderRadius: BorderRadius.vertical(
+                          bottom: Radius.circular(8),
+                        ),
                       ),
                       child: Text(
                         day,
@@ -391,7 +395,10 @@ class _CalendarPageState extends State<CalendarPage> {
             children: [
               // Pill
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 4,
+                ),
                 decoration: BoxDecoration(
                   color: pillBgColor,
                   borderRadius: BorderRadius.circular(6),
@@ -423,7 +430,10 @@ class _CalendarPageState extends State<CalendarPage> {
                 onTap: onTap,
                 borderRadius: BorderRadius.circular(4),
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 4.0),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 4.0,
+                    vertical: 4.0,
+                  ),
                   child: Row(
                     children: [
                       Text(

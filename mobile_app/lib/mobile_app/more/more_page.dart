@@ -309,16 +309,42 @@ class MorePage extends StatelessWidget {
                 ],
               ),
             ),
-            Container(
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: Colors.grey.shade200,
-                shape: BoxShape.circle,
-              ),
-              child: const Icon(
-                Icons.qr_code_scanner,
-                color: Colors.black87,
-                size: 24,
+            InkWell(
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                    title: Text('My Login QR', style: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 18), textAlign: TextAlign.center),
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text('Scan this code on another device to sign in instantly.', style: GoogleFonts.poppins(fontSize: 14), textAlign: TextAlign.center),
+                        const SizedBox(height: 24),
+                        const Icon(Icons.qr_code_2, size: 200, color: Colors.black87),
+                        const SizedBox(height: 16),
+                      ],
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: Text('Close', style: GoogleFonts.poppins(color: const Color(0xFF1E50FF), fontWeight: FontWeight.w600)),
+                      ),
+                    ],
+                  ),
+                );
+              },
+              child: Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade200,
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.qr_code_scanner,
+                  color: Colors.black87,
+                  size: 24,
+                ),
               ),
             ),
           ],

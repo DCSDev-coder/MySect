@@ -32,42 +32,45 @@ class _TransactionsPageState extends State<TransactionsPage> {
       'title': 'DEBIT PURCHASE USD',
       'subtitle': 'Shopify',
       'amount': '-RM1.06',
-      'account': 'OCBC SGD-9001',
+      'account': 'CIMB SGD-9001',
       'type': 'Expenses',
     },
     {
       'title': 'DEBIT PURCHASE USD',
       'subtitle': 'Shopify',
       'amount': '-RM1.06',
-      'account': 'OCBC SGD-9001',
+      'account': 'CIMB SGD-9001',
       'type': 'Expenses',
     },
     {
       'title': 'CLIENT PAYMENT',
       'subtitle': 'Mira',
       'amount': '+RM150.00',
-      'account': 'OCBC SGD-9001',
+      'account': 'CIMB SGD-9001',
       'type': 'Income',
     },
     {
       'title': 'DEBIT PURCHASE USD',
       'subtitle': 'Shopify',
       'amount': '-RM1.06',
-      'account': 'OCBC SGD-9001',
+      'account': 'CIMB SGD-9001',
       'type': 'Expenses',
     },
     {
       'title': 'INVOICE #1029',
       'subtitle': 'Tech Corp',
       'amount': '+RM2,400.00',
-      'account': 'Maybank MYR-1002',
+      'account': 'Maybank MYR-1102',
       'type': 'Income',
     },
   ];
 
   List<Map<String, dynamic>> get _filteredTransactions {
-    if (_selectedFilter == 'All') return _allTransactions;
-    return _allTransactions.where((t) => t['type'] == _selectedFilter).toList();
+    String bankPrefix = _selectedBank.split(' ')[0];
+    var bankFiltered = _allTransactions.where((t) => t['account'].toString().startsWith(bankPrefix));
+    
+    if (_selectedFilter == 'All') return bankFiltered.toList();
+    return bankFiltered.where((t) => t['type'] == _selectedFilter).toList();
   }
 
   Widget _buildFilterButton(String title) {

@@ -4,17 +4,26 @@ import 'package:file_picker/file_picker.dart';
 import '../notifications/notifications_page.dart';
 import 'resolved_chats_page.dart';
 
-class _ChatMessage {
+class ChatMessage {
   final String? text;
   final String? fileName;
   final bool isMe;
   final String time;
 
-  _ChatMessage({this.text, this.fileName, required this.isMe, required this.time});
+  ChatMessage({this.text, this.fileName, required this.isMe, required this.time});
 }
 
 class ActiveChatPage extends StatefulWidget {
-  const ActiveChatPage({super.key});
+  final String title;
+  final List<ChatMessage>? initialMessages;
+  final bool isResolved;
+
+  const ActiveChatPage({
+    super.key,
+    this.title = 'Support Agent',
+    this.initialMessages,
+    this.isResolved = false,
+  });
 
   @override
   State<ActiveChatPage> createState() => _ActiveChatPageState();
@@ -22,23 +31,31 @@ class ActiveChatPage extends StatefulWidget {
 
 class _ActiveChatPageState extends State<ActiveChatPage> {
   final TextEditingController _textController = TextEditingController();
-  final List<_ChatMessage> _messages = [
-    _ChatMessage(
-      text: 'Hi there! How can I help you today?',
-      isMe: false,
-      time: '10:00 AM',
-    ),
-    _ChatMessage(
-      text: 'I have a question about my recent document upload.',
-      isMe: true,
-      time: '10:02 AM',
-    ),
-    _ChatMessage(
-      text: 'Sure, I can help with that. What seems to be the issue?',
-      isMe: false,
-      time: '10:05 AM',
-    ),
-  ];
+  late final List<ChatMessage> _messages;
+
+  @override
+  void initState() {
+    super.initState();
+    _messages = widget.initialMessages != null 
+        ? List.from(widget.initialMessages!)
+        : [
+            ChatMessage(
+              text: 'Hi there! How can I help you today?',
+              isMe: false,
+              time: '10:00 AM',
+            ),
+            ChatMessage(
+              text: 'I have a question about my recent document upload.',
+              isMe: true,
+              time: '10:02 AM',
+            ),
+            ChatMessage(
+              text: 'Sure, I can help with that. What seems to be the issue?',
+              isMe: false,
+              time: '10:05 AM',
+            ),
+          ];
+  }
 
   String _getCurrentTime() {
     final now = DateTime.now();
@@ -52,7 +69,7 @@ class _ActiveChatPageState extends State<ActiveChatPage> {
     if (_textController.text.trim().isEmpty) return;
 
     setState(() {
-      _messages.add(_ChatMessage(
+      _messages.add(ChatMessage(
         text: _textController.text.trim(),
         isMe: true,
         time: _getCurrentTime(),
@@ -66,7 +83,7 @@ class _ActiveChatPageState extends State<ActiveChatPage> {
 
     if (file != null) {
       setState(() {
-        _messages.add(_ChatMessage(
+        _messages.add(ChatMessage(
           fileName: file.name,
           isMe: true,
           time: _getCurrentTime(),
@@ -137,7 +154,7 @@ class _ActiveChatPageState extends State<ActiveChatPage> {
                       ),
                       const SizedBox(width: 16),
                       Text(
-                        'Support Agent',
+                        widget.title,
                         style: GoogleFonts.poppins(
                           color: Colors.black,
                           fontSize: 24,
@@ -146,29 +163,30 @@ class _ActiveChatPageState extends State<ActiveChatPage> {
                       ),
                     ],
                   ),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const ResolvedChatsPage(),
+                  if (!widget.isResolved)
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const ResolvedChatsPage(),
+                          ),
+                        );
+                      },
+                      style: TextButton.styleFrom(
+                        padding: EdgeInsets.zero,
+                        minimumSize: Size.zero,
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      ),
+                      child: Text(
+                        'Resolve',
+                        style: GoogleFonts.poppins(
+                          color: const Color(0xFF062AAE),
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16,
                         ),
-                      );
-                    },
-                    style: TextButton.styleFrom(
-                      padding: EdgeInsets.zero,
-                      minimumSize: Size.zero,
-                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    ),
-                    child: Text(
-                      'Resolve',
-                      style: GoogleFonts.poppins(
-                        color: const Color(0xFF062AAE),
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16,
                       ),
                     ),
-                  ),
                 ],
               ),
             ),
@@ -188,7 +206,7 @@ class _ActiveChatPageState extends State<ActiveChatPage> {
     );
   }
 
-  Widget _buildMessageBubble(_ChatMessage message) {
+  Widget _buildMessageBubble(ChatMessage message) {
     return Align(
       alignment: message.isMe ? Alignment.centerRight : Alignment.centerLeft,
       child: Container(
@@ -246,6 +264,21 @@ class _ActiveChatPageState extends State<ActiveChatPage> {
   }
 
   Widget _buildMessageInput() {
+    if (widget.isResolved) {
+      return Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.grey[100],
+        ),
+        child: Center(
+          child: Text(
+            'This chat has been resolved.',
+            style: GoogleFonts.poppins(color: Colors.grey[600]),
+          ),
+        ),
+      );
+    }
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(

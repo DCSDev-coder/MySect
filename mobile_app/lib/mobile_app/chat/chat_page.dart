@@ -132,36 +132,16 @@ class _ChatPageState extends State<ChatPage> {
                     ),
                     const SizedBox(height: 32),
                     if (_searchQuery.isEmpty) ...[
-                      Center(
-                        child: Image.asset(
-                          'assets/Chat.png',
-                          height: 250,
-                          fit: BoxFit.contain,
-                        ),
-                      ),
-                      const SizedBox(height: 32),
-
-                      Center(
-                        child: Text(
-                          'No active chats right now',
-                          style: GoogleFonts.poppins(
-                            fontWeight: FontWeight.w700,
-                            fontSize: 18,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
                       const SizedBox(height: 16),
-                      Center(
-                        child: Text(
-                          'You have no active chats right now.\nIf you have any questions,\njust contact us.',
-                          textAlign: TextAlign.center,
-                          style: GoogleFonts.poppins(
-                            fontSize: 14,
-                            color: Colors.black87,
-                            height: 1.5,
-                          ),
-                        ),
+                      _buildChatCard(
+                        'General Support',
+                        '10:05 AM',
+                        'Sure, I can help with that. What seems to be the issue?',
+                        [
+                          ChatMessage(text: 'Hi there! How can I help you today?', isMe: false, time: '10:00 AM'),
+                          ChatMessage(text: 'I have a question about my recent document upload.', isMe: true, time: '10:02 AM'),
+                          ChatMessage(text: 'Sure, I can help with that. What seems to be the issue?', isMe: false, time: '10:05 AM'),
+                        ],
                       ),
                     ] else ...[
                       const SizedBox(height: 32),
@@ -188,7 +168,13 @@ class _ChatPageState extends State<ChatPage> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const ActiveChatPage()),
+            MaterialPageRoute(
+              builder: (context) => const ActiveChatPage(
+                title: 'Support Agent',
+                initialMessages: [],
+                isResolved: false,
+              ),
+            ),
           );
         },
         backgroundColor: const Color(0xFF062AAE),
@@ -201,4 +187,95 @@ class _ChatPageState extends State<ChatPage> {
       ),
     );
   }
+
+  Widget _buildChatCard(String title, String date, String lastMessage, List<ChatMessage> messages) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(16),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ActiveChatPage(
+                  title: title,
+                  initialMessages: messages,
+                  isResolved: false,
+                ),
+              ),
+            );
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Image.asset(
+              'assets/Profile.png',
+              width: 50,
+              height: 50,
+              fit: BoxFit.cover,
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: GoogleFonts.poppins(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 14,
+                      color: Colors.black,
+                      height: 1.3,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          lastMessage,
+                          style: GoogleFonts.poppins(
+                            fontSize: 14,
+                            color: Colors.grey[600],
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        date,
+                        style: GoogleFonts.poppins(
+                          fontSize: 12,
+                          color: Colors.grey[500],
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    ),
+  ),
+);
+}
 }

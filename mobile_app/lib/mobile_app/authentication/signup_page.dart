@@ -14,6 +14,17 @@ class SignupPage extends StatefulWidget {
 
 class _SignupPageState extends State<SignupPage> {
   bool _obscurePassword = true;
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,6 +84,7 @@ class _SignupPageState extends State<SignupPage> {
                     ),
                     const SizedBox(height: 8),
                     TextField(
+                      controller: _nameController,
                       decoration: InputDecoration(
                         hintText: 'Elly Melissa',
                         hintStyle: GoogleFonts.poppins(color: Colors.grey[400]),
@@ -110,6 +122,7 @@ class _SignupPageState extends State<SignupPage> {
                     ),
                     const SizedBox(height: 8),
                     TextField(
+                      controller: _emailController,
                       decoration: InputDecoration(
                         hintText: 'name@company.com',
                         hintStyle: GoogleFonts.poppins(color: Colors.grey[400]),
@@ -147,6 +160,7 @@ class _SignupPageState extends State<SignupPage> {
                     ),
                     const SizedBox(height: 8),
                     TextField(
+                      controller: _passwordController,
                       obscureText: _obscurePassword,
                       decoration: InputDecoration(
                         hintText: 'Create a secure password',
@@ -193,6 +207,60 @@ class _SignupPageState extends State<SignupPage> {
                       height: 56,
                       child: ElevatedButton(
                         onPressed: () {
+                          final name = _nameController.text.trim();
+                          final email = _emailController.text.trim();
+                          final password = _passwordController.text;
+
+                          if (name.isEmpty || email.isEmpty || password.isEmpty) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('Please fill in all fields', style: GoogleFonts.poppins(color: Colors.white)),
+                                backgroundColor: Colors.red,
+                              ),
+                            );
+                            return;
+                          }
+
+                          if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email)) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('Please enter a valid email address', style: GoogleFonts.poppins(color: Colors.white)),
+                                backgroundColor: Colors.red,
+                              ),
+                            );
+                            return;
+                          }
+
+                          if (password.length < 8) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('Password must be at least 8 characters', style: GoogleFonts.poppins(color: Colors.white)),
+                                backgroundColor: Colors.red,
+                              ),
+                            );
+                            return;
+                          }
+
+                          if (!RegExp(r'[A-Z]').hasMatch(password)) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('Password must contain at least 1 capital letter', style: GoogleFonts.poppins(color: Colors.white)),
+                                backgroundColor: Colors.red,
+                              ),
+                            );
+                            return;
+                          }
+
+                          if (!RegExp(r'[!@#\$%\^&\*\(\),\.\?":{}|<>]').hasMatch(password)) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('Password must contain at least 1 special character', style: GoogleFonts.poppins(color: Colors.white)),
+                                backgroundColor: Colors.red,
+                              ),
+                            );
+                            return;
+                          }
+
                           Navigator.of(context).push(
                             SlideTransitionRoute(
                               page: const VerificationPage(),

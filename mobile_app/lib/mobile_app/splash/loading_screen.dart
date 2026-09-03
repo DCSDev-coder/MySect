@@ -44,6 +44,15 @@ class _MySectStrokeLoadingScreenState extends State<MySectStrokeLoadingScreen>
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Precache Intro 1 images so they appear instantly when the transition happens
+    precacheImage(const AssetImage('assets/YourSectComp.png'), context);
+    precacheImage(const AssetImage('assets/incorporation.png'), context);
+    precacheImage(const AssetImage('assets/nextbutton.png'), context);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,

@@ -12,9 +12,11 @@ class VerificationPage extends StatefulWidget {
 
 class _VerificationPageState extends State<VerificationPage> {
   final List<FocusNode> _focusNodes = List.generate(6, (index) => FocusNode());
-  final List<TextEditingController> _controllers =
-      List.generate(6, (index) => TextEditingController());
-      
+  final List<TextEditingController> _controllers = List.generate(
+    6,
+    (index) => TextEditingController(),
+  );
+
   int _secondsRemaining = 60;
   Timer? _timer;
 
@@ -126,98 +128,118 @@ class _VerificationPageState extends State<VerificationPage> {
                   children: [
                     const Spacer(flex: 2),
                     Text(
-                'Enter verification code',
-                textAlign: TextAlign.center,
-                style: GoogleFonts.poppins(
-                  fontSize: 24,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.black,
-                ),
-              ),
-              const SizedBox(height: 16),
-              Text(
-                'Enter the 6-digit code we sent to your phone to\nverify your account.\nSMS to +6013299**07',
-                textAlign: TextAlign.center,
-                style: GoogleFonts.poppins(
-                  fontSize: 14,
-                  color: Colors.grey[700],
-                  height: 1.5,
-                ),
-              ),
-              const SizedBox(height: 40),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(6, (index) => _buildOtpBox(index)),
-              ),
-              const SizedBox(height: 40),
-              Center(
-                child: GestureDetector(
-                  onTap: _secondsRemaining == 0
-                      ? () {
-                          // Handle resend code logic here
-                          _startTimer();
-                        }
-                      : null,
-                  child: RichText(
-                    text: TextSpan(
-                      text: "Didn't receive the code? ",
+                      'Enter verification code',
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.poppins(
+                        fontSize: 24,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.black,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      'Enter the 6-digit code we sent to your phone to\nverify your account.\nSMS to your phone number',
+                      textAlign: TextAlign.center,
                       style: GoogleFonts.poppins(
                         fontSize: 14,
-                        color: Colors.grey[600],
+                        color: Colors.grey[700],
+                        height: 1.5,
                       ),
-                      children: [
-                        TextSpan(
-                          text: _secondsRemaining > 0
-                              ? 'Resend code in ${_secondsRemaining}s'
-                              : 'Resend code',
-                          style: GoogleFonts.poppins(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w700,
-                            color: _secondsRemaining > 0
-                                ? Colors.grey[500]
-                                : const Color(0xFF1E50FF),
+                    ),
+                    const SizedBox(height: 40),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: List.generate(
+                        6,
+                        (index) => _buildOtpBox(index),
+                      ),
+                    ),
+                    const SizedBox(height: 40),
+                    Center(
+                      child: GestureDetector(
+                        onTap: _secondsRemaining == 0
+                            ? () {
+                                // Handle resend code logic here
+                                _startTimer();
+                              }
+                            : null,
+                        child: RichText(
+                          text: TextSpan(
+                            text: "Didn't receive the code? ",
+                            style: GoogleFonts.poppins(
+                              fontSize: 14,
+                              color: Colors.grey[600],
+                            ),
+                            children: [
+                              TextSpan(
+                                text: _secondsRemaining > 0
+                                    ? 'Resend code in ${_secondsRemaining}s'
+                                    : 'Resend code',
+                                style: GoogleFonts.poppins(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w700,
+                                  color: _secondsRemaining > 0
+                                      ? Colors.grey[500]
+                                      : const Color(0xFF1E50FF),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                      ],
+                      ),
                     ),
-                  ),
+                    const SizedBox(height: 24),
+                    SizedBox(
+                      height: 56,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          final code = _controllers.map((c) => c.text).join();
+                          if (code.length != 6) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  'Please enter the 6-digit code',
+                                  style: GoogleFonts.poppins(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                backgroundColor: Colors.red,
+                              ),
+                            );
+                            return;
+                          }
+                          Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(
+                              builder: (context) => const HomePage(),
+                            ),
+                            (route) => false,
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF1E50FF),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          elevation: 0,
+                        ),
+                        child: Text(
+                          'Verify and continue',
+                          style: GoogleFonts.poppins(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const Spacer(flex: 3),
+                  ],
                 ),
               ),
-              const SizedBox(height: 24),
-              SizedBox(
-                height: 56,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(builder: (context) => const HomePage()),
-                      (route) => false,
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF1E50FF),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    elevation: 0,
-                  ),
-                  child: Text(
-                    'Verify and continue',
-                    style: GoogleFonts.poppins(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ),
-              const Spacer(flex: 3),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
-    ],
-  ),
-),
     );
   }
 }

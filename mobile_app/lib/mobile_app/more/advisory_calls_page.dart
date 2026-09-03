@@ -64,7 +64,10 @@ class _AdvisoryCallsPageState extends State<AdvisoryCallsPage> {
                     Row(
                       children: [
                         IconButton(
-                          icon: const Icon(Icons.arrow_back, color: Colors.black),
+                          icon: const Icon(
+                            Icons.arrow_back,
+                            color: Colors.black,
+                          ),
                           onPressed: () => Navigator.pop(context),
                           padding: EdgeInsets.zero,
                           constraints: const BoxConstraints(),
@@ -95,7 +98,9 @@ class _AdvisoryCallsPageState extends State<AdvisoryCallsPage> {
                         borderRadius: BorderRadius.circular(16),
                         boxShadow: [
                           BoxShadow(
-                            color: const Color(0xFF062AAE).withOpacity(0.3),
+                            color: const Color(
+                              0xFF062AAE,
+                            ).withValues(alpha: 0.3),
                             blurRadius: 12,
                             offset: const Offset(0, 6),
                           ),
@@ -165,7 +170,7 @@ class _AdvisoryCallsPageState extends State<AdvisoryCallsPage> {
                               Container(
                                 padding: const EdgeInsets.all(12),
                                 decoration: BoxDecoration(
-                                  color: Colors.white.withOpacity(0.2),
+                                  color: Colors.white.withValues(alpha: 0.2),
                                   shape: BoxShape.circle,
                                 ),
                                 child: const Icon(
@@ -292,7 +297,7 @@ class _AdvisoryCallsPageState extends State<AdvisoryCallsPage> {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -316,15 +321,22 @@ class _AdvisoryCallsPageState extends State<AdvisoryCallsPage> {
                 ),
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 4,
+                ),
                 decoration: BoxDecoration(
-                  color: isUpcoming ? const Color(0xFFE3F2FD) : Colors.grey.shade100,
+                  color: isUpcoming
+                      ? const Color(0xFFE3F2FD)
+                      : Colors.grey.shade100,
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(
                   isUpcoming ? 'Upcoming' : 'Completed',
                   style: GoogleFonts.poppins(
-                    color: isUpcoming ? const Color(0xFF1565C0) : Colors.grey.shade600,
+                    color: isUpcoming
+                        ? const Color(0xFF1565C0)
+                        : Colors.grey.shade600,
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
                   ),
@@ -354,7 +366,11 @@ class _AdvisoryCallsPageState extends State<AdvisoryCallsPage> {
             children: [
               Row(
                 children: [
-                  Icon(Icons.calendar_today, size: 16, color: Colors.grey.shade600),
+                  Icon(
+                    Icons.calendar_today,
+                    size: 16,
+                    color: Colors.grey.shade600,
+                  ),
                   const SizedBox(width: 8),
                   Text(
                     date,
@@ -368,7 +384,11 @@ class _AdvisoryCallsPageState extends State<AdvisoryCallsPage> {
               ),
               Row(
                 children: [
-                  Icon(Icons.access_time, size: 16, color: Colors.grey.shade600),
+                  Icon(
+                    Icons.access_time,
+                    size: 16,
+                    color: Colors.grey.shade600,
+                  ),
                   const SizedBox(width: 8),
                   Text(
                     time,

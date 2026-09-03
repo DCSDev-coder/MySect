@@ -15,6 +15,15 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   bool _obscurePassword = true;
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,14 +44,35 @@ class _LoginPageState extends State<LoginPage> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Padding(
-                          padding: const EdgeInsets.only(left: 16.0, top: 16.0),
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Image.asset(
-                              'assets/YourSectComp.png',
-                              width: 150,
-                              fit: BoxFit.contain,
-                            ),
+                          padding: const EdgeInsets.only(left: 16.0, top: 16.0, right: 16.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Image.asset(
+                                'assets/YourSectComp.png',
+                                width: 150,
+                                fit: BoxFit.contain,
+                              ),
+                              IconButton(
+                                icon: const Icon(Icons.qr_code_scanner, color: Colors.black, size: 28),
+                                onPressed: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                                      title: Text('Login with QR', style: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 18)),
+                                      content: Text('Simulating camera view...\n\nScan the QR code to sign in instantly.', style: GoogleFonts.poppins(fontSize: 14)),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () => Navigator.pop(context),
+                                          child: Text('Cancel', style: GoogleFonts.poppins(color: const Color(0xFF1E50FF), fontWeight: FontWeight.w600)),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              ),
+                            ],
                           ),
                         ),
                         const SizedBox(height: 40),
@@ -83,6 +113,7 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                             const SizedBox(height: 8),
                             TextField(
+                              controller: _emailController,
                               decoration: InputDecoration(
                                 hintText: 'name@company.com',
                                 hintStyle: GoogleFonts.poppins(color: Colors.grey[400]),
@@ -120,6 +151,7 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                             const SizedBox(height: 8),
                             TextField(
+                              controller: _passwordController,
                               obscureText: _obscurePassword,
                               decoration: InputDecoration(
                                 hintText: 'Enter your secure password',
@@ -192,6 +224,49 @@ class _LoginPageState extends State<LoginPage> {
                               height: 56,
                               child: ElevatedButton(
                                 onPressed: () {
+                                  final email = _emailController.text.trim();
+                                  final password = _passwordController.text;
+
+                                  if (email.isEmpty) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text('Please enter email address', style: GoogleFonts.poppins(color: Colors.white)),
+                                        backgroundColor: Colors.red,
+                                      ),
+                                    );
+                                    return;
+                                  }
+                                  
+                                  if (password.isEmpty) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text('Please enter password', style: GoogleFonts.poppins(color: Colors.white)),
+                                        backgroundColor: Colors.red,
+                                      ),
+                                    );
+                                    return;
+                                  }
+
+                                  if (email != 'test@gmail.com') {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text('Account not found with this email', style: GoogleFonts.poppins(color: Colors.white)),
+                                        backgroundColor: Colors.red,
+                                      ),
+                                    );
+                                    return;
+                                  }
+
+                                  if (password != 'Dtct+1234') {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text('Incorrect password', style: GoogleFonts.poppins(color: Colors.white)),
+                                        backgroundColor: Colors.red,
+                                      ),
+                                    );
+                                    return;
+                                  }
+
                                   Navigator.of(context).push(
                                     SlideTransitionRoute(
                                       page: const VerificationPage(),

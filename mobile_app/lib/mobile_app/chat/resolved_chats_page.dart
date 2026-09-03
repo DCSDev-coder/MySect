@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../notifications/notifications_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../home/home_page.dart';
+import 'active_chat_page.dart';
 
 class ResolvedChatsPage extends StatefulWidget {
   const ResolvedChatsPage({super.key});
@@ -124,10 +125,35 @@ class _ResolvedChatsPageState extends State<ResolvedChatsPage> {
                     ),
                     const SizedBox(height: 32),
 
-                    _buildChatCard(),
-                    _buildChatCard(),
-                    _buildChatCard(),
-                    _buildChatCard(),
+                    _buildChatCard(
+                      'Tax Filing Support',
+                      'Nov 24, 2025',
+                      'Estimated Chargeable Income filling to IRAS for the',
+                      [
+                        ChatMessage(text: 'I need help with my tax filing for 2025.', isMe: true, time: '1:00 PM'),
+                        ChatMessage(text: 'Sure, please provide your company registration number.', isMe: false, time: '1:05 PM'),
+                        ChatMessage(text: 'Estimated Chargeable Income filling to IRAS for the year is complete.', isMe: false, time: '2:00 PM'),
+                        ChatMessage(text: 'Yes, thanks!', isMe: true, time: '2:15 PM'),
+                      ],
+                    ),
+                    _buildChatCard(
+                      'Document Verification',
+                      'Nov 20, 2025',
+                      'Your incorporation documents are verified.',
+                      [
+                        ChatMessage(text: 'Did you receive my incorporation documents?', isMe: true, time: '9:00 AM'),
+                        ChatMessage(text: 'Checking now... Yes we did. Your incorporation documents are verified.', isMe: false, time: '9:30 AM'),
+                      ],
+                    ),
+                    _buildChatCard(
+                      'Billing Inquiry',
+                      'Nov 15, 2025',
+                      'The invoice #1029 has been marked as paid.',
+                      [
+                        ChatMessage(text: 'Why is my invoice #1029 still pending?', isMe: true, time: '11:00 AM'),
+                        ChatMessage(text: 'We are processing the payment. The invoice #1029 has been marked as paid.', isMe: false, time: '11:45 AM'),
+                      ],
+                    ),
                     const SizedBox(height: 80),
                   ],
                 ),
@@ -137,7 +163,18 @@ class _ResolvedChatsPageState extends State<ResolvedChatsPage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const ActiveChatPage(
+                title: 'Support Agent',
+                initialMessages: [],
+                isResolved: false,
+              ),
+            ),
+          );
+        },
         backgroundColor: const Color(0xFF062AAE),
         shape: const CircleBorder(),
         child: const Icon(
@@ -189,10 +226,9 @@ class _ResolvedChatsPageState extends State<ResolvedChatsPage> {
     );
   }
 
-  Widget _buildChatCard() {
+  Widget _buildChatCard(String title, String date, String lastMessage, List<ChatMessage> messages) {
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
-      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
@@ -204,67 +240,93 @@ class _ResolvedChatsPageState extends State<ResolvedChatsPage> {
           ),
         ],
       ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Image.asset(
-            'assets/Profile.png',
-            width: 50,
-            height: 50,
-            fit: BoxFit.cover,
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: Text(
-                        'Estimated Chargeable Income filling to IRAS for the',
-                        style: GoogleFonts.poppins(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 14,
-                          color: Colors.black,
-                          height: 1.3,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(16),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ActiveChatPage(
+                  title: title,
+                  initialMessages: messages,
+                  isResolved: true,
+                ),
+              ),
+            );
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Image.asset(
+              'assets/Profile.png',
+              width: 50,
+              height: 50,
+              fit: BoxFit.cover,
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          title,
+                          style: GoogleFonts.poppins(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14,
+                            color: Colors.black,
+                            height: 1.3,
+                          ),
                         ),
                       ),
-                    ),
-                    const SizedBox(width: 8),
-                    const Icon(
-                      Icons.check_circle_outline,
-                      color: Colors.green,
-                      size: 24,
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Yes, thanks!',
-                      style: GoogleFonts.poppins(
-                        fontSize: 14,
-                        color: Colors.grey[600],
+                      const SizedBox(width: 8),
+                      const Icon(
+                        Icons.check_circle_outline,
+                        color: Colors.green,
+                        size: 24,
                       ),
-                    ),
-                    Text(
-                      'Nov 24 2025',
-                      style: GoogleFonts.poppins(
-                        fontSize: 12,
-                        color: Colors.grey[500],
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          lastMessage,
+                          style: GoogleFonts.poppins(
+                            fontSize: 14,
+                            color: Colors.grey[600],
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                      const SizedBox(width: 8),
+                      Text(
+                        date,
+                        style: GoogleFonts.poppins(
+                          fontSize: 12,
+                          color: Colors.grey[500],
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
-    );
-  }
+    ),
+  ),
+);
+}
 }
