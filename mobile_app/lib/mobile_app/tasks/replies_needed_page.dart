@@ -85,13 +85,13 @@ class RepliesNeededPage extends StatelessWidget {
                         vertical: 8,
                       ),
                       children: [
-                        _buildReplyItem(
+                        _ReplyItemWidget(
                           title: 'Clarification on Invoice #1029',
                           subtitle: 'Is this invoice related to IT equipment?',
                           sender: 'Corporate Secretary',
                           time: '2 hours ago',
                         ),
-                        _buildReplyItem(
+                        _ReplyItemWidget(
                           title: 'Confirm Registered Address',
                           subtitle:
                               'Please confirm if the registered address has changed.',
@@ -110,12 +110,51 @@ class RepliesNeededPage extends StatelessWidget {
     );
   }
 
-  Widget _buildReplyItem({
-    required String title,
-    required String subtitle,
-    required String sender,
-    required String time,
-  }) {
+}
+
+class _ReplyItemWidget extends StatefulWidget {
+  final String title;
+  final String subtitle;
+  final String sender;
+  final String time;
+
+  const _ReplyItemWidget({
+    required this.title,
+    required this.subtitle,
+    required this.sender,
+    required this.time,
+  });
+
+  @override
+  State<_ReplyItemWidget> createState() => _ReplyItemWidgetState();
+}
+
+class _ReplyItemWidgetState extends State<_ReplyItemWidget> {
+  bool _isReplying = false;
+  final TextEditingController _controller = TextEditingController();
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _sendReply() {
+    if (_controller.text.trim().isEmpty) return;
+    setState(() {
+      _isReplying = false;
+      _controller.clear();
+    });
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Reply sent!', style: GoogleFonts.poppins(color: Colors.white)),
+        backgroundColor: Colors.green,
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       padding: const EdgeInsets.all(16),
@@ -146,7 +185,7 @@ class RepliesNeededPage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      title,
+                      widget.title,
                       style: GoogleFonts.poppins(
                         fontWeight: FontWeight.bold,
                         fontSize: 14,
@@ -154,7 +193,7 @@ class RepliesNeededPage extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      'From: $sender',
+                      'From: ${widget.sender}',
                       style: GoogleFonts.poppins(
                         fontSize: 12,
                         color: Colors.grey.shade600,
@@ -167,7 +206,7 @@ class RepliesNeededPage extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           Text(
-            subtitle,
+            widget.subtitle,
             style: GoogleFonts.poppins(fontSize: 13, color: Colors.black87),
           ),
           const SizedBox(height: 16),
@@ -175,31 +214,65 @@ class RepliesNeededPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                time,
+                widget.time,
                 style: GoogleFonts.poppins(
                   fontSize: 12,
                   color: Colors.grey.shade500,
                 ),
               ),
-              ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF062AAE),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
+              if (!_isReplying)
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      _isReplying = true;
+                    });
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF062AAE),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  child: Text(
+                    'Reply',
+                    style: GoogleFonts.poppins(
+                      color: Colors.white,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
-                child: Text(
-                  'Reply',
-                  style: GoogleFonts.poppins(
-                    color: Colors.white,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
             ],
           ),
+          if (_isReplying) ...[
+            const SizedBox(height: 16),
+            Container(
+              padding: const EdgeInsets.only(left: 12),
+              decoration: BoxDecoration(
+                color: Colors.grey.shade100,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: _controller,
+                      decoration: InputDecoration(
+                        hintText: 'Type your reply...',
+                        hintStyle: GoogleFonts.poppins(color: Colors.grey, fontSize: 13),
+                        border: InputBorder.none,
+                      ),
+                      style: GoogleFonts.poppins(fontSize: 13),
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.send, color: Color(0xFF062AAE), size: 20),
+                    onPressed: _sendReply,
+                  ),
+                ],
+              ),
+            ),
+          ],
         ],
       ),
     );
