@@ -34,9 +34,7 @@ class _LoginPageState extends State<LoginPage> {
           builder: (context, constraints) {
             return SingleChildScrollView(
               child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  minHeight: constraints.maxHeight,
-                ),
+                constraints: BoxConstraints(minHeight: constraints.maxHeight),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -44,28 +42,56 @@ class _LoginPageState extends State<LoginPage> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Padding(
-                          padding: const EdgeInsets.only(left: 16.0, top: 16.0, right: 16.0),
+                          padding: const EdgeInsets.only(
+                            left: 16.0,
+                            top: 16.0,
+                            right: 16.0,
+                          ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Image.asset(
                                 'assets/YourSectComp.png',
-                                width: 150,
+                                width: 110,
                                 fit: BoxFit.contain,
                               ),
                               IconButton(
-                                icon: const Icon(Icons.qr_code_scanner, color: Colors.black, size: 28),
+                                icon: const Icon(
+                                  Icons.qr_code_scanner,
+                                  color: Colors.black,
+                                  size: 28,
+                                ),
                                 onPressed: () {
                                   showDialog(
                                     context: context,
                                     builder: (context) => AlertDialog(
-                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                                      title: Text('Login with QR', style: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 18)),
-                                      content: Text('Simulating camera view...\n\nScan the QR code to sign in instantly.', style: GoogleFonts.poppins(fontSize: 14)),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(16),
+                                      ),
+                                      title: Text(
+                                        'Login with QR',
+                                        style: GoogleFonts.poppins(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 18,
+                                        ),
+                                      ),
+                                      content: Text(
+                                        'Simulating camera view...\n\nScan the QR code to sign in instantly.',
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 14,
+                                        ),
+                                      ),
                                       actions: [
                                         TextButton(
-                                          onPressed: () => Navigator.pop(context),
-                                          child: Text('Cancel', style: GoogleFonts.poppins(color: const Color(0xFF1E50FF), fontWeight: FontWeight.w600)),
+                                          onPressed: () =>
+                                              Navigator.pop(context),
+                                          child: Text(
+                                            'Cancel',
+                                            style: GoogleFonts.poppins(
+                                              color: const Color(0xFF1E50FF),
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -75,11 +101,11 @@ class _LoginPageState extends State<LoginPage> {
                             ],
                           ),
                         ),
-                        const SizedBox(height: 40),
+                        const SizedBox(height: 20),
                         Center(
-                          child: Image.asset('assets/login.png', height: 250),
+                          child: Image.asset('assets/login.png', height: 200),
                         ),
-                        const SizedBox(height: 40),
+                        const SizedBox(height: 30),
                       ],
                     ),
                     Container(
@@ -116,18 +142,24 @@ class _LoginPageState extends State<LoginPage> {
                               controller: _emailController,
                               decoration: InputDecoration(
                                 hintText: 'name@company.com',
-                                hintStyle: GoogleFonts.poppins(color: Colors.grey[400]),
+                                hintStyle: GoogleFonts.poppins(
+                                  color: Colors.grey[400],
+                                ),
                                 prefixIcon: Icon(
                                   Icons.email_outlined,
                                   color: Colors.grey[600],
                                 ),
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(12),
-                                  borderSide: BorderSide(color: Colors.grey[300]!),
+                                  borderSide: BorderSide(
+                                    color: Colors.grey[300]!,
+                                  ),
                                 ),
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(12),
-                                  borderSide: BorderSide(color: Colors.grey[300]!),
+                                  borderSide: BorderSide(
+                                    color: Colors.grey[300]!,
+                                  ),
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(12),
@@ -155,7 +187,9 @@ class _LoginPageState extends State<LoginPage> {
                               obscureText: _obscurePassword,
                               decoration: InputDecoration(
                                 hintText: 'Enter your secure password',
-                                hintStyle: GoogleFonts.poppins(color: Colors.grey[400]),
+                                hintStyle: GoogleFonts.poppins(
+                                  color: Colors.grey[400],
+                                ),
                                 prefixIcon: Icon(
                                   Icons.lock_outline,
                                   color: Colors.grey[600],
@@ -175,11 +209,15 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(12),
-                                  borderSide: BorderSide(color: Colors.grey[300]!),
+                                  borderSide: BorderSide(
+                                    color: Colors.grey[300]!,
+                                  ),
                                 ),
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(12),
-                                  borderSide: BorderSide(color: Colors.grey[300]!),
+                                  borderSide: BorderSide(
+                                    color: Colors.grey[300]!,
+                                  ),
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(12),
@@ -206,7 +244,8 @@ class _LoginPageState extends State<LoginPage> {
                                 style: TextButton.styleFrom(
                                   padding: EdgeInsets.zero,
                                   minimumSize: Size.zero,
-                                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                  tapTargetSize:
+                                      MaterialTapTargetSize.shrinkWrap,
                                 ),
                                 child: Text(
                                   'Forgot Password?',
@@ -230,17 +269,27 @@ class _LoginPageState extends State<LoginPage> {
                                   if (email.isEmpty) {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
-                                        content: Text('Please enter email address', style: GoogleFonts.poppins(color: Colors.white)),
+                                        content: Text(
+                                          'Please enter email address',
+                                          style: GoogleFonts.poppins(
+                                            color: Colors.white,
+                                          ),
+                                        ),
                                         backgroundColor: Colors.red,
                                       ),
                                     );
                                     return;
                                   }
-                                  
+
                                   if (password.isEmpty) {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
-                                        content: Text('Please enter password', style: GoogleFonts.poppins(color: Colors.white)),
+                                        content: Text(
+                                          'Please enter password',
+                                          style: GoogleFonts.poppins(
+                                            color: Colors.white,
+                                          ),
+                                        ),
                                         backgroundColor: Colors.red,
                                       ),
                                     );
@@ -250,7 +299,12 @@ class _LoginPageState extends State<LoginPage> {
                                   if (email != 'test@gmail.com') {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
-                                        content: Text('Account not found with this email', style: GoogleFonts.poppins(color: Colors.white)),
+                                        content: Text(
+                                          'Account not found with this email',
+                                          style: GoogleFonts.poppins(
+                                            color: Colors.white,
+                                          ),
+                                        ),
                                         backgroundColor: Colors.red,
                                       ),
                                     );
@@ -260,7 +314,12 @@ class _LoginPageState extends State<LoginPage> {
                                   if (password != 'Dtct+1234') {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
-                                        content: Text('Incorrect password', style: GoogleFonts.poppins(color: Colors.white)),
+                                        content: Text(
+                                          'Incorrect password',
+                                          style: GoogleFonts.poppins(
+                                            color: Colors.white,
+                                          ),
+                                        ),
                                         backgroundColor: Colors.red,
                                       ),
                                     );
@@ -295,7 +354,9 @@ class _LoginPageState extends State<LoginPage> {
                               child: GestureDetector(
                                 onTap: () {
                                   Navigator.of(context).push(
-                                    SlideTransitionRoute(page: const SignupPage()),
+                                    SlideTransitionRoute(
+                                      page: const SignupPage(),
+                                    ),
                                   );
                                 },
                                 child: RichText(

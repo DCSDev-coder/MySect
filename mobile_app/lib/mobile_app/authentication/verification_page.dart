@@ -115,7 +115,7 @@ class _VerificationPageState extends State<VerificationPage> {
                 alignment: Alignment.centerLeft,
                 child: Image.asset(
                   'assets/YourSectComp.png',
-                  width: 150,
+                  width: 110,
                   fit: BoxFit.contain,
                 ),
               ),

@@ -11,10 +11,11 @@ class TransactionsPage extends StatefulWidget {
 
 class _TransactionsPageState extends State<TransactionsPage> {
   String _selectedFilter = 'All';
-  String _selectedBank = 'Maybank';
+  String _selectedBank = 'All Banks';
   bool _isBankDropdownOpen = false;
 
   final List<Map<String, String>> _banks = [
+    {'name': 'All Banks', 'icon': 'assets/bank accounts.png'},
     {'name': 'Maybank', 'icon': 'assets/maybank.png'},
     {'name': 'Public Bank', 'icon': 'assets/publicbank.gif'},
     {'name': 'CIMB Bank', 'icon': 'assets/cimb.png'},
@@ -65,12 +66,43 @@ class _TransactionsPageState extends State<TransactionsPage> {
     },
   ];
 
-  List<Map<String, dynamic>> get _filteredTransactions {
+  List<Map<String, dynamic>> get _bankTransactions {
+    if (_selectedBank == 'All Banks') {
+      return _allTransactions;
+    }
     String bankPrefix = _selectedBank.split(' ')[0];
-    var bankFiltered = _allTransactions.where((t) => t['account'].toString().startsWith(bankPrefix));
-    
-    if (_selectedFilter == 'All') return bankFiltered.toList();
-    return bankFiltered.where((t) => t['type'] == _selectedFilter).toList();
+    return _allTransactions.where((t) => t['account'].toString().startsWith(bankPrefix)).toList();
+  }
+
+  List<Map<String, dynamic>> get _filteredTransactions {
+    if (_selectedFilter == 'All') return _bankTransactions;
+    return _bankTransactions.where((t) => t['type'] == _selectedFilter).toList();
+  }
+
+  String get _totalIncomeStr {
+    double total = _bankTransactions
+        .where((t) => t['type'] == 'Income')
+        .fold(0.0, (sum, t) {
+      String amountStr = t['amount'].toString().replaceAll(RegExp(r'[^\d.]'), '');
+      return sum + (double.tryParse(amountStr) ?? 0.0);
+    });
+    String formatted = total.toStringAsFixed(2);
+    RegExp reg = RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))');
+    formatted = formatted.replaceAllMapped(reg, (Match m) => '${m[1]},');
+    return 'RM $formatted';
+  }
+
+  String get _totalExpensesStr {
+    double total = _bankTransactions
+        .where((t) => t['type'] == 'Expenses')
+        .fold(0.0, (sum, t) {
+      String amountStr = t['amount'].toString().replaceAll(RegExp(r'[^\d.]'), '');
+      return sum + (double.tryParse(amountStr) ?? 0.0);
+    });
+    String formatted = total.toStringAsFixed(2);
+    RegExp reg = RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))');
+    formatted = formatted.replaceAllMapped(reg, (Match m) => '${m[1]},');
+    return 'RM $formatted';
   }
 
   Widget _buildFilterButton(String title) {
@@ -204,7 +236,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
             Padding(
               padding: const EdgeInsets.only(
                 left: 16.0,
-                top: 16.0,
+                top: 8.0,
                 right: 16.0,
               ),
               child: Row(
@@ -212,14 +244,14 @@ class _TransactionsPageState extends State<TransactionsPage> {
                 children: [
                   Image.asset(
                     'assets/YourSectComp.png',
-                    width: 150,
+                    width: 110,
                     fit: BoxFit.contain,
                   ),
                   IconButton(
                     icon: const Icon(
                       Icons.notifications_none,
                       color: Colors.black,
-                      size: 28,
+                      size: 24,
                     ),
                     onPressed: () {
                       Navigator.push(
@@ -305,7 +337,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
                                       ),
                                       const SizedBox(height: 4),
                                       Text(
-                                        'RM 128,450.00',
+                                        _totalExpensesStr,
                                         style: GoogleFonts.poppins(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w800,
@@ -333,7 +365,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
                                       ),
                                       const SizedBox(height: 4),
                                       Text(
-                                        'RM 128,450.00',
+                                        _totalIncomeStr,
                                         style: GoogleFonts.poppins(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w800,

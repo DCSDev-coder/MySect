@@ -64,7 +64,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                           Image.asset(
                             'assets/YourSectComp.png',
-                            width: 150,
+                            width: 110,
                             fit: BoxFit.contain,
                           ),
                           const Spacer(),

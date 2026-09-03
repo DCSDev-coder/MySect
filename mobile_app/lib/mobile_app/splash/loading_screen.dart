@@ -69,6 +69,7 @@ class _MySectStrokeLoadingScreenState extends State<MySectStrokeLoadingScreen>
               final double textSlideOffset = (1.0 - textOpacity) * 8.0;
 
               return Column(
+                mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   // Animated Logo Widget

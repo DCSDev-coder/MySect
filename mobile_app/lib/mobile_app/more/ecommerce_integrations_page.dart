@@ -153,7 +153,7 @@ class _EcommerceIntegrationsPageState extends State<EcommerceIntegrationsPage> {
                 children: [
                   Image.asset(
                     'assets/YourSectComp.png',
-                    width: 150,
+                    width: 110,
                     fit: BoxFit.contain,
                   ),
                   IconButton(

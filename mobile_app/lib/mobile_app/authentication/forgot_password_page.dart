@@ -17,7 +17,7 @@ class ForgotPasswordPage extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 child: Image.asset(
                   'assets/YourSectComp.png',
-                  width: 150,
+                  width: 110,
                   fit: BoxFit.contain,
                 ),
               ),
@@ -167,24 +167,7 @@ class ForgotPasswordPage extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 32),
-                    Row(
-                      children: [
-                        Expanded(child: Divider(color: Colors.grey[300])),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                          child: Text(
-                            'SECURE CONNECTION',
-                            style: GoogleFonts.poppins(
-                              fontSize: 11,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.grey[500],
-                            ),
-                          ),
-                        ),
-                        Expanded(child: Divider(color: Colors.grey[300])),
-                      ],
-                    ),
+
                     const SizedBox(height: 98),
                   ],
                 ),

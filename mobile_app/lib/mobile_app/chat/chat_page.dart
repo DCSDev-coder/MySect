@@ -25,7 +25,7 @@ class _ChatPageState extends State<ChatPage> {
             Padding(
               padding: const EdgeInsets.only(
                 left: 16.0,
-                top: 16.0,
+                top: 8.0,
                 right: 16.0,
               ),
               child: Row(
@@ -33,14 +33,14 @@ class _ChatPageState extends State<ChatPage> {
                 children: [
                   Image.asset(
                     'assets/YourSectComp.png',
-                    width: 150,
+                    width: 110,
                     fit: BoxFit.contain,
                   ),
                   IconButton(
                     icon: const Icon(
                       Icons.notifications_none,
                       color: Colors.black,
-                      size: 28,
+                      size: 24,
                     ),
                     onPressed: () {
                       Navigator.push(
@@ -130,9 +130,8 @@ class _ChatPageState extends State<ChatPage> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 32),
+                    const SizedBox(height: 16),
                     if (_searchQuery.isEmpty) ...[
-                      const SizedBox(height: 16),
                       _buildChatCard(
                         'General Support',
                         '10:05 AM',
