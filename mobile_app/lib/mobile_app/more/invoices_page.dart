@@ -192,82 +192,85 @@ class _InvoicesPageState extends State<InvoicesPage> {
               ),
             ),
 
+            const SizedBox(height: 16),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      IconButton(
+                        icon: const Icon(
+                          Icons.arrow_back,
+                          color: Colors.black,
+                        ),
+                        onPressed: () => Navigator.pop(context),
+                        padding: EdgeInsets.zero,
+                        constraints: const BoxConstraints(),
+                      ),
+                      const SizedBox(width: 16),
+                      Text(
+                        'Invoices',
+                        style: GoogleFonts.poppins(
+                          color: Colors.black,
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                  PopupMenuButton<String>(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                      child: Text(
+                        'Manage',
+                        style: GoogleFonts.poppins(
+                          color: const Color(0xFF062AAE),
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                    onSelected: (value) {
+                      if (value == 'Payment Methods') {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const PaymentMethodsPage(),
+                          ),
+                        );
+                      } else if (value == 'Customers') {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const CustomersPage(),
+                          ),
+                        );
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Manage $value coming soon', style: GoogleFonts.poppins()),
+                            backgroundColor: const Color(0xFF062AAE),
+                          ),
+                        );
+                      }
+                    },
+                    itemBuilder: (context) => [
+                      PopupMenuItem(value: 'Payment Methods', child: Text('Payment Methods', style: GoogleFonts.poppins())),
+                      PopupMenuItem(value: 'Customers', child: Text('Customers', style: GoogleFonts.poppins())),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 16),
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const SizedBox(height: 16),
-
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            IconButton(
-                              icon: const Icon(
-                                Icons.arrow_back,
-                                color: Colors.black,
-                              ),
-                              onPressed: () => Navigator.pop(context),
-                              padding: EdgeInsets.zero,
-                              constraints: const BoxConstraints(),
-                            ),
-                            const SizedBox(width: 16),
-                            Text(
-                              'Invoices',
-                              style: GoogleFonts.poppins(
-                                color: Colors.black,
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                        PopupMenuButton<String>(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-                            child: Text(
-                              'Manage',
-                              style: GoogleFonts.poppins(
-                                color: const Color(0xFF062AAE),
-                                fontWeight: FontWeight.w600,
-                                fontSize: 16,
-                              ),
-                            ),
-                          ),
-                          onSelected: (value) {
-                            if (value == 'Payment Methods') {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const PaymentMethodsPage(),
-                                ),
-                              );
-                            } else if (value == 'Customers') {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const CustomersPage(),
-                                ),
-                              );
-                            } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text('Manage $value coming soon', style: GoogleFonts.poppins()),
-                                  backgroundColor: const Color(0xFF062AAE),
-                                ),
-                              );
-                            }
-                          },
-                          itemBuilder: (context) => [
-                            PopupMenuItem(value: 'Payment Methods', child: Text('Payment Methods', style: GoogleFonts.poppins())),
-                            PopupMenuItem(value: 'Customers', child: Text('Customers', style: GoogleFonts.poppins())),
-                          ],
-                        ),
-                      ],
-                    ),
                     const SizedBox(height: 24),
                     SingleChildScrollView(
                       scrollDirection: Axis.horizontal,

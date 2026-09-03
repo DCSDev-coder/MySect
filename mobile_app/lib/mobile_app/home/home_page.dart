@@ -25,6 +25,56 @@ class _HomePageState extends State<HomePage> {
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
 
+  List<Map<String, dynamic>> _getEventsForDay(DateTime day) {
+    if (day.day == 3) {
+      return [
+        {
+          'month': DateFormat('MMM').format(day).toUpperCase(),
+          'day': day.day.toString(),
+          'title': 'Complete Tax Return (C/C-s)',
+          'subtitle': 'Filling to IRAS for the year\nending 2025',
+          'timeRemaining': 'In 18 days',
+          'pillBgColor': const Color(0xFFFFF7A3),
+          'pillTextColor': const Color(0xFFFF8A00),
+        },
+        {
+          'month': DateFormat('MMM').format(day).toUpperCase(),
+          'day': day.day.toString(),
+          'title': 'Annual Return Submission',
+          'subtitle': 'Filing to ACRA for the year\nending 2024',
+          'timeRemaining': 'In 33 days',
+          'pillBgColor': const Color(0xFFE8F5E9),
+          'pillTextColor': const Color(0xFF2E7D32),
+        },
+      ];
+    } else if (day.day == 15) {
+      return [
+        {
+          'month': DateFormat('MMM').format(day).toUpperCase(),
+          'day': day.day.toString(),
+          'title': 'Q3 GST Return',
+          'subtitle': 'Filing to IRAS for Q3 2024',
+          'timeRemaining': 'Completed',
+          'pillBgColor': Colors.grey.shade200,
+          'pillTextColor': Colors.grey.shade700,
+        },
+      ];
+    } else if (day.day == 31) {
+      return [
+        {
+          'month': DateFormat('MMM').format(day).toUpperCase(),
+          'day': day.day.toString(),
+          'title': 'Q4 GST Return',
+          'subtitle': 'Filing to IRAS for Q4 2024',
+          'timeRemaining': 'In 80 days',
+          'pillBgColor': const Color(0xFFE3F2FD),
+          'pillTextColor': const Color(0xFF1565C0),
+        },
+      ];
+    }
+    return [];
+  }
+
   @override
   void initState() {
     super.initState();
@@ -258,34 +308,35 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               // File Now ->
-              InkWell(
-                onTap: onTap,
-                borderRadius: BorderRadius.circular(4),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 4.0,
-                    vertical: 4.0,
-                  ),
-                  child: Row(
-                    children: [
-                      Text(
-                        'File Now',
-                        style: GoogleFonts.poppins(
-                          color: const Color(0xFF006D67), // Teal
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
+              if (timeRemaining.toLowerCase() != 'completed')
+                InkWell(
+                  onTap: onTap,
+                  borderRadius: BorderRadius.circular(4),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 4.0,
+                      vertical: 4.0,
+                    ),
+                    child: Row(
+                      children: [
+                        Text(
+                          'File Now',
+                          style: GoogleFonts.poppins(
+                            color: const Color(0xFF006D67), // Teal
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: 4),
-                      const Icon(
-                        Icons.arrow_forward,
-                        color: Color(0xFF006D67),
-                        size: 18,
-                      ),
-                    ],
+                        const SizedBox(width: 4),
+                        const Icon(
+                          Icons.arrow_forward,
+                          color: Color(0xFF006D67),
+                          size: 18,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
             ],
           ),
         ],
@@ -448,12 +499,17 @@ class _HomePageState extends State<HomePage> {
                             _focusedDay = focusedDay;
                           });
                         },
+                        eventLoader: _getEventsForDay,
                         calendarFormat: CalendarFormat.month,
                         headerStyle: const HeaderStyle(
                           formatButtonVisible: false,
                           titleCentered: true,
                         ),
                         calendarStyle: const CalendarStyle(
+                          markerDecoration: BoxDecoration(
+                            color: Color(0xFFD71920),
+                            shape: BoxShape.circle,
+                          ),
                           selectedDecoration: BoxDecoration(
                             color: Color(0xFF062AAE),
                             shape: BoxShape.circle,
@@ -482,43 +538,45 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                           const SizedBox(height: 16),
-                          _buildDeadlineCard(
-                            month: 'AUG',
-                            day: '3',
-                            title: 'Complete Tax Return (C/C-s)',
-                            subtitle:
-                                'Filling to IRAS for the year\nending 2025',
-                            timeRemaining: 'In 18 days',
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      const DocumentNeededPage(),
+                          if (_getEventsForDay(_selectedDay!).isEmpty)
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 16.0),
+                              child: Text(
+                                'No tasks scheduled for this day',
+                                style: GoogleFonts.poppins(
+                                  color: Colors.grey.shade500,
+                                  fontStyle: FontStyle.italic,
+                                ),
+                              ),
+                            )
+                          else
+                            ..._getEventsForDay(_selectedDay!).map((event) {
+                              return Padding(
+                                padding: const EdgeInsets.only(bottom: 16.0),
+                                child: _buildDeadlineCard(
+                                  month: event['month'],
+                                  day: event['day'],
+                                  title: event['title'],
+                                  subtitle: event['subtitle'],
+                                  timeRemaining: event['timeRemaining'],
+                                  pillBgColor:
+                                      event['pillBgColor'] ??
+                                      const Color(0xFFFFF7A3),
+                                  pillTextColor:
+                                      event['pillTextColor'] ??
+                                      const Color(0xFFFF8A00),
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const DocumentNeededPage(),
+                                      ),
+                                    );
+                                  },
                                 ),
                               );
-                            },
-                          ),
-                          const SizedBox(height: 16),
-                          _buildDeadlineCard(
-                            month: 'AUG',
-                            day: '3',
-                            title: 'Annual Return Submission',
-                            subtitle:
-                                'Filing to ACRA for the year\nending 2024',
-                            timeRemaining: 'In 33 days',
-                            pillBgColor: const Color(0xFFE8F5E9),
-                            pillTextColor: const Color(0xFF2E7D32),
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      const DocumentNeededPage(),
-                                ),
-                              );
-                            },
-                          ),
+                            }),
                         ],
                       ),
                     ),
@@ -584,54 +642,103 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: [
-        _buildHomeView(),
-        const TransactionsPage(),
-        const FilesPage(),
-        const ChatPage(),
-        const MorePage(),
-      ][_selectedIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: (index) {
+  Widget _buildNavItem(
+    int index,
+    IconData icon,
+    IconData activeIcon,
+    String label,
+  ) {
+    final isSelected = _selectedIndex == index;
+    return Expanded(
+      child: GestureDetector(
+        onTap: () {
           setState(() {
             _selectedIndex = index;
           });
         },
-        type: BottomNavigationBarType.fixed,
-        selectedItemColor: Colors.black,
-        unselectedItemColor: Colors.grey,
-        selectedLabelStyle: GoogleFonts.poppins(
-          fontSize: 10,
-          fontWeight: FontWeight.w600,
+        behavior: HitTestBehavior.opaque,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              height: 3,
+              width: isSelected ? 24 : 0,
+              decoration: BoxDecoration(
+                color: const Color(0xFF062AAE),
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+            const SizedBox(height: 6),
+            Icon(
+              isSelected ? activeIcon : icon,
+              color: isSelected ? const Color(0xFF062AAE) : Colors.grey,
+              size: 24,
+            ),
+            const SizedBox(height: 4),
+            Text(
+              label,
+              style: GoogleFonts.poppins(
+                fontSize: 10,
+                fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                color: isSelected ? const Color(0xFF062AAE) : Colors.grey,
+              ),
+            ),
+          ],
         ),
-        unselectedLabelStyle: GoogleFonts.poppins(fontSize: 10),
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home_outlined),
-            activeIcon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.swap_horiz),
-            label: 'Transactions',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.folder_outlined),
-            activeIcon: Icon(Icons.folder),
-            label: 'Files',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.chat_bubble_outline),
-            activeIcon: Icon(Icons.chat_bubble),
-            label: 'Chat',
-          ),
-          BottomNavigationBarItem(icon: Icon(Icons.more_horiz), label: 'More'),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: IndexedStack(
+        index: _selectedIndex,
+        children: [
+          _buildHomeView(),
+          const TransactionsPage(),
+          const FilesPage(),
+          const ChatPage(),
+          const MorePage(),
         ],
+      ),
+      bottomNavigationBar: Container(
+        height: 80,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              blurRadius: 10,
+              color: Colors.black.withOpacity(.05),
+              offset: const Offset(0, -2),
+            ),
+          ],
+        ),
+        child: SafeArea(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              _buildNavItem(0, Icons.home_outlined, Icons.home, 'Home'),
+              _buildNavItem(
+                1,
+                Icons.swap_horiz,
+                Icons.swap_horiz,
+                'Transactions',
+              ),
+              _buildNavItem(2, Icons.folder_outlined, Icons.folder, 'Files'),
+              _buildNavItem(
+                3,
+                Icons.chat_bubble_outline,
+                Icons.chat_bubble,
+                'Chat',
+              ),
+              _buildNavItem(4, Icons.more_horiz, Icons.more_horiz, 'More'),
+            ],
+          ),
+        ),
       ),
     );
   }

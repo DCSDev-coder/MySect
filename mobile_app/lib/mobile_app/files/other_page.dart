@@ -58,37 +58,40 @@ class _OtherPageState extends State<OtherPage> {
                 ],
               ),
             ),
+            const SizedBox(height: 16),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                children: [
+                  IconButton(
+                    icon: const Icon(
+                      Icons.arrow_back_ios,
+                      color: Colors.black,
+                      size: 20,
+                    ),
+                    onPressed: () => Navigator.pop(context),
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    'Other',
+                    style: GoogleFonts.poppins(
+                      color: Colors.black,
+                      fontSize: 24,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 16),
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(height: 16),
-                    Row(
-                      children: [
-                        IconButton(
-                          icon: const Icon(
-                            Icons.arrow_back_ios,
-                            color: Colors.black,
-                            size: 20,
-                          ),
-                          onPressed: () => Navigator.pop(context),
-                          padding: EdgeInsets.zero,
-                          constraints: const BoxConstraints(),
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          'Other',
-                          style: GoogleFonts.poppins(
-                            color: Colors.black,
-                            fontSize: 24,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
                     const SizedBox(height: 10),
 
                     Container(
@@ -124,6 +127,8 @@ class _OtherPageState extends State<OtherPage> {
                     const SizedBox(height: 16),
 
                     _buildDocumentCard(
+                      title: 'Employee Handbook 2024',
+                      subtitle: 'HR & Policies • PDF',
                       badgeText: 'Signed by all',
                       badgeBgColor: Colors.green[100]!,
                       badgeTextColor: Colors.green[800]!,
@@ -132,6 +137,8 @@ class _OtherPageState extends State<OtherPage> {
                       progressColor: Colors.green,
                     ),
                     _buildDocumentCard(
+                      title: 'Office Lease Agreement',
+                      subtitle: 'Legal Contracts • PDF',
                       badgeText: 'Progress',
                       badgeBgColor: Colors.blue[100]!,
                       badgeTextColor: Colors.blue[800]!,
@@ -140,6 +147,8 @@ class _OtherPageState extends State<OtherPage> {
                       progressColor: Colors.blue,
                     ),
                     _buildDocumentCard(
+                      title: 'Non-Disclosure Agreement',
+                      subtitle: 'Legal Contracts • PDF',
                       badgeText: 'Pending',
                       badgeBgColor: Colors.red[100]!,
                       badgeTextColor: Colors.red[800]!,
@@ -156,6 +165,7 @@ class _OtherPageState extends State<OtherPage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        heroTag: null,
         onPressed: () => showAddMenu(context),
         backgroundColor: const Color(0xFF062AAE),
         shape: const CircleBorder(),
@@ -205,6 +215,8 @@ class _OtherPageState extends State<OtherPage> {
   }
 
   Widget _buildDocumentCard({
+    required String title,
+    required String subtitle,
     required String badgeText,
     required Color badgeBgColor,
     required Color badgeTextColor,
@@ -270,20 +282,24 @@ class _OtherPageState extends State<OtherPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '5LUXE Scents Pted. Ltd. -UFS for 20...',
+                      title,
                       style: GoogleFonts.poppins(
                         fontWeight: FontWeight.w700,
                         fontSize: 14,
                         color: Colors.black,
                       ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      'Nasri Ashari • Unaudited report',
+                      subtitle,
                       style: GoogleFonts.poppins(
                         fontSize: 12,
                         color: Colors.grey[600],
                       ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ],
                 ),

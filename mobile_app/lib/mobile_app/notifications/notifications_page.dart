@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../tasks/document_needed_page.dart';
+import '../files/attention_page.dart';
+import '../more/calendar_page.dart';
 
 class NotificationsPage extends StatefulWidget {
   const NotificationsPage({super.key});
@@ -106,6 +109,10 @@ class _NotificationsPageState extends State<NotificationsPage> {
                                 _hasUnread = false;
                               });
                             }
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const DocumentNeededPage()),
+                            );
                           },
                         ),
                         _buildNotificationItem(
@@ -116,6 +123,12 @@ class _NotificationsPageState extends State<NotificationsPage> {
                               'Your Estimated Chargeable Income has been filed to IRAS.',
                           time: '1 day ago',
                           isUnread: false,
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const CalendarPage()),
+                            );
+                          },
                         ),
                         _buildNotificationItem(
                           icon: Icons.warning_amber_rounded,
@@ -125,6 +138,12 @@ class _NotificationsPageState extends State<NotificationsPage> {
                               'Clarification required for corporate secretarial work.',
                           time: '3 days ago',
                           isUnread: false,
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const AttentionPage()),
+                            );
+                          },
                         ),
                       ],
                     ),

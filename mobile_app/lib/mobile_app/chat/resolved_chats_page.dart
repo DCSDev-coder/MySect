@@ -163,6 +163,7 @@ class _ResolvedChatsPageState extends State<ResolvedChatsPage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        heroTag: null,
         onPressed: () {
           Navigator.push(
             context,

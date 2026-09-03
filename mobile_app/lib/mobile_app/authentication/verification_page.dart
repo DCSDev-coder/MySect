@@ -105,6 +105,7 @@ class _VerificationPageState extends State<VerificationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -126,7 +127,15 @@ class _VerificationPageState extends State<VerificationPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    const Spacer(flex: 2),
+                    const Spacer(flex: 1),
+                    Center(
+                      child: Image.asset(
+                        'assets/verify code.png',
+                        height: 180,
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                    const SizedBox(height: 24),
                     Text(
                       'Enter verification code',
                       textAlign: TextAlign.center,

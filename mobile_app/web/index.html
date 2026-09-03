@@ -31,6 +31,13 @@
 
   <title>mysect</title>
   <link rel="manifest" href="manifest.json">
+  <style>
+    /* Hide the native password reveal eye in Edge/Chrome */
+    input::-ms-reveal,
+    input::-ms-clear {
+      display: none;
+    }
+  </style>
 </head>
 <body>
   <!--

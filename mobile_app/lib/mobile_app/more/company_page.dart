@@ -81,36 +81,39 @@ class _CompanyPageState extends State<CompanyPage> {
               ),
             ),
 
+            const SizedBox(height: 16),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                children: [
+                  IconButton(
+                    icon: const Icon(
+                      Icons.arrow_back,
+                      color: Colors.black,
+                    ),
+                    onPressed: () => Navigator.pop(context),
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                  ),
+                  const SizedBox(width: 16),
+                  Text(
+                    'Company',
+                    style: GoogleFonts.poppins(
+                      color: Colors.black,
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 16),
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(height: 16),
-
-                    Row(
-                      children: [
-                        IconButton(
-                          icon: const Icon(
-                            Icons.arrow_back,
-                            color: Colors.black,
-                          ),
-                          onPressed: () => Navigator.pop(context),
-                          padding: EdgeInsets.zero,
-                          constraints: const BoxConstraints(),
-                        ),
-                        const SizedBox(width: 16),
-                        Text(
-                          'Company',
-                          style: GoogleFonts.poppins(
-                            color: Colors.black,
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
                     const SizedBox(height: 24),
 
                     Container(
@@ -261,14 +264,14 @@ class _CompanyPageState extends State<CompanyPage> {
                           _buildDetailItem(
                             label: 'Email for documents',
                             value: '6c1e82ca9444-33722@my.osome.com',
-                            showInfoIcon: true,
+                            infoText: 'This is the dedicated email address for your company to receive official documents.',
                             isCopyable: true,
                           ),
                           Divider(color: Colors.grey.shade200, height: 1),
                           _buildDetailItem(
                             label: 'Registration number (UEN)',
                             value: '201927948R',
-                            showInfoIcon: true,
+                            infoText: 'The Unique Entity Number (UEN) is the standard identification number for entities to interact with government agencies.',
                             isCopyable: true,
                           ),
                           Divider(color: Colors.grey.shade200, height: 1),
@@ -377,7 +380,7 @@ class _CompanyPageState extends State<CompanyPage> {
   Widget _buildDetailItem({
     required String label,
     required String value,
-    bool showInfoIcon = false,
+    String? infoText,
     bool isCopyable = false,
   }) {
     return Padding(
@@ -398,12 +401,24 @@ class _CompanyPageState extends State<CompanyPage> {
                         fontSize: 12,
                       ),
                     ),
-                    if (showInfoIcon) ...[
+                    if (infoText != null) ...[
                       const SizedBox(width: 4),
-                      Icon(
-                        Icons.info_outline,
-                        color: Colors.grey.shade500,
-                        size: 14,
+                      Tooltip(
+                        message: infoText,
+                        triggerMode: TooltipTriggerMode.tap,
+                        showDuration: const Duration(seconds: 3),
+                        padding: const EdgeInsets.all(12),
+                        margin: const EdgeInsets.symmetric(horizontal: 24),
+                        textStyle: GoogleFonts.poppins(color: Colors.white, fontSize: 12),
+                        decoration: BoxDecoration(
+                          color: Colors.black87,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Icon(
+                          Icons.info_outline,
+                          color: Colors.grey.shade500,
+                          size: 14,
+                        ),
                       ),
                     ],
                   ],

@@ -25,7 +25,7 @@ class Intro2Page extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Image.asset('assets/YourSectComp.png', width: 150, fit: BoxFit.contain),
+                            Image.asset('assets/YourSectComp.png', width: 110, fit: BoxFit.contain),
                             TextButton(
                               onPressed: () {
                                 Navigator.of(context).pushAndRemoveUntil(

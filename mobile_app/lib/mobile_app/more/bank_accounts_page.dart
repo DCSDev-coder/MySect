@@ -61,126 +61,127 @@ class _BankAccountsPageState extends State<BankAccountsPage> {
               ),
             ),
 
+            const SizedBox(height: 16),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      IconButton(
+                        icon: const Icon(
+                          Icons.arrow_back,
+                          color: Colors.black,
+                        ),
+                        onPressed: () => Navigator.pop(context),
+                        padding: EdgeInsets.zero,
+                        constraints: const BoxConstraints(),
+                      ),
+                      const SizedBox(width: 16),
+                      Text(
+                        'Bank accounts',
+                        style: GoogleFonts.poppins(
+                          color: Colors.black,
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                  IconButton(
+                    icon: const Icon(
+                      Icons.add,
+                      color: Colors.black,
+                      size: 32,
+                    ),
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          backgroundColor: Colors.white,
+                          title: Text(
+                            'Add Bank Account',
+                            style: GoogleFonts.poppins(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          content: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              TextField(
+                                decoration: InputDecoration(
+                                  labelText: 'Bank Name',
+                                  labelStyle: GoogleFonts.poppins(),
+                                ),
+                              ),
+                              TextField(
+                                decoration: InputDecoration(
+                                  labelText: 'Account Number',
+                                  labelStyle: GoogleFonts.poppins(),
+                                ),
+                                keyboardType: TextInputType.number,
+                              ),
+                              TextField(
+                                decoration: InputDecoration(
+                                  labelText: 'Currency (e.g. SGD)',
+                                  labelStyle: GoogleFonts.poppins(),
+                                ),
+                              ),
+                            ],
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(context),
+                              child: Text(
+                                'Cancel',
+                                style: GoogleFonts.poppins(
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ),
+                            ElevatedButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      'Bank account added!',
+                                      style: GoogleFonts.poppins(),
+                                    ),
+                                    backgroundColor: const Color(
+                                      0xFF062AAE,
+                                    ),
+                                  ),
+                                );
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xFF062AAE),
+                              ),
+                              child: Text(
+                                'Save',
+                                style: GoogleFonts.poppins(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 16),
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(height: 16),
-                    // Header Row: Back Button, Title, Add
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            IconButton(
-                              icon: const Icon(
-                                Icons.arrow_back,
-                                color: Colors.black,
-                              ),
-                              onPressed: () => Navigator.pop(context),
-                              padding: EdgeInsets.zero,
-                              constraints: const BoxConstraints(),
-                            ),
-                            const SizedBox(width: 16),
-                            Text(
-                              'Bank accounts',
-                              style: GoogleFonts.poppins(
-                                color: Colors.black,
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                        IconButton(
-                          icon: const Icon(
-                            Icons.add,
-                            color: Colors.black,
-                            size: 32,
-                          ),
-                          onPressed: () {
-                            showDialog(
-                              context: context,
-                              builder: (context) => AlertDialog(
-                                backgroundColor: Colors.white,
-                                title: Text(
-                                  'Add Bank Account',
-                                  style: GoogleFonts.poppins(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                content: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    TextField(
-                                      decoration: InputDecoration(
-                                        labelText: 'Bank Name',
-                                        labelStyle: GoogleFonts.poppins(),
-                                      ),
-                                    ),
-                                    TextField(
-                                      decoration: InputDecoration(
-                                        labelText: 'Account Number',
-                                        labelStyle: GoogleFonts.poppins(),
-                                      ),
-                                      keyboardType: TextInputType.number,
-                                    ),
-                                    TextField(
-                                      decoration: InputDecoration(
-                                        labelText: 'Currency (e.g. SGD)',
-                                        labelStyle: GoogleFonts.poppins(),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () => Navigator.pop(context),
-                                    child: Text(
-                                      'Cancel',
-                                      style: GoogleFonts.poppins(
-                                        color: Colors.grey,
-                                      ),
-                                    ),
-                                  ),
-                                  ElevatedButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                      ScaffoldMessenger.of(
-                                        context,
-                                      ).showSnackBar(
-                                        SnackBar(
-                                          content: Text(
-                                            'Bank account added!',
-                                            style: GoogleFonts.poppins(),
-                                          ),
-                                          backgroundColor: const Color(
-                                            0xFF062AAE,
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: const Color(0xFF062AAE),
-                                    ),
-                                    child: Text(
-                                      'Save',
-                                      style: GoogleFonts.poppins(
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
-                          padding: EdgeInsets.zero,
-                          constraints: const BoxConstraints(),
-                        ),
-                      ],
-                    ),
                     const SizedBox(height: 16),
 
                     Text(

@@ -18,6 +18,7 @@ class _ChatPageState extends State<ChatPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Column(
           children: [
@@ -131,7 +132,9 @@ class _ChatPageState extends State<ChatPage> {
                       ),
                     ),
                     const SizedBox(height: 16),
-                    if (_searchQuery.isEmpty) ...[
+                    if (_searchQuery.isEmpty || 
+                        'General Support'.toLowerCase().contains(_searchQuery) ||
+                        'Sure, I can help with that. What seems to be the issue?'.toLowerCase().contains(_searchQuery)) ...[
                       _buildChatCard(
                         'General Support',
                         '10:05 AM',
@@ -164,6 +167,7 @@ class _ChatPageState extends State<ChatPage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        heroTag: 'chat_fab',
         onPressed: () {
           Navigator.push(
             context,

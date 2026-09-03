@@ -10,6 +10,7 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  bool _isEditing = false;
   final TextEditingController _nameController = TextEditingController(text: 'Elly Melissa');
   final TextEditingController _emailController = TextEditingController(text: 'melissa@datacenterspecialists.com');
   final TextEditingController _phoneController = TextEditingController(text: '+6012 -299 3330');
@@ -43,36 +44,31 @@ class _ProfilePageState extends State<ProfilePage> {
     return Scaffold(
       backgroundColor: const Color(0xFFF7F7F9),
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
+        child: Column(
+          children: [
               Container(
                 color: Colors.white,
                 child: Column(
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(
-                        left: 8.0,
-                        top: 16.0,
+                        left: 16.0,
+                        top: 8.0,
                         right: 16.0,
                       ),
                       child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          IconButton(
-                            icon: const Icon(Icons.arrow_back, color: Colors.black87),
-                            onPressed: () => Navigator.pop(context),
-                          ),
                           Image.asset(
                             'assets/YourSectComp.png',
                             width: 110,
                             fit: BoxFit.contain,
                           ),
-                          const Spacer(),
                           IconButton(
                             icon: const Icon(
                               Icons.notifications_none,
                               color: Colors.black,
-                              size: 28,
+                              size: 24,
                             ),
                             onPressed: () {
                               Navigator.push(
@@ -86,6 +82,54 @@ class _ProfilePageState extends State<ProfilePage> {
                         ],
                       ),
                     ),
+                    const SizedBox(height: 16),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Row(
+                        children: [
+                          IconButton(
+                            icon: const Icon(
+                              Icons.arrow_back_ios,
+                              color: Colors.black,
+                              size: 20,
+                            ),
+                            onPressed: () => Navigator.pop(context),
+                            padding: EdgeInsets.zero,
+                            constraints: const BoxConstraints(),
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            'Profile',
+                            style: GoogleFonts.poppins(
+                              color: Colors.black,
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const Spacer(),
+                          if (!_isEditing)
+                            IconButton(
+                              icon: const Icon(Icons.edit, color: Colors.black),
+                              onPressed: () => setState(() => _isEditing = true),
+                            )
+                          else ...[
+                            TextButton(
+                              onPressed: () => setState(() => _isEditing = false),
+                              child: Text('Cancel', style: GoogleFonts.poppins(color: Colors.red, fontWeight: FontWeight.bold)),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                setState(() => _isEditing = false);
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(content: Text('Profile updated successfully!'), backgroundColor: Colors.green),
+                                );
+                              },
+                              child: Text('Save', style: GoogleFonts.poppins(color: const Color(0xFF062AAE), fontWeight: FontWeight.bold)),
+                            ),
+                          ],
+                        ],
+                      ),
+                    ),
                     Padding(
                       padding: const EdgeInsets.only(bottom: 24),
                       child: _buildProfileHeader(),
@@ -93,9 +137,13 @@ class _ProfilePageState extends State<ProfilePage> {
                   ],
                 ),
               ),
-            const SizedBox(height: 24),
-            _buildSectionHeader('PERSONAL INFORMATION'),
-            _buildSectionContainer(
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    const SizedBox(height: 24),
+                    _buildSectionHeader('PERSONAL INFORMATION'),
+                    _buildSectionContainer(
               children: [
                 _buildInfoItem(
                   title: 'Full Name',
@@ -151,10 +199,13 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ],
             ),
-            const SizedBox(height: 40),
+                    const SizedBox(height: 40),
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
-      ),
       ),
     );
   }
@@ -251,7 +302,7 @@ class _ProfilePageState extends State<ProfilePage> {
     Function(String)? onChanged,
   }) {
     return InkWell(
-      onTap: () => focusNode.requestFocus(),
+      onTap: _isEditing ? () => focusNode.requestFocus() : null,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
       child: Row(
@@ -285,10 +336,11 @@ class _ProfilePageState extends State<ProfilePage> {
                   controller: controller,
                   focusNode: focusNode,
                   onChanged: onChanged,
+                  enabled: _isEditing,
                   style: GoogleFonts.poppins(
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
-                    color: Colors.black87,
+                    color: _isEditing ? Colors.black : Colors.black87,
                   ),
                   decoration: const InputDecoration(
                     isDense: true,
@@ -299,7 +351,8 @@ class _ProfilePageState extends State<ProfilePage> {
               ],
             ),
           ),
-          Icon(Icons.edit, color: Colors.grey.shade300, size: 16),
+          if (_isEditing)
+            Icon(Icons.edit, color: Colors.grey.shade300, size: 16),
         ],
       ),
       ),

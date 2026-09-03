@@ -18,6 +18,8 @@ class FilesPage extends StatefulWidget {
 
 class _FilesPageState extends State<FilesPage> {
   String _searchQuery = '';
+  bool _isConnectingTMCloud = false;
+  bool _tmCloudConnected = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -147,9 +149,32 @@ class _FilesPageState extends State<FilesPage> {
                             ),
                           ),
                           OutlinedButton(
-                            onPressed: () => showAddMenu(context),
+                            onPressed: _isConnectingTMCloud || _tmCloudConnected
+                                ? null
+                                : () async {
+                                    setState(() {
+                                      _isConnectingTMCloud = true;
+                                    });
+                                    await Future.delayed(const Duration(seconds: 2));
+                                    if (mounted) {
+                                      setState(() {
+                                        _isConnectingTMCloud = false;
+                                        _tmCloudConnected = true;
+                                      });
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                          content: Text('Successfully connected to TM Cloud!'),
+                                          backgroundColor: Colors.green,
+                                        ),
+                                      );
+                                    }
+                                  },
                             style: OutlinedButton.styleFrom(
-                              side: const BorderSide(color: Color(0xFF062AAE)),
+                              side: BorderSide(
+                                color: _tmCloudConnected
+                                    ? Colors.green
+                                    : const Color(0xFF062AAE),
+                              ),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20),
                               ),
@@ -158,13 +183,37 @@ class _FilesPageState extends State<FilesPage> {
                                 vertical: 8,
                               ),
                             ),
-                            child: Text(
-                              'Connect',
-                              style: GoogleFonts.poppins(
-                                color: const Color(0xFF062AAE),
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
+                            child: _isConnectingTMCloud
+                                ? const SizedBox(
+                                    width: 16,
+                                    height: 16,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                          Color(0xFF062AAE)),
+                                    ),
+                                  )
+                                : Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      if (_tmCloudConnected) ...[
+                                        const Icon(Icons.check,
+                                            size: 16, color: Colors.green),
+                                        const SizedBox(width: 4),
+                                      ],
+                                      Text(
+                                        _tmCloudConnected
+                                            ? 'Connected'
+                                            : 'Connect',
+                                        style: GoogleFonts.poppins(
+                                          color: _tmCloudConnected
+                                              ? Colors.green
+                                              : const Color(0xFF062AAE),
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                           ),
                         ],
                       ),
@@ -309,6 +358,7 @@ class _FilesPageState extends State<FilesPage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        heroTag: 'files_fab',
         onPressed: () => showAddMenu(context),
         backgroundColor: const Color(0xFF062AAE),
         shape: const CircleBorder(),
