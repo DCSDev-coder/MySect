@@ -506,6 +506,7 @@ class _HomePageState extends State<HomePage> {
                           titleCentered: true,
                         ),
                         calendarStyle: const CalendarStyle(
+                          markersMaxCount: 1,
                           markerDecoration: BoxDecoration(
                             color: Color(0xFFD71920),
                             shape: BoxShape.circle,
