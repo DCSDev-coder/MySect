@@ -15,7 +15,7 @@ class OtherPage extends StatefulWidget {
 class _OtherPageState extends State<OtherPage> {
   final int _selectedIndex = 2; // Files tab
 
-  List<DocumentFile> _myFiles = [
+  final List<DocumentFile> _myFiles = [
     DocumentFile(
       title: 'Employee Handbook 2024',
       subtitle: 'HR & Policies • PDF',

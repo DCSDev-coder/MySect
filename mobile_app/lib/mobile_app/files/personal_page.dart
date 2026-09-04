@@ -15,7 +15,7 @@ class PersonalPage extends StatefulWidget {
 class _PersonalPageState extends State<PersonalPage> {
   final int _selectedIndex = 2;
 
-  List<DocumentFile> _myFiles = [
+  final List<DocumentFile> _myFiles = [
     DocumentFile(
       title: 'John Doe - Passport Copy',
       subtitle: 'Personal Identification • PDF',

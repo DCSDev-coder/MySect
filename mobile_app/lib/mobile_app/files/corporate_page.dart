@@ -15,7 +15,7 @@ class CorporatePage extends StatefulWidget {
 class _CorporatePageState extends State<CorporatePage> {
   final int _selectedIndex = 2;
 
-  List<DocumentFile> _myFiles = [
+  final List<DocumentFile> _myFiles = [
     DocumentFile(
       title: 'Certificate of Incorporation',
       subtitle: 'ACRA Corporate Info • PDF',

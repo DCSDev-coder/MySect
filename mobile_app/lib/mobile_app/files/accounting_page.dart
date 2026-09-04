@@ -16,7 +16,7 @@ class _AccountingPageState extends State<AccountingPage> {
   final int _selectedIndex = 2;
 
   // Dynamic list of files
-  List<DocumentFile> _myFiles = [
+  final List<DocumentFile> _myFiles = [
     DocumentFile(
       title: 'Q3 Balance Sheet',
       subtitle: 'Financial Statements • PDF',
