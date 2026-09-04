@@ -156,7 +156,7 @@ class _FilesPageState extends State<FilesPage> {
                                       _isConnectingTMCloud = true;
                                     });
                                     await Future.delayed(const Duration(seconds: 2));
-                                    if (mounted) {
+                                    if (context.mounted) {
                                       setState(() {
                                         _isConnectingTMCloud = false;
                                         _tmCloudConnected = true;
