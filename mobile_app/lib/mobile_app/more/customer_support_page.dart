@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
@@ -26,7 +25,8 @@ class _CustomerSupportPageState extends State<CustomerSupportPage> {
   }
 
   void _submitComplaint() {
-    if (_subjectController.text.trim().isEmpty || _complaintController.text.trim().isEmpty) {
+    if (_subjectController.text.trim().isEmpty ||
+        _complaintController.text.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
@@ -69,11 +69,7 @@ class _CustomerSupportPageState extends State<CustomerSupportPage> {
           children: [
             // App Header
             Padding(
-              padding: const EdgeInsets.only(
-                left: 16.0,
-                top: 8.0,
-                right: 16.0,
-              ),
+              padding: const EdgeInsets.only(left: 16.0, top: 8.0, right: 16.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -91,10 +87,7 @@ class _CustomerSupportPageState extends State<CustomerSupportPage> {
               child: Row(
                 children: [
                   IconButton(
-                    icon: const Icon(
-                      Icons.arrow_back,
-                      color: Colors.black,
-                    ),
+                    icon: const Icon(Icons.arrow_back, color: Colors.black),
                     onPressed: () => Navigator.pop(context),
                     padding: EdgeInsets.zero,
                     constraints: const BoxConstraints(),
@@ -145,7 +138,9 @@ class _CustomerSupportPageState extends State<CustomerSupportPage> {
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(color: Color(0xFF062AAE)),
+                          borderSide: const BorderSide(
+                            color: Color(0xFF062AAE),
+                          ),
                         ),
                       ),
                     ),
@@ -177,7 +172,9 @@ class _CustomerSupportPageState extends State<CustomerSupportPage> {
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(color: Color(0xFF062AAE)),
+                          borderSide: const BorderSide(
+                            color: Color(0xFF062AAE),
+                          ),
                         ),
                       ),
                     ),
@@ -213,7 +210,11 @@ class _CustomerSupportPageState extends State<CustomerSupportPage> {
                                   _selectedImage!.path,
                                   fit: BoxFit.cover,
                                   errorBuilder: (context, error, stackTrace) =>
-                                      const Icon(Icons.broken_image, size: 50, color: Colors.grey),
+                                      const Icon(
+                                        Icons.broken_image,
+                                        size: 50,
+                                        color: Colors.grey,
+                                      ),
                                 ),
                               )
                             : Column(

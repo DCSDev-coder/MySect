@@ -51,7 +51,7 @@ class Intro3Page extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               const SizedBox(width: double.infinity),
-                              Image.asset('assets/taxation.png', height: 280),
+                              Image.asset('assets/taxation.png', height: 220),
                               const SizedBox(height: 20),
                               Text(
                                 'Taxation',
