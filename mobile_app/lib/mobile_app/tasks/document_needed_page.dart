@@ -24,11 +24,17 @@ class DocumentNeededPage extends StatelessWidget {
                     fit: BoxFit.contain,
                   ),
                   IconButton(
-                    icon: const Icon(Icons.notifications_none, color: Colors.black, size: 24),
+                    icon: const Icon(
+                      Icons.notifications_none,
+                      color: Colors.black,
+                      size: 24,
+                    ),
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const NotificationsPage()),
+                        MaterialPageRoute(
+                          builder: (context) => const NotificationsPage(),
+                        ),
                       );
                     },
                   ),
@@ -41,7 +47,11 @@ class DocumentNeededPage extends StatelessWidget {
               child: Row(
                 children: [
                   IconButton(
-                    icon: const Icon(Icons.arrow_back_ios, color: Colors.black, size: 20),
+                    icon: const Icon(
+                      Icons.arrow_back_ios,
+                      color: Colors.black,
+                      size: 20,
+                    ),
                     onPressed: () => Navigator.pop(context),
                     padding: EdgeInsets.zero,
                     constraints: const BoxConstraints(),
@@ -126,7 +136,8 @@ class _ExpandableDocumentCard extends StatefulWidget {
   });
 
   @override
-  State<_ExpandableDocumentCard> createState() => _ExpandableDocumentCardState();
+  State<_ExpandableDocumentCard> createState() =>
+      _ExpandableDocumentCardState();
 }
 
 class _ExpandableDocumentCardState extends State<_ExpandableDocumentCard> {
@@ -179,7 +190,11 @@ class _ExpandableDocumentCardState extends State<_ExpandableDocumentCard> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.cloud_upload_outlined, size: 80, color: Colors.grey[300]),
+                      Icon(
+                        Icons.cloud_upload_outlined,
+                        size: 80,
+                        color: Colors.grey[300],
+                      ),
                       const SizedBox(height: 16),
                       Text(
                         'Tap below to choose file',
@@ -197,9 +212,16 @@ class _ExpandableDocumentCardState extends State<_ExpandableDocumentCard> {
                     Navigator.pop(context); // Close sheet before picker
                     PlatformFile? file = await FilePicker.pickFile(
                       type: FileType.custom,
-                      allowedExtensions: ['jpg', 'jpeg', 'png', 'pdf', 'doc', 'docx'],
+                      allowedExtensions: [
+                        'jpg',
+                        'jpeg',
+                        'png',
+                        'pdf',
+                        'doc',
+                        'docx',
+                      ],
                     );
-                    
+
                     if (file != null && context.mounted) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
@@ -265,7 +287,10 @@ class _ExpandableDocumentCardState extends State<_ExpandableDocumentCard> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
                     color: widget.badgeBgColor,
                     borderRadius: BorderRadius.circular(12),
@@ -292,11 +317,7 @@ class _ExpandableDocumentCardState extends State<_ExpandableDocumentCard> {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Image.asset(
-                  'assets/PDF.png',
-                  width: 48,
-                  height: 48,
-                ),
+                Image.asset('assets/PDF.png', width: 48, height: 48),
                 const SizedBox(width: 16),
                 Expanded(
                   child: Column(
@@ -322,7 +343,9 @@ class _ExpandableDocumentCardState extends State<_ExpandableDocumentCard> {
                   ),
                 ),
                 Icon(
-                  _isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
+                  _isExpanded
+                      ? Icons.keyboard_arrow_up
+                      : Icons.keyboard_arrow_down,
                   color: Colors.grey,
                 ),
               ],
@@ -352,49 +375,65 @@ class _ExpandableDocumentCardState extends State<_ExpandableDocumentCard> {
                 ),
               ),
               const SizedBox(height: 8),
-              // Completed Items
-              ...widget.completedItems.map((item) => Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 4),
+
+              ...widget.completedItems.map(
+                (item) => Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4),
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Icons.check_circle,
+                        color: Colors.green,
+                        size: 20,
+                      ),
+                      const SizedBox(width: 12),
+                      Text(
+                        item,
+                        style: GoogleFonts.poppins(
+                          fontSize: 13,
+                          color: Colors.grey[600],
+                          decoration: TextDecoration.lineThrough,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              ...widget.pendingItems.map(
+                (item) => InkWell(
+                  onTap: () => _handleActionTap(item),
+                  borderRadius: BorderRadius.circular(4),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
                     child: Row(
                       children: [
-                        const Icon(Icons.check_circle, color: Colors.green, size: 20),
+                        const Icon(
+                          Icons.radio_button_unchecked,
+                          color: Colors.red,
+                          size: 20,
+                        ),
                         const SizedBox(width: 12),
-                        Text(
-                          item,
-                          style: GoogleFonts.poppins(
-                            fontSize: 13,
-                            color: Colors.grey[600],
-                            decoration: TextDecoration.lineThrough,
+                        Expanded(
+                          child: Text(
+                            item,
+                            style: GoogleFonts.poppins(
+                              fontSize: 13,
+                              color: Colors.red[800],
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
+                        ),
+                        const Icon(
+                          Icons.arrow_forward_ios,
+                          size: 12,
+                          color: Colors.red,
                         ),
                       ],
                     ),
-                  )),
-              // Pending Items
-              ...widget.pendingItems.map((item) => InkWell(
-                    onTap: () => _handleActionTap(item),
-                    borderRadius: BorderRadius.circular(4),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8),
-                      child: Row(
-                        children: [
-                          const Icon(Icons.radio_button_unchecked, color: Colors.red, size: 20),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: Text(
-                              item,
-                              style: GoogleFonts.poppins(
-                                fontSize: 13,
-                                color: Colors.red[800],
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ),
-                          const Icon(Icons.arrow_forward_ios, size: 12, color: Colors.red),
-                        ],
-                      ),
-                    ),
-                  )),
+                  ),
+                ),
+              ),
             ],
           ],
         ),
