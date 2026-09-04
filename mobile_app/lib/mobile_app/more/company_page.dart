@@ -49,11 +49,7 @@ class _CompanyPageState extends State<CompanyPage> {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.only(
-                left: 16.0,
-                top: 8.0,
-                right: 16.0,
-              ),
+              padding: const EdgeInsets.only(left: 16.0, top: 8.0, right: 16.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -87,10 +83,7 @@ class _CompanyPageState extends State<CompanyPage> {
               child: Row(
                 children: [
                   IconButton(
-                    icon: const Icon(
-                      Icons.arrow_back,
-                      color: Colors.black,
-                    ),
+                    icon: const Icon(Icons.arrow_back, color: Colors.black),
                     onPressed: () => Navigator.pop(context),
                     padding: EdgeInsets.zero,
                     constraints: const BoxConstraints(),
@@ -144,7 +137,8 @@ class _CompanyPageState extends State<CompanyPage> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const CompanySharesPage(),
+                                  builder: (context) =>
+                                      const CompanySharesPage(),
                                 ),
                               );
                             },
@@ -157,7 +151,8 @@ class _CompanyPageState extends State<CompanyPage> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const CompanyDocumentsPage(),
+                                  builder: (context) =>
+                                      const CompanyDocumentsPage(),
                                 ),
                               );
                             },
@@ -264,14 +259,16 @@ class _CompanyPageState extends State<CompanyPage> {
                           _buildDetailItem(
                             label: 'Email for documents',
                             value: '6c1e82ca9444-33722@my.osome.com',
-                            infoText: 'This is the dedicated email address for your company to receive official documents.',
+                            infoText:
+                                'This is the dedicated email address for your company to receive official documents.',
                             isCopyable: true,
                           ),
                           Divider(color: Colors.grey.shade200, height: 1),
                           _buildDetailItem(
                             label: 'Registration number (UEN)',
                             value: '201927948R',
-                            infoText: 'The Unique Entity Number (UEN) is the standard identification number for entities to interact with government agencies.',
+                            infoText:
+                                'The Unique Entity Number (UEN) is the standard identification number for entities to interact with government agencies.',
                             isCopyable: true,
                           ),
                           Divider(color: Colors.grey.shade200, height: 1),
@@ -283,7 +280,7 @@ class _CompanyPageState extends State<CompanyPage> {
                           _buildDetailItem(
                             label: 'Company address',
                             value:
-                                '120 Robinson Road, #15-01, Singapore 068913',
+                                'No. 42-2 Jalan Eco Forest 6/1C Eco Forest 43500 Semenyih Selangor Malaysia',
                           ),
                         ],
                       ),
@@ -409,9 +406,14 @@ class _CompanyPageState extends State<CompanyPage> {
                         showDuration: const Duration(seconds: 3),
                         padding: const EdgeInsets.all(12),
                         margin: const EdgeInsets.symmetric(horizontal: 24),
-                        textStyle: GoogleFonts.poppins(color: Colors.white, fontSize: 12),
+                        preferBelow: false,
+                        verticalOffset: 14,
+                        textStyle: GoogleFonts.poppins(
+                          color: Colors.white,
+                          fontSize: 12,
+                        ),
                         decoration: BoxDecoration(
-                          color: Colors.black87,
+                          color: const Color(0xFF2D3748),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Icon(

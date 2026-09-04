@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../notifications/notifications_page.dart';
 
@@ -165,6 +166,71 @@ class _ProfilePageState extends State<ProfilePage> {
                   controller: _phoneController,
                   focusNode: _phoneFocus,
                   icon: Icons.phone_outlined,
+                  keyboardType: TextInputType.phone,
+                  inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9+\-\s]'))],
+                  prefix: _isEditing
+                      ? InkWell(
+                          onTap: () {
+                            showModalBottomSheet(
+                              context: context,
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+                              ),
+                              builder: (context) {
+                                return SafeArea(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(16.0),
+                                        child: Text(
+                                          'Select Country Code',
+                                          style: GoogleFonts.poppins(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                      ),
+                                      ListTile(
+                                        title: Text('Malaysia (+60)', style: GoogleFonts.poppins()),
+                                        onTap: () {
+                                          setState(() {
+                                            if (!_phoneController.text.startsWith('+60')) {
+                                              _phoneController.text = '+60 ' + _phoneController.text.replaceAll(RegExp(r'^\+\d+\s*'), '');
+                                            }
+                                          });
+                                          Navigator.pop(context);
+                                        },
+                                      ),
+                                      ListTile(
+                                        title: Text('Singapore (+65)', style: GoogleFonts.poppins()),
+                                        onTap: () {
+                                          setState(() {
+                                            if (!_phoneController.text.startsWith('+65')) {
+                                              _phoneController.text = '+65 ' + _phoneController.text.replaceAll(RegExp(r'^\+\d+\s*'), '');
+                                            }
+                                          });
+                                          Navigator.pop(context);
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 8.0, bottom: 4.0),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text('🌐', style: GoogleFonts.poppins(fontSize: 14)),
+                                const Icon(Icons.arrow_drop_down, size: 16, color: Colors.grey),
+                              ],
+                            ),
+                          ),
+                        )
+                      : null,
                 ),
                 _buildDivider(),
                 _buildInfoItem(
@@ -172,6 +238,48 @@ class _ProfilePageState extends State<ProfilePage> {
                   controller: _dobController,
                   focusNode: _dobFocus,
                   icon: Icons.cake_outlined,
+                  readOnly: true,
+                  onTap: () async {
+                    if (!_isEditing) return;
+                    DateTime initialDate = DateTime.now();
+                    if (_dobController.text.isNotEmpty) {
+                      try {
+                        final parts = _dobController.text.split('.');
+                        if (parts.length == 3) {
+                          initialDate = DateTime(
+                              int.parse(parts[2]),
+                              int.parse(parts[1]),
+                              int.parse(parts[0]));
+                        }
+                      } catch (e) {
+                        // Ignore parsing errors and fallback to now
+                      }
+                    }
+                    final DateTime? picked = await showDatePicker(
+                      context: context,
+                      initialDate: initialDate,
+                      firstDate: DateTime(1900),
+                      lastDate: DateTime.now(),
+                      builder: (context, child) {
+                        return Theme(
+                          data: Theme.of(context).copyWith(
+                            colorScheme: const ColorScheme.light(
+                              primary: Color(0xFF062AAE), // header background color
+                              onPrimary: Colors.white, // header text color
+                              onSurface: Colors.black, // body text color
+                            ),
+                          ),
+                          child: child!,
+                        );
+                      },
+                    );
+                    if (picked != null) {
+                      setState(() {
+                        _dobController.text =
+                            "${picked.day.toString().padLeft(2, '0')}.${picked.month.toString().padLeft(2, '0')}.${picked.year}";
+                      });
+                    }
+                  },
                 ),
                 _buildDivider(),
                 _buildInfoItem(
@@ -284,6 +392,11 @@ class _ProfilePageState extends State<ProfilePage> {
     required FocusNode focusNode,
     required IconData icon,
     Function(String)? onChanged,
+    VoidCallback? onTap,
+    bool readOnly = false,
+    Widget? prefix,
+    TextInputType? keyboardType,
+    List<TextInputFormatter>? inputFormatters,
   }) {
     return InkWell(
       onTap: _isEditing ? () => focusNode.requestFocus() : null,
@@ -320,23 +433,32 @@ class _ProfilePageState extends State<ProfilePage> {
                   controller: controller,
                   focusNode: focusNode,
                   onChanged: onChanged,
-                  enabled: _isEditing,
+                  onTap: onTap,
+                  readOnly: readOnly,
+                  keyboardType: keyboardType,
+                  inputFormatters: inputFormatters,
+                  enabled: _isEditing || readOnly,
                   style: GoogleFonts.poppins(
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
                     color: _isEditing ? Colors.black : Colors.black87,
                   ),
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     isDense: true,
-                    contentPadding: EdgeInsets.zero,
-                    border: InputBorder.none,
+                    contentPadding: _isEditing ? const EdgeInsets.only(bottom: 4) : EdgeInsets.zero,
+                    prefixIcon: prefix,
+                    prefixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
+                    border: _isEditing ? UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey.shade300),
+                    ) : InputBorder.none,
+                    focusedBorder: _isEditing ? const UnderlineInputBorder(
+                      borderSide: BorderSide(color: Color(0xFF062AAE), width: 1.5),
+                    ) : InputBorder.none,
                   ),
                 ),
               ],
             ),
           ),
-          if (_isEditing)
-            Icon(Icons.edit, color: Colors.grey.shade300, size: 16),
         ],
       ),
       ),
