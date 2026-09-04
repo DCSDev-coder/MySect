@@ -253,7 +253,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                         onTap: () {
                                           setState(() {
                                             if (!_phoneController.text.startsWith('+60')) {
-                                              _phoneController.text = '+60 ' + _phoneController.text.replaceAll(RegExp(r'^\+\d+\s*'), '');
+                                              _phoneController.text = '+60 ${_phoneController.text.replaceAll(RegExp(r'^\+\d+\s*'), '')}';
                                             }
                                           });
                                           Navigator.pop(context);
@@ -264,7 +264,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                         onTap: () {
                                           setState(() {
                                             if (!_phoneController.text.startsWith('+65')) {
-                                              _phoneController.text = '+65 ' + _phoneController.text.replaceAll(RegExp(r'^\+\d+\s*'), '');
+                                              _phoneController.text = '+65 ${_phoneController.text.replaceAll(RegExp(r'^\+\d+\s*'), '')}';
                                             }
                                           });
                                           Navigator.pop(context);

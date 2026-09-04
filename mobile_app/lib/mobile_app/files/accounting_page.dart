@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import '../notifications/notifications_page.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:file_picker/file_picker.dart';
 import 'add_file_menu.dart';
+import 'document_file.dart';
 
 class AccountingPage extends StatefulWidget {
   const AccountingPage({super.key});
@@ -12,6 +14,31 @@ class AccountingPage extends StatefulWidget {
 
 class _AccountingPageState extends State<AccountingPage> {
   final int _selectedIndex = 2;
+
+  // Dynamic list of files
+  List<DocumentFile> _myFiles = [
+    DocumentFile(
+      title: 'Q3 Balance Sheet',
+      subtitle: 'Financial Statements • PDF',
+      badgeText: 'Signed by all',
+      requiredActions: 3,
+      uploadedFiles: ['Q3_Statement_1.pdf', 'Q3_Statement_2.pdf', 'Q3_Statement_3.pdf'],
+    ),
+    DocumentFile(
+      title: '5LUXE Scents Pted. Ltd. - UFS for 2024',
+      subtitle: 'Nasri Ashari • Unaudited report',
+      badgeText: 'Progress',
+      requiredActions: 3,
+      uploadedFiles: ['Nasri_Report_1.pdf', 'Nasri_Report_2.pdf'],
+    ),
+    DocumentFile(
+      title: 'Pending Invoices Q4',
+      subtitle: 'Accounts Payable • PDF',
+      badgeText: 'Pending',
+      requiredActions: 3,
+      uploadedFiles: [],
+    ),
+  ];
 
   void _onItemTapped(int index) {
     if (index == _selectedIndex) return;
@@ -125,36 +152,44 @@ class _AccountingPageState extends State<AccountingPage> {
                     ),
                     const SizedBox(height: 16),
 
-                    _buildDocumentCard(
-                      title: 'Q3 Balance Sheet',
-                      subtitle: 'Financial Statements • PDF',
-                      badgeText: 'Signed by all',
-                      badgeBgColor: Colors.green[100]!,
-                      badgeTextColor: Colors.green[800]!,
-                      timeText: 'Today, 10:24 AM',
-                      progressText: '3/3',
-                      progressColor: Colors.green,
-                    ),
-                    _buildDocumentCard(
-                      title: '5LUXE Scents Pted. Ltd. - UFS for 2024',
-                      subtitle: 'Nasri Ashari • Unaudited report',
-                      badgeText: 'Progress',
-                      badgeBgColor: Colors.blue[100]!,
-                      badgeTextColor: Colors.blue[800]!,
-                      timeText: 'Today, 10:24 AM',
-                      progressText: '2/3',
-                      progressColor: Colors.blue,
-                    ),
-                    _buildDocumentCard(
-                      title: 'Pending Invoices Q4',
-                      subtitle: 'Accounts Payable • PDF',
-                      badgeText: 'Pending',
-                      badgeBgColor: Colors.red[100]!,
-                      badgeTextColor: Colors.red[800]!,
-                      timeText: 'Today, 10:24 AM',
-                      progressText: '0/3',
-                      progressColor: Colors.red,
-                    ),
+                    ..._myFiles.map((file) {
+                      return _buildDocumentCard(
+                        title: file.title,
+                        subtitle: file.subtitle,
+                        badgeText: file.badgeText,
+                        badgeBgColor: file.progressColor.withValues(alpha: 0.1),
+                        badgeTextColor: file.progressColor == Colors.green 
+                            ? Colors.green[800]! 
+                            : (file.progressColor == Colors.blue 
+                                ? Colors.blue[800]! 
+                                : Colors.red[800]!),
+                        timeText: 'Today, 10:24 AM', // Hardcoded time for now
+                        progressText: file.progressText,
+                        progressColor: file.progressColor,
+                        onTap: () {
+                          setState(() {
+                            file.isExpanded = !file.isExpanded;
+                          });
+                        },
+                        isExpanded: file.isExpanded,
+                        uploadedFiles: file.uploadedFiles,
+                        onUpload: () async {
+                          if (file.uploadedFiles.length < file.requiredActions) {
+                            var result = await FilePicker.pickFile();
+                            if (result != null) {
+                              setState(() {
+                                file.uploadedFiles.add(result.name);
+                              });
+                            }
+                          }
+                        },
+                        onRemoveFile: (index) {
+                          setState(() {
+                            file.uploadedFiles.removeAt(index);
+                          });
+                        },
+                      );
+                    }),
                     const SizedBox(height: 80),
                   ],
                 ),
@@ -222,10 +257,17 @@ class _AccountingPageState extends State<AccountingPage> {
     required String timeText,
     required String progressText,
     required Color progressColor,
+    required bool isExpanded,
+    required List<String> uploadedFiles,
+    VoidCallback? onTap,
+    VoidCallback? onUpload,
+    Function(int)? onRemoveFile,
   }) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 16),
-      padding: const EdgeInsets.all(16),
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 16),
+        padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
@@ -316,8 +358,44 @@ class _AccountingPageState extends State<AccountingPage> {
               ),
             ),
           ),
+          if (isExpanded) ...[
+            const Divider(height: 32),
+            Text('Uploaded Files', style: GoogleFonts.poppins(fontWeight: FontWeight.bold, fontSize: 14)),
+            const SizedBox(height: 8),
+            if (uploadedFiles.isEmpty)
+              Text('No files uploaded yet.', style: GoogleFonts.poppins(fontSize: 12, color: Colors.grey)),
+            ...uploadedFiles.asMap().entries.map((entry) {
+              int idx = entry.key;
+              String f = entry.value;
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 8.0),
+                child: Row(
+                  children: [
+                    const Icon(Icons.insert_drive_file, size: 16, color: Colors.grey),
+                    const SizedBox(width: 8),
+                    Expanded(child: Text(f, style: GoogleFonts.poppins(fontSize: 12))),
+                    if (onRemoveFile != null)
+                      GestureDetector(
+                        onTap: () => onRemoveFile(idx),
+                        child: const Icon(Icons.close, size: 16, color: Colors.grey),
+                      ),
+                  ],
+                ),
+              );
+            }),
+            if (progressColor != Colors.green)
+              Align(
+                alignment: Alignment.center,
+                child: TextButton.icon(
+                  onPressed: onUpload,
+                  icon: const Icon(Icons.upload_file),
+                  label: const Text('Upload File'),
+                ),
+              ),
+          ],
         ],
       ),
-    );
+    ),
+  );
   }
 }
