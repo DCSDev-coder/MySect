@@ -14,6 +14,15 @@ class _CustomerSupportPageState extends State<CustomerSupportPage> {
   final TextEditingController _complaintController = TextEditingController();
   final ImagePicker _picker = ImagePicker();
   XFile? _selectedImage;
+  String? _selectedIssueType;
+  
+  final List<String> _issueTypes = [
+    'Technical Issue',
+    'Billing Issue',
+    'Account Issue',
+    'Feature Request',
+    'Other',
+  ];
 
   Future<void> _pickImage() async {
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
@@ -25,12 +34,13 @@ class _CustomerSupportPageState extends State<CustomerSupportPage> {
   }
 
   void _submitComplaint() {
-    if (_subjectController.text.trim().isEmpty ||
+    if (_selectedIssueType == null ||
+        _subjectController.text.trim().isEmpty ||
         _complaintController.text.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            'Please fill in both subject and complaint fields.',
+            'Please fill in issue type, subject, and complaint.',
             style: GoogleFonts.poppins(),
           ),
           backgroundColor: Colors.red,
@@ -111,6 +121,55 @@ class _CustomerSupportPageState extends State<CustomerSupportPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    const SizedBox(height: 24),
+                    Text(
+                      'Issue Type',
+                      style: GoogleFonts.poppins(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14,
+                        color: Colors.black,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    DropdownButtonFormField<String>(
+                      value: _selectedIssueType,
+                      hint: Text(
+                        'Select issue type',
+                        style: GoogleFonts.poppins(color: Colors.grey),
+                      ),
+                      items: _issueTypes.map((String type) {
+                        return DropdownMenuItem<String>(
+                          value: type,
+                          child: Text(
+                            type,
+                            style: GoogleFonts.poppins(),
+                          ),
+                        );
+                      }).toList(),
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          _selectedIssueType = newValue;
+                        });
+                      },
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: Colors.white,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(color: Colors.grey.shade300),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(color: Colors.grey.shade300),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(
+                            color: Color(0xFF062AAE),
+                          ),
+                        ),
+                      ),
+                    ),
                     const SizedBox(height: 24),
                     Text(
                       'Subject',
