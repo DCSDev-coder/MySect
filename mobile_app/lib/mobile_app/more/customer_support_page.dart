@@ -132,7 +132,7 @@ class _CustomerSupportPageState extends State<CustomerSupportPage> {
                     ),
                     const SizedBox(height: 8),
                     DropdownButtonFormField<String>(
-                      value: _selectedIssueType,
+                      initialValue: _selectedIssueType,
                       hint: Text(
                         'Select issue type',
                         style: GoogleFonts.poppins(color: Colors.grey),

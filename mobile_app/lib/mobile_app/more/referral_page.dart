@@ -117,16 +117,16 @@ class _ReferralPageState extends State<ReferralPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(height: 40),
+                    const SizedBox(height: 16),
 
                     Center(
                       child: Image.asset(
                         'assets/referral.png',
-                        height: 250,
+                        height: 320,
                         fit: BoxFit.contain,
                       ),
                     ),
-                    const SizedBox(height: 40),
+                    const SizedBox(height: 24),
 
                     Center(
                       child: Text(
@@ -140,7 +140,7 @@ class _ReferralPageState extends State<ReferralPage> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 32),
+                    const SizedBox(height: 24),
 
                     Text(
                       'Your referral link',
