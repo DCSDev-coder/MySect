@@ -18,25 +18,56 @@ class _ProfilePageState extends State<ProfilePage> {
   final TextEditingController _dobController = TextEditingController(text: 'Jan 1, 2000');
   final TextEditingController _addressController = TextEditingController(text: 'Eco Forest, Malaysia');
 
+  final TextEditingController _firstNameController = TextEditingController(text: 'Elly');
+  final TextEditingController _lastNameController = TextEditingController(text: 'Melissa');
+  final TextEditingController _buildingController = TextEditingController(text: 'No. 42-2 Jalan Eco Forest');
+  final TextEditingController _cityController = TextEditingController(text: 'Semenyih');
+  final TextEditingController _stateController = TextEditingController(text: 'Selangor');
+  final TextEditingController _postcodeController = TextEditingController(text: '43500');
+  final TextEditingController _countryController = TextEditingController(text: 'Malaysia');
+
   final FocusNode _nameFocus = FocusNode();
+  final FocusNode _firstNameFocus = FocusNode();
+  final FocusNode _lastNameFocus = FocusNode();
+
   final FocusNode _emailFocus = FocusNode();
   final FocusNode _phoneFocus = FocusNode();
   final FocusNode _dobFocus = FocusNode();
+
   final FocusNode _addressFocus = FocusNode();
+  final FocusNode _buildingFocus = FocusNode();
+  final FocusNode _cityFocus = FocusNode();
+  final FocusNode _stateFocus = FocusNode();
+  final FocusNode _postcodeFocus = FocusNode();
+  final FocusNode _countryFocus = FocusNode();
 
   @override
   void dispose() {
     _nameController.dispose();
+    _firstNameController.dispose();
+    _lastNameController.dispose();
     _emailController.dispose();
     _phoneController.dispose();
     _dobController.dispose();
     _addressController.dispose();
+    _buildingController.dispose();
+    _cityController.dispose();
+    _stateController.dispose();
+    _postcodeController.dispose();
+    _countryController.dispose();
     
     _nameFocus.dispose();
+    _firstNameFocus.dispose();
+    _lastNameFocus.dispose();
     _emailFocus.dispose();
     _phoneFocus.dispose();
     _dobFocus.dispose();
     _addressFocus.dispose();
+    _buildingFocus.dispose();
+    _cityFocus.dispose();
+    _stateFocus.dispose();
+    _postcodeFocus.dispose();
+    _countryFocus.dispose();
     super.dispose();
   }
 
@@ -120,7 +151,16 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                             TextButton(
                               onPressed: () {
-                                setState(() => _isEditing = false);
+                                setState(() {
+                                  _nameController.text = '${_firstNameController.text} ${_lastNameController.text}'.trim();
+                                  _addressController.text = [
+                                    _buildingController.text,
+                                    '${_postcodeController.text} ${_cityController.text}'.trim(),
+                                    _stateController.text,
+                                    _countryController.text,
+                                  ].where((s) => s.isNotEmpty).join(', ');
+                                  _isEditing = false;
+                                });
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(content: Text('Profile updated successfully!'), backgroundColor: Colors.green),
                                 );
@@ -146,13 +186,30 @@ class _ProfilePageState extends State<ProfilePage> {
                     _buildSectionHeader('PERSONAL INFORMATION'),
                     _buildSectionContainer(
               children: [
-                _buildInfoItem(
-                  title: 'Full Name',
-                  controller: _nameController,
-                  focusNode: _nameFocus,
-                  icon: Icons.person_outline,
-                  onChanged: (value) => setState(() {}),
-                ),
+                if (!_isEditing)
+                  _buildInfoItem(
+                    title: 'Full Name',
+                    controller: _nameController,
+                    focusNode: _nameFocus,
+                    icon: Icons.person_outline,
+                  )
+                else ...[
+                  _buildInfoItem(
+                    title: 'First Name',
+                    controller: _firstNameController,
+                    focusNode: _firstNameFocus,
+                    icon: Icons.person_outline,
+                    onChanged: (value) => setState(() {}),
+                  ),
+                  _buildDivider(),
+                  _buildInfoItem(
+                    title: 'Last Name',
+                    controller: _lastNameController,
+                    focusNode: _lastNameFocus,
+                    icon: Icons.person_outline,
+                    onChanged: (value) => setState(() {}),
+                  ),
+                ],
                 _buildDivider(),
                 _buildInfoItem(
                   title: 'Email Address',
@@ -282,12 +339,50 @@ class _ProfilePageState extends State<ProfilePage> {
                   },
                 ),
                 _buildDivider(),
-                _buildInfoItem(
-                  title: 'Address',
-                  controller: _addressController,
-                  focusNode: _addressFocus,
-                  icon: Icons.home_outlined,
-                ),
+                if (!_isEditing)
+                  _buildInfoItem(
+                    title: 'Address',
+                    controller: _addressController,
+                    focusNode: _addressFocus,
+                    icon: Icons.home_outlined,
+                    maxLines: null,
+                  )
+                else ...[
+                  _buildInfoItem(
+                    title: 'Building No.',
+                    controller: _buildingController,
+                    focusNode: _buildingFocus,
+                    icon: Icons.home_outlined,
+                  ),
+                  _buildDivider(),
+                  _buildInfoItem(
+                    title: 'City',
+                    controller: _cityController,
+                    focusNode: _cityFocus,
+                    icon: Icons.location_city_outlined,
+                  ),
+                  _buildDivider(),
+                  _buildInfoItem(
+                    title: 'State',
+                    controller: _stateController,
+                    focusNode: _stateFocus,
+                    icon: Icons.map_outlined,
+                  ),
+                  _buildDivider(),
+                  _buildInfoItem(
+                    title: 'Postcode',
+                    controller: _postcodeController,
+                    focusNode: _postcodeFocus,
+                    icon: Icons.local_post_office_outlined,
+                  ),
+                  _buildDivider(),
+                  _buildInfoItem(
+                    title: 'Country',
+                    controller: _countryController,
+                    focusNode: _countryFocus,
+                    icon: Icons.public_outlined,
+                  ),
+                ],
               ],
             ),
 
@@ -397,6 +492,7 @@ class _ProfilePageState extends State<ProfilePage> {
     Widget? prefix,
     TextInputType? keyboardType,
     List<TextInputFormatter>? inputFormatters,
+    int? maxLines = 1,
   }) {
     return InkWell(
       onTap: _isEditing ? () => focusNode.requestFocus() : null,
@@ -437,6 +533,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   readOnly: readOnly,
                   keyboardType: keyboardType,
                   inputFormatters: inputFormatters,
+                  maxLines: maxLines,
                   enabled: _isEditing || readOnly,
                   style: GoogleFonts.poppins(
                     fontSize: 14,
