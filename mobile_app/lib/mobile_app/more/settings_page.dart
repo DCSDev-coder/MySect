@@ -14,7 +14,6 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   final int _selectedIndex = 4;
 
-  String _phoneNumber = '+6012 -299 3330';
   bool _whatsappEnabled = true;
   bool _emailEnabled = true;
   bool _passcodeEnabled = true;
@@ -27,68 +26,7 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
-  void _editPhoneNumber() {
-    final TextEditingController controller = TextEditingController(
-      text: _phoneNumber,
-    );
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          title: Text(
-            'Edit Phone Number',
-            style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
-          ),
-          content: TextField(
-            controller: controller,
-            keyboardType: TextInputType.phone,
-            decoration: InputDecoration(
-              hintText: 'Enter new phone number',
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text(
-                'Cancel',
-                style: GoogleFonts.poppins(color: Colors.grey.shade700),
-              ),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  _phoneNumber = controller.text;
-                });
-                Navigator.pop(context);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                      'Phone number updated',
-                      style: GoogleFonts.poppins(),
-                    ),
-                    backgroundColor: Colors.green,
-                  ),
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF062AAE),
-              ),
-              child: Text(
-                'Save',
-                style: GoogleFonts.poppins(color: Colors.white),
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
+
 
   void _togglePasscode() {
     setState(() {
@@ -233,44 +171,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   children: [
                     const SizedBox(height: 24),
 
-                    Text(
-                      'CONTACTS',
-                      style: GoogleFonts.poppins(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: Colors.grey.shade200),
-                      ),
-                      child: Column(
-                        children: [
-                          _buildListTile(
-                            icon: Icons.mail_outline,
-                            title: 'Email address',
-                            subtitle: 'melissa@datacenterspecialists.com',
-                          ),
-                          Divider(color: Colors.grey.shade200, height: 1),
-                          _buildListTile(
-                            icon: Icons.phone_outlined,
-                            title: 'Phone number',
-                            subtitle: _phoneNumber,
-                            trailing: const Icon(
-                              Icons.chevron_right,
-                              color: Colors.black,
-                            ),
-                            onTap: _editPhoneNumber,
-                          ),
-                        ],
-                      ),
-                    ),
 
-                    const SizedBox(height: 24),
 
                     Text(
                       'NOTIFICATIONS',
@@ -360,7 +261,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     const SizedBox(height: 24),
 
                     Text(
-                      'SYSTEM',
+                      'SECURITY',
                       style: GoogleFonts.poppins(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
@@ -374,11 +275,29 @@ class _SettingsPageState extends State<SettingsPage> {
                         borderRadius: BorderRadius.circular(16),
                         border: Border.all(color: Colors.grey.shade200),
                       ),
-                      child: _buildListTile(
-                        icon: Icons.lock_outline,
-                        title: 'Passcode protection',
-                        subtitle: _passcodeEnabled ? 'Enabled' : 'Disabled',
-                        onTap: _togglePasscode,
+                      child: Column(
+                        children: [
+                          _buildListTile(
+                            icon: Icons.lock_outline,
+                            title: 'Change password',
+                            trailing: const Icon(Icons.chevron_right, color: Colors.black),
+                            onTap: () {},
+                          ),
+                          Divider(color: Colors.grey.shade200, height: 1),
+                          _buildListTile(
+                            icon: Icons.security_outlined,
+                            title: 'Two-Factor Authentication',
+                            trailing: const Icon(Icons.chevron_right, color: Colors.black),
+                            onTap: () {},
+                          ),
+                          Divider(color: Colors.grey.shade200, height: 1),
+                          _buildListTile(
+                            icon: Icons.pin_outlined,
+                            title: 'Passcode protection',
+                            subtitle: _passcodeEnabled ? 'Enabled' : 'Disabled',
+                            onTap: _togglePasscode,
+                          ),
+                        ],
                       ),
                     ),
 

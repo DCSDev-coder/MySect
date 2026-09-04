@@ -182,23 +182,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ],
             ),
-            const SizedBox(height: 24),
-            _buildSectionHeader('ACCOUNT SECURITY'),
-            _buildSectionContainer(
-              children: [
-                _buildActionItem(
-                  title: 'Change Password',
-                  icon: Icons.lock_outline,
-                  onTap: () {},
-                ),
-                _buildDivider(),
-                _buildActionItem(
-                  title: 'Two-Factor Authentication',
-                  icon: Icons.security_outlined,
-                  onTap: () {},
-                ),
-              ],
-            ),
+
                     const SizedBox(height: 40),
                   ],
                 ),
@@ -359,45 +343,5 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Widget _buildActionItem({
-    required String title,
-    required IconData icon,
-    required VoidCallback onTap,
-  }) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(16),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
-        child: Row(
-          children: [
-            Container(
-              width: 32,
-              height: 32,
-              decoration: BoxDecoration(
-                color: Colors.indigo.shade50,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Center(
-                child: Icon(icon, color: Colors.indigo.shade500, size: 18),
-              ),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Text(
-                title,
-                style: GoogleFonts.poppins(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.black87,
-                ),
-              ),
-            ),
-            Icon(Icons.chevron_right, color: Colors.grey.shade400, size: 20),
-          ],
-        ),
-      ),
-    );
-  }
 }
 
