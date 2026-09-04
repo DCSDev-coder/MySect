@@ -4,6 +4,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import '../notifications/notifications_page.dart';
 import 'add_invoice_item_page.dart';
+import 'customers_page.dart';
 
 class CreateInvoicePage extends StatefulWidget {
   const CreateInvoicePage({super.key});
@@ -215,6 +216,18 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
                     _buildTextField(
                       label: 'Customer / Client',
                       controller: _customerController,
+                      onTap: () async {
+                        final result = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const CustomersPage(),
+                          ),
+                        );
+                        // If they ever select a customer and return it, set it here.
+                        if (result != null && result is String) {
+                          _customerController.text = result;
+                        }
+                      },
                     ),
                     const SizedBox(height: 16),
 
@@ -449,6 +462,7 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
     required String label,
     required TextEditingController controller,
     int maxLines = 1,
+    VoidCallback? onTap,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -464,6 +478,8 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
         TextField(
           controller: controller,
           maxLines: maxLines,
+          readOnly: onTap != null,
+          onTap: onTap,
           decoration: InputDecoration(
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 16,
