@@ -7,6 +7,7 @@ import '../transactions/transactions_page.dart';
 import '../files/files_page.dart';
 import '../chat/chat_page.dart';
 import '../more/more_page.dart';
+import '../widgets/custom_bottom_nav_bar.dart';
 import '../tasks/document_needed_page.dart';
 import '../tasks/replies_needed_page.dart';
 
@@ -505,12 +506,33 @@ class _HomePageState extends State<HomePage> {
                           formatButtonVisible: false,
                           titleCentered: true,
                         ),
+                        calendarBuilders: CalendarBuilders(
+                          markerBuilder: (context, date, events) {
+                            if (events.isNotEmpty) {
+                              return Positioned(
+                                right: 6,
+                                top: 6,
+                                child: Container(
+                                  width: 8,
+                                  height: 8,
+                                  decoration: const BoxDecoration(
+                                    color: Color(0xFFD71920),
+                                    shape: BoxShape.circle,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black26,
+                                        blurRadius: 2,
+                                        offset: Offset(0, 1),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            }
+                            return null;
+                          },
+                        ),
                         calendarStyle: const CalendarStyle(
-                          markersMaxCount: 1,
-                          markerDecoration: BoxDecoration(
-                            color: Color(0xFFD71920),
-                            shape: BoxShape.circle,
-                          ),
                           selectedDecoration: BoxDecoration(
                             color: Color(0xFF062AAE),
                             shape: BoxShape.circle,
@@ -643,55 +665,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildNavItem(
-    int index,
-    IconData icon,
-    IconData activeIcon,
-    String label,
-  ) {
-    final isSelected = _selectedIndex == index;
-    return Expanded(
-      child: GestureDetector(
-        onTap: () {
-          setState(() {
-            _selectedIndex = index;
-          });
-        },
-        behavior: HitTestBehavior.opaque,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            AnimatedContainer(
-              duration: const Duration(milliseconds: 200),
-              height: 3,
-              width: isSelected ? 24 : 0,
-              decoration: BoxDecoration(
-                color: const Color(0xFF062AAE),
-                borderRadius: BorderRadius.circular(2),
-              ),
-            ),
-            const SizedBox(height: 6),
-            Icon(
-              isSelected ? activeIcon : icon,
-              color: isSelected ? const Color(0xFF062AAE) : Colors.grey,
-              size: 24,
-            ),
-            const SizedBox(height: 4),
-            Text(
-              label,
-              style: GoogleFonts.poppins(
-                fontSize: 10,
-                fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-                color: isSelected ? const Color(0xFF062AAE) : Colors.grey,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -706,40 +679,13 @@ class _HomePageState extends State<HomePage> {
           const MorePage(),
         ],
       ),
-      bottomNavigationBar: Container(
-        height: 80,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              blurRadius: 10,
-              color: Colors.black.withValues(alpha: .05),
-              offset: const Offset(0, -2),
-            ),
-          ],
-        ),
-        child: SafeArea(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              _buildNavItem(0, Icons.home_outlined, Icons.home, 'Home'),
-              _buildNavItem(
-                1,
-                Icons.swap_horiz,
-                Icons.swap_horiz,
-                'Transactions',
-              ),
-              _buildNavItem(2, Icons.folder_outlined, Icons.folder, 'Files'),
-              _buildNavItem(
-                3,
-                Icons.chat_bubble_outline,
-                Icons.chat_bubble,
-                'Chat',
-              ),
-              _buildNavItem(4, Icons.more_horiz, Icons.more_horiz, 'More'),
-            ],
-          ),
-        ),
+      bottomNavigationBar: CustomBottomNavBar(
+        currentIndex: _selectedIndex,
+        onTap: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
       ),
     );
   }

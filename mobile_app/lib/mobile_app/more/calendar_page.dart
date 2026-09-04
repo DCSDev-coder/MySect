@@ -3,6 +3,7 @@ import '../notifications/notifications_page.dart';
 import '../home/home_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../tasks/document_needed_page.dart';
+import '../widgets/custom_bottom_nav_bar.dart';
 
 class CalendarPage extends StatefulWidget {
   const CalendarPage({super.key});
@@ -100,21 +101,46 @@ class _CalendarPageState extends State<CalendarPage> {
                     Container(
                       width: double.infinity,
                       height: 50,
+                      padding: const EdgeInsets.all(4),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: Colors.grey.shade200,
                         borderRadius: BorderRadius.circular(25),
-                        border: Border.all(
-                          color: const Color(0xFF062AAE),
-                          width: 1.5,
-                        ),
                       ),
-                      child: Row(
+                      child: Stack(
                         children: [
-                          Expanded(child: _buildSegment('Current')),
-                          Container(width: 1.5, color: const Color(0xFF062AAE)),
-                          Expanded(child: _buildSegment('Past')),
-                          Container(width: 1.5, color: const Color(0xFF062AAE)),
-                          Expanded(child: _buildSegment('Upcoming')),
+                          AnimatedAlign(
+                            alignment: _selectedTab == 'Current'
+                                ? Alignment.centerLeft
+                                : _selectedTab == 'Past'
+                                    ? Alignment.center
+                                    : Alignment.centerRight,
+                            duration: const Duration(milliseconds: 250),
+                            curve: Curves.easeInOut,
+                            child: FractionallySizedBox(
+                              widthFactor: 1 / 3,
+                              heightFactor: 1.0,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(21),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withValues(alpha: 0.08),
+                                      blurRadius: 4,
+                                      offset: const Offset(0, 2),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          Row(
+                            children: [
+                              Expanded(child: _buildSegment('Current')),
+                              Expanded(child: _buildSegment('Past')),
+                              Expanded(child: _buildSegment('Upcoming')),
+                            ],
+                          ),
                         ],
                       ),
                     ),
@@ -201,45 +227,9 @@ class _CalendarPageState extends State<CalendarPage> {
           ],
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
+      bottomNavigationBar: CustomBottomNavBar(
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
-        type: BottomNavigationBarType.fixed,
-        selectedItemColor: Colors.black,
-        unselectedItemColor: Colors.grey,
-        showUnselectedLabels: true,
-        selectedLabelStyle: GoogleFonts.poppins(
-          fontSize: 12,
-          fontWeight: FontWeight.w600,
-        ),
-        unselectedLabelStyle: GoogleFonts.poppins(fontSize: 12),
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home_outlined),
-            activeIcon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.swap_horiz_outlined),
-            activeIcon: Icon(Icons.swap_horiz),
-            label: 'Transactions',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.folder_outlined),
-            activeIcon: Icon(Icons.folder),
-            label: 'Files',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.chat_bubble_outline),
-            activeIcon: Icon(Icons.chat_bubble),
-            label: 'Chat',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.more_horiz),
-            activeIcon: Icon(Icons.more_horiz),
-            label: 'More',
-          ),
-        ],
       ),
     );
   }
@@ -252,22 +242,14 @@ class _CalendarPageState extends State<CalendarPage> {
           _selectedTab = title;
         });
       },
+      behavior: HitTestBehavior.opaque,
       child: Container(
         alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFF062AAE) : Colors.transparent,
-          borderRadius: BorderRadius.horizontal(
-            left: title == 'Current' ? const Radius.circular(23) : Radius.zero,
-            right: title == 'Upcoming'
-                ? const Radius.circular(23)
-                : Radius.zero,
-          ),
-        ),
         child: Text(
           title,
           style: GoogleFonts.poppins(
-            color: isSelected ? Colors.white : Colors.black,
-            fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+            color: isSelected ? const Color(0xFF062AAE) : Colors.grey.shade600,
+            fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
             fontSize: 14,
           ),
         ),
