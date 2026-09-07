@@ -209,7 +209,7 @@ class _ExpandableDocumentCardState extends State<_ExpandableDocumentCard> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () async {
-                    Navigator.pop(context); // Close sheet before picker
+                    Navigator.pop(context);
                     PlatformFile? file = await FilePicker.pickFile(
                       type: FileType.custom,
                       allowedExtensions: [

@@ -8,7 +8,8 @@ class TwoFactorVerificationPage extends StatefulWidget {
   const TwoFactorVerificationPage({super.key});
 
   @override
-  State<TwoFactorVerificationPage> createState() => _TwoFactorVerificationPageState();
+  State<TwoFactorVerificationPage> createState() =>
+      _TwoFactorVerificationPageState();
 }
 
 class _TwoFactorVerificationPageState extends State<TwoFactorVerificationPage> {
@@ -121,13 +122,8 @@ class _TwoFactorVerificationPageState extends State<TwoFactorVerificationPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Matching Header
             Padding(
-              padding: const EdgeInsets.only(
-                left: 16.0,
-                top: 8.0,
-                right: 16.0,
-              ),
+              padding: const EdgeInsets.only(left: 16.0, top: 8.0, right: 16.0),
               child: Row(
                 children: [
                   Image.asset(
@@ -196,7 +192,6 @@ class _TwoFactorVerificationPageState extends State<TwoFactorVerificationPage> {
                       child: GestureDetector(
                         onTap: _secondsRemaining == 0
                             ? () {
-                                // Handle resend code logic here
                                 _startTimer();
                               }
                             : null,
@@ -246,18 +241,20 @@ class _TwoFactorVerificationPageState extends State<TwoFactorVerificationPage> {
                             );
                             return;
                           }
-                          // Pop back to the Settings Page with success message
-                          Navigator.of(context).popUntil((route) => route.isFirst || route.settings.name == '/settings'); // Approximate pop back to root or just pop twice
-                          Navigator.of(context).pop(); // Also pop the 2FA setting page if possible, or just once:
-                          // Actually, let's pop twice to go back to settings page
+
+                          Navigator.of(context).popUntil(
+                            (route) =>
+                                route.isFirst ||
+                                route.settings.name == '/settings',
+                          );
+                          Navigator.of(context).pop();
+
                           Navigator.of(context).pop();
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text(
                                 'Two-Factor Authentication Enabled',
-                                style: GoogleFonts.poppins(
-                                  color: Colors.white,
-                                ),
+                                style: GoogleFonts.poppins(color: Colors.white),
                               ),
                               backgroundColor: Colors.green,
                             ),

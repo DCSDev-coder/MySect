@@ -57,7 +57,7 @@ class _TwoFactorAuthPageState extends State<TwoFactorAuthPage> {
 
     Future.delayed(const Duration(seconds: 2), () {
       if (mounted) {
-        Navigator.pop(context); // Dismiss loading dialog
+        Navigator.pop(context);
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -76,13 +76,8 @@ class _TwoFactorAuthPageState extends State<TwoFactorAuthPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Matching Header
             Padding(
-              padding: const EdgeInsets.only(
-                left: 16.0,
-                top: 8.0,
-                right: 16.0,
-              ),
+              padding: const EdgeInsets.only(left: 16.0, top: 8.0, right: 16.0),
               child: Row(
                 children: [
                   Image.asset(
@@ -93,7 +88,7 @@ class _TwoFactorAuthPageState extends State<TwoFactorAuthPage> {
                 ],
               ),
             ),
-            
+
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -141,8 +136,19 @@ class _TwoFactorAuthPageState extends State<TwoFactorAuthPage> {
                       child: Column(
                         children: [
                           SwitchListTile(
-                            title: Text('Send Email', style: GoogleFonts.poppins(fontWeight: FontWeight.w500)),
-                            subtitle: Text('Receive codes via email', style: GoogleFonts.poppins(fontSize: 12, color: Colors.grey.shade600)),
+                            title: Text(
+                              'Send Email',
+                              style: GoogleFonts.poppins(
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            subtitle: Text(
+                              'Receive codes via email',
+                              style: GoogleFonts.poppins(
+                                fontSize: 12,
+                                color: Colors.grey.shade600,
+                              ),
+                            ),
                             value: _emailEnabled,
                             activeColor: Colors.black,
                             onChanged: (bool value) {
@@ -150,7 +156,10 @@ class _TwoFactorAuthPageState extends State<TwoFactorAuthPage> {
                                 _emailEnabled = value;
                               });
                             },
-                            secondary: const Icon(Icons.email_outlined, color: Colors.black),
+                            secondary: const Icon(
+                              Icons.email_outlined,
+                              color: Colors.black,
+                            ),
                           ),
                         ],
                       ),
