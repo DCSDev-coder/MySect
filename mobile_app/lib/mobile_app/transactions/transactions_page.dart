@@ -113,26 +113,23 @@ class _TransactionsPageState extends State<TransactionsPage> {
           _selectedFilter = title;
         });
       },
-      child: Container(
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        height: 36,
         alignment: Alignment.center,
-        padding: const EdgeInsets.symmetric(vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 16),
         decoration: BoxDecoration(
           color: isSelected ? const Color(0xFF062AAE) : Colors.white,
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
-              blurRadius: 4,
-              offset: const Offset(0, 2),
-            ),
-          ],
+          borderRadius: BorderRadius.circular(18),
+          border: isSelected ? Border.all(color: const Color(0xFF062AAE)) : Border.all(color: Colors.grey.shade300),
         ),
         child: Text(
           title,
           style: GoogleFonts.poppins(
-            color: isSelected ? Colors.white : Colors.black,
-            fontWeight: FontWeight.w600,
-            fontSize: 14,
+            color: isSelected ? Colors.white : Colors.black87,
+            fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+            fontSize: 12,
+            letterSpacing: 0.2,
           ),
         ),
       ),

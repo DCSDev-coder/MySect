@@ -44,8 +44,9 @@ class _InvoicesPageState extends State<InvoicesPage> {
           displayText,
           style: GoogleFonts.poppins(
             color: isSelected ? Colors.white : Colors.black87,
-            fontWeight: FontWeight.w500,
-            fontSize: 13,
+            fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+            fontSize: 12,
+            letterSpacing: 0.2,
           ),
         ),
         if (hasValue && title != 'Status') ...[
@@ -59,7 +60,7 @@ class _InvoicesPageState extends State<InvoicesPage> {
             },
             child: Icon(
               Icons.close,
-              size: 16,
+              size: 14,
               color: isSelected ? Colors.white : Colors.black54,
             ),
           ),
@@ -68,27 +69,22 @@ class _InvoicesPageState extends State<InvoicesPage> {
           const SizedBox(width: 4),
           Icon(
             Icons.keyboard_arrow_down,
-            size: 16,
+            size: 14,
             color: isSelected ? Colors.white : Colors.black54,
           ),
         ],
       ],
     );
 
-    Widget container = Container(
+    Widget container = AnimatedContainer(
+      duration: const Duration(milliseconds: 200),
+      height: 36,
       alignment: Alignment.center,
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
         color: isSelected ? const Color(0xFF062AAE) : Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          ),
-        ],
-        border: isSelected ? null : Border.all(color: Colors.grey.shade300),
+        borderRadius: BorderRadius.circular(18),
+        border: isSelected ? Border.all(color: const Color(0xFF062AAE)) : Border.all(color: Colors.grey.shade300),
       ),
       child: pillContent,
     );

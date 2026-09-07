@@ -133,7 +133,7 @@ class _MailboxPageState extends State<MailboxPage> {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF062AAE),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(25),
+                            borderRadius: BorderRadius.circular(12),
                           ),
                         ),
                         child: Text(

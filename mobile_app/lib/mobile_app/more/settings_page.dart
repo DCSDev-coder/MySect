@@ -3,6 +3,7 @@ import '../notifications/notifications_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../home/home_page.dart';
 import '../widgets/custom_bottom_nav_bar.dart';
+import 'two_factor_auth_page.dart';
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
 
@@ -288,11 +289,11 @@ class _SettingsPageState extends State<SettingsPage> {
                       ),
                     ),
                     const SizedBox(height: 12),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
+                    Material(
+                      color: Colors.white,
+                      shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: Colors.grey.shade200),
+                        side: BorderSide(color: Colors.grey.shade200),
                       ),
                       child: Column(
                         children: [
@@ -340,11 +341,11 @@ class _SettingsPageState extends State<SettingsPage> {
                       ),
                     ),
                     const SizedBox(height: 12),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
+                    Material(
+                      color: Colors.white,
+                      shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: Colors.grey.shade200),
+                        side: BorderSide(color: Colors.grey.shade200),
                       ),
                       child: Column(
                         children: [
@@ -358,8 +359,16 @@ class _SettingsPageState extends State<SettingsPage> {
                           _buildListTile(
                             icon: Icons.security_outlined,
                             title: 'Two-Factor Authentication',
+                            subtitle: 'Send email',
                             trailing: const Icon(Icons.chevron_right, color: Colors.black),
-                            onTap: () {}, // Not functional
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const TwoFactorAuthPage(),
+                                ),
+                              );
+                            },
                           ),
                           Divider(color: Colors.grey.shade200, height: 1),
                           _buildListTile(
@@ -383,11 +392,11 @@ class _SettingsPageState extends State<SettingsPage> {
                       ),
                     ),
                     const SizedBox(height: 12),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
+                    Material(
+                      color: Colors.white,
+                      shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: Colors.grey.shade200),
+                        side: BorderSide(color: Colors.grey.shade200),
                       ),
                       child: _buildListTile(
                         icon: Icons.security_outlined,

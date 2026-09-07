@@ -53,49 +53,6 @@ class _LoginPageState extends State<LoginPage> {
                               width: 110,
                               fit: BoxFit.contain,
                             ),
-                            IconButton(
-                              icon: const Icon(
-                                Icons.qr_code_scanner,
-                                color: Colors.black,
-                                size: 28,
-                              ),
-                              onPressed: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (context) => AlertDialog(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(16),
-                                    ),
-                                    title: Text(
-                                      'Login with QR',
-                                      style: GoogleFonts.poppins(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 18,
-                                      ),
-                                    ),
-                                    content: Text(
-                                      'Simulating camera view...\n\nScan the QR code to sign in instantly.',
-                                      style: GoogleFonts.poppins(
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () =>
-                                            Navigator.pop(context),
-                                        child: Text(
-                                          'Cancel',
-                                          style: GoogleFonts.poppins(
-                                            color: const Color(0xFF1E50FF),
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              },
-                            ),
                           ],
                         ),
                       ),
