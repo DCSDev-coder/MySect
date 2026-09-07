@@ -359,7 +359,7 @@ class _FilesPageState extends State<FilesPage> {
       ),
       floatingActionButton: FloatingActionButton(
         heroTag: 'files_fab',
-        onPressed: () => showAddMenu(context),
+        onPressed: () => showAddMenu(context, showFileOptions: false, showFolderOption: true),
         backgroundColor: const Color(0xFF062AAE),
         shape: const CircleBorder(),
         child: const Icon(Icons.add, color: Colors.white, size: 32),

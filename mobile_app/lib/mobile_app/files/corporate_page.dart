@@ -198,7 +198,7 @@ class _CorporatePageState extends State<CorporatePage> {
       ),
       floatingActionButton: FloatingActionButton(
         heroTag: null,
-        onPressed: () => showAddMenu(context),
+        onPressed: () => showAddMenu(context, showFileOptions: true, showFolderOption: false),
         backgroundColor: const Color(0xFF062AAE),
         shape: const CircleBorder(),
         child: const Icon(Icons.add, color: Colors.white, size: 32),
