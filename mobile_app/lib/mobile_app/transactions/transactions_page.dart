@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../notifications/notifications_page.dart';
-import '../tasks/document_needed_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class TransactionsPage extends StatefulWidget {
@@ -11,9 +10,6 @@ class TransactionsPage extends StatefulWidget {
 }
 
 class _TransactionsPageState extends State<TransactionsPage> {
-  String _selectedFilter = 'All';
-  String _selectedBank = 'All Banks';
-  bool _isBankDropdownOpen = false;
   DateTime? _selectedDate;
   bool _isDocumentsNeededFilterActive = false;
   bool _isReplyNeededFilterActive = false;
@@ -23,141 +19,8 @@ class _TransactionsPageState extends State<TransactionsPage> {
     return months[month - 1];
   }
 
-  final List<Map<String, String>> _banks = [
-    {'name': 'All Banks', 'icon': 'assets/bank accounts.png'},
-    {'name': 'Maybank', 'icon': 'assets/maybank.png'},
-    {'name': 'Public Bank', 'icon': 'assets/publicbank.gif'},
-    {'name': 'CIMB Bank', 'icon': 'assets/cimb.png'},
-  ];
 
-  String _getBankIcon(String name) {
-    return _banks.firstWhere(
-      (b) => b['name'] == name,
-      orElse: () => _banks.first,
-    )['icon']!;
-  }
 
-  final List<Map<String, dynamic>> _allTransactions = [
-    {
-      'title': 'DEBIT PURCHASE USD',
-      'subtitle': 'Shopify',
-      'amount': '-RM1.06',
-      'account': 'CIMB SGD-9001',
-      'type': 'Expenses',
-    },
-    {
-      'title': 'DEBIT PURCHASE USD',
-      'subtitle': 'Shopify',
-      'amount': '-RM1.06',
-      'account': 'CIMB SGD-9001',
-      'type': 'Expenses',
-    },
-    {
-      'title': 'CLIENT PAYMENT',
-      'subtitle': 'Mira',
-      'amount': '+RM150.00',
-      'account': 'CIMB SGD-9001',
-      'type': 'Income',
-    },
-    {
-      'title': 'DEBIT PURCHASE USD',
-      'subtitle': 'Shopify',
-      'amount': '-RM1.06',
-      'account': 'CIMB SGD-9001',
-      'type': 'Expenses',
-    },
-    {
-      'title': 'INVOICE #1029',
-      'subtitle': 'Tech Corp',
-      'amount': '+RM2,400.00',
-      'account': 'Maybank MYR-1102',
-      'type': 'Income',
-    },
-  ];
-
-  List<Map<String, dynamic>> get _bankTransactions {
-    if (_selectedBank == 'All Banks') {
-      return _allTransactions;
-    }
-    String bankPrefix = _selectedBank.split(' ')[0];
-    return _allTransactions
-        .where((t) => t['account'].toString().startsWith(bankPrefix))
-        .toList();
-  }
-
-  List<Map<String, dynamic>> get _filteredTransactions {
-    if (_selectedFilter == 'All') return _bankTransactions;
-    return _bankTransactions
-        .where((t) => t['type'] == _selectedFilter)
-        .toList();
-  }
-
-  String get _totalIncomeStr {
-    double total = _bankTransactions.where((t) => t['type'] == 'Income').fold(
-      0.0,
-      (sum, t) {
-        String amountStr = t['amount'].toString().replaceAll(
-          RegExp(r'[^\d.]'),
-          '',
-        );
-        return sum + (double.tryParse(amountStr) ?? 0.0);
-      },
-    );
-    String formatted = total.toStringAsFixed(2);
-    RegExp reg = RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))');
-    formatted = formatted.replaceAllMapped(reg, (Match m) => '${m[1]},');
-    return 'RM $formatted';
-  }
-
-  String get _totalExpensesStr {
-    double total = _bankTransactions.where((t) => t['type'] == 'Expenses').fold(
-      0.0,
-      (sum, t) {
-        String amountStr = t['amount'].toString().replaceAll(
-          RegExp(r'[^\d.]'),
-          '',
-        );
-        return sum + (double.tryParse(amountStr) ?? 0.0);
-      },
-    );
-    String formatted = total.toStringAsFixed(2);
-    RegExp reg = RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))');
-    formatted = formatted.replaceAllMapped(reg, (Match m) => '${m[1]},');
-    return 'RM $formatted';
-  }
-
-  Widget _buildFilterButton(String title) {
-    bool isSelected = _selectedFilter == title;
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          _selectedFilter = title;
-        });
-      },
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        height: 36,
-        alignment: Alignment.center,
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFF062AAE) : Colors.white,
-          borderRadius: BorderRadius.circular(18),
-          border: isSelected
-              ? Border.all(color: const Color(0xFF062AAE))
-              : Border.all(color: Colors.grey.shade300),
-        ),
-        child: Text(
-          title,
-          style: GoogleFonts.poppins(
-            color: isSelected ? Colors.white : Colors.black87,
-            fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-            fontSize: 12,
-            letterSpacing: 0.2,
-          ),
-        ),
-      ),
-    );
-  }
 
   void _showUploadOptions(BuildContext context) {
     showModalBottomSheet(
@@ -265,97 +128,6 @@ class _TransactionsPageState extends State<TransactionsPage> {
     );
   }
 
-  Widget _buildTransactionCard(
-    BuildContext context,
-    Map<String, dynamic> transaction,
-  ) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 16),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.blue.shade50,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: IconButton(
-              icon: Icon(
-                Icons.download_rounded,
-                color: Colors.blue.shade700,
-                size: 24,
-              ),
-              onPressed: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                      'Downloading receipt...',
-                      style: GoogleFonts.poppins(),
-                    ),
-                    backgroundColor: const Color(0xFF062AAE),
-                  ),
-                );
-              },
-            ),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  transaction['title'],
-                  style: GoogleFonts.poppins(
-                    fontWeight: FontWeight.w700,
-                    fontSize: 12,
-                    color: Colors.black,
-                  ),
-                ),
-                Text(
-                  transaction['subtitle'],
-                  style: GoogleFonts.poppins(
-                    fontSize: 12,
-                    color: Colors.grey.shade600,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(
-                transaction['amount'],
-                style: GoogleFonts.poppins(
-                  fontWeight: FontWeight.w800,
-                  fontSize: 14,
-                  color: Colors.black,
-                ),
-              ),
-              Text(
-                transaction['account'],
-                style: GoogleFonts.poppins(
-                  fontSize: 12,
-                  color: Colors.grey.shade500,
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
