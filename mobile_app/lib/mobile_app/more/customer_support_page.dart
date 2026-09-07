@@ -15,7 +15,7 @@ class _CustomerSupportPageState extends State<CustomerSupportPage> {
   final ImagePicker _picker = ImagePicker();
   XFile? _selectedImage;
   String? _selectedIssueType;
-  
+
   final List<String> _issueTypes = [
     'Technical Issue',
     'Billing Issue',
@@ -49,7 +49,6 @@ class _CustomerSupportPageState extends State<CustomerSupportPage> {
       return;
     }
 
-    // Simulate submission
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
@@ -77,7 +76,6 @@ class _CustomerSupportPageState extends State<CustomerSupportPage> {
       body: SafeArea(
         child: Column(
           children: [
-            // App Header
             Padding(
               padding: const EdgeInsets.only(left: 16.0, top: 8.0, right: 16.0),
               child: Row(
@@ -140,10 +138,7 @@ class _CustomerSupportPageState extends State<CustomerSupportPage> {
                       items: _issueTypes.map((String type) {
                         return DropdownMenuItem<String>(
                           value: type,
-                          child: Text(
-                            type,
-                            style: GoogleFonts.poppins(),
-                          ),
+                          child: Text(type, style: GoogleFonts.poppins()),
                         );
                       }).toList(),
                       onChanged: (String? newValue) {
@@ -263,8 +258,7 @@ class _CustomerSupportPageState extends State<CustomerSupportPage> {
                         child: _selectedImage != null
                             ? ClipRRect(
                                 borderRadius: BorderRadius.circular(12),
-                                // Display image conditionally based on web vs mobile
-                                // For web, Image.network is used with XFile.path
+
                                 child: Image.network(
                                   _selectedImage!.path,
                                   fit: BoxFit.cover,

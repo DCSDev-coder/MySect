@@ -28,11 +28,7 @@ class _FilesPageState extends State<FilesPage> {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.only(
-                left: 16.0,
-                top: 8.0,
-                right: 16.0,
-              ),
+              padding: const EdgeInsets.only(left: 16.0, top: 8.0, right: 16.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -75,7 +71,7 @@ class _FilesPageState extends State<FilesPage> {
                       ),
                     ),
                     const SizedBox(height: 16),
-                    // Search Bar
+
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       decoration: BoxDecoration(
@@ -155,15 +151,21 @@ class _FilesPageState extends State<FilesPage> {
                                     setState(() {
                                       _isConnectingTMCloud = true;
                                     });
-                                    await Future.delayed(const Duration(seconds: 2));
+                                    await Future.delayed(
+                                      const Duration(seconds: 2),
+                                    );
                                     if (context.mounted) {
                                       setState(() {
                                         _isConnectingTMCloud = false;
                                         _tmCloudConnected = true;
                                       });
-                                      ScaffoldMessenger.of(context).showSnackBar(
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
                                         const SnackBar(
-                                          content: Text('Successfully connected to TM Cloud!'),
+                                          content: Text(
+                                            'Successfully connected to TM Cloud!',
+                                          ),
                                           backgroundColor: Colors.green,
                                         ),
                                       );
@@ -190,15 +192,19 @@ class _FilesPageState extends State<FilesPage> {
                                     child: CircularProgressIndicator(
                                       strokeWidth: 2,
                                       valueColor: AlwaysStoppedAnimation<Color>(
-                                          Color(0xFF062AAE)),
+                                        Color(0xFF062AAE),
+                                      ),
                                     ),
                                   )
                                 : Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       if (_tmCloudConnected) ...[
-                                        const Icon(Icons.check,
-                                            size: 16, color: Colors.green),
+                                        const Icon(
+                                          Icons.check,
+                                          size: 16,
+                                          color: Colors.green,
+                                        ),
                                         const SizedBox(width: 4),
                                       ],
                                       Text(
@@ -359,7 +365,11 @@ class _FilesPageState extends State<FilesPage> {
       ),
       floatingActionButton: FloatingActionButton(
         heroTag: 'files_fab',
-        onPressed: () => showAddMenu(context, showFileOptions: false, showFolderOption: true),
+        onPressed: () => showAddMenu(
+          context,
+          showFileOptions: false,
+          showFolderOption: true,
+        ),
         backgroundColor: const Color(0xFF062AAE),
         shape: const CircleBorder(),
         child: const Icon(Icons.add, color: Colors.white, size: 32),

@@ -10,7 +10,12 @@ class ChatMessage {
   final bool isMe;
   final String time;
 
-  ChatMessage({this.text, this.fileName, required this.isMe, required this.time});
+  ChatMessage({
+    this.text,
+    this.fileName,
+    required this.isMe,
+    required this.time,
+  });
 }
 
 class ActiveChatPage extends StatefulWidget {
@@ -36,7 +41,7 @@ class _ActiveChatPageState extends State<ActiveChatPage> {
   @override
   void initState() {
     super.initState();
-    _messages = widget.initialMessages != null 
+    _messages = widget.initialMessages != null
         ? List.from(widget.initialMessages!)
         : [
             ChatMessage(
@@ -59,7 +64,9 @@ class _ActiveChatPageState extends State<ActiveChatPage> {
 
   String _getCurrentTime() {
     final now = DateTime.now();
-    final hour = now.hour > 12 ? now.hour - 12 : (now.hour == 0 ? 12 : now.hour);
+    final hour = now.hour > 12
+        ? now.hour - 12
+        : (now.hour == 0 ? 12 : now.hour);
     final period = now.hour >= 12 ? 'PM' : 'AM';
     final minute = now.minute.toString().padLeft(2, '0');
     return '$hour:$minute $period';
@@ -69,11 +76,13 @@ class _ActiveChatPageState extends State<ActiveChatPage> {
     if (_textController.text.trim().isEmpty) return;
 
     setState(() {
-      _messages.add(ChatMessage(
-        text: _textController.text.trim(),
-        isMe: true,
-        time: _getCurrentTime(),
-      ));
+      _messages.add(
+        ChatMessage(
+          text: _textController.text.trim(),
+          isMe: true,
+          time: _getCurrentTime(),
+        ),
+      );
       _textController.clear();
     });
   }
@@ -83,11 +92,9 @@ class _ActiveChatPageState extends State<ActiveChatPage> {
 
     if (file != null) {
       setState(() {
-        _messages.add(ChatMessage(
-          fileName: file.name,
-          isMe: true,
-          time: _getCurrentTime(),
-        ));
+        _messages.add(
+          ChatMessage(fileName: file.name, isMe: true, time: _getCurrentTime()),
+        );
       });
     }
   }
@@ -105,13 +112,8 @@ class _ActiveChatPageState extends State<ActiveChatPage> {
       body: SafeArea(
         child: Column(
           children: [
-            // Standard App Header (Logo + Notification)
             Padding(
-              padding: const EdgeInsets.only(
-                left: 16.0,
-                top: 8.0,
-                right: 16.0,
-              ),
+              padding: const EdgeInsets.only(left: 16.0, top: 8.0, right: 16.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -138,7 +140,7 @@ class _ActiveChatPageState extends State<ActiveChatPage> {
                 ],
               ),
             ),
-            // Header Row: Back Button, Title, Resolve
+
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
               child: Row(
@@ -230,7 +232,11 @@ class _ActiveChatPageState extends State<ActiveChatPage> {
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(Icons.insert_drive_file, color: message.isMe ? Colors.white : Colors.black, size: 20),
+                  Icon(
+                    Icons.insert_drive_file,
+                    color: message.isMe ? Colors.white : Colors.black,
+                    size: 20,
+                  ),
                   const SizedBox(width: 8),
                   Text(
                     message.fileName!,
@@ -267,9 +273,7 @@ class _ActiveChatPageState extends State<ActiveChatPage> {
     if (widget.isResolved) {
       return Container(
         padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Colors.grey[100],
-        ),
+        decoration: BoxDecoration(color: Colors.grey[100]),
         child: Center(
           child: Text(
             'This chat has been resolved.',

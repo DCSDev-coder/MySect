@@ -22,13 +22,8 @@ class _ChatPageState extends State<ChatPage> {
       body: SafeArea(
         child: Column(
           children: [
-            // Standard App Header (Logo + Notification)
             Padding(
-              padding: const EdgeInsets.only(
-                left: 16.0,
-                top: 8.0,
-                right: 16.0,
-              ),
+              padding: const EdgeInsets.only(left: 16.0, top: 8.0, right: 16.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -139,17 +134,35 @@ class _ChatPageState extends State<ChatPage> {
                       ),
                     ),
                     const SizedBox(height: 16),
-                    if (_searchQuery.isEmpty || 
-                        'General Support'.toLowerCase().contains(_searchQuery) ||
-                        'Sure, I can help with that. What seems to be the issue?'.toLowerCase().contains(_searchQuery)) ...[
+                    if (_searchQuery.isEmpty ||
+                        'General Support'.toLowerCase().contains(
+                          _searchQuery,
+                        ) ||
+                        'Sure, I can help with that. What seems to be the issue?'
+                            .toLowerCase()
+                            .contains(_searchQuery)) ...[
                       _buildChatCard(
                         'General Support',
                         '10:05 AM',
                         'Sure, I can help with that. What seems to be the issue?',
                         [
-                          ChatMessage(text: 'Hi there! How can I help you today?', isMe: false, time: '10:00 AM'),
-                          ChatMessage(text: 'I have a question about my recent document upload.', isMe: true, time: '10:02 AM'),
-                          ChatMessage(text: 'Sure, I can help with that. What seems to be the issue?', isMe: false, time: '10:05 AM'),
+                          ChatMessage(
+                            text: 'Hi there! How can I help you today?',
+                            isMe: false,
+                            time: '10:00 AM',
+                          ),
+                          ChatMessage(
+                            text:
+                                'I have a question about my recent document upload.',
+                            isMe: true,
+                            time: '10:02 AM',
+                          ),
+                          ChatMessage(
+                            text:
+                                'Sure, I can help with that. What seems to be the issue?',
+                            isMe: false,
+                            time: '10:05 AM',
+                          ),
                         ],
                       ),
                     ] else ...[
@@ -198,7 +211,12 @@ class _ChatPageState extends State<ChatPage> {
     );
   }
 
-  Widget _buildChatCard(String title, String date, String lastMessage, List<ChatMessage> messages) {
+  Widget _buildChatCard(
+    String title,
+    String date,
+    String lastMessage,
+    List<ChatMessage> messages,
+  ) {
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
@@ -231,61 +249,61 @@ class _ChatPageState extends State<ChatPage> {
           child: Padding(
             padding: const EdgeInsets.all(16),
             child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Image.asset(
-              'assets/Profile.png',
-              width: 50,
-              height: 50,
-              fit: BoxFit.cover,
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: GoogleFonts.poppins(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 14,
-                      color: Colors.black,
-                      height: 1.3,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Image.asset(
+                  'assets/Profile.png',
+                  width: 50,
+                  height: 50,
+                  fit: BoxFit.cover,
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Expanded(
-                        child: Text(
-                          lastMessage,
-                          style: GoogleFonts.poppins(
-                            fontSize: 14,
-                            color: Colors.grey[600],
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
+                      Text(
+                        title,
+                        style: GoogleFonts.poppins(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 14,
+                          color: Colors.black,
+                          height: 1.3,
                         ),
                       ),
-                      const SizedBox(width: 8),
-                      Text(
-                        date,
-                        style: GoogleFonts.poppins(
-                          fontSize: 12,
-                          color: Colors.grey[500],
-                        ),
+                      const SizedBox(height: 8),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: Text(
+                              lastMessage,
+                              style: GoogleFonts.poppins(
+                                fontSize: 14,
+                                color: Colors.grey[600],
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            date,
+                            style: GoogleFonts.poppins(
+                              fontSize: 12,
+                              color: Colors.grey[500],
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
-    ),
-  ),
-);
-}
+    );
+  }
 }

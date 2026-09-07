@@ -31,7 +31,7 @@ class _SignupPageState extends State<SignupPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF9FAFB), // Very light grey background
+      backgroundColor: const Color(0xFFF9FAFB),
       body: SafeArea(
         child: Column(
           children: [
@@ -49,10 +49,7 @@ class _SignupPageState extends State<SignupPage> {
             const SizedBox(height: 10),
             Expanded(
               child: Center(
-                child: Image.asset(
-                  'assets/signup.png',
-                  height: 200, // Reduced image size
-                ),
+                child: Image.asset('assets/signup.png', height: 200),
               ),
             ),
             Container(
@@ -251,20 +248,34 @@ class _SignupPageState extends State<SignupPage> {
                           final email = _emailController.text.trim();
                           final password = _passwordController.text;
 
-                          if (name.isEmpty || email.isEmpty || password.isEmpty) {
+                          if (name.isEmpty ||
+                              email.isEmpty ||
+                              password.isEmpty) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
-                                content: Text('Please fill in all fields', style: GoogleFonts.poppins(color: Colors.white)),
+                                content: Text(
+                                  'Please fill in all fields',
+                                  style: GoogleFonts.poppins(
+                                    color: Colors.white,
+                                  ),
+                                ),
                                 backgroundColor: Colors.red,
                               ),
                             );
                             return;
                           }
 
-                          if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email)) {
+                          if (!RegExp(
+                            r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
+                          ).hasMatch(email)) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
-                                content: Text('Please enter a valid email address', style: GoogleFonts.poppins(color: Colors.white)),
+                                content: Text(
+                                  'Please enter a valid email address',
+                                  style: GoogleFonts.poppins(
+                                    color: Colors.white,
+                                  ),
+                                ),
                                 backgroundColor: Colors.red,
                               ),
                             );
@@ -274,7 +285,12 @@ class _SignupPageState extends State<SignupPage> {
                           if (password.length < 8) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
-                                content: Text('Password must be at least 8 characters', style: GoogleFonts.poppins(color: Colors.white)),
+                                content: Text(
+                                  'Password must be at least 8 characters',
+                                  style: GoogleFonts.poppins(
+                                    color: Colors.white,
+                                  ),
+                                ),
                                 backgroundColor: Colors.red,
                               ),
                             );
@@ -284,17 +300,29 @@ class _SignupPageState extends State<SignupPage> {
                           if (!RegExp(r'[A-Z]').hasMatch(password)) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
-                                content: Text('Password must contain at least 1 capital letter', style: GoogleFonts.poppins(color: Colors.white)),
+                                content: Text(
+                                  'Password must contain at least 1 capital letter',
+                                  style: GoogleFonts.poppins(
+                                    color: Colors.white,
+                                  ),
+                                ),
                                 backgroundColor: Colors.red,
                               ),
                             );
                             return;
                           }
 
-                          if (!RegExp(r'[!@#\$%\^&\*\(\),\.\?":{}|<>]').hasMatch(password)) {
+                          if (!RegExp(
+                            r'[!@#\$%\^&\*\(\),\.\?":{}|<>]',
+                          ).hasMatch(password)) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
-                                content: Text('Password must contain at least 1 special character', style: GoogleFonts.poppins(color: Colors.white)),
+                                content: Text(
+                                  'Password must contain at least 1 special character',
+                                  style: GoogleFonts.poppins(
+                                    color: Colors.white,
+                                  ),
+                                ),
                                 backgroundColor: Colors.red,
                               ),
                             );

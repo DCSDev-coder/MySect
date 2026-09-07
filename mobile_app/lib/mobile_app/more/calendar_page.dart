@@ -32,11 +32,7 @@ class _CalendarPageState extends State<CalendarPage> {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.only(
-                left: 16.0,
-                top: 8.0,
-                right: 16.0,
-              ),
+              padding: const EdgeInsets.only(left: 16.0, top: 8.0, right: 16.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -70,10 +66,7 @@ class _CalendarPageState extends State<CalendarPage> {
               child: Row(
                 children: [
                   IconButton(
-                    icon: const Icon(
-                      Icons.arrow_back,
-                      color: Colors.black,
-                    ),
+                    icon: const Icon(Icons.arrow_back, color: Colors.black),
                     onPressed: () => Navigator.pop(context),
                     padding: EdgeInsets.zero,
                     constraints: const BoxConstraints(),
@@ -97,7 +90,6 @@ class _CalendarPageState extends State<CalendarPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-
                     Container(
                       width: double.infinity,
                       height: 50,
@@ -112,8 +104,8 @@ class _CalendarPageState extends State<CalendarPage> {
                             alignment: _selectedTab == 'Current'
                                 ? Alignment.centerLeft
                                 : _selectedTab == 'Past'
-                                    ? Alignment.center
-                                    : Alignment.centerRight,
+                                ? Alignment.center
+                                : Alignment.centerRight,
                             duration: const Duration(milliseconds: 250),
                             curve: Curves.easeInOut,
                             child: FractionallySizedBox(
@@ -125,7 +117,9 @@ class _CalendarPageState extends State<CalendarPage> {
                                   borderRadius: BorderRadius.circular(21),
                                   boxShadow: [
                                     BoxShadow(
-                                      color: Colors.black.withValues(alpha: 0.08),
+                                      color: Colors.black.withValues(
+                                        alpha: 0.08,
+                                      ),
                                       blurRadius: 4,
                                       offset: const Offset(0, 2),
                                     ),
@@ -287,7 +281,6 @@ class _CalendarPageState extends State<CalendarPage> {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Calendar Date Icon
               Container(
                 width: 48,
                 decoration: BoxDecoration(
@@ -307,7 +300,7 @@ class _CalendarPageState extends State<CalendarPage> {
                       width: double.infinity,
                       padding: const EdgeInsets.symmetric(vertical: 4),
                       decoration: const BoxDecoration(
-                        color: Color(0xFFD71920), // Red header
+                        color: Color(0xFFD71920),
                         borderRadius: BorderRadius.vertical(
                           top: Radius.circular(8),
                         ),
@@ -345,7 +338,7 @@ class _CalendarPageState extends State<CalendarPage> {
                 ),
               ),
               const SizedBox(width: 12),
-              // Text Details
+
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -377,7 +370,6 @@ class _CalendarPageState extends State<CalendarPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              // Pill
               Container(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 10,
@@ -409,7 +401,7 @@ class _CalendarPageState extends State<CalendarPage> {
                   ],
                 ),
               ),
-              // File Now ->
+
               if (timeRemaining.toLowerCase() != 'completed')
                 InkWell(
                   onTap: onTap,
@@ -424,7 +416,7 @@ class _CalendarPageState extends State<CalendarPage> {
                         Text(
                           'File Now',
                           style: GoogleFonts.poppins(
-                            color: const Color(0xFF006D67), // Teal
+                            color: const Color(0xFF006D67),
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
                           ),

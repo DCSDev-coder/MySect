@@ -17,7 +17,7 @@ class _CustomersPageState extends State<CustomersPage> {
       'phone': '+60 12-345 6789',
       'email': 'dato.hamzah@example.com',
       'address': '123 Jalan Ampang, Kuala Lumpur',
-    }
+    },
   ];
 
   void _showCustomerDetailsSheet(Map<String, String> customer) {
@@ -61,15 +61,19 @@ class _CustomersPageState extends State<CustomersPage> {
                 const SizedBox(height: 12),
                 _buildDetailRow(Icons.email, 'Email', customer['email'] ?? ''),
                 const SizedBox(height: 12),
-                _buildDetailRow(Icons.location_on, 'Address', customer['address'] ?? ''),
+                _buildDetailRow(
+                  Icons.location_on,
+                  'Address',
+                  customer['address'] ?? '',
+                ),
                 const SizedBox(height: 24),
                 SizedBox(
                   width: double.infinity,
                   height: 50,
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.pop(context); // Close sheet
-                      Navigator.pop(context, customer['name']); // Select customer
+                      Navigator.pop(context);
+                      Navigator.pop(context, customer['name']);
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF062AAE),
@@ -150,9 +154,22 @@ class _CustomersPageState extends State<CustomersPage> {
                 ),
                 const SizedBox(height: 24),
                 ListTile(
-                  leading: const Icon(Icons.person, color: Color(0xFF062AAE), size: 32),
-                  title: Text('Individual', style: GoogleFonts.poppins(fontWeight: FontWeight.w600)),
-                  subtitle: Text('Add a personal customer', style: GoogleFonts.poppins(fontSize: 12, color: Colors.grey.shade600)),
+                  leading: const Icon(
+                    Icons.person,
+                    color: Color(0xFF062AAE),
+                    size: 32,
+                  ),
+                  title: Text(
+                    'Individual',
+                    style: GoogleFonts.poppins(fontWeight: FontWeight.w600),
+                  ),
+                  subtitle: Text(
+                    'Add a personal customer',
+                    style: GoogleFonts.poppins(
+                      fontSize: 12,
+                      color: Colors.grey.shade600,
+                    ),
+                  ),
                   onTap: () {
                     Navigator.pop(context);
                     _showIndividualCustomerSheet();
@@ -160,9 +177,22 @@ class _CustomersPageState extends State<CustomersPage> {
                 ),
                 const Divider(),
                 ListTile(
-                  leading: const Icon(Icons.business, color: Color(0xFF062AAE), size: 32),
-                  title: Text('Company', style: GoogleFonts.poppins(fontWeight: FontWeight.w600)),
-                  subtitle: Text('Add a business entity', style: GoogleFonts.poppins(fontSize: 12, color: Colors.grey.shade600)),
+                  leading: const Icon(
+                    Icons.business,
+                    color: Color(0xFF062AAE),
+                    size: 32,
+                  ),
+                  title: Text(
+                    'Company',
+                    style: GoogleFonts.poppins(fontWeight: FontWeight.w600),
+                  ),
+                  subtitle: Text(
+                    'Add a business entity',
+                    style: GoogleFonts.poppins(
+                      fontSize: 12,
+                      color: Colors.grey.shade600,
+                    ),
+                  ),
                   onTap: () {
                     Navigator.pop(context);
                     _showCompanyCustomerSheet();
@@ -246,7 +276,10 @@ class _CustomersPageState extends State<CustomersPage> {
                           Navigator.pop(context);
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                              content: Text('Customer added', style: GoogleFonts.poppins()),
+                              content: Text(
+                                'Customer added',
+                                style: GoogleFonts.poppins(),
+                              ),
                               backgroundColor: const Color(0xFF062AAE),
                             ),
                           );
@@ -379,7 +412,10 @@ class _CustomersPageState extends State<CustomersPage> {
                           Navigator.pop(context);
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                              content: Text('Customer added', style: GoogleFonts.poppins()),
+                              content: Text(
+                                'Customer added',
+                                style: GoogleFonts.poppins(),
+                              ),
                               backgroundColor: const Color(0xFF062AAE),
                             ),
                           );
@@ -418,11 +454,7 @@ class _CustomersPageState extends State<CustomersPage> {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.only(
-                left: 16.0,
-                top: 8.0,
-                right: 16.0,
-              ),
+              padding: const EdgeInsets.only(left: 16.0, top: 8.0, right: 16.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -449,7 +481,7 @@ class _CustomersPageState extends State<CustomersPage> {
                 ],
               ),
             ),
-            
+
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -460,7 +492,10 @@ class _CustomersPageState extends State<CustomersPage> {
                     Row(
                       children: [
                         IconButton(
-                          icon: const Icon(Icons.arrow_back, color: Colors.black),
+                          icon: const Icon(
+                            Icons.arrow_back,
+                            color: Colors.black,
+                          ),
                           onPressed: () => Navigator.pop(context),
                           padding: EdgeInsets.zero,
                           constraints: const BoxConstraints(),
@@ -482,7 +517,11 @@ class _CustomersPageState extends State<CustomersPage> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(Icons.people_outline, size: 80, color: Colors.grey.shade300),
+                            Icon(
+                              Icons.people_outline,
+                              size: 80,
+                              color: Colors.grey.shade300,
+                            ),
                             const SizedBox(height: 24),
                             Text(
                               'No customers added yet.',
@@ -512,7 +551,9 @@ class _CustomersPageState extends State<CustomersPage> {
                               ),
                               child: ListTile(
                                 leading: CircleAvatar(
-                                  backgroundColor: const Color(0xFF062AAE).withValues(alpha: 0.1),
+                                  backgroundColor: const Color(
+                                    0xFF062AAE,
+                                  ).withValues(alpha: 0.1),
                                   child: Text(
                                     customerName.substring(0, 1).toUpperCase(),
                                     style: GoogleFonts.poppins(
@@ -534,7 +575,10 @@ class _CustomersPageState extends State<CustomersPage> {
                                     color: Colors.grey.shade600,
                                   ),
                                 ),
-                                trailing: const Icon(Icons.chevron_right, color: Colors.grey),
+                                trailing: const Icon(
+                                  Icons.chevron_right,
+                                  color: Colors.grey,
+                                ),
                                 onTap: () {
                                   _showCustomerDetailsSheet(customer);
                                 },

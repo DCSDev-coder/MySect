@@ -5,6 +5,7 @@ import 'package:file_picker/file_picker.dart';
 import 'add_file_menu.dart';
 import 'document_file.dart';
 import '../widgets/custom_bottom_nav_bar.dart';
+
 class OtherPage extends StatefulWidget {
   const OtherPage({super.key});
 
@@ -13,7 +14,7 @@ class OtherPage extends StatefulWidget {
 }
 
 class _OtherPageState extends State<OtherPage> {
-  final int _selectedIndex = 2; // Files tab
+  final int _selectedIndex = 2;
 
   final List<DocumentFile> _myFiles = [
     DocumentFile(
@@ -53,11 +54,7 @@ class _OtherPageState extends State<OtherPage> {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.only(
-                left: 16.0,
-                top: 8.0,
-                right: 16.0,
-              ),
+              padding: const EdgeInsets.only(left: 16.0, top: 8.0, right: 16.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -158,12 +155,12 @@ class _OtherPageState extends State<OtherPage> {
                         subtitle: file.subtitle,
                         badgeText: file.badgeText,
                         badgeBgColor: file.progressColor.withValues(alpha: 0.1),
-                        badgeTextColor: file.progressColor == Colors.green 
-                            ? Colors.green[800]! 
-                            : (file.progressColor == Colors.blue 
-                                ? Colors.blue[800]! 
-                                : Colors.red[800]!),
-                        timeText: 'Today, 10:24 AM', // Hardcoded time for now
+                        badgeTextColor: file.progressColor == Colors.green
+                            ? Colors.green[800]!
+                            : (file.progressColor == Colors.blue
+                                  ? Colors.blue[800]!
+                                  : Colors.red[800]!),
+                        timeText: 'Today, 10:24 AM',
                         progressText: file.progressText,
                         progressColor: file.progressColor,
                         onTap: () {
@@ -174,7 +171,8 @@ class _OtherPageState extends State<OtherPage> {
                         isExpanded: file.isExpanded,
                         uploadedFiles: file.uploadedFiles,
                         onUpload: () async {
-                          if (file.uploadedFiles.length < file.requiredActions) {
+                          if (file.uploadedFiles.length <
+                              file.requiredActions) {
                             var result = await FilePicker.pickFile();
                             if (result != null) {
                               setState(() {
@@ -200,7 +198,11 @@ class _OtherPageState extends State<OtherPage> {
       ),
       floatingActionButton: FloatingActionButton(
         heroTag: null,
-        onPressed: () => showAddMenu(context, showFileOptions: true, showFolderOption: false),
+        onPressed: () => showAddMenu(
+          context,
+          showFileOptions: true,
+          showFolderOption: false,
+        ),
         backgroundColor: const Color(0xFF062AAE),
         shape: const CircleBorder(),
         child: const Icon(Icons.add, color: Colors.white, size: 32),
@@ -232,134 +234,156 @@ class _OtherPageState extends State<OtherPage> {
       child: Container(
         margin: const EdgeInsets.only(bottom: 16),
         padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 4,
-                ),
-                decoration: BoxDecoration(
-                  color: badgeBgColor,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Text(
-                  badgeText,
-                  style: GoogleFonts.poppins(
-                    color: badgeTextColor,
-                    fontSize: 10,
-                    fontWeight: FontWeight.w600,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.05),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 4,
+                  ),
+                  decoration: BoxDecoration(
+                    color: badgeBgColor,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Text(
+                    badgeText,
+                    style: GoogleFonts.poppins(
+                      color: badgeTextColor,
+                      fontSize: 10,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
-              ),
-              Text(
-                timeText,
+                Text(
+                  timeText,
+                  style: GoogleFonts.poppins(
+                    color: Colors.grey[600],
+                    fontSize: 12,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Image.asset('assets/PDF.png', width: 48, height: 48),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: GoogleFonts.poppins(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 14,
+                          color: Colors.black,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        subtitle,
+                        style: GoogleFonts.poppins(
+                          fontSize: 12,
+                          color: Colors.grey[600],
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            Align(
+              alignment: Alignment.bottomRight,
+              child: Text(
+                progressText,
                 style: GoogleFonts.poppins(
-                  color: Colors.grey[600],
+                  fontWeight: FontWeight.w600,
                   fontSize: 12,
+                  color: progressColor,
                 ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Image.asset('assets/PDF.png', width: 48, height: 48),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      title,
-                      style: GoogleFonts.poppins(
-                        fontWeight: FontWeight.w700,
-                        fontSize: 14,
-                        color: Colors.black,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      subtitle,
-                      style: GoogleFonts.poppins(
-                        fontSize: 12,
-                        color: Colors.grey[600],
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          Align(
-            alignment: Alignment.bottomRight,
-            child: Text(
-              progressText,
-              style: GoogleFonts.poppins(
-                fontWeight: FontWeight.w600,
-                fontSize: 12,
-                color: progressColor,
               ),
             ),
-          ),
-          if (isExpanded) ...[
-            const Divider(height: 32),
-            Text('Uploaded Files', style: GoogleFonts.poppins(fontWeight: FontWeight.bold, fontSize: 14)),
-            const SizedBox(height: 8),
-            if (uploadedFiles.isEmpty)
-              Text('No files uploaded yet.', style: GoogleFonts.poppins(fontSize: 12, color: Colors.grey)),
-            ...uploadedFiles.asMap().entries.map((entry) {
-              int idx = entry.key;
-              String f = entry.value;
-              return Padding(
-                padding: const EdgeInsets.only(bottom: 8.0),
-                child: Row(
-                  children: [
-                    const Icon(Icons.insert_drive_file, size: 16, color: Colors.grey),
-                    const SizedBox(width: 8),
-                    Expanded(child: Text(f, style: GoogleFonts.poppins(fontSize: 12))),
-                    if (onRemoveFile != null)
-                      GestureDetector(
-                        onTap: () => onRemoveFile(idx),
-                        child: const Icon(Icons.close, size: 16, color: Colors.grey),
-                      ),
-                  ],
-                ),
-              );
-            }),
-            if (progressColor != Colors.green)
-              Align(
-                alignment: Alignment.center,
-                child: TextButton.icon(
-                  onPressed: onUpload,
-                  icon: const Icon(Icons.upload_file),
-                  label: const Text('Upload File'),
+            if (isExpanded) ...[
+              const Divider(height: 32),
+              Text(
+                'Uploaded Files',
+                style: GoogleFonts.poppins(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
                 ),
               ),
+              const SizedBox(height: 8),
+              if (uploadedFiles.isEmpty)
+                Text(
+                  'No files uploaded yet.',
+                  style: GoogleFonts.poppins(fontSize: 12, color: Colors.grey),
+                ),
+              ...uploadedFiles.asMap().entries.map((entry) {
+                int idx = entry.key;
+                String f = entry.value;
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Icons.insert_drive_file,
+                        size: 16,
+                        color: Colors.grey,
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          f,
+                          style: GoogleFonts.poppins(fontSize: 12),
+                        ),
+                      ),
+                      if (onRemoveFile != null)
+                        GestureDetector(
+                          onTap: () => onRemoveFile(idx),
+                          child: const Icon(
+                            Icons.close,
+                            size: 16,
+                            color: Colors.grey,
+                          ),
+                        ),
+                    ],
+                  ),
+                );
+              }),
+              if (progressColor != Colors.green)
+                Align(
+                  alignment: Alignment.center,
+                  child: TextButton.icon(
+                    onPressed: onUpload,
+                    icon: const Icon(Icons.upload_file),
+                    label: const Text('Upload File'),
+                  ),
+                ),
+            ],
           ],
-        ],
+        ),
       ),
-    ),
-  );
-}
+    );
+  }
 }

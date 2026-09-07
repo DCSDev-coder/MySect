@@ -81,10 +81,12 @@ class _UnsortedPageState extends State<UnsortedPage> {
         style: GoogleFonts.poppins(fontWeight: FontWeight.w500),
       ),
       onTap: () {
-        Navigator.pop(context); // Close bottom sheet
+        Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Successfully moved ${_selectedIndices.length} files to $title!'),
+            content: Text(
+              'Successfully moved ${_selectedIndices.length} files to $title!',
+            ),
             backgroundColor: Colors.green,
           ),
         );
@@ -114,11 +116,17 @@ class _UnsortedPageState extends State<UnsortedPage> {
                     fit: BoxFit.contain,
                   ),
                   IconButton(
-                    icon: const Icon(Icons.notifications_none, color: Colors.black, size: 24),
+                    icon: const Icon(
+                      Icons.notifications_none,
+                      color: Colors.black,
+                      size: 24,
+                    ),
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const NotificationsPage()),
+                        MaterialPageRoute(
+                          builder: (context) => const NotificationsPage(),
+                        ),
                       );
                     },
                   ),
@@ -134,7 +142,11 @@ class _UnsortedPageState extends State<UnsortedPage> {
                   Row(
                     children: [
                       IconButton(
-                        icon: const Icon(Icons.arrow_back_ios, color: Colors.black, size: 20),
+                        icon: const Icon(
+                          Icons.arrow_back_ios,
+                          color: Colors.black,
+                          size: 20,
+                        ),
                         onPressed: () => Navigator.pop(context),
                         padding: EdgeInsets.zero,
                         constraints: const BoxConstraints(),
@@ -248,9 +260,7 @@ class _UnsortedPageState extends State<UnsortedPage> {
       onTap: () {
         if (_isSelectionMode) {
           _toggleSelection(index);
-        } else {
-          // Open document logic
-        }
+        } else {}
       },
       onLongPress: () {
         if (!_isSelectionMode) {
@@ -294,7 +304,10 @@ class _UnsortedPageState extends State<UnsortedPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 4,
+                        ),
                         decoration: BoxDecoration(
                           color: badgeBgColor,
                           borderRadius: BorderRadius.circular(12),
@@ -321,11 +334,7 @@ class _UnsortedPageState extends State<UnsortedPage> {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Image.asset(
-                        'assets/PDF.png',
-                        width: 48,
-                        height: 48,
-                      ),
+                      Image.asset('assets/PDF.png', width: 48, height: 48),
                       const SizedBox(width: 16),
                       Expanded(
                         child: Column(

@@ -90,11 +90,7 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.only(
-                left: 16.0,
-                top: 8.0,
-                right: 16.0,
-              ),
+              padding: const EdgeInsets.only(left: 16.0, top: 8.0, right: 16.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -127,10 +123,7 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
               child: Row(
                 children: [
                   IconButton(
-                    icon: const Icon(
-                      Icons.arrow_back,
-                      color: Colors.black,
-                    ),
+                    icon: const Icon(Icons.arrow_back, color: Colors.black),
                     onPressed: () => Navigator.pop(context),
                     padding: EdgeInsets.zero,
                     constraints: const BoxConstraints(),
@@ -158,7 +151,7 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 32),
-                    // Logo
+
                     GestureDetector(
                       onTap: _pickLogo,
                       child: Container(
@@ -223,7 +216,7 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
                             builder: (context) => const CustomersPage(),
                           ),
                         );
-                        // If they ever select a customer and return it, set it here.
+
                         if (result != null && result is String) {
                           _customerController.text = result;
                         }

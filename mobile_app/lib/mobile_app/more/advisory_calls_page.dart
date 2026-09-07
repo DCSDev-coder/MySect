@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../notifications/notifications_page.dart';
 import '../home/home_page.dart';
 import '../widgets/custom_bottom_nav_bar.dart';
+
 class AdvisoryCallsPage extends StatefulWidget {
   const AdvisoryCallsPage({super.key});
 
@@ -32,13 +33,8 @@ class _AdvisoryCallsPageState extends State<AdvisoryCallsPage> {
       body: SafeArea(
         child: Column(
           children: [
-            // Standard Header
             Padding(
-              padding: const EdgeInsets.only(
-                left: 16.0,
-                top: 8.0,
-                right: 16.0,
-              ),
+              padding: const EdgeInsets.only(left: 16.0, top: 8.0, right: 16.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -72,10 +68,7 @@ class _AdvisoryCallsPageState extends State<AdvisoryCallsPage> {
               child: Row(
                 children: [
                   IconButton(
-                    icon: const Icon(
-                      Icons.arrow_back,
-                      color: Colors.black,
-                    ),
+                    icon: const Icon(Icons.arrow_back, color: Colors.black),
                     onPressed: () => Navigator.pop(context),
                     padding: EdgeInsets.zero,
                     constraints: const BoxConstraints(),
@@ -101,7 +94,6 @@ class _AdvisoryCallsPageState extends State<AdvisoryCallsPage> {
                   children: [
                     const SizedBox(height: 32),
 
-                    // Plan & Balance Card
                     Container(
                       width: double.infinity,
                       padding: const EdgeInsets.all(20),
@@ -202,7 +194,6 @@ class _AdvisoryCallsPageState extends State<AdvisoryCallsPage> {
                     ),
                     const SizedBox(height: 32),
 
-                    // Segmented Control
                     Container(
                       width: double.infinity,
                       height: 50,
@@ -228,7 +219,9 @@ class _AdvisoryCallsPageState extends State<AdvisoryCallsPage> {
                                   borderRadius: BorderRadius.circular(21),
                                   boxShadow: [
                                     BoxShadow(
-                                      color: Colors.black.withValues(alpha: 0.08),
+                                      color: Colors.black.withValues(
+                                        alpha: 0.08,
+                                      ),
                                       blurRadius: 4,
                                       offset: const Offset(0, 2),
                                     ),
@@ -248,7 +241,6 @@ class _AdvisoryCallsPageState extends State<AdvisoryCallsPage> {
                     ),
                     const SizedBox(height: 24),
 
-                    // Calls List
                     if (_selectedTab == 'Upcoming') ...[
                       _buildCallCard(
                         title: 'Quarterly Tax Review',

@@ -186,7 +186,6 @@ class _HomePageState extends State<HomePage> {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Calendar Date Icon
               Container(
                 width: 48,
                 decoration: BoxDecoration(
@@ -206,7 +205,7 @@ class _HomePageState extends State<HomePage> {
                       width: double.infinity,
                       padding: const EdgeInsets.symmetric(vertical: 4),
                       decoration: const BoxDecoration(
-                        color: Color(0xFFD71920), // Red header
+                        color: Color(0xFFD71920),
                         borderRadius: BorderRadius.vertical(
                           top: Radius.circular(8),
                         ),
@@ -244,7 +243,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               const SizedBox(width: 12),
-              // Text Details
+
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -276,7 +275,6 @@ class _HomePageState extends State<HomePage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              // Pill
               Container(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 10,
@@ -308,7 +306,7 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
               ),
-              // File Now ->
+
               if (timeRemaining.toLowerCase() != 'completed')
                 InkWell(
                   onTap: onTap,
@@ -323,7 +321,7 @@ class _HomePageState extends State<HomePage> {
                         Text(
                           'File Now',
                           style: GoogleFonts.poppins(
-                            color: const Color(0xFF006D67), // Teal
+                            color: const Color(0xFF006D67),
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
                           ),

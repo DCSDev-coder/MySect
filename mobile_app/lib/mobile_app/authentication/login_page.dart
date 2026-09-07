@@ -28,7 +28,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF9FAFB), // Very light grey background
+      backgroundColor: const Color(0xFFF9FAFB),
       body: SafeArea(
         child: LayoutBuilder(
           builder: (context, constraints) {
@@ -218,7 +218,9 @@ class _LoginPageState extends State<LoginPage> {
                                     final password = _passwordController.text;
 
                                     if (email.isEmpty) {
-                                      ScaffoldMessenger.of(context).showSnackBar(
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
                                         SnackBar(
                                           content: Text(
                                             'Please enter email address',
@@ -233,7 +235,9 @@ class _LoginPageState extends State<LoginPage> {
                                     }
 
                                     if (password.isEmpty) {
-                                      ScaffoldMessenger.of(context).showSnackBar(
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
                                         SnackBar(
                                           content: Text(
                                             'Please enter password',
@@ -248,7 +252,9 @@ class _LoginPageState extends State<LoginPage> {
                                     }
 
                                     if (email != 'test@gmail.com') {
-                                      ScaffoldMessenger.of(context).showSnackBar(
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
                                         SnackBar(
                                           content: Text(
                                             'Account not found with this email',
@@ -263,7 +269,9 @@ class _LoginPageState extends State<LoginPage> {
                                     }
 
                                     if (password != 'Dtct+1234') {
-                                      ScaffoldMessenger.of(context).showSnackBar(
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
                                         SnackBar(
                                           content: Text(
                                             'Incorrect password',

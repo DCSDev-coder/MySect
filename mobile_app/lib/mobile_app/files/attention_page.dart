@@ -24,11 +24,17 @@ class AttentionPage extends StatelessWidget {
                     fit: BoxFit.contain,
                   ),
                   IconButton(
-                    icon: const Icon(Icons.notifications_none, color: Colors.black, size: 24),
+                    icon: const Icon(
+                      Icons.notifications_none,
+                      color: Colors.black,
+                      size: 24,
+                    ),
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const NotificationsPage()),
+                        MaterialPageRoute(
+                          builder: (context) => const NotificationsPage(),
+                        ),
                       );
                     },
                   ),
@@ -41,7 +47,11 @@ class AttentionPage extends StatelessWidget {
               child: Row(
                 children: [
                   IconButton(
-                    icon: const Icon(Icons.arrow_back_ios, color: Colors.black, size: 20),
+                    icon: const Icon(
+                      Icons.arrow_back_ios,
+                      color: Colors.black,
+                      size: 20,
+                    ),
                     onPressed: () => Navigator.pop(context),
                     padding: EdgeInsets.zero,
                     constraints: const BoxConstraints(),
@@ -73,8 +83,14 @@ class AttentionPage extends StatelessWidget {
                       progressText: 'Pending Signature',
                       progressColor: Colors.red,
                       title: 'Director Resolution 2026',
-                      completedItems: const ['Document Uploaded', 'Initial Review'],
-                      pendingItems: const ['Awaiting Director Signature', 'Final Approval'],
+                      completedItems: const [
+                        'Document Uploaded',
+                        'Initial Review',
+                      ],
+                      pendingItems: const [
+                        'Awaiting Director Signature',
+                        'Final Approval',
+                      ],
                     ),
                     _ExpandableDocumentCard(
                       badgeText: 'Urgent',
@@ -85,7 +101,10 @@ class AttentionPage extends StatelessWidget {
                       progressColor: Colors.transparent,
                       title: 'Tax Invoice #1029',
                       completedItems: const ['Invoice Scanned'],
-                      pendingItems: const ['Upload Missing ID', 'Verify Payment Details'],
+                      pendingItems: const [
+                        'Upload Missing ID',
+                        'Verify Payment Details',
+                      ],
                     ),
                   ],
                 ),
@@ -122,14 +141,13 @@ class _ExpandableDocumentCard extends StatefulWidget {
   });
 
   @override
-  State<_ExpandableDocumentCard> createState() => _ExpandableDocumentCardState();
+  State<_ExpandableDocumentCard> createState() =>
+      _ExpandableDocumentCardState();
 }
 
 class _ExpandableDocumentCardState extends State<_ExpandableDocumentCard> {
   bool _isExpanded = false;
   final List<String> _uploadedFiles = [];
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -163,7 +181,10 @@ class _ExpandableDocumentCardState extends State<_ExpandableDocumentCard> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
                     color: widget.badgeBgColor,
                     borderRadius: BorderRadius.circular(12),
@@ -190,11 +211,7 @@ class _ExpandableDocumentCardState extends State<_ExpandableDocumentCard> {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Image.asset(
-                  'assets/PDF.png',
-                  width: 48,
-                  height: 48,
-                ),
+                Image.asset('assets/PDF.png', width: 48, height: 48),
                 const SizedBox(width: 16),
                 Expanded(
                   child: Column(
@@ -220,7 +237,9 @@ class _ExpandableDocumentCardState extends State<_ExpandableDocumentCard> {
                   ),
                 ),
                 Icon(
-                  _isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
+                  _isExpanded
+                      ? Icons.keyboard_arrow_up
+                      : Icons.keyboard_arrow_down,
                   color: Colors.grey,
                 ),
               ],
@@ -250,57 +269,68 @@ class _ExpandableDocumentCardState extends State<_ExpandableDocumentCard> {
                 ),
               ),
               const SizedBox(height: 8),
-              // Completed Items
-              ...widget.completedItems.map((item) => Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 4),
-                    child: Row(
-                      children: [
-                        const Icon(Icons.check_circle, color: Colors.green, size: 20),
-                        const SizedBox(width: 12),
-                        Text(
+
+              ...widget.completedItems.map(
+                (item) => Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4),
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Icons.check_circle,
+                        color: Colors.green,
+                        size: 20,
+                      ),
+                      const SizedBox(width: 12),
+                      Text(
+                        item,
+                        style: GoogleFonts.poppins(
+                          fontSize: 13,
+                          color: Colors.grey[600],
+                          decoration: TextDecoration.lineThrough,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              ...widget.pendingItems.map(
+                (item) => Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 20,
+                        height: 20,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Colors.red, width: 1.5),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Text(
                           item,
                           style: GoogleFonts.poppins(
                             fontSize: 13,
-                            color: Colors.grey[600],
-                            decoration: TextDecoration.lineThrough,
+                            color: Colors.red,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
-                      ],
-                    ),
-                  )),
-              // Pending Items
-              ...widget.pendingItems.map((item) => Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8),
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 20,
-                          height: 20,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(color: Colors.red, width: 1.5),
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Text(
-                            item,
-                            style: GoogleFonts.poppins(
-                              fontSize: 13,
-                              color: Colors.red,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  )),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
               const SizedBox(height: 16),
               const Divider(height: 1),
               const SizedBox(height: 16),
               Text(
                 'Uploaded Files',
-                style: GoogleFonts.poppins(fontWeight: FontWeight.bold, fontSize: 14),
+                style: GoogleFonts.poppins(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                ),
               ),
               const SizedBox(height: 8),
               if (_uploadedFiles.isEmpty)
@@ -315,16 +345,29 @@ class _ExpandableDocumentCardState extends State<_ExpandableDocumentCard> {
                   padding: const EdgeInsets.only(bottom: 8.0),
                   child: Row(
                     children: [
-                      const Icon(Icons.insert_drive_file, size: 16, color: Colors.grey),
+                      const Icon(
+                        Icons.insert_drive_file,
+                        size: 16,
+                        color: Colors.grey,
+                      ),
                       const SizedBox(width: 8),
-                      Expanded(child: Text(f, style: GoogleFonts.poppins(fontSize: 12))),
+                      Expanded(
+                        child: Text(
+                          f,
+                          style: GoogleFonts.poppins(fontSize: 12),
+                        ),
+                      ),
                       GestureDetector(
                         onTap: () {
                           setState(() {
                             _uploadedFiles.removeAt(idx);
                           });
                         },
-                        child: const Icon(Icons.close, size: 16, color: Colors.grey),
+                        child: const Icon(
+                          Icons.close,
+                          size: 16,
+                          color: Colors.grey,
+                        ),
                       ),
                     ],
                   ),

@@ -168,7 +168,6 @@ class _VerificationPageState extends State<VerificationPage> {
                       child: GestureDetector(
                         onTap: _secondsRemaining == 0
                             ? () {
-                                // Handle resend code logic here
                                 _startTimer();
                               }
                             : null,
