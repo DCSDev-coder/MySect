@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../home/home_page.dart';
+import '../widgets/custom_bottom_nav_bar.dart';
 
 class TwoFactorVerificationPage extends StatefulWidget {
   const TwoFactorVerificationPage({super.key});
@@ -10,6 +12,16 @@ class TwoFactorVerificationPage extends StatefulWidget {
 }
 
 class _TwoFactorVerificationPageState extends State<TwoFactorVerificationPage> {
+  final int _selectedIndex = 4;
+
+  void _onItemTapped(int index) {
+    if (index == _selectedIndex) return;
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (context) => HomePage(initialIndex: index)),
+      (route) => false,
+    );
+  }
+
   final List<FocusNode> _focusNodes = List.generate(6, (index) => FocusNode());
   final List<TextEditingController> _controllers = List.generate(
     6,
@@ -107,16 +119,17 @@ class _TwoFactorVerificationPageState extends State<TwoFactorVerificationPage> {
       resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Matching Header
             Padding(
-              padding: const EdgeInsets.only(left: 16.0, top: 16.0),
+              padding: const EdgeInsets.only(
+                left: 16.0,
+                top: 8.0,
+                right: 16.0,
+              ),
               child: Row(
                 children: [
-                  IconButton(
-                    icon: const Icon(Icons.arrow_back_ios, color: Colors.black, size: 20),
-                    onPressed: () => Navigator.pop(context),
-                  ),
                   Image.asset(
                     'assets/YourSectComp.png',
                     width: 110,
@@ -127,36 +140,47 @@ class _TwoFactorVerificationPageState extends State<TwoFactorVerificationPage> {
             ),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.all(24.0),
+                padding: const EdgeInsets.all(16.0),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Row(
+                      children: [
+                        IconButton(
+                          icon: const Icon(
+                            Icons.arrow_back_ios,
+                            color: Colors.black,
+                            size: 20,
+                          ),
+                          onPressed: () => Navigator.pop(context),
+                          padding: EdgeInsets.zero,
+                          constraints: const BoxConstraints(),
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          'Verification Code',
+                          style: GoogleFonts.poppins(
+                            color: Colors.black,
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 24),
+                    Text(
+                      'Enter the 6-digit code we sent to your email to verify your account.',
+                      style: GoogleFonts.poppins(
+                        color: Colors.grey.shade700,
+                        fontSize: 14,
+                      ),
+                    ),
                     const Spacer(flex: 1),
                     Center(
                       child: Image.asset(
                         'assets/verify code.png',
                         height: 180,
                         fit: BoxFit.contain,
-                      ),
-                    ),
-                    const SizedBox(height: 24),
-                    Text(
-                      'Enter verification code',
-                      textAlign: TextAlign.center,
-                      style: GoogleFonts.poppins(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.black,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    Text(
-                      'Enter the 6-digit code we sent to your email to\nverify your account.',
-                      textAlign: TextAlign.center,
-                      style: GoogleFonts.poppins(
-                        fontSize: 14,
-                        color: Colors.grey[700],
-                        height: 1.5,
                       ),
                     ),
                     const SizedBox(height: 40),
@@ -203,7 +227,8 @@ class _TwoFactorVerificationPageState extends State<TwoFactorVerificationPage> {
                     ),
                     const SizedBox(height: 24),
                     SizedBox(
-                      height: 56,
+                      width: double.infinity,
+                      height: 50,
                       child: ElevatedButton(
                         onPressed: () {
                           final code = _controllers.map((c) => c.text).join();
@@ -239,18 +264,17 @@ class _TwoFactorVerificationPageState extends State<TwoFactorVerificationPage> {
                           );
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF1E50FF),
+                          backgroundColor: const Color(0xFF062AAE),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
-                          elevation: 0,
                         ),
                         child: Text(
                           'Verify and enable',
                           style: GoogleFonts.poppins(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
                             color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16,
                           ),
                         ),
                       ),
@@ -262,6 +286,10 @@ class _TwoFactorVerificationPageState extends State<TwoFactorVerificationPage> {
             ),
           ],
         ),
+      ),
+      bottomNavigationBar: CustomBottomNavBar(
+        currentIndex: 4,
+        onTap: _onItemTapped,
       ),
     );
   }

@@ -144,7 +144,7 @@ class _TwoFactorAuthPageState extends State<TwoFactorAuthPage> {
                             title: Text('Send Email', style: GoogleFonts.poppins(fontWeight: FontWeight.w500)),
                             subtitle: Text('Receive codes via email', style: GoogleFonts.poppins(fontSize: 12, color: Colors.grey.shade600)),
                             value: _emailEnabled,
-                            activeColor: const Color(0xFF1E50FF),
+                            activeColor: Colors.black,
                             onChanged: (bool value) {
                               setState(() {
                                 _emailEnabled = value;
@@ -158,22 +158,21 @@ class _TwoFactorAuthPageState extends State<TwoFactorAuthPage> {
                     const SizedBox(height: 32),
                     SizedBox(
                       width: double.infinity,
-                      height: 56,
+                      height: 50,
                       child: ElevatedButton(
                         onPressed: _emailEnabled ? _sendCode : null,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF1E50FF),
+                          backgroundColor: const Color(0xFF062AAE),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
-                          elevation: 0,
                         ),
                         child: Text(
                           'Send Verification Code',
                           style: GoogleFonts.poppins(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
                             color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16,
                           ),
                         ),
                       ),

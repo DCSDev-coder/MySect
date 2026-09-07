@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../notifications/notifications_page.dart';
+import '../home/home_page.dart';
+import '../widgets/custom_bottom_nav_bar.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -11,6 +13,16 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  final int _selectedIndex = 4;
+
+  void _onItemTapped(int index) {
+    if (index == _selectedIndex) return;
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (context) => HomePage(initialIndex: index)),
+      (route) => false,
+    );
+  }
+
   bool _isEditing = false;
   final TextEditingController _nameController = TextEditingController(text: 'Elly Melissa');
   final TextEditingController _emailController = TextEditingController(text: 'melissa@datacenterspecialists.com');
@@ -393,6 +405,10 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
           ],
         ),
+      ),
+      bottomNavigationBar: CustomBottomNavBar(
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
       ),
     );
   }
