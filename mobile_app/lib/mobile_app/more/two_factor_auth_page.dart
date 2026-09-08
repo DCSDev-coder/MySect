@@ -81,7 +81,7 @@ class _TwoFactorAuthPageState extends State<TwoFactorAuthPage> {
               child: Row(
                 children: [
                   Image.asset(
-                    'assets/YourSectComp.png',
+                    'assets/mysect_logo.png',
                     width: 110,
                     fit: BoxFit.contain,
                   ),

@@ -45,7 +45,7 @@ class _MySectStrokeLoadingScreenState extends State<MySectStrokeLoadingScreen>
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    precacheImage(const AssetImage('assets/YourSectComp.png'), context);
+    precacheImage(const AssetImage('assets/mysect_logo.png'), context);
     precacheImage(const AssetImage('assets/incorporation.png'), context);
     precacheImage(const AssetImage('assets/nextbutton.png'), context);
   }

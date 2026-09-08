@@ -39,7 +39,7 @@ class _BankAccountsPageState extends State<BankAccountsPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Image.asset(
-                    'assets/YourSectComp.png',
+                    'assets/mysect_logo.png',
                     width: 110,
                     fit: BoxFit.contain,
                   ),
@@ -218,7 +218,7 @@ class _BankAccountsPageState extends State<BankAccountsPage> {
                               Row(
                                 children: [
                                   Image.asset(
-                                    'assets/cimb square.png',
+                                    'assets/cimb_square.png',
                                     width: 40,
                                     height: 40,
                                     fit: BoxFit.contain,

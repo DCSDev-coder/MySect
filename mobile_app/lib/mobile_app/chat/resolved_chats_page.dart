@@ -39,7 +39,7 @@ class _ResolvedChatsPageState extends State<ResolvedChatsPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Image.asset(
-                    'assets/YourSectComp.png',
+                    'assets/mysect_logo.png',
                     width: 110,
                     fit: BoxFit.contain,
                   ),
@@ -227,7 +227,7 @@ class _ResolvedChatsPageState extends State<ResolvedChatsPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Image.asset(
-              'assets/Profile.png',
+              'assets/profile.png',
               width: 50,
               height: 50,
               fit: BoxFit.cover,

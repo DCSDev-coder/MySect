@@ -270,7 +270,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Image.asset(
-                    'assets/YourSectComp.png',
+                    'assets/mysect_logo.png',
                     width: 110,
                     fit: BoxFit.contain,
                   ),
@@ -449,7 +449,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         side: BorderSide(color: Colors.grey.shade200),
                       ),
                       child: _buildListTile(
-                        imagePath: 'assets/bin.png',
+                        icon: Icons.delete_outline,
                         title: 'Delete account',
                         trailing: const Icon(
                           Icons.chevron_right,

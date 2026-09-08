@@ -16,7 +16,7 @@ class ForgotPasswordPage extends StatelessWidget {
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Image.asset(
-                  'assets/YourSectComp.png',
+                  'assets/mysect_logo.png',
                   width: 110,
                   fit: BoxFit.contain,
                 ),
@@ -25,7 +25,7 @@ class ForgotPasswordPage extends StatelessWidget {
             const SizedBox(height: 20),
             Expanded(
               child: Center(
-                child: Image.asset('assets/forgot password.png', height: 250),
+                child: Image.asset('assets/forgot_password.png', height: 250),
               ),
             ),
             Container(

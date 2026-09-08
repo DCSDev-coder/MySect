@@ -127,7 +127,7 @@ class _TwoFactorVerificationPageState extends State<TwoFactorVerificationPage> {
               child: Row(
                 children: [
                   Image.asset(
-                    'assets/YourSectComp.png',
+                    'assets/mysect_logo.png',
                     width: 110,
                     fit: BoxFit.contain,
                   ),
@@ -174,7 +174,7 @@ class _TwoFactorVerificationPageState extends State<TwoFactorVerificationPage> {
                     const Spacer(flex: 1),
                     Center(
                       child: Image.asset(
-                        'assets/verify code.png',
+                        'assets/verify_code.png',
                         height: 180,
                         fit: BoxFit.contain,
                       ),

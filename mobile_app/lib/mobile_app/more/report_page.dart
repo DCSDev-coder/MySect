@@ -15,7 +15,20 @@ class ReportPage extends StatefulWidget {
 class _ReportPageState extends State<ReportPage> {
   final int _selectedIndex = 4;
   String _selectedMonth = 'Jul 2026';
-  String _selectedCurrency = 'SGD';
+  String _selectedCurrency = 'MYR';
+  bool _isLoading = false;
+
+  Future<void> _reloadPage() async {
+    setState(() {
+      _isLoading = true;
+    });
+    await Future.delayed(const Duration(seconds: 1));
+    if (mounted) {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
 
   void _onItemTapped(int index) {
     if (index == _selectedIndex) return;
@@ -42,7 +55,7 @@ class _ReportPageState extends State<ReportPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Image.asset(
-                    'assets/YourSectComp.png',
+                    'assets/mysect_logo.png',
                     width: 110,
                     fit: BoxFit.contain,
                   ),
@@ -99,7 +112,7 @@ class _ReportPageState extends State<ReportPage> {
                       color: Colors.black,
                       size: 28,
                     ),
-                    onPressed: () {},
+                    onPressed: _reloadPage,
                     padding: EdgeInsets.zero,
                     constraints: const BoxConstraints(),
                   ),
@@ -109,9 +122,15 @@ class _ReportPageState extends State<ReportPage> {
             const SizedBox(height: 16),
 
             Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Column(
+              child: _isLoading
+                  ? const Center(
+                      child: CircularProgressIndicator(
+                        color: Color(0xFF062AAE),
+                      ),
+                    )
+                  : SingleChildScrollView(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 24),
@@ -182,28 +201,28 @@ class _ReportPageState extends State<ReportPage> {
                     _buildReportCard(
                       title: 'Revenue Trend',
                       amount: _getConvertedAmount(28430),
-                      subtitle: 'vs Jun 2026',
-                      imagePath: 'assets/revenue.png',
+                      subtitle: 'vs ${_getPreviousMonth(_selectedMonth)}',
+                      imagePath: 'assets/financial_revenue_chart.png',
                     ),
                     _buildReportCard(
                       title: 'Cash Flow Trend',
                       amount: _getConvertedAmount(28430),
-                      imagePath: 'assets/cashflow.png',
+                      imagePath: 'assets/financial_cashflow_chart.png',
                     ),
                     _buildReportCard(
                       title: 'Top Revenue Sources',
                       amount: _getConvertedAmount(28430),
-                      imagePath: 'assets/revenue.png',
+                      imagePath: 'assets/financial_revenue_chart.png',
                     ),
                     _buildReportCard(
                       title: 'Top Expenses',
                       amount: null,
-                      imagePath: 'assets/top expenses.png',
+                      imagePath: 'assets/financial_expenses_chart.png',
                     ),
                     _buildReportCard(
                       title: 'Cash Runway',
                       amount: _getConvertedAmount(28430),
-                      imagePath: 'assets/cash runway.png',
+                      imagePath: 'assets/financial_cash_runway_chart.png',
                     ),
 
                     const SizedBox(height: 80),
@@ -280,6 +299,26 @@ class _ReportPageState extends State<ReportPage> {
         ),
       ),
     );
+  }
+
+  String _getPreviousMonth(String monthStr) {
+    const months = [
+      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+    ];
+    final parts = monthStr.split(' ');
+    if (parts.length != 2) return '';
+    final month = parts[0];
+    final year = int.tryParse(parts[1]) ?? 2026;
+
+    final index = months.indexOf(month);
+    if (index == -1) return '';
+
+    if (index == 0) {
+      return 'Dec ${year - 1}';
+    } else {
+      return '${months[index - 1]} $year';
+    }
   }
 
   String _getConvertedAmount(double amountSGD) {

@@ -166,7 +166,7 @@ class _InvoicesPageState extends State<InvoicesPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Image.asset(
-                    'assets/YourSectComp.png',
+                    'assets/mysect_logo.png',
                     width: 110,
                     fit: BoxFit.contain,
                   ),
@@ -284,7 +284,7 @@ class _InvoicesPageState extends State<InvoicesPage> {
                     const SizedBox(height: 32),
 
                     Image.asset(
-                      'assets/invoices page.png',
+                      'assets/invoices_page.png',
                       height: 250,
                       fit: BoxFit.contain,
                     ),

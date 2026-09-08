@@ -122,7 +122,7 @@ class _UnsortedPageState extends State<UnsortedPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Image.asset(
-                    'assets/YourSectComp.png',
+                    'assets/mysect_logo.png',
                     width: 110,
                     fit: BoxFit.contain,
                   ),
@@ -348,7 +348,7 @@ class _UnsortedPageState extends State<UnsortedPage> {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Image.asset('assets/PDF.png', width: 48, height: 48),
+                      Image.asset('assets/pdf.png', width: 48, height: 48),
                       const SizedBox(width: 16),
                       Expanded(
                         child: Column(

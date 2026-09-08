@@ -59,7 +59,7 @@ class _PersonalPageState extends State<PersonalPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Image.asset(
-                    'assets/YourSectComp.png',
+                    'assets/mysect_logo.png',
                     width: 110,
                     fit: BoxFit.contain,
                   ),
@@ -282,7 +282,7 @@ class _PersonalPageState extends State<PersonalPage> {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Image.asset('assets/PDF.png', width: 48, height: 48),
+                Image.asset('assets/pdf.png', width: 48, height: 48),
                 const SizedBox(width: 16),
                 Expanded(
                   child: Column(

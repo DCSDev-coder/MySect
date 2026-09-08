@@ -355,7 +355,7 @@ class _HomePageState extends State<HomePage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Image.asset(
-                  'assets/YourSectComp.png',
+                  'assets/mysect_logo.png',
                   width: 110,
                   fit: BoxFit.contain,
                 ),
@@ -503,7 +503,7 @@ class _HomePageState extends State<HomePage> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Image.asset('assets/locked icon.png', height: 250),
+                            Image.asset('assets/locked_icon.png', height: 250),
                             const SizedBox(height: 16),
                             Text(
                               'Company Locked',
@@ -740,7 +740,7 @@ class _HomePageState extends State<HomePage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Image.asset(
-                          'assets/YourSectComp.png',
+                          'assets/mysect_logo.png',
                           width: 110,
                           fit: BoxFit.contain,
                         ),
@@ -777,7 +777,7 @@ class _HomePageState extends State<HomePage> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Image.asset('assets/locked icon.png', height: 250),
+                          Image.asset('assets/locked_icon.png', height: 250),
                           const SizedBox(height: 16),
                           Text(
                             'Company Locked',

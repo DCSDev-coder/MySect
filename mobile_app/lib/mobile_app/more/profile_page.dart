@@ -128,7 +128,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Image.asset(
-                          'assets/YourSectComp.png',
+                          'assets/mysect_logo.png',
                           width: 110,
                           fit: BoxFit.contain,
                         ),
@@ -396,7 +396,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   );
                                 }
                               } catch (e) {
-                                // Fallback to current date on parsing error
+                                // Ignore parsing error and fallback to default
                               }
                             }
                             final DateTime? picked = await showDatePicker(

@@ -195,7 +195,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Image.asset(
-                    'assets/YourSectComp.png',
+                    'assets/mysect_logo.png',
                     width: 110,
                     fit: BoxFit.contain,
                   ),
@@ -505,7 +505,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Image.asset(
-                                  'assets/transation money.png',
+                                  'assets/transation_money.png',
                                   height: 300,
                                   errorBuilder: (context, error, stackTrace) {
                                     return Icon(

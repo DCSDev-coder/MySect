@@ -40,7 +40,7 @@ class _SignupPageState extends State<SignupPage> {
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Image.asset(
-                  'assets/YourSectComp.png',
+                  'assets/mysect_logo.png',
                   width: 110,
                   fit: BoxFit.contain,
                 ),

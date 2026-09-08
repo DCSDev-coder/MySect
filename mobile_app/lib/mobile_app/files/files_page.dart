@@ -33,7 +33,7 @@ class _FilesPageState extends State<FilesPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Image.asset(
-                    'assets/YourSectComp.png',
+                    'assets/mysect_logo.png',
                     width: 110,
                     fit: BoxFit.contain,
                   ),
@@ -116,7 +116,7 @@ class _FilesPageState extends State<FilesPage> {
                       child: Row(
                         children: [
                           Image.asset(
-                            'assets/TM Cloud.png',
+                            'assets/tm_cloud.png',
                             width: 50,
                             height: 50,
                           ),
