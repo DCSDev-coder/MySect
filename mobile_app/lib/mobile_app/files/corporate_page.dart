@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:file_picker/file_picker.dart';
 import 'add_file_menu.dart';
 import 'document_file.dart';
+import 'document_viewer_page.dart';
 import '../widgets/custom_bottom_nav_bar.dart';
 
 class CorporatePage extends StatefulWidget {
@@ -329,7 +330,7 @@ class _CorporatePageState extends State<CorporatePage> {
             if (isExpanded) ...[
               const Divider(height: 32),
               Text(
-                'Uploaded Files',
+                'Files',
                 style: GoogleFonts.poppins(
                   fontWeight: FontWeight.bold,
                   fontSize: 14,
@@ -338,38 +339,47 @@ class _CorporatePageState extends State<CorporatePage> {
               const SizedBox(height: 8),
               if (uploadedFiles.isEmpty)
                 Text(
-                  'No files uploaded yet.',
+                  'No files available.',
                   style: GoogleFonts.poppins(fontSize: 12, color: Colors.grey),
                 ),
               ...uploadedFiles.asMap().entries.map((entry) {
-                int idx = entry.key;
                 String f = entry.value;
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 8.0),
-                  child: Row(
-                    children: [
-                      const Icon(
-                        Icons.insert_drive_file,
-                        size: 16,
-                        color: Colors.grey,
+                return InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => DocumentViewerPage(fileName: f),
                       ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: Text(
-                          f,
-                          style: GoogleFonts.poppins(fontSize: 12),
+                    );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.insert_drive_file,
+                          size: 16,
+                          color: Color(0xFF062AAE),
                         ),
-                      ),
-                      if (onRemoveFile != null)
-                        GestureDetector(
-                          onTap: () => onRemoveFile(idx),
-                          child: const Icon(
-                            Icons.close,
-                            size: 16,
-                            color: Colors.grey,
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            f,
+                            style: GoogleFonts.poppins(
+                              fontSize: 12,
+                              color: const Color(0xFF062AAE),
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
                         ),
-                    ],
+                        const Icon(
+                          Icons.visibility,
+                          size: 16,
+                          color: Color(0xFF062AAE),
+                        ),
+                      ],
+                    ),
                   ),
                 );
               }),
@@ -380,6 +390,9 @@ class _CorporatePageState extends State<CorporatePage> {
                     onPressed: onUpload,
                     icon: const Icon(Icons.upload_file),
                     label: const Text('Upload File'),
+                    style: TextButton.styleFrom(
+                      foregroundColor: const Color(0xFF062AAE),
+                    ),
                   ),
                 ),
             ],

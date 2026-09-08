@@ -105,101 +105,107 @@ class _ReferralPageState extends State<ReferralPage> {
             ),
             const SizedBox(height: 16),
             Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 16),
-
-                    Center(
-                      child: Image.asset(
-                        'assets/referral.png',
-                        height: 320,
-                        fit: BoxFit.contain,
-                      ),
+              child: Align(
+                alignment: const Alignment(0.0, -0.2),
+                child: SingleChildScrollView(
+                  child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 24,
+                      vertical: 24,
                     ),
-                    const SizedBox(height: 24),
-
-                    Center(
-                      child: Text(
-                        'Refer your friends & earn\nup to RM200 per referral',
-                        textAlign: TextAlign.center,
-                        style: GoogleFonts.poppins(
-                          color: Colors.black,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          height: 1.2,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Center(
+                          child: Image.asset(
+                            'assets/referral.png',
+                            height: 240,
+                            fit: BoxFit.contain,
+                          ),
                         ),
-                      ),
-                    ),
-                    const SizedBox(height: 24),
-
-                    Text(
-                      'Your referral link',
-                      style: GoogleFonts.poppins(
-                        color: Colors.black,
-                        fontSize: 14,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    InkWell(
-                      onTap: _copyToClipboard,
-                      borderRadius: BorderRadius.circular(12),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 12,
+                        const SizedBox(height: 24),
+                        Center(
+                          child: Text(
+                            'Refer your friends & earn up to RM200 per referral',
+                            textAlign: TextAlign.center,
+                            style: GoogleFonts.poppins(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.black87,
+                              height: 1.3,
+                            ),
+                          ),
                         ),
-                        decoration: BoxDecoration(
-                          color: Colors.blue.shade50,
+                        const SizedBox(height: 24),
+
+                        Text(
+                          'Your referral link',
+                          style: GoogleFonts.poppins(
+                            color: Colors.black,
+                            fontSize: 14,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        InkWell(
+                          onTap: _copyToClipboard,
                           borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                _referralLink,
-                                style: GoogleFonts.poppins(
-                                  color: Colors.black,
-                                  fontSize: 14,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 12,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.blue.shade50,
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    _referralLink,
+                                    style: GoogleFonts.poppins(
+                                      color: Colors.black,
+                                      fontSize: 14,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
                                 ),
-                                overflow: TextOverflow.ellipsis,
+                                const Icon(
+                                  Icons.copy_outlined,
+                                  color: Colors.black,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 24),
+
+                        SizedBox(
+                          width: double.infinity,
+                          height: 50,
+                          child: ElevatedButton(
+                            onPressed: _shareLink,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFF062AAE),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
                               ),
                             ),
-                            const Icon(
-                              Icons.copy_outlined,
-                              color: Colors.black,
+                            child: Text(
+                              'Share MySect',
+                              style: GoogleFonts.poppins(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 16,
+                              ),
                             ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 24),
-
-                    SizedBox(
-                      width: double.infinity,
-                      height: 50,
-                      child: ElevatedButton(
-                        onPressed: _shareLink,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF062AAE),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
                           ),
                         ),
-                        child: Text(
-                          'Share MySect',
-                          style: GoogleFonts.poppins(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 16,
-                          ),
-                        ),
-                      ),
+                        const SizedBox(height: 40),
+                      ],
                     ),
-                    const SizedBox(height: 40),
-                  ],
+                  ),
                 ),
               ),
             ),

@@ -286,10 +286,12 @@ class _InvoicesPageState extends State<InvoicesPage> {
                     child: Align(
                       alignment: const Alignment(0.0, -0.2),
                       child: SingleChildScrollView(
-                        padding: const EdgeInsets.symmetric(horizontal: 24),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
+                        child: Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 24),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
                             Image.asset(
                               'assets/invoices_page.png',
                               height: 170,
@@ -322,7 +324,8 @@ class _InvoicesPageState extends State<InvoicesPage> {
                       ),
                     ),
                   ),
-                ],
+                ),
+              ],
               ),
             ),
           ],
