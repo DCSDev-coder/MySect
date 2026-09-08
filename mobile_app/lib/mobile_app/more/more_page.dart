@@ -26,11 +26,7 @@ class MorePage extends StatelessWidget {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.only(
-                left: 16.0,
-                top: 8.0,
-                right: 16.0,
-              ),
+              padding: const EdgeInsets.only(left: 16.0, top: 8.0, right: 16.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -186,7 +182,7 @@ class MorePage extends StatelessWidget {
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Text(
-                              'EARN \$200',
+                              'EARN RM200',
                               style: GoogleFonts.poppins(
                                 fontSize: 10,
                                 fontWeight: FontWeight.w700,
@@ -312,7 +308,10 @@ class MorePage extends StatelessWidget {
                       onPressed: () => Navigator.pop(context),
                       style: OutlinedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 16),
-                        side: BorderSide(color: Colors.grey.shade300, width: 1.5),
+                        side: BorderSide(
+                          color: Colors.grey.shade300,
+                          width: 1.5,
+                        ),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),

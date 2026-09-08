@@ -219,11 +219,10 @@ class _TransactionsPageState extends State<TransactionsPage> {
             ),
 
             Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(
                         left: 24,
                         right: 24,
                         top: 16,
@@ -495,37 +494,43 @@ class _TransactionsPageState extends State<TransactionsPage> {
                                 ),
                               ],
                             ),
-                          ),const SizedBox(height: 24),
-
-                          Container(
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    Expanded(
+                      child: Align(
+                        alignment: const Alignment(0.0, -0.2),
+                        child: SingleChildScrollView(
+                          child: Container(
                             width: double.infinity,
                             padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 24),
-
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Image.asset(
                                   'assets/transation_money.png',
-                                  height: 300,
+                                  height: 170,
                                   errorBuilder: (context, error, stackTrace) {
                                     return Icon(
                                       Icons.check_circle_outline,
-                                      size: 150,
+                                      size: 120,
                                       color: const Color(0xFF1E3A8A).withValues(alpha: 0.5),
                                     );
                                   },
                                 ),
-                                const SizedBox(height: 32),
+                                const SizedBox(height: 24),
                                 Text(
                                   !_isDocumentsNeededFilterActive && !_isReplyNeededFilterActive
                                       ? 'Create and send professional\ntransactions in minutes'
                                       : 'No Pending Actions',
                                   textAlign: TextAlign.center,
                                   style: GoogleFonts.poppins(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w700,
-                                    color: Colors.black,
-                                    height: 1.2,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.black87,
+                                    height: 1.3,
                                   ),
                                 ),
                                 const SizedBox(height: 8),
@@ -537,23 +542,21 @@ class _TransactionsPageState extends State<TransactionsPage> {
                                           : 'There are currently no transactions\nrequiring a reply.',
                                   textAlign: TextAlign.center,
                                   style: GoogleFonts.poppins(
-                                    fontSize: 14,
+                                    fontSize: 13,
                                     fontWeight: FontWeight.w400,
-                                    color: Colors.grey.shade800,
+                                    color: Colors.grey.shade600,
                                     height: 1.5,
                                   ),
                                 ),
                               ],
                             ),
                           ),
-                          const SizedBox(height: 40),
-                        ],
+                        ),
                       ),
                     ),
                   ],
                 ),
               ),
-            ),
           ],
         ),
       ),

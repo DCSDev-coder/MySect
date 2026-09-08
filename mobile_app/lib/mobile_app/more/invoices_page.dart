@@ -263,13 +263,12 @@ class _InvoicesPageState extends State<InvoicesPage> {
             ),
             const SizedBox(height: 16),
             Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const SizedBox(height: 24),
-                    SingleChildScrollView(
+              child: Column(
+                children: [
+                  const SizedBox(height: 24),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Row(
                         children: [
@@ -281,38 +280,49 @@ class _InvoicesPageState extends State<InvoicesPage> {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 32),
-
-                    Image.asset(
-                      'assets/invoices_page.png',
-                      height: 250,
-                      fit: BoxFit.contain,
-                    ),
-                    const SizedBox(height: 48),
-
-                    Text(
-                      'Create and send professional\ninvoices in minutes',
-                      textAlign: TextAlign.center,
-                      style: GoogleFonts.poppins(
-                        color: Colors.black,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        height: 1.2,
+                  ),
+                  const SizedBox(height: 24),
+                  Expanded(
+                    child: Align(
+                      alignment: const Alignment(0.0, -0.2),
+                      child: SingleChildScrollView(
+                        padding: const EdgeInsets.symmetric(horizontal: 24),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset(
+                              'assets/invoices_page.png',
+                              height: 170,
+                              fit: BoxFit.contain,
+                            ),
+                            const SizedBox(height: 24),
+                            Text(
+                              'Create and send professional\ninvoices in minutes',
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.poppins(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black87,
+                                height: 1.3,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              'Get paid faster with Mysect invoices',
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.poppins(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w400,
+                                color: Colors.grey.shade600,
+                                height: 1.5,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                    const SizedBox(height: 16),
-                    Text(
-                      'Get paid faster with Mysect invoices',
-                      textAlign: TextAlign.center,
-                      style: GoogleFonts.poppins(
-                        color: Colors.black87,
-                        fontSize: 14,
-                      ),
-                    ),
-                    const SizedBox(height: 48),
-
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ],
