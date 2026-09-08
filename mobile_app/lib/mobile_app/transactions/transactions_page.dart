@@ -425,7 +425,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
                                         return Theme(
                                           data: Theme.of(context).copyWith(
                                             colorScheme: const ColorScheme.light(
-                                              primary: const Color(0xFF062AAE),
+                                              primary: Color(0xFF062AAE),
                                             ),
                                           ),
                                           child: child!,

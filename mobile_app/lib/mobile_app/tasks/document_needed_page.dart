@@ -2,9 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:file_picker/file_picker.dart';
 import '../notifications/notifications_page.dart';
+import '../home/home_page.dart';
+import '../widgets/custom_bottom_nav_bar.dart';
 
 class DocumentNeededPage extends StatelessWidget {
   const DocumentNeededPage({super.key});
+
+  void _onItemTapped(BuildContext context, int index) {
+    if (index == 0) return;
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (context) => HomePage(initialIndex: index)),
+      (route) => false,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,8 +90,8 @@ class DocumentNeededPage extends StatelessWidget {
                       badgeBgColor: Colors.red[100]!,
                       badgeTextColor: Colors.red[800]!,
                       timeText: 'Due: 15 Oct 2026',
-                      progressText: 'Pending Upload',
-                      progressColor: Colors.red,
+                      progressText: '',
+                      progressColor: Colors.transparent,
                       title: 'Bank Statement (FY2026)',
                       subtitle: 'Please upload the latest bank statement.',
                       completedItems: const ['Request Received'],
@@ -92,8 +102,8 @@ class DocumentNeededPage extends StatelessWidget {
                       badgeBgColor: Colors.orange[100]!,
                       badgeTextColor: Colors.orange[800]!,
                       timeText: 'Due: 15 Oct 2026',
-                      progressText: 'Missing Details',
-                      progressColor: Colors.orange,
+                      progressText: '',
+                      progressColor: Colors.transparent,
                       title: 'Director Identity Card',
                       subtitle: 'Clear copy of NRIC or Passport.',
                       completedItems: const [],
@@ -105,6 +115,10 @@ class DocumentNeededPage extends StatelessWidget {
             ),
           ],
         ),
+      ),
+      bottomNavigationBar: CustomBottomNavBar(
+        currentIndex: 0,
+        onTap: (index) => _onItemTapped(context, index),
       ),
     );
   }
@@ -350,7 +364,7 @@ class _ExpandableDocumentCardState extends State<_ExpandableDocumentCard> {
                 ),
               ],
             ),
-            if (!_isExpanded)
+            if (!_isExpanded && widget.progressText.isNotEmpty)
               Align(
                 alignment: Alignment.bottomRight,
                 child: Text(

@@ -2,9 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../notifications/notifications_page.dart';
 import 'package:file_picker/file_picker.dart';
+import '../home/home_page.dart';
+import '../widgets/custom_bottom_nav_bar.dart';
 
 class AttentionPage extends StatelessWidget {
   const AttentionPage({super.key});
+
+  void _onItemTapped(BuildContext context, int index) {
+    if (index == 2) return;
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (context) => HomePage(initialIndex: index)),
+      (route) => false,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,8 +90,8 @@ class AttentionPage extends StatelessWidget {
                       badgeBgColor: Colors.red[100]!,
                       badgeTextColor: Colors.red[800]!,
                       timeText: 'Today, 09:00 AM',
-                      progressText: 'Pending Signature',
-                      progressColor: Colors.red,
+                      progressText: '',
+                      progressColor: Colors.transparent,
                       title: 'Director Resolution 2026',
                       completedItems: const [
                         'Document Uploaded',
@@ -112,6 +122,10 @@ class AttentionPage extends StatelessWidget {
             ),
           ],
         ),
+      ),
+      bottomNavigationBar: CustomBottomNavBar(
+        currentIndex: 2,
+        onTap: (index) => _onItemTapped(context, index),
       ),
     );
   }
@@ -244,7 +258,7 @@ class _ExpandableDocumentCardState extends State<_ExpandableDocumentCard> {
                 ),
               ],
             ),
-            if (!_isExpanded)
+            if (!_isExpanded && widget.progressText.isNotEmpty)
               Align(
                 alignment: Alignment.bottomRight,
                 child: Text(

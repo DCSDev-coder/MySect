@@ -395,7 +395,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                     int.parse(parts[0]),
                                   );
                                 }
-                              } catch (e) {}
+                              } catch (e) {
+                                // Fallback to current date on parsing error
+                              }
                             }
                             final DateTime? picked = await showDatePicker(
                               context: context,

@@ -1,9 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../notifications/notifications_page.dart';
+import '../home/home_page.dart';
+import '../widgets/custom_bottom_nav_bar.dart';
 
 class RepliesNeededPage extends StatelessWidget {
   const RepliesNeededPage({super.key});
+
+  void _onItemTapped(BuildContext context, int index) {
+    if (index == 0) return;
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (context) => HomePage(initialIndex: index)),
+      (route) => false,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -106,6 +116,10 @@ class RepliesNeededPage extends StatelessWidget {
             ),
           ],
         ),
+      ),
+      bottomNavigationBar: CustomBottomNavBar(
+        currentIndex: 0,
+        onTap: (index) => _onItemTapped(context, index),
       ),
     );
   }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../notifications/notifications_page.dart';
+import '../home/home_page.dart';
+import '../widgets/custom_bottom_nav_bar.dart';
 
 class UnsortedPage extends StatefulWidget {
   const UnsortedPage({super.key});
@@ -11,6 +13,15 @@ class UnsortedPage extends StatefulWidget {
 
 class _UnsortedPageState extends State<UnsortedPage> {
   bool _isSelectionMode = false;
+
+  void _onItemTapped(int index) {
+    if (index == 2) return;
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (context) => HomePage(initialIndex: index)),
+      (route) => false,
+    );
+  }
+
   final Set<int> _selectedIndices = {};
 
   final List<Map<String, String>> _files = [
@@ -242,7 +253,10 @@ class _UnsortedPageState extends State<UnsortedPage> {
                 ),
               ),
             )
-          : null,
+          : CustomBottomNavBar(
+              currentIndex: 2,
+              onTap: _onItemTapped,
+            ),
     );
   }
 

@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../home/home_page.dart';
 import '../widgets/custom_bottom_nav_bar.dart';
 import 'two_factor_auth_page.dart';
+import '../authentication/signup_page.dart';
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
 
@@ -155,49 +156,98 @@ class _SettingsPageState extends State<SettingsPage> {
     showDialog(
       context: context,
       builder: (context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          title: Text(
-            'Delete Account',
-            style: GoogleFonts.poppins(
-              fontWeight: FontWeight.bold,
-              color: Colors.red,
-            ),
-          ),
-          content: Text(
-            'Are you sure you want to permanently delete your account? This action cannot be undone.',
-            style: GoogleFonts.poppins(),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text(
-                'Cancel',
-                style: GoogleFonts.poppins(color: Colors.grey.shade700),
-              ),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                      'Account deleted (Simulation)',
-                      style: GoogleFonts.poppins(),
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          child: Stack(
+            clipBehavior: Clip.none,
+            alignment: Alignment.topCenter,
+            children: [
+              Container(
+                margin: const EdgeInsets.only(top: 26),
+                padding: const EdgeInsets.only(top: 32, left: 24, right: 24, bottom: 16),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      'Delete Account',
+                      style: GoogleFonts.poppins(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                        color: const Color(0xFF3B4058),
+                      ),
                     ),
-                    backgroundColor: Colors.red,
-                  ),
-                );
-              },
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-              child: Text(
-                'Delete',
-                style: GoogleFonts.poppins(color: Colors.white),
+                    const SizedBox(height: 12),
+                    Text(
+                      'Are you certain you wish to permanently\ndelete your account?',
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.poppins(
+                        fontSize: 14,
+                        color: Colors.grey.shade600,
+                      ),
+                    ),
+                    const SizedBox(height: 32),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(context),
+                          child: Text(
+                            'CANCEL',
+                            style: GoogleFonts.poppins(
+                              fontWeight: FontWeight.bold,
+                              color: const Color(0xFF3B4058),
+                            ),
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const SignupPage(),
+                              ),
+                              (route) => false,
+                            );
+                          },
+                          child: Text(
+                            'DELETE',
+                            style: GoogleFonts.poppins(
+                              fontWeight: FontWeight.bold,
+                              color: const Color(0xFFD3455B),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+              Positioned(
+                top: 0,
+                child: Container(
+                  width: 52,
+                  height: 52,
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Center(
+                    child: Image.asset(
+                      'assets/trashcan.png',
+                      width: 46,
+                      height: 46,
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         );
       },
     );
@@ -399,7 +449,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         side: BorderSide(color: Colors.grey.shade200),
                       ),
                       child: _buildListTile(
-                        icon: Icons.security_outlined,
+                        imagePath: 'assets/bin.png',
                         title: 'Delete account',
                         trailing: const Icon(
                           Icons.chevron_right,
@@ -425,7 +475,8 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Widget _buildListTile({
-    required IconData icon,
+    IconData? icon,
+    String? imagePath,
     required String title,
     String? subtitle,
     Widget? trailing,
@@ -438,7 +489,10 @@ class _SettingsPageState extends State<SettingsPage> {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         child: Row(
           children: [
-            Icon(icon, color: Colors.black, size: 28),
+            if (imagePath != null)
+              Image.asset(imagePath, width: 28, height: 28)
+            else if (icon != null)
+              Icon(icon, color: Colors.black, size: 28),
             const SizedBox(width: 16),
             Expanded(
               child: Column(
