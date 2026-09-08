@@ -150,7 +150,7 @@ class _TwoFactorAuthPageState extends State<TwoFactorAuthPage> {
                               ),
                             ),
                             value: _emailEnabled,
-                            activeColor: Colors.black,
+                            activeThumbColor: Colors.black,
                             onChanged: (bool value) {
                               setState(() {
                                 _emailEnabled = value;

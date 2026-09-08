@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../notifications/notifications_page.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:file_picker/file_picker.dart';
 
 class TransactionsPage extends StatefulWidget {
   const TransactionsPage({super.key});
@@ -13,15 +15,70 @@ class _TransactionsPageState extends State<TransactionsPage> {
   DateTime? _selectedDate;
   bool _isDocumentsNeededFilterActive = false;
   bool _isReplyNeededFilterActive = false;
+  bool _isMatchingFile = false;
 
   String _getMonthString(int month) {
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     return months[month - 1];
   }
 
+  final ImagePicker _picker = ImagePicker();
 
+  Future<void> _pickImage(ImageSource source) async {
+    try {
+      final XFile? image = await _picker.pickImage(source: source);
+      if (image != null) {
+        setState(() {
+          _isMatchingFile = true;
+        });
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('File ${image.name} selected.', style: GoogleFonts.poppins()),
+              backgroundColor: const Color(0xFF1E3A8A),
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error selecting image: $e', style: GoogleFonts.poppins()),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+  }
 
-
+  Future<void> _pickFile() async {
+    try {
+      PlatformFile? file = await FilePicker.pickFile();
+      if (file != null) {
+        setState(() {
+          _isMatchingFile = true;
+        });
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('File ${file.name} selected.', style: GoogleFonts.poppins()),
+              backgroundColor: const Color(0xFF1E3A8A),
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error selecting file: $e', style: GoogleFonts.poppins()),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+  }
   void _showUploadOptions(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -42,7 +99,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
                 width: 40,
                 height: 4,
                 decoration: BoxDecoration(
-                  color: const Color(0xFF062AAE),
+                  color: const Color(0xFF1E3A8A),
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
@@ -55,21 +112,25 @@ class _TransactionsPageState extends State<TransactionsPage> {
                     context,
                     icon: Icons.camera_alt,
                     label: 'Camera',
+                    onTap: () => _pickImage(ImageSource.camera),
                   ),
                   _buildUploadOption(
                     context,
                     icon: Icons.image,
                     label: 'Library',
+                    onTap: () => _pickImage(ImageSource.gallery),
                   ),
                   _buildUploadOption(
                     context,
                     icon: Icons.insert_drive_file,
                     label: 'File',
+                    onTap: () => _pickFile(),
                   ),
                   _buildUploadOption(
                     context,
                     icon: Icons.document_scanner,
                     label: 'Scan',
+                    onTap: () => _pickImage(ImageSource.camera),
                   ),
                   GestureDetector(
                     onTap: () => Navigator.pop(context),
@@ -92,19 +153,11 @@ class _TransactionsPageState extends State<TransactionsPage> {
     );
   }
 
-  Widget _buildUploadOption(BuildContext context, {required IconData icon, required String label}) {
+  Widget _buildUploadOption(BuildContext context, {required IconData icon, required String label, required VoidCallback onTap}) {
     return GestureDetector(
       onTap: () {
         Navigator.pop(context);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              'Opening $label...',
-              style: GoogleFonts.poppins(),
-            ),
-            backgroundColor: const Color(0xFF062AAE),
-          ),
-        );
+        onTap();
       },
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -132,15 +185,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF9FAFB),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _showUploadOptions(context);
-        },
-        backgroundColor: const Color(0xFF062AAE),
-        shape: const CircleBorder(),
-        child: const Icon(Icons.file_upload_outlined, color: Colors.white),
-      ),
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Column(
           children: [
@@ -187,14 +232,20 @@ class _TransactionsPageState extends State<TransactionsPage> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            'Transactions',
-                            style: GoogleFonts.poppins(
-                              fontSize: 24,
-                              fontWeight: FontWeight.w800,
-                              color: Colors.black,
+                          Row(
+                            children: [
+                              const Icon(Icons.arrow_back, color: Colors.black),
+                              const SizedBox(width: 16),
+                                Text(
+                                  'Transactions',
+                                  style: GoogleFonts.poppins(
+                                    fontSize: 28,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
                         ],
                       ),
                     ),
@@ -204,71 +255,73 @@ class _TransactionsPageState extends State<TransactionsPage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Container(
-                            padding: const EdgeInsets.all(16),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(16),
-                              border: Border.all(
-                                color: const Color(0xFF062AAE).withValues(alpha: 0.1),
-                                width: 1.5,
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withValues(alpha: 0.02),
-                                  blurRadius: 10,
-                                  offset: const Offset(0, 4),
+                          if (_isMatchingFile) ...[
+                            Container(
+                              padding: const EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(
+                                  color: const Color(0xFF1E3A8A).withValues(alpha: 0.1),
+                                  width: 1.5,
                                 ),
-                              ],
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    Container(
-                                      padding: const EdgeInsets.all(8),
-                                      decoration: BoxDecoration(
-                                        color: const Color(0xFF062AAE).withValues(alpha: 0.1),
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                      child: const Icon(
-                                        Icons.receipt_long_outlined,
-                                        color: Color(0xFF062AAE),
-                                        size: 24,
-                                      ),
-                                    ),
-                                    const SizedBox(width: 12),
-                                    Expanded(
-                                      child: Text(
-                                        'Matching 1 file with transactions...',
-                                        style: GoogleFonts.poppins(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w600,
-                                          color: Colors.black,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withValues(alpha: 0.02),
+                                    blurRadius: 10,
+                                    offset: const Offset(0, 4),
+                                  ),
+                                ],
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Container(
+                                        padding: const EdgeInsets.all(8),
+                                        decoration: BoxDecoration(
+                                          color: const Color(0xFF1E3A8A).withValues(alpha: 0.1),
+                                          borderRadius: BorderRadius.circular(8),
+                                        ),
+                                        child: const Icon(
+                                          Icons.receipt_long_outlined,
+                                          color: Color(0xFF1E3A8A),
+                                          size: 24,
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 12),
-                                Text(
-                                  'This can take up to 24 hours. You can add more files in the meantime.',
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 12,
-                                    color: Colors.grey.shade600,
+                                      const SizedBox(width: 12),
+                                      Expanded(
+                                        child: Text(
+                                          'Matching 1 file with transactions...',
+                                          style: GoogleFonts.poppins(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w600,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ),
-                              ],
+                                  const SizedBox(height: 12),
+                                  Text(
+                                    'This can take up to 24 hours. You can add more files in the meantime.',
+                                    style: GoogleFonts.poppins(
+                                      fontSize: 12,
+                                      color: Colors.grey.shade600,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 24),
+                            const SizedBox(height: 24),
+                          ],
 
-                          SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
+                          FittedBox(
+                            fit: BoxFit.scaleDown,
+                            alignment: Alignment.centerLeft,
                             child: Row(
                               children: [
-
                                 GestureDetector(
                                   onTap: () {
                                     setState(() {
@@ -277,18 +330,11 @@ class _TransactionsPageState extends State<TransactionsPage> {
                                     });
                                   },
                                   child: Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                                     decoration: BoxDecoration(
                                       color: _isDocumentsNeededFilterActive ? const Color(0xFF062AAE) : Colors.white,
-                                      borderRadius: BorderRadius.circular(20),
+                                      borderRadius: BorderRadius.circular(24),
                                       border: _isDocumentsNeededFilterActive ? null : Border.all(color: Colors.grey.shade300),
-                                      boxShadow: _isDocumentsNeededFilterActive ? [
-                                        BoxShadow(
-                                          color: const Color(0xFF062AAE).withValues(alpha: 0.2),
-                                          blurRadius: 8,
-                                          offset: const Offset(0, 4),
-                                        ),
-                                      ] : null,
                                     ),
                                     child: Row(
                                       mainAxisSize: MainAxisSize.min,
@@ -302,7 +348,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
                                           child: Text(
                                             '0',
                                             style: GoogleFonts.poppins(
-                                              fontSize: 10,
+                                              fontSize: 12,
                                               fontWeight: FontWeight.w700,
                                               color: _isDocumentsNeededFilterActive ? const Color(0xFF062AAE) : Colors.white,
                                             ),
@@ -312,24 +358,16 @@ class _TransactionsPageState extends State<TransactionsPage> {
                                         Text(
                                           'Documents needed',
                                           style: GoogleFonts.poppins(
-                                            fontSize: 12,
+                                            fontSize: 13,
                                             fontWeight: FontWeight.w600,
                                             color: _isDocumentsNeededFilterActive ? Colors.white : Colors.black87,
                                           ),
                                         ),
-                                        if (_isDocumentsNeededFilterActive) ...[
-                                          const SizedBox(width: 8),
-                                          const Icon(
-                                            Icons.close,
-                                            color: Colors.white,
-                                            size: 16,
-                                          ),
-                                        ]
                                       ],
                                     ),
                                   ),
                                 ),
-                                const SizedBox(width: 12),
+                                const SizedBox(width: 8),
                                 GestureDetector(
                                   onTap: () {
                                     setState(() {
@@ -338,18 +376,11 @@ class _TransactionsPageState extends State<TransactionsPage> {
                                     });
                                   },
                                   child: Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                                     decoration: BoxDecoration(
                                       color: _isReplyNeededFilterActive ? const Color(0xFF062AAE) : Colors.white,
-                                      borderRadius: BorderRadius.circular(20),
+                                      borderRadius: BorderRadius.circular(24),
                                       border: _isReplyNeededFilterActive ? null : Border.all(color: Colors.grey.shade300),
-                                      boxShadow: _isReplyNeededFilterActive ? [
-                                        BoxShadow(
-                                          color: const Color(0xFF062AAE).withValues(alpha: 0.2),
-                                          blurRadius: 8,
-                                          offset: const Offset(0, 4),
-                                        ),
-                                      ] : null,
                                     ),
                                     child: Row(
                                       mainAxisSize: MainAxisSize.min,
@@ -363,7 +394,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
                                           child: Text(
                                             '0',
                                             style: GoogleFonts.poppins(
-                                              fontSize: 10,
+                                              fontSize: 12,
                                               fontWeight: FontWeight.w700,
                                               color: _isReplyNeededFilterActive ? const Color(0xFF062AAE) : Colors.white,
                                             ),
@@ -373,24 +404,16 @@ class _TransactionsPageState extends State<TransactionsPage> {
                                         Text(
                                           'Reply needed',
                                           style: GoogleFonts.poppins(
-                                            fontSize: 12,
+                                            fontSize: 13,
                                             fontWeight: FontWeight.w600,
                                             color: _isReplyNeededFilterActive ? Colors.white : Colors.black87,
                                           ),
                                         ),
-                                        if (_isReplyNeededFilterActive) ...[
-                                          const SizedBox(width: 8),
-                                          const Icon(
-                                            Icons.close,
-                                            color: Colors.white,
-                                            size: 16,
-                                          ),
-                                        ]
                                       ],
                                     ),
                                   ),
                                 ),
-                                const SizedBox(width: 12),
+                                const SizedBox(width: 8),
                                 GestureDetector(
                                   onTap: () async {
                                     final picked = await showDatePicker(
@@ -402,7 +425,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
                                         return Theme(
                                           data: Theme.of(context).copyWith(
                                             colorScheme: const ColorScheme.light(
-                                              primary: Color(0xFF062AAE),
+                                              primary: const Color(0xFF062AAE),
                                             ),
                                           ),
                                           child: child!,
@@ -416,10 +439,10 @@ class _TransactionsPageState extends State<TransactionsPage> {
                                     }
                                   },
                                   child: Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                                     decoration: BoxDecoration(
                                       color: _selectedDate != null ? const Color(0xFF062AAE) : Colors.white,
-                                      borderRadius: BorderRadius.circular(20),
+                                      borderRadius: BorderRadius.circular(24),
                                       border: Border.all(
                                         color: _selectedDate != null ? const Color(0xFF062AAE) : Colors.grey.shade300,
                                       ),
@@ -438,7 +461,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
                                               ? '${_selectedDate!.day} ${_getMonthString(_selectedDate!.month)} ${_selectedDate!.year}'
                                               : 'Select Date',
                                           style: GoogleFonts.poppins(
-                                            fontSize: 12,
+                                            fontSize: 13,
                                             fontWeight: FontWeight.w600,
                                             color: _selectedDate != null ? Colors.white : Colors.black87,
                                           ),
@@ -455,7 +478,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
                                               padding: EdgeInsets.only(left: 4.0),
                                               child: Icon(
                                                 Icons.close,
-                                                size: 16,
+                                                size: 14,
                                                 color: Colors.white,
                                               ),
                                             ),
@@ -463,7 +486,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
                                         else
                                           const Icon(
                                             Icons.keyboard_arrow_down,
-                                            size: 16,
+                                            size: 14,
                                             color: Colors.black87,
                                           ),
                                       ],
@@ -472,64 +495,51 @@ class _TransactionsPageState extends State<TransactionsPage> {
                                 ),
                               ],
                             ),
-                          ),
-                          const SizedBox(height: 24),
+                          ),const SizedBox(height: 24),
 
                           Container(
                             width: double.infinity,
-                            padding: const EdgeInsets.symmetric(vertical: 48, horizontal: 24),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(24),
-                              border: Border.all(
-                                color: const Color(0xFF062AAE).withValues(alpha: 0.05),
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withValues(alpha: 0.02),
-                                  blurRadius: 15,
-                                  offset: const Offset(0, 8),
-                                ),
-                              ],
-                            ),
+                            padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 24),
+
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Image.asset(
                                   'assets/transation money.png',
-                                  height: 220,
+                                  height: 300,
                                   errorBuilder: (context, error, stackTrace) {
                                     return Icon(
                                       Icons.check_circle_outline,
                                       size: 150,
-                                      color: const Color(0xFF062AAE).withValues(alpha: 0.5),
+                                      color: const Color(0xFF1E3A8A).withValues(alpha: 0.5),
                                     );
                                   },
                                 ),
                                 const SizedBox(height: 32),
                                 Text(
                                   !_isDocumentsNeededFilterActive && !_isReplyNeededFilterActive
-                                      ? 'All Documents'
-                                      : 'You\'re all caught up!',
+                                      ? 'Create and send professional\ntransactions in minutes'
+                                      : 'No Pending Actions',
                                   textAlign: TextAlign.center,
                                   style: GoogleFonts.poppins(
-                                    fontSize: 18,
+                                    fontSize: 20,
                                     fontWeight: FontWeight.w700,
-                                    color: const Color(0xFF062AAE),
+                                    color: Colors.black,
+                                    height: 1.2,
                                   ),
                                 ),
                                 const SizedBox(height: 8),
                                 Text(
                                   !_isDocumentsNeededFilterActive && !_isReplyNeededFilterActive
-                                      ? 'Your uploaded documents will appear here.'
+                                      ? 'Get paid faster with Mysect transactions'
                                       : _isDocumentsNeededFilterActive
-                                          ? 'No transactions need documents\nright now.'
-                                          : 'No replies are needed\nright now.',
+                                          ? 'There are currently no transactions\nrequiring documents.'
+                                          : 'There are currently no transactions\nrequiring a reply.',
                                   textAlign: TextAlign.center,
                                   style: GoogleFonts.poppins(
                                     fontSize: 14,
-                                    fontWeight: FontWeight.w500,
-                                    color: Colors.grey.shade600,
+                                    fontWeight: FontWeight.w400,
+                                    color: Colors.grey.shade800,
                                     height: 1.5,
                                   ),
                                 ),
@@ -546,6 +556,15 @@ class _TransactionsPageState extends State<TransactionsPage> {
             ),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          _showUploadOptions(context);
+        },
+        backgroundColor: const Color(0xFF062AAE),
+        elevation: 2,
+        shape: const CircleBorder(),
+        child: const Icon(Icons.add, color: Colors.white),
       ),
     );
   }

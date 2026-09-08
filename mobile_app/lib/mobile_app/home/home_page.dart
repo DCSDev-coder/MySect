@@ -83,10 +83,11 @@ class _HomePageState extends State<HomePage> {
     _selectedDay = _focusedDay;
   }
 
-  final List<String> _companies = [
+  List<String> get _companies => [
     'Data Center Specialists Sdn Bhd (M)',
     'C2 Coffee + Candle',
     '5Luxe Scents Co.',
+    'Test Enterprise',
   ];
 
   Widget _buildTaskCard({
@@ -365,6 +366,16 @@ class _HomePageState extends State<HomePage> {
                     size: 24,
                   ),
                   onPressed: () {
+                    if (_selectedCompany == 'Test Enterprise') {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Notifications are unavailable to view.', style: GoogleFonts.poppins(color: Colors.white)),
+                          backgroundColor: Colors.red,
+                          duration: const Duration(seconds: 2),
+                        ),
+                      );
+                      return;
+                    }
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -396,63 +407,83 @@ class _HomePageState extends State<HomePage> {
                             color: Colors.black,
                           ),
                         ),
-                        PopupMenuButton<String>(
-                          onSelected: (String newValue) {
-                            setState(() {
-                              _selectedCompany = newValue;
-                              _isDropdownOpen = false;
-                            });
-                          },
-                          onOpened: () {
-                            setState(() {
-                              _isDropdownOpen = true;
-                            });
-                          },
-                          onCanceled: () {
-                            setState(() {
-                              _isDropdownOpen = false;
-                            });
-                          },
-                          offset: const Offset(0, 30),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Flexible(
-                                child: Text(
-                                  _selectedCompany,
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w700,
-                                    color: Colors.black,
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                              AnimatedRotation(
-                                turns: _isDropdownOpen ? 0.25 : 0.0,
-                                duration: const Duration(milliseconds: 200),
-                                child: const Icon(
-                                  Icons.chevron_right,
-                                  color: Colors.black,
-                                ),
-                              ),
-                            ],
+                        Theme(
+                          data: Theme.of(context).copyWith(
+                            hoverColor: Colors.transparent,
+                            focusColor: Colors.transparent,
+                            splashColor: Colors.transparent,
+                            highlightColor: Colors.transparent,
                           ),
-                          itemBuilder: (BuildContext context) {
-                            return _companies.map((String value) {
-                              return PopupMenuItem<String>(
-                                value: value,
-                                child: Text(
-                                  value,
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w500,
+                          child: PopupMenuButton<String>(
+                            color: Colors.white,
+                            surfaceTintColor: Colors.white,
+                            onSelected: (String newValue) {
+                              setState(() {
+                                _selectedCompany = newValue;
+                                _isDropdownOpen = false;
+                              });
+                            },
+                            onOpened: () {
+                              setState(() {
+                                _isDropdownOpen = true;
+                              });
+                            },
+                            onCanceled: () {
+                              setState(() {
+                                _isDropdownOpen = false;
+                              });
+                            },
+                            offset: const Offset(0, 30),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Flexible(
+                                  child: Text(
+                                    _selectedCompany,
+                                    style: GoogleFonts.poppins(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w700,
+                                      color: Colors.black,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                                AnimatedRotation(
+                                  turns: _isDropdownOpen ? 0.25 : 0.0,
+                                  duration: const Duration(milliseconds: 200),
+                                  child: const Icon(
+                                    Icons.chevron_right,
                                     color: Colors.black,
                                   ),
                                 ),
-                              );
-                            }).toList();
-                          },
+                              ],
+                            ),
+                            itemBuilder: (BuildContext context) {
+                              return _companies.map((String value) {
+                                return PopupMenuItem<String>(
+                                  value: value,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Expanded(
+                                        child: Text(
+                                          value,
+                                          style: GoogleFonts.poppins(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w500,
+                                            color: value == 'Test Enterprise' ? Colors.grey : Colors.black,
+                                          ),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                      if (value == 'Test Enterprise')
+                                        const Icon(Icons.lock, size: 18, color: Colors.grey),
+                                    ],
+                                  ),
+                                );
+                              }).toList();
+                            },
+                          ),
                         ),
                         const SizedBox(height: 4),
                         Text(
@@ -465,18 +496,48 @@ class _HomePageState extends State<HomePage> {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 24),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Text(
-                      'UPCOMING DATELINE',
-                      style: GoogleFonts.poppins(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
+                  if (_selectedCompany == 'Test Enterprise')
+                    Padding(
+                      padding: const EdgeInsets.only(top: 80.0),
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset('assets/locked icon.png', height: 250),
+                            const SizedBox(height: 16),
+                            Text(
+                              'Company Locked',
+                              style: GoogleFonts.poppins(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              'You do not have access to this company.',
+                              style: GoogleFonts.poppins(
+                                fontSize: 16,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  else ...[
+                    const SizedBox(height: 24),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Text(
+                        'UPCOMING DATELINE',
+                        style: GoogleFonts.poppins(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
                       ),
                     ),
-                  ),
                   const SizedBox(height: 16),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -654,6 +715,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   const SizedBox(height: 40),
+                  ],
                 ],
               ),
             ),
@@ -667,16 +729,89 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: IndexedStack(
-        index: _selectedIndex,
-        children: [
-          _buildHomeView(),
-          const TransactionsPage(),
-          const FilesPage(),
-          const ChatPage(),
-          const MorePage(),
-        ],
-      ),
+      body: _selectedCompany == 'Test Enterprise' && _selectedIndex != 0
+          ? SafeArea(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 16.0, top: 8.0, right: 16.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Image.asset(
+                          'assets/YourSectComp.png',
+                          width: 110,
+                          fit: BoxFit.contain,
+                        ),
+                        IconButton(
+                          icon: const Icon(
+                            Icons.notifications_none,
+                            color: Colors.black,
+                            size: 24,
+                          ),
+                          onPressed: () {
+                            if (_selectedCompany == 'Test Enterprise') {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text('Notifications are unavailable to view.', style: GoogleFonts.poppins(color: Colors.white)),
+                                  backgroundColor: Colors.red,
+                                  duration: const Duration(seconds: 2),
+                                ),
+                              );
+                              return;
+                            }
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const NotificationsPage(),
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset('assets/locked icon.png', height: 250),
+                          const SizedBox(height: 16),
+                          Text(
+                            'Company Locked',
+                            style: GoogleFonts.poppins(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            'You do not have access to this company.',
+                            style: GoogleFonts.poppins(
+                              fontSize: 16,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            )
+          : IndexedStack(
+              index: _selectedIndex,
+              children: [
+                _buildHomeView(),
+                const TransactionsPage(),
+                const FilesPage(),
+                const ChatPage(),
+                const MorePage(),
+              ],
+            ),
       bottomNavigationBar: CustomBottomNavBar(
         currentIndex: _selectedIndex,
         onTap: (index) {
