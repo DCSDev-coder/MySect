@@ -372,7 +372,7 @@ class _FilesPageState extends State<FilesPage> {
         ),
         backgroundColor: const Color(0xFF062AAE),
         shape: const CircleBorder(),
-        child: const Icon(Icons.add, color: Colors.white, size: 32),
+        child: const Icon(Icons.create_new_folder, color: Colors.white, size: 32),
       ),
     );
   }

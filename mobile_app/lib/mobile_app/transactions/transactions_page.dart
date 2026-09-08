@@ -564,7 +564,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
         backgroundColor: const Color(0xFF062AAE),
         elevation: 2,
         shape: const CircleBorder(),
-        child: const Icon(Icons.add, color: Colors.white),
+        child: const Icon(Icons.upload_file, color: Colors.white, size: 32),
       ),
     );
   }

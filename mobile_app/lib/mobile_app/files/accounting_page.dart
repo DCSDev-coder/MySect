@@ -208,7 +208,7 @@ class _AccountingPageState extends State<AccountingPage> {
         ),
         backgroundColor: const Color(0xFF062AAE),
         shape: const CircleBorder(),
-        child: const Icon(Icons.add, color: Colors.white, size: 32),
+        child: const Icon(Icons.upload_file, color: Colors.white, size: 32),
       ),
       bottomNavigationBar: CustomBottomNavBar(
         currentIndex: _selectedIndex,
