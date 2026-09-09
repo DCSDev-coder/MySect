@@ -3,6 +3,7 @@ import '../notifications/notifications_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:file_picker/file_picker.dart';
+import '../files/document_viewer_page.dart';
 
 class TransactionsPage extends StatefulWidget {
   const TransactionsPage({super.key});
@@ -178,6 +179,104 @@ class _TransactionsPageState extends State<TransactionsPage> {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildExampleTransaction(String title, String date) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => DocumentViewerPage(fileName: title),
+          ),
+        );
+      },
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: Colors.grey.shade200),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.02),
+              blurRadius: 4,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: const Color(0xFF062AAE).withOpacity(0.1),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: const Icon(
+              Icons.insert_drive_file,
+              color: Color(0xFF062AAE),
+              size: 20,
+            ),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: GoogleFonts.poppins(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black87,
+                  ),
+                ),
+                Text(
+                  date,
+                  style: GoogleFonts.poppins(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w400,
+                    color: Colors.grey.shade600,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          PopupMenuButton<String>(
+            icon: const Icon(Icons.more_vert, color: Colors.grey),
+            onSelected: (value) {
+              if (value == 'rename') {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Rename $title coming soon', style: GoogleFonts.poppins()),
+                    backgroundColor: const Color(0xFF1E3A8A),
+                  ),
+                );
+              } else if (value == 'delete') {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Delete $title coming soon', style: GoogleFonts.poppins()),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+              }
+            },
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                value: 'rename',
+                child: Text('Rename', style: GoogleFonts.poppins()),
+              ),
+              PopupMenuItem(
+                value: 'delete',
+                child: Text('Delete', style: GoogleFonts.poppins(color: Colors.red)),
+              ),
+            ],
+          ),
+        ],
+      ),
+    ),
     );
   }
 
@@ -501,53 +600,64 @@ class _TransactionsPageState extends State<TransactionsPage> {
                     const SizedBox(height: 24),
                     Expanded(
                       child: Align(
-                        alignment: const Alignment(0.0, -0.2),
+                        alignment: (!_isDocumentsNeededFilterActive && !_isReplyNeededFilterActive)
+                            ? Alignment.topCenter
+                            : const Alignment(0.0, -0.2),
                         child: SingleChildScrollView(
                           child: Container(
                             width: double.infinity,
-                            padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 24),
+                            padding: EdgeInsets.only(
+                              top: (!_isDocumentsNeededFilterActive && !_isReplyNeededFilterActive) ? 0 : 24,
+                              bottom: 24,
+                              left: 24,
+                              right: 24,
+                            ),
                             child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisAlignment: (!_isDocumentsNeededFilterActive && !_isReplyNeededFilterActive)
+                                  ? MainAxisAlignment.start
+                                  : MainAxisAlignment.center,
                               children: [
-                                Image.asset(
-                                  'assets/transation_money.png',
-                                  height: 170,
-                                  errorBuilder: (context, error, stackTrace) {
-                                    return Icon(
-                                      Icons.check_circle_outline,
-                                      size: 120,
-                                      color: const Color(0xFF1E3A8A).withValues(alpha: 0.5),
-                                    );
-                                  },
-                                ),
-                                const SizedBox(height: 24),
-                                Text(
-                                  !_isDocumentsNeededFilterActive && !_isReplyNeededFilterActive
-                                      ? 'Create and send professional\ntransactions in minutes'
-                                      : 'No Pending Actions',
-                                  textAlign: TextAlign.center,
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.black87,
-                                    height: 1.3,
+                                if (!_isDocumentsNeededFilterActive && !_isReplyNeededFilterActive) ...[
+                                  _buildExampleTransaction('Transaction_Doc_A.pdf', 'Mar 15, 2024'),
+                                  const SizedBox(height: 12),
+                                  _buildExampleTransaction('Transaction_Doc_B.pdf', 'Mar 12, 2024'),
+                                ] else ...[
+                                  Image.asset(
+                                    'assets/transation_money.png',
+                                    height: 170,
+                                    errorBuilder: (context, error, stackTrace) {
+                                      return Icon(
+                                        Icons.check_circle_outline,
+                                        size: 120,
+                                        color: const Color(0xFF1E3A8A).withValues(alpha: 0.5),
+                                      );
+                                    },
                                   ),
-                                ),
-                                const SizedBox(height: 8),
-                                Text(
-                                  !_isDocumentsNeededFilterActive && !_isReplyNeededFilterActive
-                                      ? 'Get paid faster with Mysect transactions'
-                                      : _isDocumentsNeededFilterActive
-                                          ? 'There are currently no transactions\nrequiring documents.'
-                                          : 'There are currently no transactions\nrequiring a reply.',
-                                  textAlign: TextAlign.center,
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.w400,
-                                    color: Colors.grey.shade600,
-                                    height: 1.5,
+                                  const SizedBox(height: 24),
+                                  Text(
+                                    'No Pending Actions',
+                                    textAlign: TextAlign.center,
+                                    style: GoogleFonts.poppins(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.black87,
+                                      height: 1.3,
+                                    ),
                                   ),
-                                ),
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    _isDocumentsNeededFilterActive
+                                        ? 'There are currently no transactions\nrequiring documents.'
+                                        : 'There are currently no transactions\nrequiring a reply.',
+                                    textAlign: TextAlign.center,
+                                    style: GoogleFonts.poppins(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w400,
+                                      color: Colors.grey.shade600,
+                                      height: 1.5,
+                                    ),
+                                  ),
+                                ],
                               ],
                             ),
                           ),
