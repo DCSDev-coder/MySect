@@ -37,6 +37,11 @@ class _HomePageState extends State<HomePage> {
   late bool _docsFilterForTransactions;
   late bool _replyFilterForTransactions;
 
+  Future<void> _handleRefresh() async {
+    await Future.delayed(const Duration(seconds: 1));
+    setState(() {});
+  }
+
   List<Map<String, dynamic>> _getEventsForDay(DateTime day) {
     if (day.day == 3) {
       return [
@@ -401,8 +406,11 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           Expanded(
-            child: SingleChildScrollView(
-              child: Column(
+            child: RefreshIndicator(
+              onRefresh: _handleRefresh,
+              child: SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
@@ -690,7 +698,7 @@ class _HomePageState extends State<HomePage> {
                   const SizedBox(height: 8),
                   _buildTaskCard(
                     number: '$documentsNeededCount',
-                    color: const Color(0xFF062AAE),
+                    color: Colors.blue.shade700,
                     title: 'Document Needed',
                     subtitle: 'Actions required to file returns',
                     onTap: () {
@@ -704,7 +712,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   _buildTaskCard(
                     number: '$replyNeededCount',
-                    color: Colors.green.shade600,
+                    color: Colors.red.shade400,
                     title: 'Replies Needed',
                     subtitle: 'Clarifications with secretary',
                     onTap: () {
@@ -731,6 +739,7 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ],
               ),
+            ),
             ),
           ),
         ],

@@ -22,79 +22,22 @@ class _InvoicesPageState extends State<InvoicesPage> {
   DateTime? _selectedIssuedDate;
   String? _selectedStatus;
   String _selectedCurrency = 'MYR';
-  final Map<String, bool> _isFilterDropdownOpen = {};
 
-  Widget _buildFilterDropdown(String title, List<String> options) {
-    bool isSelected = _selectedFilter == title;
-    return Theme(
-      data: Theme.of(context).copyWith(
-        splashColor: Colors.transparent,
-        highlightColor: Colors.transparent,
-        hoverColor: Colors.transparent,
-      ),
-      child: PopupMenuButton<String>(
-        tooltip: '',
-      offset: const Offset(0, 40),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      onOpened: () {
-        setState(() => _isFilterDropdownOpen[title] = true);
-      },
-      onCanceled: () {
-        setState(() => _isFilterDropdownOpen[title] = false);
-      },
-      onSelected: (value) {
-        setState(() {
-          _isFilterDropdownOpen[title] = false;
-          _selectedFilter = title;
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('$title: $value', style: GoogleFonts.poppins()),
-              duration: const Duration(seconds: 1),
-              backgroundColor: const Color(0xFF062AAE),
-            ),
-          );
-        });
-      },
-      itemBuilder: (context) => options.map((opt) {
-        return PopupMenuItem<String>(
-          value: opt,
-          child: Text(opt, style: GoogleFonts.poppins(fontSize: 13)),
-        );
-      }).toList(),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFF062AAE) : Colors.white,
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: isSelected ? const Color(0xFF062AAE) : Colors.grey.shade300),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              title,
-              style: GoogleFonts.poppins(
-                color: isSelected ? Colors.white : Colors.black87,
-                fontWeight: FontWeight.w500,
-                fontSize: 13,
-              ),
-            ),
-            const SizedBox(width: 4),
-            AnimatedRotation(
-              turns: (_isFilterDropdownOpen[title] ?? false) ? 0.5 : 0.0,
-              duration: const Duration(milliseconds: 200),
-              child: Icon(
-                Icons.keyboard_arrow_down,
-                size: 16,
-                color: isSelected ? Colors.white : Colors.black54,
-              ),
-            ),
-          ],
-        ),
-      ),
-    ),
-  );
-}
+
+
+  final List<Map<String, dynamic>> _invoices = [
+    {'no': '#INV-2026-001', 'customer': 'Data Center Specialists Sdn Bhd (M)', 'date': '09 Sep 2026', 'amount': 1250.00, 'status': 'Paid', 'color': Colors.green.shade700, 'bg': Colors.green.shade50},
+    {'no': '#INV-2026-002', 'customer': 'C2 Coffee + Candle', 'date': '08 Sep 2026', 'amount': 850.50, 'status': 'Unpaid', 'color': Colors.red.shade700, 'bg': Colors.red.shade50},
+    {'no': '#INV-2026-003', 'customer': '5Luxe Scents Co.', 'date': '05 Sep 2026', 'amount': 2400.00, 'status': 'Draft', 'color': Colors.grey.shade700, 'bg': Colors.grey.shade100},
+    {'no': '#INV-2026-004', 'customer': 'Data Center Specialists Sdn Bhd (M)', 'date': '01 Sep 2026', 'amount': 15000.00, 'status': 'Paid', 'color': Colors.green.shade700, 'bg': Colors.green.shade50},
+    {'no': '#INV-2026-005', 'customer': 'C2 Coffee + Candle', 'date': '28 Aug 2026', 'amount': 4200.00, 'status': 'Unpaid', 'color': Colors.red.shade700, 'bg': Colors.red.shade50},
+  ];
+
+  Future<void> _handleRefresh() async {
+    await Future.delayed(const Duration(seconds: 1));
+    setState(() {});
+  }
+
 
   Widget _buildFilterButton(String title) {
     bool isSelected = _selectedFilter == title;
@@ -286,7 +229,29 @@ class _InvoicesPageState extends State<InvoicesPage> {
 
   Widget _buildInvoiceCard(String invoiceNo, String customer, String date, double amountSGD, String status, Color statusColor, Color bgColor) {
     String amount = _getConvertedAmount(amountSGD);
-    return GestureDetector(
+    return Dismissible(
+      key: Key(invoiceNo),
+      direction: DismissDirection.endToStart,
+      background: Container(
+        margin: const EdgeInsets.only(bottom: 16),
+        alignment: Alignment.centerRight,
+        padding: const EdgeInsets.only(right: 20),
+        decoration: BoxDecoration(
+          color: Colors.red.shade400,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: const Icon(Icons.delete_outline, color: Colors.white),
+      ),
+      onDismissed: (direction) {
+        setState(() {
+          _invoices.removeWhere((i) => i['no'] == invoiceNo);
+        });
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Invoice $invoiceNo deleted'),
+          duration: const Duration(seconds: 2),
+        ));
+      },
+      child: GestureDetector(
       onTap: () {
         Navigator.push(
           context,
@@ -410,10 +375,10 @@ class _InvoicesPageState extends State<InvoicesPage> {
         ],
       ),
     ),
-  );
-}
+    );
+  }
 
-@override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
@@ -536,11 +501,11 @@ class _InvoicesPageState extends State<InvoicesPage> {
                       scrollDirection: Axis.horizontal,
                       child: Row(
                         children: [
-                          _buildFilterDropdown('Due Date', ['Last 7 Days', 'Last 30 Days', 'This Month', 'This Quarter']),
+                          _buildFilterButton('Due Date'),
                           const SizedBox(width: 8),
-                          _buildFilterDropdown('Issued', ['Last 7 Days', 'Last 30 Days', 'This Month', 'This Quarter']),
+                          _buildFilterButton('Issued'),
                           const SizedBox(width: 8),
-                          _buildFilterDropdown('Status', ['Paid', 'Unpaid', 'Draft']),
+                          _buildFilterButton('Status'),
                           const SizedBox(width: 8),
                           _buildDropdown(
                             value: _selectedCurrency,
@@ -553,16 +518,74 @@ class _InvoicesPageState extends State<InvoicesPage> {
                   ),
                   const SizedBox(height: 24),
                   Expanded(
-                    child: ListView(
-                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-                      children: [
-                        _buildInvoiceCard('#INV-2026-001', 'Data Center Specialists Sdn Bhd (M)', '09 Sep 2026', 1250.00, 'Paid', Colors.green.shade700, Colors.green.shade50),
-                        _buildInvoiceCard('#INV-2026-002', 'C2 Coffee + Candle', '08 Sep 2026', 850.50, 'Unpaid', Colors.red.shade700, Colors.red.shade50),
-                        _buildInvoiceCard('#INV-2026-003', '5Luxe Scents Co.', '05 Sep 2026', 2400.00, 'Draft', Colors.grey.shade700, Colors.grey.shade100),
-                        _buildInvoiceCard('#INV-2026-004', 'Data Center Specialists Sdn Bhd (M)', '01 Sep 2026', 15000.00, 'Paid', Colors.green.shade700, Colors.green.shade50),
-                        _buildInvoiceCard('#INV-2026-005', 'C2 Coffee + Candle', '28 Aug 2026', 4200.00, 'Unpaid', Colors.red.shade700, Colors.red.shade50),
-                        const SizedBox(height: 80),
-                      ],
+                    child: RefreshIndicator(
+                      onRefresh: _handleRefresh,
+                      child: ListView(
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                        children: [
+                          if (_invoices.isEmpty) ...[
+                            const SizedBox(height: 40),
+                            Image.asset(
+                              'assets/transation_money.png',
+                              height: 170,
+                              errorBuilder: (context, error, stackTrace) => Icon(
+                                Icons.receipt_long,
+                                size: 120,
+                                color: const Color(0xFF1E3A8A).withOpacity(0.5),
+                              ),
+                            ),
+                            const SizedBox(height: 24),
+                            Text(
+                              'No Invoices Found',
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.poppins(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black87,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              'Create a new invoice to get started.',
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.poppins(
+                                fontSize: 13,
+                                color: Colors.grey.shade600,
+                              ),
+                            ),
+                            const SizedBox(height: 24),
+                            Center(
+                              child: ElevatedButton.icon(
+                                onPressed: () {
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => const CreateInvoicePage()));
+                                },
+                                icon: const Icon(Icons.add, size: 18),
+                                label: const Text('Create Invoice'),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0xFF062AAE),
+                                  foregroundColor: Colors.white,
+                                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(24),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ] else ...[
+                            ..._invoices.map((inv) => _buildInvoiceCard(
+                                  inv['no'],
+                                  inv['customer'],
+                                  inv['date'],
+                                  inv['amount'],
+                                  inv['status'],
+                                  inv['color'],
+                                  inv['bg'],
+                                )),
+                          ],
+                          const SizedBox(height: 80),
+                        ],
+                      ),
                     ),
                   ),
               ],

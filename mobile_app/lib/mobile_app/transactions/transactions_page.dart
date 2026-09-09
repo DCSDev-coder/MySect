@@ -66,6 +66,11 @@ class _TransactionsPageState extends State<TransactionsPage> {
 
   final ImagePicker _picker = ImagePicker();
 
+  Future<void> _handleRefresh() async {
+    await Future.delayed(const Duration(seconds: 1));
+    setState(() {});
+  }
+
   Future<void> _pickImage(ImageSource source) async {
     try {
       final XFile? image = await _picker.pickImage(source: source);
@@ -121,6 +126,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
       }
     }
   }
+
   void _showUploadOptions(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -224,16 +230,37 @@ class _TransactionsPageState extends State<TransactionsPage> {
   }
 
   Widget _buildExampleTransaction(String title, String date, {bool isReplyNeeded = false}) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => DocumentViewerPage(fileName: title),
-          ),
-        );
+    return Dismissible(
+      key: Key(title),
+      direction: DismissDirection.endToStart,
+      background: Container(
+        alignment: Alignment.centerRight,
+        padding: const EdgeInsets.only(right: 20),
+        decoration: BoxDecoration(
+          color: Colors.red.shade400,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: const Icon(Icons.delete_outline, color: Colors.white),
+      ),
+      onDismissed: (direction) {
+        setState(() {
+          allTransactions.removeWhere((t) => t.title == title);
+        });
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('$title dismissed'),
+          duration: const Duration(seconds: 2),
+        ));
       },
-      child: Container(
+      child: GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => DocumentViewerPage(fileName: title),
+            ),
+          );
+        },
+        child: Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
           color: Colors.white,
@@ -252,13 +279,16 @@ class _TransactionsPageState extends State<TransactionsPage> {
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: isReplyNeeded ? Colors.green.shade600.withOpacity(0.1) : const Color(0xFF062AAE).withOpacity(0.1),
+              color: isReplyNeeded ? Colors.red.shade400.withOpacity(0.1) : Colors.blue.shade700.withOpacity(0.1),
               borderRadius: BorderRadius.circular(8),
             ),
-            child: Icon(
-              Icons.insert_drive_file,
-              color: isReplyNeeded ? Colors.green.shade600 : const Color(0xFF062AAE),
-              size: 20,
+            child: Hero(
+              tag: 'doc_icon_$title',
+              child: Icon(
+                Icons.insert_drive_file,
+                color: isReplyNeeded ? Colors.red.shade400 : Colors.blue.shade700,
+                size: 20,
+              ),
             ),
           ),
           const SizedBox(width: 16),
@@ -317,6 +347,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
           ),
         ],
       ),
+    ),
     ),
     );
   }
@@ -481,7 +512,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
                                         Container(
                                           padding: const EdgeInsets.all(4),
                                           decoration: BoxDecoration(
-                                            color: _isDocumentsNeededFilterActive ? Colors.white : const Color(0xFF062AAE),
+                                            color: _isDocumentsNeededFilterActive ? Colors.white : Colors.blue.shade700,
                                             shape: BoxShape.circle,
                                           ),
                                           child: Text(
@@ -489,7 +520,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
                                             style: GoogleFonts.poppins(
                                               fontSize: 12,
                                               fontWeight: FontWeight.w700,
-                                              color: _isDocumentsNeededFilterActive ? const Color(0xFF062AAE) : Colors.white,
+                                              color: _isDocumentsNeededFilterActive ? Colors.blue.shade700 : Colors.white,
                                             ),
                                           ),
                                         ),
@@ -519,7 +550,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
                                     decoration: BoxDecoration(
                                       color: Colors.white,
                                       borderRadius: BorderRadius.circular(24),
-                                      border: Border.all(color: _isReplyNeededFilterActive ? Colors.green.shade600 : Colors.grey.shade300),
+                                      border: Border.all(color: _isReplyNeededFilterActive ? Colors.red.shade400 : Colors.grey.shade300),
                                     ),
                                     child: Row(
                                       mainAxisSize: MainAxisSize.min,
@@ -527,7 +558,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
                                         Container(
                                           padding: const EdgeInsets.all(4),
                                           decoration: BoxDecoration(
-                                            color: _isReplyNeededFilterActive ? Colors.green.shade600 : Colors.grey.shade200,
+                                            color: _isReplyNeededFilterActive ? Colors.red.shade400 : Colors.grey.shade200,
                                             shape: BoxShape.circle,
                                           ),
                                           child: Text(
@@ -545,7 +576,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
                                           style: GoogleFonts.poppins(
                                             fontSize: 13,
                                             fontWeight: FontWeight.w600,
-                                            color: _isReplyNeededFilterActive ? Colors.green.shade600 : Colors.black87,
+                                            color: _isReplyNeededFilterActive ? Colors.red.shade400 : Colors.black87,
                                           ),
                                         ),
                                       ],
@@ -644,8 +675,11 @@ class _TransactionsPageState extends State<TransactionsPage> {
                         alignment: _filteredTransactions.isNotEmpty
                             ? Alignment.topCenter
                             : const Alignment(0.0, -0.2),
-                        child: SingleChildScrollView(
-                          child: Container(
+                        child: RefreshIndicator(
+                          onRefresh: _handleRefresh,
+                          child: SingleChildScrollView(
+                            physics: const AlwaysScrollableScrollPhysics(),
+                            child: Container(
                             width: double.infinity,
                             padding: EdgeInsets.only(
                               top: _filteredTransactions.isNotEmpty ? 0 : 24,
@@ -705,17 +739,31 @@ class _TransactionsPageState extends State<TransactionsPage> {
                                       height: 1.5,
                                     ),
                                   ),
+                                  const SizedBox(height: 24),
+                                  ElevatedButton.icon(
+                                    onPressed: () {
+                                      _showUploadOptions(context);
+                                    },
+                                    icon: const Icon(Icons.upload_file, size: 18),
+                                    label: const Text('Upload Document'),
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: const Color(0xFF062AAE),
+                                      foregroundColor: Colors.white,
+                                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(24),
+                                      ),
+                                    ),
+                                  ),
                                 ],
                               ],
                             ),
                           ),
                         ),
+                        ),
                       ),
-                    ),
-                  ],
                 ),
-              ),
-          ],
+                ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
