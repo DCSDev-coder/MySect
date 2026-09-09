@@ -16,6 +16,7 @@ class AccountingPage extends StatefulWidget {
 
 class _AccountingPageState extends State<AccountingPage> {
   final int _selectedIndex = 2;
+  String _searchQuery = '';
 
   final List<DocumentFile> _myFiles = [
     DocumentFile(
@@ -128,6 +129,11 @@ class _AccountingPageState extends State<AccountingPage> {
                         borderRadius: BorderRadius.circular(30),
                       ),
                       child: TextField(
+                        onChanged: (value) {
+                          setState(() {
+                            _searchQuery = value.toLowerCase();
+                          });
+                        },
                         decoration: InputDecoration(
                           icon: const Icon(
                             Icons.search,
@@ -153,7 +159,7 @@ class _AccountingPageState extends State<AccountingPage> {
                     ),
                     const SizedBox(height: 16),
 
-                    ..._myFiles.map((file) {
+                    ..._myFiles.where((f) => f.title.toLowerCase().contains(_searchQuery)).map((file) {
                       return _buildDocumentCard(
                         title: file.title,
                         subtitle: file.subtitle,

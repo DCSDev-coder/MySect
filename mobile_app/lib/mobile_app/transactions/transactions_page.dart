@@ -12,11 +12,36 @@ class TransactionsPage extends StatefulWidget {
   State<TransactionsPage> createState() => _TransactionsPageState();
 }
 
+class _Transaction {
+  final String title;
+  final DateTime date;
+
+  _Transaction({required this.title, required this.date});
+}
+
 class _TransactionsPageState extends State<TransactionsPage> {
   DateTime? _selectedDate;
   bool _isDocumentsNeededFilterActive = false;
   bool _isReplyNeededFilterActive = false;
   bool _isMatchingFile = false;
+
+  final List<_Transaction> _allTransactions = [
+    _Transaction(title: 'Transaction_Doc_A.pdf', date: DateTime(2024, 3, 15)),
+    _Transaction(title: 'Transaction_Doc_B.pdf', date: DateTime(2024, 3, 12)),
+  ];
+
+  bool get _isDateFilterEmpty {
+    if (_selectedDate == null) return false;
+    return _allTransactions.where((t) =>
+      t.date.year == _selectedDate!.year &&
+      t.date.month == _selectedDate!.month &&
+      t.date.day == _selectedDate!.day
+    ).isEmpty;
+  }
+
+  String _formatDate(DateTime date) {
+    return '${_getMonthString(date.month)} ${date.day}, ${date.year}';
+  }
 
   String _getMonthString(int month) {
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -600,27 +625,43 @@ class _TransactionsPageState extends State<TransactionsPage> {
                     const SizedBox(height: 24),
                     Expanded(
                       child: Align(
-                        alignment: (!_isDocumentsNeededFilterActive && !_isReplyNeededFilterActive)
+                        alignment: (!_isDocumentsNeededFilterActive && !_isReplyNeededFilterActive && !_isDateFilterEmpty)
                             ? Alignment.topCenter
                             : const Alignment(0.0, -0.2),
                         child: SingleChildScrollView(
                           child: Container(
                             width: double.infinity,
                             padding: EdgeInsets.only(
-                              top: (!_isDocumentsNeededFilterActive && !_isReplyNeededFilterActive) ? 0 : 24,
+                              top: (!_isDocumentsNeededFilterActive && !_isReplyNeededFilterActive && !_isDateFilterEmpty) ? 0 : 24,
                               bottom: 24,
                               left: 24,
                               right: 24,
                             ),
                             child: Column(
-                              mainAxisAlignment: (!_isDocumentsNeededFilterActive && !_isReplyNeededFilterActive)
+                              mainAxisAlignment: (!_isDocumentsNeededFilterActive && !_isReplyNeededFilterActive && !_isDateFilterEmpty)
                                   ? MainAxisAlignment.start
                                   : MainAxisAlignment.center,
                               children: [
-                                if (!_isDocumentsNeededFilterActive && !_isReplyNeededFilterActive) ...[
-                                  _buildExampleTransaction('Transaction_Doc_A.pdf', 'Mar 15, 2024'),
-                                  const SizedBox(height: 12),
-                                  _buildExampleTransaction('Transaction_Doc_B.pdf', 'Mar 12, 2024'),
+                                if (!_isDocumentsNeededFilterActive && !_isReplyNeededFilterActive && !_isDateFilterEmpty) ...[
+                                  Builder(
+                                    builder: (context) {
+                                      final filteredTransactions = _allTransactions.where((t) {
+                                        if (_selectedDate == null) return true;
+                                        return t.date.year == _selectedDate!.year &&
+                                               t.date.month == _selectedDate!.month &&
+                                               t.date.day == _selectedDate!.day;
+                                      }).toList();
+
+                                      return Column(
+                                        children: filteredTransactions.map((t) {
+                                          return Padding(
+                                            padding: const EdgeInsets.only(bottom: 12),
+                                            child: _buildExampleTransaction(t.title, _formatDate(t.date)),
+                                          );
+                                        }).toList(),
+                                      );
+                                    }
+                                  ),
                                 ] else ...[
                                   Image.asset(
                                     'assets/transation_money.png',
@@ -635,7 +676,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
                                   ),
                                   const SizedBox(height: 24),
                                   Text(
-                                    'No Pending Actions',
+                                    (!_isDocumentsNeededFilterActive && !_isReplyNeededFilterActive) ? 'No Transactions Found' : 'No Pending Actions',
                                     textAlign: TextAlign.center,
                                     style: GoogleFonts.poppins(
                                       fontSize: 18,
@@ -648,7 +689,9 @@ class _TransactionsPageState extends State<TransactionsPage> {
                                   Text(
                                     _isDocumentsNeededFilterActive
                                         ? 'There are currently no transactions\nrequiring documents.'
-                                        : 'There are currently no transactions\nrequiring a reply.',
+                                        : _isReplyNeededFilterActive
+                                            ? 'There are currently no transactions\nrequiring a reply.'
+                                            : 'There are currently no transactions\nfor the selected date.',
                                     textAlign: TextAlign.center,
                                     style: GoogleFonts.poppins(
                                       fontSize: 13,

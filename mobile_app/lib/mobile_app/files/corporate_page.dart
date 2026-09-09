@@ -16,32 +16,39 @@ class CorporatePage extends StatefulWidget {
 
 class _CorporatePageState extends State<CorporatePage> {
   final int _selectedIndex = 2;
+  String _searchQuery = '';
 
   final List<DocumentFile> _myFiles = [
     DocumentFile(
-      title: 'Certificate of Incorporation',
-      subtitle: 'ACRA Corporate Info • PDF',
+      title: 'SSM Annual Returns',
+      subtitle: 'Statutory Documents • PDF',
       badgeText: 'Signed by all',
       requiredActions: 3,
       uploadedFiles: [
-        'Cert_Incorp_1.pdf',
-        'Cert_Incorp_2.pdf',
-        'Cert_Incorp_3.pdf',
+        'SSM_Annual_Return_2023.pdf',
+        'Statutory_Doc_A.pdf',
       ],
     ),
     DocumentFile(
-      title: 'Company BizFile 2024',
-      subtitle: 'Corporate Structure • PDF',
+      title: 'Statutory Registers',
+      subtitle: 'Share Transfers & Records • PDF',
       badgeText: 'Progress',
-      requiredActions: 3,
-      uploadedFiles: ['BizFile_1.pdf', 'BizFile_2.pdf'],
+      requiredActions: 2,
+      uploadedFiles: ['Register_of_Members.pdf', 'Share_Transfer_Form.pdf'],
     ),
     DocumentFile(
-      title: 'Director Resolution 2024',
-      subtitle: 'Board & Meetings • PDF',
+      title: 'Board Meeting Minutes',
+      subtitle: 'Agendas & Minutes • PDF',
       badgeText: 'Pending',
-      requiredActions: 3,
+      requiredActions: 4,
       uploadedFiles: [],
+    ),
+    DocumentFile(
+      title: 'Compliance & Restructuring',
+      subtitle: 'Legal Advisory • PDF',
+      badgeText: 'Progress',
+      requiredActions: 1,
+      uploadedFiles: ['Advisory_Memo_2024.pdf'],
     ),
   ];
 
@@ -128,6 +135,11 @@ class _CorporatePageState extends State<CorporatePage> {
                         borderRadius: BorderRadius.circular(30),
                       ),
                       child: TextField(
+                        onChanged: (value) {
+                          setState(() {
+                            _searchQuery = value.toLowerCase();
+                          });
+                        },
                         decoration: InputDecoration(
                           icon: const Icon(
                             Icons.search,
@@ -152,7 +164,7 @@ class _CorporatePageState extends State<CorporatePage> {
                       ),
                     ),
                     const SizedBox(height: 16),
-                    ..._myFiles.map((file) {
+                    ..._myFiles.where((f) => f.title.toLowerCase().contains(_searchQuery)).map((file) {
                       return _buildDocumentCard(
                         title: file.title,
                         subtitle: file.subtitle,

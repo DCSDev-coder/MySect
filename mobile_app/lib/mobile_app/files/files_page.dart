@@ -315,7 +315,7 @@ class _FilesPageState extends State<FilesPage> {
                         icon: Icons.folder,
                         iconColor: Colors.orange[300]!,
                         title: 'Corporate',
-                        subtitle: '3 files',
+                        subtitle: '4 files',
                         onTap: () {
                           Navigator.push(
                             context,
