@@ -309,27 +309,6 @@ class _InvoicesPageState extends State<InvoicesPage> {
                     ),
                   ],
                 ),
-                PopupMenuButton<String>(
-                  icon: const Icon(Icons.more_vert, color: Colors.grey, size: 20),
-                  padding: EdgeInsets.zero,
-                  constraints: const BoxConstraints(),
-                  onSelected: (value) {
-                    if (value == 'delete') {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('Invoice $invoiceNo deleted', style: GoogleFonts.poppins()),
-                          backgroundColor: Colors.red,
-                        ),
-                      );
-                    }
-                  },
-                  itemBuilder: (context) => [
-                    PopupMenuItem(
-                      value: 'delete',
-                      child: Text('Delete', style: GoogleFonts.poppins(color: Colors.red)),
-                    ),
-                  ],
-                ),
               ],
             ),
           const SizedBox(height: 12),
@@ -374,7 +353,8 @@ class _InvoicesPageState extends State<InvoicesPage> {
           ),
         ],
       ),
-    ),
+      ),
+      ),
     );
   }
 
@@ -532,7 +512,7 @@ class _InvoicesPageState extends State<InvoicesPage> {
                               errorBuilder: (context, error, stackTrace) => Icon(
                                 Icons.receipt_long,
                                 size: 120,
-                                color: const Color(0xFF1E3A8A).withOpacity(0.5),
+                                color: const Color(0xFF1E3A8A).withValues(alpha: 0.5),
                               ),
                             ),
                             const SizedBox(height: 24),
@@ -581,7 +561,7 @@ class _InvoicesPageState extends State<InvoicesPage> {
                                   inv['status'],
                                   inv['color'],
                                   inv['bg'],
-                                )),
+                                )).toList(),
                           ],
                           const SizedBox(height: 80),
                         ],

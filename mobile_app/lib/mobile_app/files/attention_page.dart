@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../notifications/notifications_page.dart';
-import 'package:file_picker/file_picker.dart';
 import 'document_viewer_page.dart';
 import '../widgets/custom_bottom_nav_bar.dart';
 import '../home/home_page.dart';
