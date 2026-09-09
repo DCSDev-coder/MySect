@@ -690,7 +690,7 @@ class _HomePageState extends State<HomePage> {
                   const SizedBox(height: 8),
                   _buildTaskCard(
                     number: '$documentsNeededCount',
-                    color: Colors.blue.shade700,
+                    color: const Color(0xFF062AAE),
                     title: 'Document Needed',
                     subtitle: 'Actions required to file returns',
                     onTap: () {
@@ -704,7 +704,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   _buildTaskCard(
                     number: '$replyNeededCount',
-                    color: Colors.red.shade400,
+                    color: Colors.green.shade600,
                     title: 'Replies Needed',
                     subtitle: 'Clarifications with secretary',
                     onTap: () {

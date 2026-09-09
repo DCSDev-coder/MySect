@@ -223,7 +223,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
     );
   }
 
-  Widget _buildExampleTransaction(String title, String date) {
+  Widget _buildExampleTransaction(String title, String date, {bool isReplyNeeded = false}) {
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -252,12 +252,12 @@ class _TransactionsPageState extends State<TransactionsPage> {
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: const Color(0xFF062AAE).withOpacity(0.1),
+              color: isReplyNeeded ? Colors.green.shade600.withOpacity(0.1) : const Color(0xFF062AAE).withOpacity(0.1),
               borderRadius: BorderRadius.circular(8),
             ),
-            child: const Icon(
+            child: Icon(
               Icons.insert_drive_file,
-              color: Color(0xFF062AAE),
+              color: isReplyNeeded ? Colors.green.shade600 : const Color(0xFF062AAE),
               size: 20,
             ),
           ),
@@ -517,9 +517,9 @@ class _TransactionsPageState extends State<TransactionsPage> {
                                   child: Container(
                                     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                                     decoration: BoxDecoration(
-                                      color: _isReplyNeededFilterActive ? const Color(0xFF062AAE) : Colors.white,
+                                      color: Colors.white,
                                       borderRadius: BorderRadius.circular(24),
-                                      border: _isReplyNeededFilterActive ? null : Border.all(color: Colors.grey.shade300),
+                                      border: Border.all(color: _isReplyNeededFilterActive ? Colors.green.shade600 : Colors.grey.shade300),
                                     ),
                                     child: Row(
                                       mainAxisSize: MainAxisSize.min,
@@ -527,7 +527,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
                                         Container(
                                           padding: const EdgeInsets.all(4),
                                           decoration: BoxDecoration(
-                                            color: _isReplyNeededFilterActive ? Colors.white : const Color(0xFF062AAE),
+                                            color: _isReplyNeededFilterActive ? Colors.green.shade600 : Colors.grey.shade200,
                                             shape: BoxShape.circle,
                                           ),
                                           child: Text(
@@ -535,7 +535,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
                                             style: GoogleFonts.poppins(
                                               fontSize: 12,
                                               fontWeight: FontWeight.w700,
-                                              color: _isReplyNeededFilterActive ? const Color(0xFF062AAE) : Colors.white,
+                                              color: _isReplyNeededFilterActive ? Colors.white : Colors.black54,
                                             ),
                                           ),
                                         ),
@@ -545,7 +545,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
                                           style: GoogleFonts.poppins(
                                             fontSize: 13,
                                             fontWeight: FontWeight.w600,
-                                            color: _isReplyNeededFilterActive ? Colors.white : Colors.black87,
+                                            color: _isReplyNeededFilterActive ? Colors.green.shade600 : Colors.black87,
                                           ),
                                         ),
                                       ],
@@ -663,7 +663,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
                                     children: _filteredTransactions.map((t) {
                                       return Padding(
                                         padding: const EdgeInsets.only(bottom: 12),
-                                        child: _buildExampleTransaction(t.title, _formatDate(t.date)),
+                                        child: _buildExampleTransaction(t.title, _formatDate(t.date), isReplyNeeded: t.replyNeeded),
                                       );
                                     }).toList(),
                                   ),
