@@ -3,6 +3,8 @@ import 'package:google_fonts/google_fonts.dart';
 import '../notifications/notifications_page.dart';
 import '../home/home_page.dart';
 import '../widgets/custom_bottom_nav_bar.dart';
+import 'package:intl/intl.dart';
+import '../transactions/transaction_data.dart';
 
 class RepliesNeededPage extends StatelessWidget {
   const RepliesNeededPage({super.key});
@@ -95,19 +97,14 @@ class RepliesNeededPage extends StatelessWidget {
                         vertical: 8,
                       ),
                       children: [
-                        _ReplyItemWidget(
-                          title: 'Clarification on Invoice #1029',
-                          subtitle: 'Is this invoice related to IT equipment?',
-                          sender: 'Corporate Secretary',
-                          time: '2 hours ago',
-                        ),
-                        _ReplyItemWidget(
-                          title: 'Confirm Registered Address',
-                          subtitle:
-                              'Please confirm if the registered address has changed.',
-                          sender: 'Compliance Team',
-                          time: '1 day ago',
-                        ),
+                        ...allTransactions.where((t) => t.replyNeeded).map((transaction) {
+                          return _ReplyItemWidget(
+                            title: transaction.title,
+                            subtitle: 'Please clarify this transaction.',
+                            sender: 'Corporate Secretary',
+                            time: 'Due: ${DateFormat('dd MMM yyyy').format(transaction.date)}',
+                          );
+                        }).toList(),
                       ],
                     ),
                   ),

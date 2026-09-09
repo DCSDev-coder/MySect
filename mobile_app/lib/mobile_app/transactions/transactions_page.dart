@@ -4,39 +4,55 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:file_picker/file_picker.dart';
 import '../files/document_viewer_page.dart';
+import 'transaction_data.dart';
 
 class TransactionsPage extends StatefulWidget {
-  const TransactionsPage({super.key});
+  final bool initialDocumentsNeededFilter;
+  final bool initialReplyNeededFilter;
+
+  const TransactionsPage({
+    super.key,
+    this.initialDocumentsNeededFilter = false,
+    this.initialReplyNeededFilter = false,
+  });
 
   @override
   State<TransactionsPage> createState() => _TransactionsPageState();
 }
 
-class _Transaction {
-  final String title;
-  final DateTime date;
-
-  _Transaction({required this.title, required this.date});
-}
-
 class _TransactionsPageState extends State<TransactionsPage> {
   DateTime? _selectedDate;
-  bool _isDocumentsNeededFilterActive = false;
-  bool _isReplyNeededFilterActive = false;
+  late bool _isDocumentsNeededFilterActive;
+  late bool _isReplyNeededFilterActive;
   bool _isMatchingFile = false;
 
-  final List<_Transaction> _allTransactions = [
-    _Transaction(title: 'Transaction_Doc_A.pdf', date: DateTime(2024, 3, 15)),
-    _Transaction(title: 'Transaction_Doc_B.pdf', date: DateTime(2024, 3, 12)),
-  ];
+  @override
+  void initState() {
+    super.initState();
+    _isDocumentsNeededFilterActive = widget.initialDocumentsNeededFilter;
+    _isReplyNeededFilterActive = widget.initialReplyNeededFilter;
+  }
 
-  bool get _isDateFilterEmpty {
-    if (_selectedDate == null) return false;
-    return _allTransactions.where((t) =>
-      t.date.year == _selectedDate!.year &&
-      t.date.month == _selectedDate!.month &&
-      t.date.day == _selectedDate!.day
-    ).isEmpty;
+  @override
+  void didUpdateWidget(TransactionsPage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.initialDocumentsNeededFilter != oldWidget.initialDocumentsNeededFilter ||
+        widget.initialReplyNeededFilter != oldWidget.initialReplyNeededFilter) {
+      setState(() {
+        _isDocumentsNeededFilterActive = widget.initialDocumentsNeededFilter;
+        _isReplyNeededFilterActive = widget.initialReplyNeededFilter;
+      });
+    }
+  }
+
+  List<Transaction> get _filteredTransactions {
+    return allTransactions.where((t) {
+      if (!t.isTransaction) return false;
+      if (_selectedDate != null && (t.date.year != _selectedDate!.year || t.date.month != _selectedDate!.month || t.date.day != _selectedDate!.day)) return false;
+      if (_isDocumentsNeededFilterActive && !t.documentsNeeded) return false;
+      if (_isReplyNeededFilterActive && !t.replyNeeded) return false;
+      return true;
+    }).toList();
   }
 
   String _formatDate(DateTime date) {
@@ -469,7 +485,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
                                             shape: BoxShape.circle,
                                           ),
                                           child: Text(
-                                            '0',
+                                            '$transactionDocsNeededCount',
                                             style: GoogleFonts.poppins(
                                               fontSize: 12,
                                               fontWeight: FontWeight.w700,
@@ -515,7 +531,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
                                             shape: BoxShape.circle,
                                           ),
                                           child: Text(
-                                            '0',
+                                            '$transactionReplyNeededCount',
                                             style: GoogleFonts.poppins(
                                               fontSize: 12,
                                               fontWeight: FontWeight.w700,
@@ -625,42 +641,31 @@ class _TransactionsPageState extends State<TransactionsPage> {
                     const SizedBox(height: 24),
                     Expanded(
                       child: Align(
-                        alignment: (!_isDocumentsNeededFilterActive && !_isReplyNeededFilterActive && !_isDateFilterEmpty)
+                        alignment: _filteredTransactions.isNotEmpty
                             ? Alignment.topCenter
                             : const Alignment(0.0, -0.2),
                         child: SingleChildScrollView(
                           child: Container(
                             width: double.infinity,
                             padding: EdgeInsets.only(
-                              top: (!_isDocumentsNeededFilterActive && !_isReplyNeededFilterActive && !_isDateFilterEmpty) ? 0 : 24,
+                              top: _filteredTransactions.isNotEmpty ? 0 : 24,
                               bottom: 24,
                               left: 24,
                               right: 24,
                             ),
                             child: Column(
-                              mainAxisAlignment: (!_isDocumentsNeededFilterActive && !_isReplyNeededFilterActive && !_isDateFilterEmpty)
+                              mainAxisAlignment: _filteredTransactions.isNotEmpty
                                   ? MainAxisAlignment.start
                                   : MainAxisAlignment.center,
                               children: [
-                                if (!_isDocumentsNeededFilterActive && !_isReplyNeededFilterActive && !_isDateFilterEmpty) ...[
-                                  Builder(
-                                    builder: (context) {
-                                      final filteredTransactions = _allTransactions.where((t) {
-                                        if (_selectedDate == null) return true;
-                                        return t.date.year == _selectedDate!.year &&
-                                               t.date.month == _selectedDate!.month &&
-                                               t.date.day == _selectedDate!.day;
-                                      }).toList();
-
-                                      return Column(
-                                        children: filteredTransactions.map((t) {
-                                          return Padding(
-                                            padding: const EdgeInsets.only(bottom: 12),
-                                            child: _buildExampleTransaction(t.title, _formatDate(t.date)),
-                                          );
-                                        }).toList(),
+                                if (_filteredTransactions.isNotEmpty) ...[
+                                  Column(
+                                    children: _filteredTransactions.map((t) {
+                                      return Padding(
+                                        padding: const EdgeInsets.only(bottom: 12),
+                                        child: _buildExampleTransaction(t.title, _formatDate(t.date)),
                                       );
-                                    }
+                                    }).toList(),
                                   ),
                                 ] else ...[
                                   Image.asset(

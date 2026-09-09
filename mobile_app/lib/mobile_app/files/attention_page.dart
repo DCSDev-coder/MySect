@@ -5,6 +5,8 @@ import 'package:file_picker/file_picker.dart';
 import 'document_viewer_page.dart';
 import '../widgets/custom_bottom_nav_bar.dart';
 import '../home/home_page.dart';
+import 'package:intl/intl.dart';
+import '../transactions/transaction_data.dart';
 
 class AttentionPage extends StatelessWidget {
   const AttentionPage({super.key});
@@ -86,37 +88,28 @@ class AttentionPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _ExpandableDocumentCard(
-                      badgeText: 'Action Required',
-                      badgeBgColor: Colors.red[100]!,
-                      badgeTextColor: Colors.red[800]!,
-                      timeText: 'Today, 09:00 AM',
-                      progressText: '',
-                      progressColor: Colors.transparent,
-                      title: 'Director Resolution 2026',
-                      completedItems: const [
-                        'Document Uploaded',
-                        'Initial Review',
-                      ],
-                      pendingItems: const [
-                        'Awaiting Director Signature',
-                        'Final Approval',
-                      ],
-                    ),
-                    _ExpandableDocumentCard(
-                      badgeText: 'Urgent',
-                      badgeBgColor: Colors.orange[100]!,
-                      badgeTextColor: Colors.orange[800]!,
-                      timeText: 'Yesterday, 04:30 PM',
-                      progressText: '',
-                      progressColor: Colors.transparent,
-                      title: 'Tax Invoice #1029',
-                      completedItems: const ['Invoice Scanned'],
-                      pendingItems: const [
-                        'Upload Missing ID',
-                        'Verify Payment Details',
-                      ],
-                    ),
+                    ...allTransactions.where((t) => t.documentsNeeded).map((transaction) {
+                      return _DocumentCard(
+                        badgeText: 'Action Required',
+                        badgeBgColor: Colors.red[100]!,
+                        badgeTextColor: Colors.red[800]!,
+                        timeText: 'Due: ${DateFormat('dd MMM yyyy').format(transaction.date)}',
+                        progressText: '',
+                        progressColor: Colors.transparent,
+                        title: transaction.title,
+                        subtitle: 'Please upload the requested document.',
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => DocumentViewerPage(
+                                fileName: transaction.title,
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    }).toList(),
                   ],
                 ),
               ),
@@ -132,7 +125,7 @@ class AttentionPage extends StatelessWidget {
   }
 }
 
-class _ExpandableDocumentCard extends StatefulWidget {
+class _DocumentCard extends StatelessWidget {
   final String badgeText;
   final Color badgeBgColor;
   final Color badgeTextColor;
@@ -140,10 +133,10 @@ class _ExpandableDocumentCard extends StatefulWidget {
   final String progressText;
   final Color progressColor;
   final String title;
-  final List<String> completedItems;
-  final List<String> pendingItems;
+  final String subtitle;
+  final VoidCallback onTap;
 
-  const _ExpandableDocumentCard({
+  const _DocumentCard({
     required this.badgeText,
     required this.badgeBgColor,
     required this.badgeTextColor,
@@ -151,36 +144,20 @@ class _ExpandableDocumentCard extends StatefulWidget {
     required this.progressText,
     required this.progressColor,
     required this.title,
-    required this.completedItems,
-    required this.pendingItems,
+    required this.subtitle,
+    required this.onTap,
   });
-
-  @override
-  State<_ExpandableDocumentCard> createState() =>
-      _ExpandableDocumentCardState();
-}
-
-class _ExpandableDocumentCardState extends State<_ExpandableDocumentCard> {
-  bool _isExpanded = false;
-  final List<String> _uploadedFiles = [];
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        setState(() {
-          _isExpanded = !_isExpanded;
-        });
-      },
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
+      onTap: onTap,
+      child: Container(
         margin: const EdgeInsets.only(bottom: 16),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
-          border: _isExpanded ? Border.all(color: Colors.grey.shade300) : null,
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.05),
@@ -201,20 +178,20 @@ class _ExpandableDocumentCardState extends State<_ExpandableDocumentCard> {
                     vertical: 4,
                   ),
                   decoration: BoxDecoration(
-                    color: widget.badgeBgColor,
+                    color: badgeBgColor,
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Text(
-                    widget.badgeText,
+                    badgeText,
                     style: GoogleFonts.poppins(
-                      color: widget.badgeTextColor,
+                      color: badgeTextColor,
                       fontSize: 10,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
                 ),
                 Text(
-                  widget.timeText,
+                  timeText,
                   style: GoogleFonts.poppins(
                     color: Colors.grey[600],
                     fontSize: 12,
@@ -233,7 +210,7 @@ class _ExpandableDocumentCardState extends State<_ExpandableDocumentCard> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        widget.title,
+                        title,
                         style: GoogleFonts.poppins(
                           fontWeight: FontWeight.w700,
                           fontSize: 14,
@@ -242,7 +219,7 @@ class _ExpandableDocumentCardState extends State<_ExpandableDocumentCard> {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        'Tap to view checklist',
+                        subtitle,
                         style: GoogleFonts.poppins(
                           fontSize: 12,
                           color: Colors.grey[600],
@@ -251,166 +228,20 @@ class _ExpandableDocumentCardState extends State<_ExpandableDocumentCard> {
                     ],
                   ),
                 ),
-                Icon(
-                  _isExpanded
-                      ? Icons.keyboard_arrow_up
-                      : Icons.keyboard_arrow_down,
-                  color: Colors.grey,
-                ),
               ],
             ),
-            if (!_isExpanded && widget.progressText.isNotEmpty)
+            if (progressText.isNotEmpty)
               Align(
                 alignment: Alignment.bottomRight,
                 child: Text(
-                  widget.progressText,
+                  progressText,
                   style: GoogleFonts.poppins(
                     fontWeight: FontWeight.w600,
                     fontSize: 12,
-                    color: widget.progressColor,
+                    color: progressColor,
                   ),
                 ),
               ),
-            if (_isExpanded) ...[
-              const SizedBox(height: 16),
-              const Divider(),
-              const SizedBox(height: 8),
-              Text(
-                'Action Checklist',
-                style: GoogleFonts.poppins(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 14,
-                  color: Colors.black,
-                ),
-              ),
-              const SizedBox(height: 8),
-
-              ...widget.completedItems.map(
-                (item) => Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4),
-                  child: Row(
-                    children: [
-                      const Icon(
-                        Icons.check_circle,
-                        color: Colors.green,
-                        size: 20,
-                      ),
-                      const SizedBox(width: 12),
-                      Text(
-                        item,
-                        style: GoogleFonts.poppins(
-                          fontSize: 13,
-                          color: Colors.grey[600],
-                          decoration: TextDecoration.lineThrough,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-
-              ...widget.pendingItems.map(
-                (item) => Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8),
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 20,
-                        height: 20,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(color: Colors.red, width: 1.5),
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Text(
-                          item,
-                          style: GoogleFonts.poppins(
-                            fontSize: 13,
-                            color: Colors.red,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              const Divider(height: 32),
-              Text(
-                'Files',
-                style: GoogleFonts.poppins(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14,
-                ),
-              ),
-              const SizedBox(height: 8),
-              if (_uploadedFiles.isEmpty)
-                Text(
-                  'No files available.',
-                  style: GoogleFonts.poppins(fontSize: 12, color: Colors.grey),
-                ),
-              ..._uploadedFiles.asMap().entries.map((entry) {
-                String f = entry.value;
-                return InkWell(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => DocumentViewerPage(fileName: f),
-                      ),
-                    );
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: Row(
-                      children: [
-                        const Icon(
-                          Icons.insert_drive_file,
-                          size: 16,
-                          color: Color(0xFF062AAE),
-                        ),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: Text(
-                            f,
-                            style: GoogleFonts.poppins(
-                              fontSize: 12,
-                              color: const Color(0xFF062AAE),
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
-                        const Icon(
-                          Icons.visibility,
-                          size: 16,
-                          color: Color(0xFF062AAE),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              }),
-              Align(
-                alignment: Alignment.center,
-                child: TextButton.icon(
-                  onPressed: () async {
-                    var result = await FilePicker.pickFile();
-                    if (result != null) {
-                      setState(() {
-                        _uploadedFiles.add(result.name);
-                      });
-                    }
-                  },
-                  icon: const Icon(Icons.upload_file),
-                  label: const Text('Upload File'),
-                  style: TextButton.styleFrom(
-                    foregroundColor: const Color(0xFF062AAE),
-                  ),
-                ),
-              ),
-            ],
           ],
         ),
       ),

@@ -10,10 +10,19 @@ import '../more/more_page.dart';
 import '../widgets/custom_bottom_nav_bar.dart';
 import '../tasks/document_needed_page.dart';
 import '../tasks/replies_needed_page.dart';
+import '../transactions/transaction_data.dart';
 
 class HomePage extends StatefulWidget {
   final int initialIndex;
-  const HomePage({super.key, this.initialIndex = 0});
+  final bool initialDocsFilter;
+  final bool initialReplyFilter;
+
+  const HomePage({
+    super.key,
+    this.initialIndex = 0,
+    this.initialDocsFilter = false,
+    this.initialReplyFilter = false,
+  });
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -25,6 +34,8 @@ class _HomePageState extends State<HomePage> {
   bool _isDropdownOpen = false;
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
+  late bool _docsFilterForTransactions;
+  late bool _replyFilterForTransactions;
 
   List<Map<String, dynamic>> _getEventsForDay(DateTime day) {
     if (day.day == 3) {
@@ -81,6 +92,8 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     _selectedIndex = widget.initialIndex;
     _selectedDay = _focusedDay;
+    _docsFilterForTransactions = widget.initialDocsFilter;
+    _replyFilterForTransactions = widget.initialReplyFilter;
   }
 
   List<String> get _companies => [
@@ -676,7 +689,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   const SizedBox(height: 8),
                   _buildTaskCard(
-                    number: '4',
+                    number: '$documentsNeededCount',
                     color: Colors.blue.shade700,
                     title: 'Document Needed',
                     subtitle: 'Actions required to file returns',
@@ -690,7 +703,7 @@ class _HomePageState extends State<HomePage> {
                     },
                   ),
                   _buildTaskCard(
-                    number: '4',
+                    number: '$replyNeededCount',
                     color: Colors.red.shade400,
                     title: 'Replies Needed',
                     subtitle: 'Clarifications with secretary',
@@ -806,7 +819,10 @@ class _HomePageState extends State<HomePage> {
               index: _selectedIndex,
               children: [
                 _buildHomeView(),
-                const TransactionsPage(),
+                TransactionsPage(
+                  initialDocumentsNeededFilter: _docsFilterForTransactions,
+                  initialReplyNeededFilter: _replyFilterForTransactions,
+                ),
                 const FilesPage(),
                 const ChatPage(),
                 const MorePage(),

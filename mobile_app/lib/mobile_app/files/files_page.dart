@@ -8,6 +8,7 @@ import 'unsorted_page.dart';
 import 'corporate_page.dart';
 import 'personal_page.dart';
 import 'other_page.dart';
+import '../transactions/transaction_data.dart';
 
 class FilesPage extends StatefulWidget {
   const FilesPage({super.key});
@@ -243,7 +244,7 @@ class _FilesPageState extends State<FilesPage> {
                               icon: Icons.warning_amber_rounded,
                               iconBgColor: Colors.red[100]!,
                               iconColor: Colors.red,
-                              badgeText: '2 files',
+                              badgeText: '$documentsNeededCount files',
                               badgeColor: Colors.red,
                               badgeTextColor: Colors.white,
                               title: 'Attention',

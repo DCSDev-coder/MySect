@@ -55,28 +55,73 @@ class _UnsortedPageState extends State<UnsortedPage> {
   void _showMoveBottomSheet() {
     showModalBottomSheet(
       context: context,
+      backgroundColor: Colors.white,
+      isScrollControlled: true,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
       ),
       builder: (context) {
-        return Container(
-          padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+        return Padding(
+          padding: const EdgeInsets.only(top: 12, bottom: 32, left: 24, right: 24),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                'Move ${_selectedIndices.length} files to...',
-                style: GoogleFonts.poppins(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
+              Container(
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade300,
+                  borderRadius: BorderRadius.circular(2),
                 ),
               ),
-              const SizedBox(height: 16),
-              _buildMoveOption('Personal', Icons.person),
-              _buildMoveOption('Corporate', Icons.business),
-              _buildMoveOption('Accounting', Icons.account_balance_wallet),
-              _buildMoveOption('Other', Icons.folder),
+              const SizedBox(height: 24),
+              Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF062AAE).withValues(alpha: 0.1),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.drive_file_move_outlined,
+                      color: Color(0xFF062AAE),
+                      size: 24,
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Move ${_selectedIndices.length} files',
+                          style: GoogleFonts.poppins(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black87,
+                          ),
+                        ),
+                        Text(
+                          'Select a destination folder',
+                          style: GoogleFonts.poppins(
+                            fontSize: 13,
+                            color: Colors.grey.shade600,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 24),
+              _buildMoveOption('Personal', 'Individual files & records', Icons.person_outline),
+              const SizedBox(height: 12),
+              _buildMoveOption('Corporate', 'Business & statutory docs', Icons.business_outlined),
+              const SizedBox(height: 12),
+              _buildMoveOption('Accounting', 'Financial & tax statements', Icons.account_balance_wallet_outlined),
+              const SizedBox(height: 12),
+              _buildMoveOption('Other', 'Miscellaneous documents', Icons.folder_open_outlined),
             ],
           ),
         );
@@ -84,21 +129,19 @@ class _UnsortedPageState extends State<UnsortedPage> {
     );
   }
 
-  Widget _buildMoveOption(String title, IconData icon) {
-    return ListTile(
-      leading: Icon(icon, color: const Color(0xFF062AAE)),
-      title: Text(
-        title,
-        style: GoogleFonts.poppins(fontWeight: FontWeight.w500),
-      ),
+  Widget _buildMoveOption(String title, String subtitle, IconData icon) {
+    return InkWell(
       onTap: () {
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              'Successfully moved ${_selectedIndices.length} files to $title!',
+              'Successfully moved ${_selectedIndices.length} files to $title',
+              style: GoogleFonts.poppins(),
             ),
-            backgroundColor: Colors.green,
+            backgroundColor: const Color(0xFF062AAE),
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           ),
         );
         setState(() {
@@ -106,6 +149,51 @@ class _UnsortedPageState extends State<UnsortedPage> {
           _selectedIndices.clear();
         });
       },
+      borderRadius: BorderRadius.circular(16),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.grey.shade200, width: 1.5),
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: Colors.grey.shade50,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(icon, color: const Color(0xFF062AAE), size: 22),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: GoogleFonts.poppins(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 15,
+                      color: Colors.black87,
+                    ),
+                  ),
+                  Text(
+                    subtitle,
+                    style: GoogleFonts.poppins(
+                      fontWeight: FontWeight.w400,
+                      fontSize: 12,
+                      color: Colors.grey.shade600,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Icon(Icons.chevron_right, color: Colors.grey.shade400),
+          ],
+        ),
+      ),
     );
   }
 
