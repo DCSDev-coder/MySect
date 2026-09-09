@@ -87,28 +87,31 @@ class DocumentNeededPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    ...allTransactions.where((t) => t.documentsNeeded).map((transaction) {
-                    return _DocumentCard(
-                      badgeText: 'Action Required',
-                      badgeBgColor: Colors.red[100]!,
-                      badgeTextColor: Colors.red[800]!,
-                      timeText: 'Due: ${DateFormat('dd MMM yyyy').format(transaction.date)}',
-                      progressText: '',
-                      progressColor: Colors.transparent,
-                      title: transaction.title,
-                      subtitle: 'Please upload the requested document.',
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => DocumentViewerPage(
-                              fileName: transaction.title,
+                    ...allTransactions.where((t) => t.documentsNeeded).map((
+                      transaction,
+                    ) {
+                      return _DocumentCard(
+                        badgeText: 'Action Required',
+                        badgeBgColor: Colors.red[100]!,
+                        badgeTextColor: Colors.red[800]!,
+                        timeText:
+                            'Due: ${DateFormat('dd MMM yyyy').format(transaction.date)}',
+                        progressText: '',
+                        progressColor: Colors.transparent,
+                        title: transaction.title,
+                        subtitle: 'Please upload the requested document.',
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => DocumentViewerPage(
+                                fileName: transaction.title,
+                              ),
                             ),
-                          ),
-                        );
-                      },
-                    );
-                  }).toList(),
+                          );
+                        },
+                      );
+                    }),
                   ],
                 ),
               ),

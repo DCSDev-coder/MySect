@@ -82,13 +82,10 @@ class DocumentViewerPage extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Hero(
-                      tag: 'doc_icon_$fileName',
-                      child: const Icon(
-                        Icons.insert_drive_file,
-                        size: 80,
-                        color: Color(0xFF062AAE),
-                      ),
+                    const Icon(
+                      Icons.insert_drive_file,
+                      size: 80,
+                      color: Color(0xFF062AAE),
                     ),
                     const SizedBox(height: 24),
                     Text(

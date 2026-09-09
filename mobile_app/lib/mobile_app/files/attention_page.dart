@@ -87,12 +87,15 @@ class AttentionPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    ...allTransactions.where((t) => t.documentsNeeded).map((transaction) {
+                    ...allTransactions.where((t) => t.documentsNeeded).map((
+                      transaction,
+                    ) {
                       return _DocumentCard(
                         badgeText: 'Action Required',
                         badgeBgColor: Colors.red[100]!,
                         badgeTextColor: Colors.red[800]!,
-                        timeText: 'Due: ${DateFormat('dd MMM yyyy').format(transaction.date)}',
+                        timeText:
+                            'Due: ${DateFormat('dd MMM yyyy').format(transaction.date)}',
                         progressText: '',
                         progressColor: Colors.transparent,
                         title: transaction.title,

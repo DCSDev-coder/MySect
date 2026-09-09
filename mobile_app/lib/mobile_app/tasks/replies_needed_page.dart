@@ -25,11 +25,7 @@ class RepliesNeededPage extends StatelessWidget {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.only(
-                left: 16.0,
-                top: 8.0,
-                right: 16.0,
-              ),
+              padding: const EdgeInsets.only(left: 16.0, top: 8.0, right: 16.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -97,14 +93,17 @@ class RepliesNeededPage extends StatelessWidget {
                         vertical: 8,
                       ),
                       children: [
-                        ...allTransactions.where((t) => t.replyNeeded).map((transaction) {
+                        ...allTransactions.where((t) => t.replyNeeded).map((
+                          transaction,
+                        ) {
                           return _ReplyItemWidget(
                             title: transaction.title,
                             subtitle: 'Please clarify this transaction.',
                             sender: 'Corporate Secretary',
-                            time: 'Due: ${DateFormat('dd MMM yyyy').format(transaction.date)}',
+                            time:
+                                'Due: ${DateFormat('dd MMM yyyy').format(transaction.date)}',
                           );
-                        }).toList(),
+                        }),
                       ],
                     ),
                   ),
@@ -120,7 +119,6 @@ class RepliesNeededPage extends StatelessWidget {
       ),
     );
   }
-
 }
 
 class _ReplyItemWidget extends StatefulWidget {
@@ -158,7 +156,10 @@ class _ReplyItemWidgetState extends State<_ReplyItemWidget> {
     });
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('Reply sent!', style: GoogleFonts.poppins(color: Colors.white)),
+        content: Text(
+          'Reply sent!',
+          style: GoogleFonts.poppins(color: Colors.white),
+        ),
         backgroundColor: Colors.green,
       ),
     );
@@ -270,14 +271,21 @@ class _ReplyItemWidgetState extends State<_ReplyItemWidget> {
                       controller: _controller,
                       decoration: InputDecoration(
                         hintText: 'Type your reply...',
-                        hintStyle: GoogleFonts.poppins(color: Colors.grey, fontSize: 13),
+                        hintStyle: GoogleFonts.poppins(
+                          color: Colors.grey,
+                          fontSize: 13,
+                        ),
                         border: InputBorder.none,
                       ),
                       style: GoogleFonts.poppins(fontSize: 13),
                     ),
                   ),
                   IconButton(
-                    icon: const Icon(Icons.send, color: Color(0xFF062AAE), size: 20),
+                    icon: const Icon(
+                      Icons.send,
+                      color: Color(0xFF062AAE),
+                      size: 20,
+                    ),
                     onPressed: _sendReply,
                   ),
                 ],

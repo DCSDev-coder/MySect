@@ -230,50 +230,51 @@ class _TransactionsPageState extends State<TransactionsPage> {
   }
 
   Widget _buildExampleTransaction(String title, String date, {bool isReplyNeeded = false}) {
-    return Dismissible(
-      key: Key(title),
-      direction: DismissDirection.endToStart,
-      background: Container(
-        alignment: Alignment.centerRight,
-        padding: const EdgeInsets.only(right: 20),
-        decoration: BoxDecoration(
-          color: Colors.red.shade400,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: const Icon(Icons.delete_outline, color: Colors.white),
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey.shade200),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.02),
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
-      onDismissed: (direction) {
-        setState(() {
-          allTransactions.removeWhere((t) => t.title == title);
-        });
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text('$title dismissed'),
-          duration: const Duration(seconds: 2),
-        ));
-      },
-      child: GestureDetector(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => DocumentViewerPage(fileName: title),
-            ),
-          );
-        },
-        child: Container(
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: Colors.grey.shade200),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.02),
-              blurRadius: 4,
-              offset: const Offset(0, 2),
-            ),
-          ],
-        ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(11),
+        child: Dismissible(
+          key: Key(title),
+          direction: DismissDirection.endToStart,
+          background: Container(
+            alignment: Alignment.centerRight,
+            padding: const EdgeInsets.only(right: 20),
+            color: Colors.red.shade400,
+            child: const Icon(Icons.delete_outline, color: Colors.white),
+          ),
+          onDismissed: (direction) {
+            setState(() {
+              allTransactions.removeWhere((t) => t.title == title);
+            });
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text('$title dismissed'),
+              duration: const Duration(seconds: 2),
+            ));
+          },
+          child: GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => DocumentViewerPage(fileName: title),
+                ),
+              );
+            },
+            child: Container(
+            padding: const EdgeInsets.all(12),
+            color: Colors.white,
       child: Row(
         children: [
           Container(
@@ -282,13 +283,10 @@ class _TransactionsPageState extends State<TransactionsPage> {
               color: isReplyNeeded ? Colors.red.shade400.withValues(alpha: 0.1) : Colors.blue.shade700.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(8),
             ),
-            child: Hero(
-              tag: 'doc_icon_$title',
-              child: Icon(
-                Icons.insert_drive_file,
-                color: isReplyNeeded ? Colors.red.shade400 : Colors.blue.shade700,
-                size: 20,
-              ),
+            child: Icon(
+              Icons.insert_drive_file,
+              color: isReplyNeeded ? Colors.red.shade400 : Colors.blue.shade700,
+              size: 20,
             ),
           ),
           const SizedBox(width: 16),
@@ -315,38 +313,11 @@ class _TransactionsPageState extends State<TransactionsPage> {
               ],
             ),
           ),
-          PopupMenuButton<String>(
-            icon: const Icon(Icons.more_vert, color: Colors.grey),
-            onSelected: (value) {
-              if (value == 'rename') {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('Rename $title coming soon', style: GoogleFonts.poppins()),
-                    backgroundColor: const Color(0xFF1E3A8A),
-                  ),
-                );
-              } else if (value == 'delete') {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('Delete $title coming soon', style: GoogleFonts.poppins()),
-                    backgroundColor: Colors.red,
-                  ),
-                );
-              }
-            },
-            itemBuilder: (context) => [
-              PopupMenuItem(
-                value: 'rename',
-                child: Text('Rename', style: GoogleFonts.poppins()),
-              ),
-              PopupMenuItem(
-                value: 'delete',
-                child: Text('Delete', style: GoogleFonts.poppins(color: Colors.red)),
-              ),
-            ],
-          ),
+
         ],
       ),
+    ),
+    ),
     ),
     ),
     );
