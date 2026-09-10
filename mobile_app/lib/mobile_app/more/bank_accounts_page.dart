@@ -207,7 +207,6 @@ class _BankAccountsPageState extends State<BankAccountsPage> {
                             offset: const Offset(0, 4),
                           ),
                         ],
-                        border: Border.all(color: Colors.grey.shade100),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,

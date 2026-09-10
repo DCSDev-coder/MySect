@@ -111,7 +111,7 @@ class AttentionPage extends StatelessWidget {
                           );
                         },
                       );
-                    }).toList(),
+                    }),
                   ],
                 ),
               ),
