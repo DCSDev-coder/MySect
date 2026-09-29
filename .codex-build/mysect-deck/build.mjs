@@ -5,7 +5,7 @@ import { Presentation, PresentationFile } from '@oai/artifact-tool';
 
 const { SKILL_DIR, TMP_DIR, RUNTIME_PYTHON } = process.env;
 const workspaceDir = '/Users/marketingdeveloper/DCStack/MySect';
-const finalPath = path.join(workspaceDir, 'output/pptx/MYSECT_PLATFORM_BLUEPRINT_DECK.pptx');
+const finalPath = path.join(workspaceDir, 'output/pptx/MYSECT_PLATFORM_BLUEPRINT_DECK_PLAIN_LANGUAGE_V3.pptx');
 await fs.mkdir(TMP_DIR, { recursive: true });
 await fs.mkdir(path.dirname(finalPath), { recursive: true });
 
@@ -59,16 +59,26 @@ function card(slide,x,y,w,h,title,body,accent=C.blue) {
   notes(s,'Business model: three role-specific products share one backend and authorization model. The secretary firm is a tenant/partner organization; MySect remains the platform operator.');
 }
 
-// 3 architecture
+// 3 product pages
 {
-  const s=base('Recommended architecture and trust boundaries');
-  box(s,{x:65,y:155,w:1150,h:68,text:'Flutter customer app        Secretary web        MySect admin web',size:22,color:C.white,bold:true,align:'center',valign:'middle',fill:C.navy,line:C.navy,padding:10});
-  box(s,{x:65,y:270,w:1150,h:70,text:'API gateway / authentication / tenant and permission checks',size:22,color:C.white,bold:true,align:'center',valign:'middle',fill:C.blue,line:C.blue,padding:10});
-  const xs=[65,300,535,770,1005]; const labs=['Cases & chat','Documents','Compliance','Billing','AI orchestration'];
+  const s=base('What each product needs to contain');
+  card(s,58,155,350,390,'Customer app','Home and companies\n\nAsk MySect AI\nRequests and status\nDocuments\nApprovals and signatures\nNotifications\nBilling and profile',C.blue);
+  card(s,465,155,350,390,'Secretary website','Dashboard and work queue\n\nAI escalations\nCompany workspace\nHuman customer conversation\nCompliance calendar\nTeam and reports\nFirm settings',C.teal);
+  card(s,872,155,350,390,'MySect admin website','Platform dashboard\n\nFirm onboarding\nCompanies and assignments\nPlans and subscriptions\nPayments and support\nAudit and security\nReports and settings',C.navy);
+  box(s,{x:90,y:592,w:1100,h:42,text:'For the first three months, build the pages needed for one complete customer request from intake to secretary completion.',size:18,color:C.navy,bold:true,align:'center'});
+  notes(s,'Page inventory summary. The detailed page-by-page checklist is in the blueprint PDF section 3.4.');
+}
+
+// 4 how the products work together
+{
+  const s=base('How the three products work together');
+  box(s,{x:65,y:155,w:1150,h:68,text:'Customer app        Secretary workspace        MySect admin',size:22,color:C.white,bold:true,align:'center',valign:'middle',fill:C.navy,line:C.navy,padding:10});
+  box(s,{x:65,y:270,w:1150,h:70,text:'One shared MySect service centre\nKeeps the right information with the right people',size:22,color:C.white,bold:true,align:'center',valign:'middle',fill:C.blue,line:C.blue,padding:10});
+  const xs=[65,300,535,770,1005]; const labs=['Customer requests','Documents','Company tasks','Payments','AI assistance'];
   xs.forEach((x,i)=>box(s,{x,y:390,w:190,h:82,text:labs[i],size:18,color:C.navy,bold:true,align:'center',valign:'middle',fill:C.pale,line:C.line,padding:8}));
-  box(s,{x:65,y:520,w:550,h:70,text:'PostgreSQL\nusers, companies, assignments, cases, audit events',size:17,color:C.ink,align:'center',valign:'middle',fill:'#F8FBFD',line:C.line,padding:8});
-  box(s,{x:665,y:520,w:550,h:70,text:'TM Cloud Object Storage\noriginal files, versions, retention, signed downloads',size:17,color:C.ink,align:'center',valign:'middle',fill:'#F8FBFD',line:C.line,padding:8});
-  notes(s,'Architecture recommendation: one backend with modular domains, strict tenant isolation, backend-controlled AI tools, and signed file access. Source: blueprint sections 6, 7 and 9.');
+  box(s,{x:65,y:520,w:550,h:70,text:'Company records\npeople, companies, tasks, payments and history',size:17,color:C.ink,align:'center',valign:'middle',fill:'#F8FBFD',line:C.line,padding:8});
+  box(s,{x:665,y:520,w:550,h:70,text:'Secure document storage\noriginal files, version history and controlled access',size:17,color:C.ink,align:'center',valign:'middle',fill:'#F8FBFD',line:C.line,padding:8});
+  notes(s,'Architecture recommendation: one shared backend with strict tenant isolation, backend-controlled AI tools, and signed file access. Source: blueprint sections 6, 7 and 9.');
 }
 
 // 4 AI workflow
@@ -83,54 +93,69 @@ function card(slide,x,y,w,h,title,body,accent=C.blue) {
 
 // 5 deployment and storage
 {
-  const s=base('Deployment: keep Windows Server, run Linux containers safely');
-  box(s,{x:75,y:150,w:1125,h:62,text:'Windows Server host',size:23,color:C.white,bold:true,align:'center',valign:'middle',fill:C.navy,line:C.navy,padding:8});
-  box(s,{x:145,y:260,w:985,h:62,text:'Hyper-V Linux VM  →  Docker Engine + Docker Compose',size:23,color:C.white,bold:true,align:'center',valign:'middle',fill:C.blue,line:C.blue,padding:8});
-  const labs=[['API','auth, tenant checks, cases'],['Worker','notifications, OCR, scheduled jobs'],['DB','PostgreSQL + backup'],['Proxy','TLS, rate limits, routing']];
+  const s=base('How the system is hosted and protected');
+  box(s,{x:75,y:150,w:1125,h:62,text:'Company Windows Server',size:23,color:C.white,bold:true,align:'center',valign:'middle',fill:C.navy,line:C.navy,padding:8});
+  box(s,{x:145,y:260,w:985,h:62,text:'Protected application environment\nRuns the MySect services safely and consistently',size:23,color:C.white,bold:true,align:'center',valign:'middle',fill:C.blue,line:C.blue,padding:8});
+  const labs=[['Main service','accounts, companies and tasks'],['Background work','notifications and document reading'],['Company records','records plus regular backups'],['Secure connection','website protection and traffic control']];
   labs.forEach((a,i)=>box(s,{x:75+i*285,y:380,w:245,h:92,text:a[0]+'\n'+a[1],size:17,color:C.navy,bold:i===0,align:'center',valign:'middle',fill:C.pale,line:C.line,padding:8}));
-  box(s,{x:180,y:535,w:920,h:64,text:'TM Cloud Object Storage  |  encrypted originals  |  metadata in PostgreSQL  |  short-lived signed URLs',size:19,color:C.teal,bold:true,align:'center',valign:'middle',fill:'#F8FBFD',line:C.line,padding:10});
+  box(s,{x:180,y:535,w:920,h:64,text:'TM Cloud secure file storage  |  protected originals  |  controlled downloads  |  backup copies',size:19,color:C.teal,bold:true,align:'center',valign:'middle',fill:'#F8FBFD',line:C.line,padding:10});
   notes(s,'Deployment choice: Windows Server remains the operational host, but production Linux containers should run inside a Hyper-V Linux VM rather than relying on Docker Desktop as the server runtime. Sources: Microsoft Windows containers/Linux containers documentation and TM One cloud service references.');
 }
 
 // 6 AI pricing
 {
   const s=base('AI provider decision: start cheap, stay replaceable');
-  box(s,{x:62,y:143,w:1160,h:42,text:'Illustrative API price per 1M tokens (USD, researched 28 Sep 2026)',size:15,color:C.muted});
+  box(s,{x:62,y:143,w:1160,h:42,text:'Illustrative AI service price comparison (USD, researched 28 Sep 2026)',size:15,color:C.muted});
   const rows=[['Gemini 2.5 Flash-Lite','Recommended intake','0.10','0.40'],['OpenAI GPT-6 Luna','Strong fallback','0.10','0.50'],['Mistral Small 4','Good alternative','0.15','0.60'],['DeepSeek Flash','Cost option; review data terms','0.15–0.30','0.60–1.20']];
-  box(s,{x:62,y:195,w:1160,h:40,text:'Provider / role                                      Input       Output',size:17,color:C.white,bold:true,fill:C.navy,line:C.navy,padding:10});
+  box(s,{x:62,y:195,w:1160,h:40,text:'Provider / role                                      Customer message       AI reply',size:17,color:C.white,bold:true,fill:C.navy,line:C.navy,padding:10});
   rows.forEach((r,i)=>{const y=240+i*54; box(s,{x:62,y,w:1160,h:46,text:`${r[0]}  |  ${r[1]}                                      $${r[2]}       $${r[3]}`,size:16,color:i===0?C.navy:C.ink,bold:i===0,fill:i===0?'#E7F5F4':(i%2?'#F8FBFD':C.white),line:C.line,padding:10});});
-  box(s,{x:75,y:500,w:1125,h:85,text:'Example: 10,000 AI conversations/month at 4,000 input + 800 output tokens each ≈ $7–$11/month for the listed low-cost models before OCR, storage and engineering.',size:19,color:C.navy,bold:true,align:'center',valign:'middle',fill:'#FFF8E8',line:'#F4D79A',padding:12});
+  box(s,{x:75,y:500,w:1125,h:85,text:'Example: 10,000 AI conversations/month ≈ $7–$11/month for the listed low-cost models before document reading, storage and engineering.',size:19,color:C.navy,bold:true,align:'center',valign:'middle',fill:'#FFF8E8',line:'#F4D79A',padding:12});
   notes(s,'Pricing sources: Google Gemini API pricing, Mistral API pricing, DeepSeek API pricing, and OpenAI API pricing. Prices are subject to provider changes and do not include OCR, storage, observability, development, or support. Recommended implementation: provider-neutral AiProvider interface, Gemini Flash-Lite for pilot intake, with a controlled fallback.');
 }
 
-// 7 billing model
+// 8 e-KYC and TM Cloud pricing
+{
+  const s=base('Other important service costs');
+  box(s,{x:60,y:140,w:560,h:38,text:'e-KYC identity check options',size:20,color:C.navy,bold:true});
+  const ekyc=[['Epsilon ID V3','RM2.99 / full check'],['TrueIdentity','RM8,000 setup + RM3.50 / check + RM4,000/year'],['MasChain','RM3.50 down to RM1.50 / check'],['Tekkis T-Verify','RM1.50 / API call shown publicly']];
+  ekyc.forEach((r,i)=>box(s,{x:60,y:185+i*47,w:560,h:38,text:r[0]+'   '+r[1],size:15,color:C.ink,fill:i%2? '#F8FBFD':C.pale,line:C.line,padding:9}));
+  box(s,{x:660,y:140,w:560,h:38,text:'TM Cloud storage references',size:20,color:C.navy,bold:true});
+  box(s,{x:660,y:185,w:560,h:118,text:'Exact production price: not publicly listed; request a quotation.\n\nOlder Cloud Alpha reference: RM0.49/GB/month mid-performance or RM2.20/GB/month high-performance.\n\nSeparate Unifi storage plans are not automatically suitable for application storage.',size:15,color:C.ink,fill:C.pale,line:C.line,padding:10});
+  box(s,{x:660,y:330,w:560,h:104,text:'For a 100–500GB MVP, the older reference implies approximately RM49–RM1,100/month for raw storage only, before backup, server, support, and other services.',size:17,color:C.navy,bold:true,fill:'#FFF8E8',line:'#F4D79A',padding:12});
+  box(s,{x:75,y:500,w:1125,h:72,text:'Recommendation: test e-KYC with 20–50 people, request the TM quote, and choose on privacy, Malaysia coverage, support and reliability—not price alone.',size:19,color:C.teal,bold:true,align:'center',valign:'middle',fill:'#F8FBFD',line:C.line,padding:12});
+  notes(s,'Public reference prices only. Epsilon ID V3, TrueIdentity, MasChain and Tekkis pages were reviewed for published pricing. TM One Cloud Alpha pages do not publish the exact production Object Storage line-item price; an older Cloud Alpha VPC catalogue provides a planning reference only.');
+}
+
+// 9 billing model
 {
   const s=base('Two billing relationships, kept operationally separate');
   box(s,{x:70,y:155,w:500,h:72,text:'MySect Admin\n→ Secretary Firm',size:22,color:C.white,bold:true,align:'center',valign:'middle',fill:C.navy,line:C.navy,padding:10});
   box(s,{x:710,y:155,w:500,h:72,text:'Secretary Firm\n→ Customer Company',size:22,color:C.white,bold:true,align:'center',valign:'middle',fill:C.teal,line:C.teal,padding:10});
   box(s,{x:70,y:270,w:500,h:190,text:'Platform subscription\n\n• Starter / Growth / Professional\n• Seats, companies, AI and storage limits\n• MySect invoice, payment status and entitlements\n• Grace period and suspension rules',size:17,color:C.ink,fill:C.pale,line:C.line,padding:16});
   box(s,{x:710,y:270,w:500,h:190,text:'Professional service subscription\n\n• Firm-defined package and price\n• Customer agreement and service invoice\n• Firm owns refund, cancellation and dispute\n• One-off filing/government fees stay visible',size:17,color:C.ink,fill:'#F8FBFD',line:C.line,padding:16});
-  box(s,{x:170,y:520,w:940,h:70,text:'Pilot recommendation: MySect bills firms directly; firms collect customer payments directly. Add marketplace payouts only after legal, tax, KYC and dispute ownership are approved.',size:19,color:C.navy,bold:true,align:'center',valign:'middle',fill:'#FFF8E8',line:'#F4D79A',padding:12});
+  box(s,{x:170,y:520,w:940,h:70,text:'Pilot recommendation: MySect bills firms directly; firms collect customer payments directly. Add shared payment collection only after legal, tax, identity checks and dispute ownership are approved.',size:19,color:C.navy,bold:true,align:'center',valign:'middle',fill:'#FFF8E8',line:'#F4D79A',padding:12});
   notes(s,'Payment architecture: two independent billing ledgers and merchant relationships. Evaluate Stripe first for Malaysia, using recurring card billing for MySect firm subscriptions and one-off FPX/card checkout for secretary invoices. FPX is not recurring according to Stripe documentation. Sources: Stripe Malaysia pricing, Billing, FPX and Connect pages.');
 }
 
-// 8 budget and roadmap
+// 10 three-month MVP
 {
-  const s=base('Two-year plan: validate the workflow before scaling it');
-  box(s,{x:58,y:150,w:550,h:68,text:'Phase 1  |  0–3 months\nFoundation + customer/secretary MVP',size:20,color:C.white,bold:true,fill:C.blue,line:C.blue,padding:14});
-  box(s,{x:672,y:150,w:550,h:68,text:'Phase 2  |  4–6 months\nPilot with controlled secretary firms',size:20,color:C.white,bold:true,fill:C.teal,line:C.teal,padding:14});
-  box(s,{x:58,y:245,w:550,h:170,text:'• Auth, tenant model, cases\n• AI intake and escalation\n• TM Cloud storage + signed URLs\n• Secretary queue and human chat\n• Audit events and backups',size:18,color:C.ink,fill:C.pale,line:C.line,padding:14});
-  box(s,{x:672,y:245,w:550,h:170,text:'• Real client/firm onboarding\n• SLA, billing and notifications\n• Security testing and restore drills\n• Measure AI resolution and handoff\n• Refine packages and operations',size:18,color:C.ink,fill:'#F8FBFD',line:C.line,padding:14});
-  box(s,{x:58,y:470,w:1164,h:105,text:'Planning range for 24 months: RM1.68m–RM3.52m total. Biggest drivers are people, product scope, security/support, and operational scale—not AI tokens alone.',size:22,color:C.navy,bold:true,align:'center',valign:'middle',fill:'#FFF8E8',line:'#F4D79A',padding:15});
-  notes(s,'Budget is a planning range, not a vendor quotation. Detailed categories are in the PDF: product/engineering, Windows/VM, storage/backups, AI, security/legal, support, and contingency.');
+  const s=base('What we can realistically complete in 12 weeks');
+  box(s,{x:58,y:150,w:265,h:62,text:'Weeks 1–2\nConfirm and design',size:19,color:C.white,bold:true,align:'center',valign:'middle',fill:C.navy,line:C.navy,padding:10});
+  box(s,{x:345,y:150,w:265,h:62,text:'Weeks 3–6\nCustomer flow',size:19,color:C.white,bold:true,align:'center',valign:'middle',fill:C.blue,line:C.blue,padding:10});
+  box(s,{x:632,y:150,w:265,h:62,text:'Weeks 7–9\nSecretary operations',size:19,color:C.white,bold:true,align:'center',valign:'middle',fill:C.teal,line:C.teal,padding:10});
+  box(s,{x:919,y:150,w:265,h:62,text:'Weeks 10–12\nPilot readiness',size:19,color:C.white,bold:true,align:'center',valign:'middle',fill:C.navy,line:C.navy,padding:10});
+  const cols=[['• Freeze first service\n• Page checklist\n• Pilot firm\n• Data and access plan'],['• Sign-in and company setup\n• AI intake\n• Request status\n• Documents'],['• AI escalation queue\n• Human conversation\n• Information requests\n• Approvals'],['• Admin controls\n• Billing status\n• Backup test\n• Pilot training']];
+  [58,345,632,919].forEach((x,i)=>box(s,{x,y:245,w:265,h:180,text:cols[i],size:17,color:C.ink,fill:i%2? '#F8FBFD':C.pale,line:C.line,padding:14}));
+  box(s,{x:80,y:510,w:1120,h:76,text:'To meet three months, defer full statutory automation, complex marketplace payouts, the secretary mobile app, advanced analytics, and every possible service type.',size:20,color:C.navy,bold:true,align:'center',valign:'middle',fill:'#FFF8E8',line:'#F4D79A',padding:14});
+  notes(s,'Three-month target is an MVP and controlled pilot, not the complete long-term platform. Scope and sequencing are detailed in blueprint section 16.1.');
 }
 
-// 9 next steps
+// 11 next steps
 {
   const s=base('Management decisions required before UI design');
-  const items=['Confirm launch scope: company secretary services and first filing workflows','Confirm Secretary Firm commercial model, onboarding and revenue share','Confirm TM Cloud product, region, API, backup and retention terms','Approve pilot AI provider and data-processing review','Approve two-year budget envelope and first 90-day delivery team','Name the first pilot firm and 5–10 customer companies'];
+  const items=['Confirm launch scope: company secretary services and first workflow','Confirm Secretary Firm commercial model and pilot firm','Request TM Cloud quote for 100–500GB plus backups','Shortlist e-KYC provider and run 20–50 test checks','Approve pilot AI provider and data-processing review','Name the first 5–10 customer companies for testing'];
   items.forEach((t,i)=>{const y=145+i*64; box(s,{x:75,y,w:42,h:42,text:String(i+1),size:19,color:C.white,bold:true,align:'center',valign:'middle',fill:C.teal,line:C.teal}); box(s,{x:140,y:y-2,w:1040,h:45,text:t,size:20,color:C.ink,valign:'middle'});});
-  box(s,{x:75,y:565,w:1125,h:48,text:'Recommended next milestone: approve the blueprint, then write the MVP product requirements and data model before visual design.',size:19,color:C.navy,bold:true,align:'center',valign:'middle',fill:C.pale,line:C.line,padding:8});
+  box(s,{x:75,y:565,w:1125,h:48,text:'Recommended next milestone: approve the blueprint, then write the detailed feature and workflow plan before visual design.',size:19,color:C.navy,bold:true,align:'center',valign:'middle',fill:C.pale,line:C.line,padding:8});
   notes(s,'Close: the next deliverable after management approval should be the MVP product requirements, permission matrix, data model, and clickable role flows.');
 }
 
@@ -138,7 +163,7 @@ const candidatePath = path.join(TMP_DIR, 'candidate.pptx');
 await (await PresentationFile.exportPptx(presentation)).save(candidatePath);
 
 const requirements = {
-  explicitTotalSlideCount: 9,
+  explicitTotalSlideCount: 11,
   requiredNativeTableOwnerSlides: [],
   requiredNativeChartOwnerSlides: [],
   fontPolicy: { basis:'design', families:[family] },

@@ -150,6 +150,55 @@ The Admin website should contain:
 - Service catalogue.
 - Platform settings.
 
+### 3.4 Page inventory for the first release
+
+The following is the minimum page structure for the three products. These are product pages/screens, not necessarily separate technical applications.
+
+#### Customer mobile app
+
+- Welcome, sign in, registration, and password recovery.
+- Home: companies, open requests, pending approvals, and important reminders.
+- My Companies: company list and company profile.
+- Company Workspace: company details, people, documents, tasks, and service status.
+- Ask MySect: AI conversation for every new question or request.
+- Request Details: status, missing information, documents, history, and next action.
+- Documents: upload, view, version history, and document requests.
+- Approvals and Signatures: items waiting for approval, signed history, and rejection reason.
+- Notifications: reminders, requests for information, completed work, and payment notices.
+- Billing: secretary invoices, payment status, receipts, and service details when enabled.
+- Help and Profile: account details, company contacts, security, privacy, and support.
+
+#### Secretary Firm website
+
+- Sign in, password recovery, and staff access.
+- Dashboard: workload, urgent items, due dates, unpaid invoices, and service performance.
+- AI Escalations: new cases created by AI, with summary, category, urgency, and suggested next step.
+- Work Queue: assigned requests filtered by status, company, owner, and due date.
+- Companies: company list, onboarding, assignment, and company workspace.
+- Company Workspace: overview, directors, shareholders, documents, requests, approvals, filing tasks, and billing.
+- Human Conversation: secretary-controlled customer chat connected to a specific case.
+- Compliance Calendar: annual return, licence, renewal, resolution, and other tracked deadlines.
+- Templates and Documents: approved templates, document review, version history, and download controls.
+- Team: staff users, roles, workload, and assignment rules.
+- Reports: workload, turnaround time, completed work, outstanding items, and revenue summary.
+- Firm Settings: firm profile, licence information, service packages, payment settings, notifications, and security.
+
+#### MySect Admin website
+
+- Admin sign in and additional security verification.
+- Admin Dashboard: platform health, new firms, open escalations, payment exceptions, and support items.
+- Secretary Firms: onboarding, verification, licence records, staff, plans, and firm status.
+- Companies: all companies, ownership, assignment, transfer, and account status.
+- Users and Access: customers, secretary staff, admin staff, roles, and access history.
+- Plans and Subscriptions: plan catalogue, limits, trials, discounts, renewals, and suspensions.
+- Invoices and Payments: platform invoices, payment status, refunds, failed payments, and reconciliation.
+- Cases and Service Quality: escalations, response targets, complaints, disputes, and resolution history.
+- Audit and Security: sign-in history, file access, important changes, AI actions, and audit records.
+- Reports: active companies, firm performance, revenue, support volume, AI handoff rate, and storage usage.
+- System Settings: service categories, notification templates, AI rules, storage rules, and feature switches.
+
+For the three-month MVP, build only the pages required for sign-in, company setup, AI intake, the secretary work queue, human case handling, document exchange, approvals, notifications, basic billing status, and admin firm/company management. The remaining pages can follow after the pilot.
+
 ## 4. Communication and AI-first intake
 
 ### 4.1 Customer communication rule
@@ -460,7 +509,33 @@ References:
 
 The application should store original files in TM Cloud and document metadata in PostgreSQL.
 
-### 9.1 Upload pattern
+### 9.1 TM Cloud pricing: what is public and what is not
+
+TM One's current public Cloud Alpha pages describe pay-as-you-grow cloud services, local-currency billing, data residency, and managed support, but they do not publish a current line-item price for the exact Object Storage package MySect would buy. The final price must therefore come from a TM quotation after we specify capacity, performance, backups, support, network, and recovery requirements.
+
+There are two public reference points, but neither should be treated as the final MySect quote:
+
+1. An older Cloud Alpha VPC catalogue lists indicative storage rates of RM0.49 per GB/month for mid-performance SAS storage and RM2.20 per GB/month for high-performance SSD storage. This is a catalogue reference for VPC storage, not a confirmed current Object Storage price.
+2. TM/Unifi Cloud Storage publishes small-business plans such as 500GB at RM9/month for TM customers and RM10/month for non-TM customers, 1.5TB at RM31.50/RM35, 3TB at RM52/RM65, and 5TB at RM94.40/RM118. This is a file-storage subscription and should not be assumed to provide the production application storage, access controls, backup policy, or API contract that MySect needs.
+
+For early planning only, the older Cloud Alpha storage reference implies raw capacity scenarios of approximately:
+
+| Capacity | Mid-performance reference | High-performance reference |
+|---|---:|---:|
+| 100GB | RM49/month | RM220/month |
+| 500GB | RM245/month | RM1,100/month |
+| 1TB | RM490/month | RM2,200/month |
+
+These figures exclude the application server, database, backup copies, monitoring, security services, network, managed support, tax, and any minimum commitment. For a three-month MVP, request a TM quote for 100-500GB primary storage plus a separate backup allowance. Do not commit to the production storage design until TM confirms API access, encryption, Malaysia data location, versioning, lifecycle rules, restore process, availability commitment, and total monthly cost.
+
+References:
+
+- https://www.tmone.com.my/cloud-services/
+- https://www.tmone.com.my/cloud-services/cloud-infrastructure/
+- https://www.cloudalpha.com.my/wp-content/uploads/2024/02/Mampu-Catalalogue-VPC.pdf
+- https://biz.unifi.com.my/tncfaq/cloudstorage/FAQ_Unifi_Cloud_Storage.pdf
+
+### 9.2 Upload pattern
 
 ```text
 Client requests upload permission
@@ -652,7 +727,45 @@ Self-hosting an open-weight model inside the TM environment may improve control 
 
 Self-hosting is not automatically cheaper at pilot volume. It should be evaluated after the system has measured real usage or when the privacy requirement makes external APIs unsuitable.
 
-## 12. Subscription and revenue model
+## 12. e-KYC options and recommendation
+
+e-KYC means electronically checking that a person is who they claim to be. For MySect, it is mainly needed when onboarding a Secretary Firm, verifying firm staff, or verifying company directors before sensitive approvals. It should not be forced on every customer for ordinary sign-in.
+
+Publicly listed options to investigate:
+
+| Option | Public price reference | Why consider it | Main caution |
+|---|---:|---|---|
+| Epsilon ID V3 by LangitDigital | RM2.99 per full ID + face + liveness verification under 15,000/month; RM2.49 for volume above 15,000; no setup fee stated | Malaysia-focused; MyKad, MyPR, passport support; local technical contact | Confirm contract, data location, retention, SLA, and production support |
+| TrueIdentity by Truestack | RM8,000 one-time setup + RM3.50 per completed verification + RM4,000/year platform fee | Malaysia data residency and hosted verification flow are advertised; predictable formula | Higher fixed cost; verify coverage, legal basis, and exact verification result |
+| MasChain eKYC | RM3.50 for first 1-100 transactions, reducing to RM1.50 above 1,000 transactions for ID + face + liveness | Clear volume tiers and simple pilot calculation | Confirm Malaysian document coverage, support, privacy terms, and whether the quoted service fits company-secretary use |
+| Tekkis T-Verify | Public page shows RM1.50 per API call with RM500 first-time credit; custom volume pricing available | Malaysia-oriented flow and low pilot entry cost | Published page is older/staging; reconfirm current commercial terms |
+| Build or self-host | No vendor transaction fee, but requires identity technology, security, testing, and ongoing maintenance | Maximum control | Not recommended for a three-month MVP |
+
+Recommended decision for the three-month MVP:
+
+1. Use a hosted Malaysia-capable provider rather than building e-KYC ourselves.
+2. Shortlist Epsilon ID V3 and TrueIdentity first because their public information is Malaysia-oriented and includes the full ID, face, and liveness journey.
+3. Run a controlled proof with 20-50 test verifications using Malaysian identity documents and a small set of edge cases.
+4. Choose based on actual pass rate, false rejection, review process, data location, retention, audit export, support response, and final quote—not price alone.
+5. Store only the minimum result and audit reference in MySect; keep identity images with the provider unless retention is legally and operationally required.
+
+Illustrative pilot cost for 100 completed checks, excluding setup and tax:
+
+- Epsilon ID V3: approximately RM299 at the advertised standard tier.
+- TrueIdentity: approximately RM350 plus its setup and annual platform fees.
+- MasChain: approximately RM350 before volume-tier reductions.
+- Tekkis: approximately RM150 before any current plan conditions, with the stated first-time credit potentially reducing the initial bill.
+
+These are published vendor references, not confirmed quotations. e-KYC is a compliance decision as well as a technical purchase; the company-secretary domain expert and legal adviser should approve the identity data, consent wording, retention period, and use of facial information.
+
+References:
+
+- https://langitdigital.my/products/epsilon
+- https://www.truestack.my/trueidentity
+- https://docs.maschain.com/services/ekyc/pricing
+- https://staging.tekkis.com.my/pricing/tverify
+
+## 13. Subscription and revenue model
 
 ### 12.1 Customer
 
@@ -751,7 +864,7 @@ Possible additional revenue:
 
 For the initial pilot, use a simple secretary-firm subscription and avoid adding commission until the operational workflow is proven.
 
-## 13. Two-year planning budget
+## 14. Optional long-range planning context
 
 Assumptions:
 
@@ -772,11 +885,9 @@ Assumptions:
 | Security, legal, and compliance | RM80k-RM200k |
 | Customer and technical support | RM150k-RM360k |
 | Contingency | RM150k-RM300k |
-| **Total planning range** | **RM1.68m-RM3.52m** |
+This is an early planning reference only, not a requested approval total or vendor quotation. For the current decision, prioritise the three-month MVP scope and obtain actual quotes for AI, e-KYC, TM Cloud, payment processing, and implementation resources.
 
-A lean pilot may cost less if the existing team provides engineering capacity and the first release delays AI, marketplace payments, mobile secretary features, and advanced SSM integration.
-
-## 14. Team and responsibilities
+## 15. Team and responsibilities
 
 Recommended core team:
 
@@ -793,7 +904,56 @@ Recommended core team:
 
 The domain expert is essential. The team should not design statutory workflows only from screenshots or competitor pages.
 
-## 15. Implementation roadmap
+## 16. Implementation roadmap
+
+### 16.1 Three-month MVP target
+
+Finishing a usable first release in three months is possible only if the scope is an MVP and the team works in parallel. It is not realistic to complete every company-secretary feature, full statutory filing automation, marketplace payouts, and advanced reporting in the same period.
+
+#### Weeks 1-2: confirm and design
+
+- Freeze the first service workflow and the first customer type.
+- Confirm the page inventory and permission matrix.
+- Confirm the Secretary Firm pilot and 5-10 customer companies.
+- Confirm TM Cloud quotation request and e-KYC shortlist.
+- Finalise database, company, case, document, and subscription records.
+- Produce clickable role flows before detailed visual design.
+
+#### Weeks 3-6: build the foundation and customer flow
+
+- Authentication and role access.
+- Customer company setup.
+- AI intake with structured questions.
+- Case creation and secretary notification.
+- Document upload and controlled download.
+- Basic customer request status.
+- Initial TM Cloud storage adapter.
+- Initial e-KYC provider proof of concept.
+
+#### Weeks 7-9: build secretary operations
+
+- Secretary dashboard.
+- AI Escalations and Work Queue.
+- Case ownership and status changes.
+- Secretary-controlled human conversation.
+- Customer information requests.
+- Approval and signature status.
+- Notifications and audit history.
+
+#### Weeks 10-12: build admin controls and pilot readiness
+
+- Admin firm and company management.
+- Basic plan and subscription records.
+- Platform invoice status.
+- Support and escalation view.
+- Backup and restore test.
+- Security and permission test.
+- Pilot training, data setup, and acceptance testing.
+
+Three-month release boundary:
+
+- Included: one main customer workflow, AI intake, secretary case handling, document exchange, basic approvals, basic admin controls, and provider integrations sufficient for a pilot.
+- Deferred: full statutory register suite, automated SSM submission, complex marketplace payouts, secretary mobile app, advanced analytics, self-hosted AI, and every possible service type.
 
 ### Phase 0: Business and compliance validation
 
@@ -916,7 +1076,7 @@ Use year two for:
 - SSM integration only after confirmation.
 - Security testing and independent review.
 
-## 16. Launch gates
+## 17. Launch gates
 
 MySect should not be called production-ready until:
 
