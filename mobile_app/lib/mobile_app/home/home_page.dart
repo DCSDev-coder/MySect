@@ -392,7 +392,10 @@ class _HomePageState extends State<HomePage> {
                     if (_selectedCompany == 'Test Enterprise') {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: Text('Notifications are unavailable to view.', style: GoogleFonts.poppins(color: Colors.white)),
+                          content: Text(
+                            'Notifications are unavailable to view.',
+                            style: GoogleFonts.poppins(color: Colors.white),
+                          ),
                           backgroundColor: Colors.red,
                           duration: const Duration(seconds: 2),
                         ),
@@ -416,335 +419,347 @@ class _HomePageState extends State<HomePage> {
               child: SingleChildScrollView(
                 physics: const AlwaysScrollableScrollPhysics(),
                 child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16.0,
-                      vertical: 8.0,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Good Morning,',
-                          style: GoogleFonts.poppins(
-                            fontSize: 16,
-                            color: Colors.black,
-                          ),
-                        ),
-                        Theme(
-                          data: Theme.of(context).copyWith(
-                            hoverColor: Colors.transparent,
-                            focusColor: Colors.transparent,
-                            splashColor: Colors.transparent,
-                            highlightColor: Colors.transparent,
-                          ),
-                          child: PopupMenuButton<String>(
-                            color: Colors.white,
-                            surfaceTintColor: Colors.white,
-                            onSelected: (String newValue) {
-                              setState(() {
-                                _selectedCompany = newValue;
-                                _isDropdownOpen = false;
-                              });
-                            },
-                            onOpened: () {
-                              setState(() {
-                                _isDropdownOpen = true;
-                              });
-                            },
-                            onCanceled: () {
-                              setState(() {
-                                _isDropdownOpen = false;
-                              });
-                            },
-                            offset: const Offset(0, 30),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Flexible(
-                                  child: Text(
-                                    _selectedCompany,
-                                    style: GoogleFonts.poppins(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w700,
-                                      color: Colors.black,
-                                    ),
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-                                AnimatedRotation(
-                                  turns: _isDropdownOpen ? 0.25 : 0.0,
-                                  duration: const Duration(milliseconds: 200),
-                                  child: const Icon(
-                                    Icons.chevron_right,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            itemBuilder: (BuildContext context) {
-                              return _companies.map((String value) {
-                                return PopupMenuItem<String>(
-                                  value: value,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Expanded(
-                                        child: Text(
-                                          value,
-                                          style: GoogleFonts.poppins(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w500,
-                                            color: value == 'Test Enterprise' ? Colors.grey : Colors.black,
-                                          ),
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ),
-                                      if (value == 'Test Enterprise')
-                                        const Icon(Icons.lock, size: 18, color: Colors.grey),
-                                    ],
-                                  ),
-                                );
-                              }).toList();
-                            },
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          'Financial Year 2026',
-                          style: GoogleFonts.poppins(
-                            fontSize: 14,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  if (_selectedCompany == 'Test Enterprise')
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
                     Padding(
-                      padding: const EdgeInsets.only(top: 80.0),
-                      child: Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.asset('assets/locked_icon.png', height: 250),
-                            const SizedBox(height: 16),
-                            Text(
-                              'Company Locked',
-                              style: GoogleFonts.poppins(
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              'You do not have access to this company.',
-                              style: GoogleFonts.poppins(
-                                fontSize: 16,
-                                color: Colors.grey,
-                              ),
-                            ),
-                          ],
-                        ),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16.0,
+                        vertical: 8.0,
                       ),
-                    )
-                  else ...[
-                    const SizedBox(height: 24),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: Text(
-                        'UPCOMING DATELINE',
-                        style: GoogleFonts.poppins(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
-                  const SizedBox(height: 16),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey.shade300),
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: TableCalendar(
-                        firstDay: DateTime.utc(2020, 10, 16),
-                        lastDay: DateTime.utc(2030, 3, 14),
-                        focusedDay: _focusedDay,
-                        selectedDayPredicate: (day) {
-                          return isSameDay(_selectedDay, day);
-                        },
-                        onDaySelected: (selectedDay, focusedDay) {
-                          setState(() {
-                            _selectedDay = selectedDay;
-                            _focusedDay = focusedDay;
-                          });
-                        },
-                        eventLoader: _getEventsForDay,
-                        calendarFormat: CalendarFormat.month,
-                        headerStyle: const HeaderStyle(
-                          formatButtonVisible: false,
-                          titleCentered: true,
-                        ),
-                        calendarBuilders: CalendarBuilders(
-                          markerBuilder: (context, date, events) {
-                            if (events.isNotEmpty) {
-                              return Positioned(
-                                right: 6,
-                                top: 6,
-                                child: Container(
-                                  width: 8,
-                                  height: 8,
-                                  decoration: const BoxDecoration(
-                                    color: Color(0xFFD71920),
-                                    shape: BoxShape.circle,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.black26,
-                                        blurRadius: 2,
-                                        offset: Offset(0, 1),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            }
-                            return null;
-                          },
-                        ),
-                        calendarStyle: const CalendarStyle(
-                          selectedDecoration: BoxDecoration(
-                            color: Color(0xFF062AAE),
-                            shape: BoxShape.circle,
-                          ),
-                          todayDecoration: BoxDecoration(
-                            color: Colors.black26,
-                            shape: BoxShape.circle,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  if (_selectedDay != null)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Tasks for ${DateFormat.yMMMd().format(_selectedDay!)}',
+                            'Good Morning,',
                             style: GoogleFonts.poppins(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
                               color: Colors.black,
                             ),
                           ),
-                          const SizedBox(height: 16),
-                          if (_getEventsForDay(_selectedDay!).isEmpty)
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 16.0),
-                              child: Text(
-                                'No tasks scheduled for this day',
-                                style: GoogleFonts.poppins(
-                                  color: Colors.grey.shade500,
-                                  fontStyle: FontStyle.italic,
-                                ),
-                              ),
-                            )
-                          else
-                            ..._getEventsForDay(_selectedDay!).map((event) {
-                              return Padding(
-                                padding: const EdgeInsets.only(bottom: 16.0),
-                                child: _buildDeadlineCard(
-                                  month: event['month'],
-                                  day: event['day'],
-                                  title: event['title'],
-                                  subtitle: event['subtitle'],
-                                  timeRemaining: event['timeRemaining'],
-                                  pillBgColor:
-                                      event['pillBgColor'] ??
-                                      const Color(0xFFFFF7A3),
-                                  pillTextColor:
-                                      event['pillTextColor'] ??
-                                      const Color(0xFFFF8A00),
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            const DocumentNeededPage(),
+                          Theme(
+                            data: Theme.of(context).copyWith(
+                              hoverColor: Colors.transparent,
+                              focusColor: Colors.transparent,
+                              splashColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
+                            ),
+                            child: PopupMenuButton<String>(
+                              color: Colors.white,
+                              surfaceTintColor: Colors.white,
+                              onSelected: (String newValue) {
+                                setState(() {
+                                  _selectedCompany = newValue;
+                                  _isDropdownOpen = false;
+                                });
+                              },
+                              onOpened: () {
+                                setState(() {
+                                  _isDropdownOpen = true;
+                                });
+                              },
+                              onCanceled: () {
+                                setState(() {
+                                  _isDropdownOpen = false;
+                                });
+                              },
+                              offset: const Offset(0, 30),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Flexible(
+                                    child: Text(
+                                      _selectedCompany,
+                                      style: GoogleFonts.poppins(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w700,
+                                        color: Colors.black,
                                       ),
-                                    );
-                                  },
-                                ),
-                              );
-                            }),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                  AnimatedRotation(
+                                    turns: _isDropdownOpen ? 0.25 : 0.0,
+                                    duration: const Duration(milliseconds: 200),
+                                    child: const Icon(
+                                      Icons.chevron_right,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              itemBuilder: (BuildContext context) {
+                                return _companies.map((String value) {
+                                  return PopupMenuItem<String>(
+                                    value: value,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Expanded(
+                                          child: Text(
+                                            value,
+                                            style: GoogleFonts.poppins(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w500,
+                                              color: value == 'Test Enterprise'
+                                                  ? Colors.grey
+                                                  : Colors.black,
+                                            ),
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                        if (value == 'Test Enterprise')
+                                          const Icon(
+                                            Icons.lock,
+                                            size: 18,
+                                            color: Colors.grey,
+                                          ),
+                                      ],
+                                    ),
+                                  );
+                                }).toList();
+                              },
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            'Financial Year 2026',
+                            style: GoogleFonts.poppins(
+                              fontSize: 14,
+                              color: Colors.black,
+                            ),
+                          ),
                         ],
                       ),
                     ),
-                  const SizedBox(height: 24),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Text(
-                      'REQUIRED TASKS',
-                      style: GoogleFonts.poppins(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  _buildTaskCard(
-                    number: '$documentsNeededCount',
-                    color: Colors.blue.shade700,
-                    title: 'Document Needed',
-                    subtitle: 'Actions required to file returns',
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const DocumentNeededPage(),
+                    if (_selectedCompany == 'Test Enterprise')
+                      Padding(
+                        padding: const EdgeInsets.only(top: 80.0),
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset(
+                                'assets/locked_icon.png',
+                                height: 250,
+                              ),
+                              const SizedBox(height: 16),
+                              Text(
+                                'Company Locked',
+                                style: GoogleFonts.poppins(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                'You do not have access to this company.',
+                                style: GoogleFonts.poppins(
+                                  fontSize: 16,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      );
-                    },
-                  ),
-                  _buildTaskCard(
-                    number: '$replyNeededCount',
-                    color: Colors.red.shade400,
-                    title: 'Replies Needed',
-                    subtitle: 'Clarifications with secretary',
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const RepliesNeededPage(),
+                      )
+                    else ...[
+                      const SizedBox(height: 24),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: Text(
+                          'UPCOMING DATELINE',
+                          style: GoogleFonts.poppins(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
                         ),
-                      );
-                    },
-                  ),
-                  const SizedBox(height: 32),
-                  Center(
-                    child: Text(
-                      'NO PENDING TASK',
-                      style: GoogleFonts.poppins(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey.shade400,
                       ),
-                    ),
-                  ),
-                  const SizedBox(height: 40),
+                      const SizedBox(height: 16),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey.shade300),
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: TableCalendar(
+                            firstDay: DateTime.utc(2020, 10, 16),
+                            lastDay: DateTime.utc(2030, 3, 14),
+                            focusedDay: _focusedDay,
+                            selectedDayPredicate: (day) {
+                              return isSameDay(_selectedDay, day);
+                            },
+                            onDaySelected: (selectedDay, focusedDay) {
+                              setState(() {
+                                _selectedDay = selectedDay;
+                                _focusedDay = focusedDay;
+                              });
+                            },
+                            eventLoader: _getEventsForDay,
+                            calendarFormat: CalendarFormat.month,
+                            headerStyle: const HeaderStyle(
+                              formatButtonVisible: false,
+                              titleCentered: true,
+                            ),
+                            calendarBuilders: CalendarBuilders(
+                              markerBuilder: (context, date, events) {
+                                if (events.isNotEmpty) {
+                                  return Positioned(
+                                    right: 6,
+                                    top: 6,
+                                    child: Container(
+                                      width: 8,
+                                      height: 8,
+                                      decoration: const BoxDecoration(
+                                        color: Color(0xFFD71920),
+                                        shape: BoxShape.circle,
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.black26,
+                                            blurRadius: 2,
+                                            offset: Offset(0, 1),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                }
+                                return null;
+                              },
+                            ),
+                            calendarStyle: const CalendarStyle(
+                              selectedDecoration: BoxDecoration(
+                                color: Color(0xFF062AAE),
+                                shape: BoxShape.circle,
+                              ),
+                              todayDecoration: BoxDecoration(
+                                color: Colors.black26,
+                                shape: BoxShape.circle,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      if (_selectedDay != null)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Tasks for ${DateFormat.yMMMd().format(_selectedDay!)}',
+                                style: GoogleFonts.poppins(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              const SizedBox(height: 16),
+                              if (_getEventsForDay(_selectedDay!).isEmpty)
+                                Padding(
+                                  padding: const EdgeInsets.only(bottom: 16.0),
+                                  child: Text(
+                                    'No tasks scheduled for this day',
+                                    style: GoogleFonts.poppins(
+                                      color: Colors.grey.shade500,
+                                      fontStyle: FontStyle.italic,
+                                    ),
+                                  ),
+                                )
+                              else
+                                ..._getEventsForDay(_selectedDay!).map((event) {
+                                  return Padding(
+                                    padding: const EdgeInsets.only(
+                                      bottom: 16.0,
+                                    ),
+                                    child: _buildDeadlineCard(
+                                      month: event['month'],
+                                      day: event['day'],
+                                      title: event['title'],
+                                      subtitle: event['subtitle'],
+                                      timeRemaining: event['timeRemaining'],
+                                      pillBgColor:
+                                          event['pillBgColor'] ??
+                                          const Color(0xFFFFF7A3),
+                                      pillTextColor:
+                                          event['pillTextColor'] ??
+                                          const Color(0xFFFF8A00),
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                const DocumentNeededPage(),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  );
+                                }),
+                            ],
+                          ),
+                        ),
+                      const SizedBox(height: 24),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: Text(
+                          'REQUIRED TASKS',
+                          style: GoogleFonts.poppins(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      _buildTaskCard(
+                        number: '$documentsNeededCount',
+                        color: Colors.blue.shade700,
+                        title: 'Document Needed',
+                        subtitle: 'Actions required to file returns',
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const DocumentNeededPage(),
+                            ),
+                          );
+                        },
+                      ),
+                      _buildTaskCard(
+                        number: '$replyNeededCount',
+                        color: Colors.red.shade400,
+                        title: 'Replies Needed',
+                        subtitle: 'Clarifications with secretary',
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const RepliesNeededPage(),
+                            ),
+                          );
+                        },
+                      ),
+                      const SizedBox(height: 32),
+                      Center(
+                        child: Text(
+                          'NO PENDING TASK',
+                          style: GoogleFonts.poppins(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.grey.shade400,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 40),
+                    ],
                   ],
-                ],
+                ),
               ),
-            ),
             ),
           ),
         ],
@@ -762,7 +777,11 @@ class _HomePageState extends State<HomePage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(left: 16.0, top: 8.0, right: 16.0),
+                    padding: const EdgeInsets.only(
+                      left: 16.0,
+                      top: 8.0,
+                      right: 16.0,
+                    ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -781,7 +800,12 @@ class _HomePageState extends State<HomePage> {
                             if (_selectedCompany == 'Test Enterprise') {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
-                                  content: Text('Notifications are unavailable to view.', style: GoogleFonts.poppins(color: Colors.white)),
+                                  content: Text(
+                                    'Notifications are unavailable to view.',
+                                    style: GoogleFonts.poppins(
+                                      color: Colors.white,
+                                    ),
+                                  ),
                                   backgroundColor: Colors.red,
                                   duration: const Duration(seconds: 2),
                                 ),

@@ -1,9 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../notifications/notifications_page.dart';
+import '../home/home_page.dart';
+import '../widgets/custom_bottom_nav_bar.dart';
 
-class CompanySharesPage extends StatelessWidget {
+class CompanySharesPage extends StatefulWidget {
   const CompanySharesPage({super.key});
+
+  @override
+  State<CompanySharesPage> createState() => _CompanySharesPageState();
+}
+
+class _CompanySharesPageState extends State<CompanySharesPage> {
+  final int _selectedIndex = 4;
+  String _selectedCurrency = 'MYR';
+
+  void _onItemTapped(int index) {
+    if (index == _selectedIndex) return;
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (context) => HomePage(initialIndex: index)),
+      (route) => false,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,6 +83,19 @@ class CompanySharesPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: _buildDropdown(
+                  value: _selectedCurrency,
+                  items: ['SGD', 'MYR', 'USD'],
+                  onChanged: (v) =>
+                      setState(() => _selectedCurrency = v!),
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -76,7 +107,7 @@ class CompanySharesPage extends StatelessWidget {
                     _buildShareholderCard(
                       shareholder: 'Adam Bin Hamzah',
                       type: 'Ordinary',
-                      currency: 'SGD',
+                      currency: _selectedCurrency,
                       numberOfShares: '5,000',
                       totalShares: '10,000',
                     ),
@@ -84,7 +115,7 @@ class CompanySharesPage extends StatelessWidget {
                     _buildShareholderCard(
                       shareholder: 'Eidza Binti Jumanis',
                       type: 'Ordinary',
-                      currency: 'SGD',
+                      currency: _selectedCurrency,
                       numberOfShares: '5,000',
                       totalShares: '10,000',
                     ),
@@ -95,6 +126,47 @@ class CompanySharesPage extends StatelessWidget {
               ),
             ),
           ],
+        ),
+      ),
+      bottomNavigationBar: CustomBottomNavBar(
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
+      ),
+    );
+  }
+
+  Widget _buildDropdown({
+    required String value,
+    required List<String> items,
+    required ValueChanged<String?> onChanged,
+  }) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton<String>(
+          value: value,
+          icon: const Icon(Icons.keyboard_arrow_down, color: Colors.black),
+          isDense: true,
+          style: GoogleFonts.poppins(
+            color: Colors.black,
+            fontWeight: FontWeight.w600,
+            fontSize: 14,
+          ),
+          onChanged: onChanged,
+          items: items.map<DropdownMenuItem<String>>((String item) {
+            return DropdownMenuItem<String>(value: item, child: Text(item));
+          }).toList(),
         ),
       ),
     );
