@@ -1,93 +1,100 @@
 import React from 'react';
 import { 
-  LayoutDashboard, Building2, ClipboardList, Clock, 
-  FileText, Hammer, Calendar, Users, Search, ChevronDown 
+  LayoutDashboard, Building2, Users, AlertCircle, 
+  Settings
 } from 'lucide-react';
 import mysectLogo from '../assets/mysect_main_logo.png';
 
-const Sidebar = ({ activePage, setActivePage }) => {
+const Sidebar = ({ 
+  activePage, 
+  setActivePage,
+  pendingFirmsCount = 0,
+  urgentItemsCount = 0,
+}) => {
   const menuItems = [
-    { name: 'Dashboard', icon: LayoutDashboard },
-    { name: 'Companies', icon: Building2 },
-    { name: 'Tasks', icon: ClipboardList },
-    { name: 'Deadlines', icon: Clock },
+    { 
+      id: 'Overview', 
+      label: 'Overview', 
+      icon: LayoutDashboard 
+    },
+    { 
+      id: 'Firms', 
+      label: 'Secretary Firms', 
+      icon: Building2,
+      badge: pendingFirmsCount > 0 ? pendingFirmsCount : null,
+      badgeColor: 'bg-amber-100 text-amber-800'
+    },
+    { 
+      id: 'Companies', 
+      label: 'Companies', 
+      icon: Users 
+    },
+    { 
+      id: 'Operations', 
+      label: 'Operations & Issues', 
+      icon: AlertCircle,
+      badge: urgentItemsCount > 0 ? urgentItemsCount : null,
+      badgeColor: 'bg-rose-100 text-rose-800'
+    },
+    { 
+      id: 'Settings', 
+      label: 'Plans & Settings', 
+      icon: Settings 
+    },
   ];
 
   return (
-    <div className="w-64 bg-white border-r border-gray-200 h-screen flex flex-col flex-shrink-0">
-      <div className="p-6">
-        <img src={mysectLogo} alt="mysect" className="h-8 w-auto object-contain" />
-      </div>
-      
-      <div className="px-4 mb-6">
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-          <input 
-            type="text" 
-            placeholder="Search..." 
-            className="w-full pl-9 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#062AAE]"
-          />
+    <div className="w-64 bg-white border-r border-gray-200 h-screen flex flex-col shrink-0 select-none">
+      {/* Brand Header */}
+      <div className="p-6 border-b border-gray-100">
+        <div className="flex items-center gap-2.5">
+          <img src={mysectLogo} alt="MySect" className="h-7 w-auto object-contain" />
+          <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 bg-gray-100 text-gray-700 rounded-md">
+            Admin
+          </span>
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto px-3">
-        <div className="mb-6">
-          <p className="px-3 text-xs font-semibold text-gray-400 tracking-wider mb-2">OPERATIONS</p>
-          <nav className="space-y-1">
-            {menuItems.map((item) => {
-              const isActive = activePage === item.name;
-              return (
-                <button
-                  key={item.name}
-                  onClick={() => setActivePage(item.name)}
-                  className={`w-full flex items-center px-3 py-2.5 rounded-lg font-medium transition-colors ${
-                    isActive 
-                      ? 'bg-gray-50 text-[#062AAE]' 
-                      : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
-                  }`}
-                >
-                  <item.icon className={`w-5 h-5 mr-3 ${isActive ? 'text-[#062AAE]' : 'text-gray-700'}`} />
-                  {item.name}
-                  {isActive && <div className="ml-auto w-1.5 h-1.5 rounded-full bg-[#062AAE]"></div>}
-                </button>
-              );
-            })}
-          </nav>
-        </div>
-
-        <div>
-          <p className="px-3 text-xs font-semibold text-gray-400 tracking-wider mb-2">MORE FEATURES</p>
-          <nav className="space-y-1">
-            <a href="#" className="flex items-center px-3 py-2.5 text-gray-400 hover:text-gray-600 rounded-lg font-medium transition-colors">
-              <FileText className="w-5 h-5 mr-3" />
-              Documents
-            </a>
-            <a href="#" className="flex items-center px-3 py-2.5 text-gray-400 hover:text-gray-600 rounded-lg font-medium transition-colors">
-              <Hammer className="w-5 h-5 mr-3" />
-              Resolutions
-            </a>
-            <a href="#" className="flex items-center px-3 py-2.5 text-gray-400 hover:text-gray-600 rounded-lg font-medium transition-colors">
-              <Calendar className="w-5 h-5 mr-3" />
-              Meetings
-            </a>
-            <a href="#" className="flex items-center px-3 py-2.5 text-gray-400 hover:text-gray-600 rounded-lg font-medium transition-colors">
-              <Users className="w-5 h-5 mr-3" />
-              Team
-            </a>
-          </nav>
-        </div>
+      {/* Clean 5-Item Navigation */}
+      <div className="flex-1 px-3 py-6 space-y-1">
+        {menuItems.map((item) => {
+          const isActive = activePage === item.id;
+          return (
+            <button
+              key={item.id}
+              onClick={() => setActivePage(item.id)}
+              className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all ${
+                isActive 
+                  ? 'bg-[#062AAE] text-white shadow-xs' 
+                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+              }`}
+            >
+              <div className="flex items-center gap-3">
+                <item.icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-gray-400'}`} />
+                <span>{item.label}</span>
+              </div>
+              {item.badge && (
+                <span className={`px-2 py-0.5 text-xs font-bold rounded-full ${
+                  isActive ? 'bg-white/20 text-white' : item.badgeColor
+                }`}>
+                  {item.badge}
+                </span>
+              )}
+            </button>
+          );
+        })}
       </div>
 
-      <div className="p-4 border-t border-gray-200">
-        <div className="flex items-center cursor-pointer hover:bg-gray-50 p-2 rounded-lg transition-colors">
-          <div className="w-9 h-9 rounded-full bg-[#062AAE] text-white flex items-center justify-center font-semibold text-sm">
-            SA
+      {/* Operator Profile Footer */}
+      <div className="p-4 border-t border-gray-100">
+        <div className="flex items-center gap-3 p-2 rounded-xl bg-gray-50">
+          <div className="w-8 h-8 rounded-full bg-[#062AAE] text-white flex items-center justify-center font-bold text-xs shrink-0">
+            HQ
           </div>
-          <div className="ml-3 flex-1 overflow-hidden">
-            <p className="text-sm font-semibold text-gray-900 truncate">Sarah Ahmad</p>
-            <p className="text-xs text-gray-500 truncate">Data Center Specialists Sdn...</p>
+          <div className="flex-1 overflow-hidden">
+            <p className="text-xs font-semibold text-gray-900 truncate">Platform Moderator</p>
+            <p className="text-[11px] text-gray-500 truncate">admin@mysect.com.my</p>
           </div>
-          <ChevronDown className="w-4 h-4 text-gray-400 ml-1" />
         </div>
       </div>
     </div>
