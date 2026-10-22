@@ -2,11 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../notifications/notifications_page.dart';
 
+import '../services/company_service.dart';
+
 class CompanyDocumentsPage extends StatelessWidget {
   const CompanyDocumentsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final company = CompanyService.instance.selectedCompany;
+    final docs = (company?.statutoryDocuments != null && company!.statutoryDocuments.isNotEmpty)
+        ? company.statutoryDocuments.map((d) => d['title']?.toString() ?? 'Statutory Document').toList()
+        : [
+            'Company Constitution (M&AA)',
+            'SSM Section 14 Certificate of Incorporation',
+            'SSM Corporate Profile (e-Info)',
+            'Section 58 Notice of Appointment of Secretary',
+            'Share Certificates Register',
+            'First Board Resolution',
+          ];
+
     return Scaffold(
       backgroundColor: const Color(0xFFFAFAFA),
       body: SafeArea(
@@ -53,12 +67,29 @@ class CompanyDocumentsPage extends StatelessWidget {
                     constraints: const BoxConstraints(),
                   ),
                   const SizedBox(width: 16),
-                  Text(
-                    'Documents',
-                    style: GoogleFonts.poppins(
-                      color: Colors.black,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Documents',
+                          style: GoogleFonts.poppins(
+                            color: Colors.black,
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        if (company != null)
+                          Text(
+                            company.name,
+                            style: GoogleFonts.poppins(
+                              color: Colors.grey.shade600,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                      ],
                     ),
                   ),
                 ],
@@ -71,18 +102,11 @@ class CompanyDocumentsPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(height: 32),
-
-                    _buildDocumentItem('Company Constitution (M&AA)'),
                     const SizedBox(height: 16),
-                    _buildDocumentItem('Certificate of Incorporation'),
-                    const SizedBox(height: 16),
-                    _buildDocumentItem('ACRA BizFile (Business Profile)'),
-                    const SizedBox(height: 16),
-                    _buildDocumentItem('Share Certificates'),
-                    const SizedBox(height: 16),
-                    _buildDocumentItem('First Board Resolution'),
-
+                    ...docs.map((docTitle) => Padding(
+                          padding: const EdgeInsets.only(bottom: 16),
+                          child: _buildDocumentItem(docTitle),
+                        )),
                     const SizedBox(height: 40),
                   ],
                 ),

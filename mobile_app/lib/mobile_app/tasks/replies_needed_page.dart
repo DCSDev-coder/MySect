@@ -3,14 +3,18 @@ import 'package:google_fonts/google_fonts.dart';
 import '../notifications/notifications_page.dart';
 import '../home/home_page.dart';
 import '../widgets/custom_bottom_nav_bar.dart';
-import 'package:intl/intl.dart';
-import '../transactions/transaction_data.dart';
+import '../models/ssm_filing_model.dart';
+import '../services/ssm_filing_service.dart';
+import '../transactions/ssm_filing_detail_page.dart';
 
 class RepliesNeededPage extends StatelessWidget {
   const RepliesNeededPage({super.key});
 
   void _onItemTapped(BuildContext context, int index) {
-    if (index == 0) return;
+    if (index == 0) {
+      Navigator.pop(context);
+      return;
+    }
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(builder: (context) => HomePage(initialIndex: index)),
       (route) => false,
@@ -19,281 +23,295 @@ class RepliesNeededPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFFAFAFA),
-      body: SafeArea(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 16.0, top: 8.0, right: 16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Image.asset(
-                    'assets/mysect_logo.png',
-                    width: 110,
-                    fit: BoxFit.contain,
-                  ),
-                  IconButton(
-                    icon: const Icon(
-                      Icons.notifications_none,
-                      color: Colors.black,
-                      size: 24,
-                    ),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const NotificationsPage(),
-                        ),
-                      );
-                    },
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      left: 16.0,
-                      right: 16.0,
-                      top: 16.0,
-                      bottom: 8.0,
-                    ),
-                    child: Row(
-                      children: [
-                        IconButton(
-                          icon: const Icon(
-                            Icons.arrow_back_ios,
-                            color: Colors.black,
-                            size: 20,
-                          ),
-                          onPressed: () => Navigator.pop(context),
-                          padding: EdgeInsets.zero,
-                          constraints: const BoxConstraints(),
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          'Replies Needed',
-                          style: GoogleFonts.poppins(
-                            color: Colors.black,
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    child: ListView(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 8,
+    return AnimatedBuilder(
+      animation: SsmFilingService.instance,
+      builder: (context, _) {
+        final filingsNeedingReply = SsmFilingService.instance.filings
+            .where((f) => f.status == SsmFilingStatus.secretaryReplied)
+            .toList();
+
+        return Scaffold(
+          backgroundColor: const Color(0xFFF8FAFC),
+          body: SafeArea(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 16.0, top: 8.0, right: 16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Image.asset(
+                        'assets/mysect_logo.png',
+                        width: 110,
+                        fit: BoxFit.contain,
                       ),
-                      children: [
-                        ...allTransactions.where((t) => t.replyNeeded).map((
-                          transaction,
-                        ) {
-                          return _ReplyItemWidget(
-                            title: transaction.title,
-                            subtitle: 'Please clarify this transaction.',
-                            sender: 'Corporate Secretary',
-                            time:
-                                'Due: ${DateFormat('dd MMM yyyy').format(transaction.date)}',
+                      IconButton(
+                        icon: const Icon(
+                          Icons.notifications_none,
+                          color: Colors.black87,
+                          size: 24,
+                        ),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const NotificationsPage(),
+                            ),
                           );
-                        }),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-      bottomNavigationBar: CustomBottomNavBar(
-        currentIndex: 0,
-        onTap: (index) => _onItemTapped(context, index),
-      ),
-    );
-  }
-}
-
-class _ReplyItemWidget extends StatefulWidget {
-  final String title;
-  final String subtitle;
-  final String sender;
-  final String time;
-
-  const _ReplyItemWidget({
-    required this.title,
-    required this.subtitle,
-    required this.sender,
-    required this.time,
-  });
-
-  @override
-  State<_ReplyItemWidget> createState() => _ReplyItemWidgetState();
-}
-
-class _ReplyItemWidgetState extends State<_ReplyItemWidget> {
-  bool _isReplying = false;
-  final TextEditingController _controller = TextEditingController();
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  void _sendReply() {
-    if (_controller.text.trim().isEmpty) return;
-    setState(() {
-      _isReplying = false;
-      _controller.clear();
-    });
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          'Reply sent!',
-          style: GoogleFonts.poppins(color: Colors.white),
-        ),
-        backgroundColor: Colors.green,
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 16),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.grey.shade300),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: Colors.red.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: const Icon(
-                  Icons.question_answer_outlined,
-                  color: Colors.red,
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      widget.title,
-                      style: GoogleFonts.poppins(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
+                        },
                       ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      'From: ${widget.sender}',
-                      style: GoogleFonts.poppins(
-                        fontSize: 12,
-                        color: Colors.grey.shade600,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          Text(
-            widget.subtitle,
-            style: GoogleFonts.poppins(fontSize: 13, color: Colors.black87),
-          ),
-          const SizedBox(height: 16),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                widget.time,
-                style: GoogleFonts.poppins(
-                  fontSize: 12,
-                  color: Colors.grey.shade500,
-                ),
-              ),
-              if (!_isReplying)
-                ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      _isReplying = true;
-                    });
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF062AAE),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  child: Text(
-                    'Reply',
-                    style: GoogleFonts.poppins(
-                      color: Colors.white,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                    ),
+                    ],
                   ),
                 ),
-            ],
-          ),
-          if (_isReplying) ...[
-            const SizedBox(height: 16),
-            Container(
-              padding: const EdgeInsets.only(left: 12),
-              decoration: BoxDecoration(
-                color: Colors.grey.shade100,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: _controller,
-                      decoration: InputDecoration(
-                        hintText: 'Type your reply...',
-                        hintStyle: GoogleFonts.poppins(
-                          color: Colors.grey,
-                          fontSize: 13,
+                Expanded(
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          left: 16.0,
+                          right: 16.0,
+                          top: 16.0,
+                          bottom: 12.0,
                         ),
-                        border: InputBorder.none,
+                        child: Row(
+                          children: [
+                            IconButton(
+                              icon: const Icon(
+                                Icons.arrow_back_ios_new,
+                                color: Colors.black87,
+                                size: 18,
+                              ),
+                              onPressed: () => Navigator.pop(context),
+                              padding: EdgeInsets.zero,
+                              constraints: const BoxConstraints(),
+                            ),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Secretary Replies Needed',
+                                    style: GoogleFonts.poppins(
+                                      color: Colors.black87,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Text(
+                                    'Action required from you to proceed with SSM lodgement',
+                                    style: GoogleFonts.poppins(
+                                      color: Colors.grey.shade600,
+                                      fontSize: 11,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                      style: GoogleFonts.poppins(fontSize: 13),
-                    ),
+                      Expanded(
+                        child: filingsNeedingReply.isEmpty
+                            ? Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(24.0),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        padding: const EdgeInsets.all(16),
+                                        decoration: const BoxDecoration(
+                                          color: Color(0xFFECFDF5),
+                                          shape: BoxShape.circle,
+                                        ),
+                                        child: const Icon(Icons.check_circle_outline, color: Color(0xFF059669), size: 48),
+                                      ),
+                                      const SizedBox(height: 16),
+                                      Text(
+                                        'All Caught Up!',
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black87,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 6),
+                                      Text(
+                                        'No queries or clarifications currently requested by your licensed secretary.',
+                                        style: GoogleFonts.poppins(fontSize: 12, color: Colors.grey.shade600),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              )
+                            : ListView.builder(
+                                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                itemCount: filingsNeedingReply.length,
+                                itemBuilder: (context, index) {
+                                  final filing = filingsNeedingReply[index];
+                                  final lastSecMsg = filing.messages.lastWhere(
+                                    (m) => m.isFromSecretary,
+                                    orElse: () => filing.messages.last,
+                                  );
+
+                                  return Container(
+                                    margin: const EdgeInsets.only(bottom: 12),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(14),
+                                      border: Border.all(color: const Color(0xFFFECACA), width: 1.5),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black.withValues(alpha: 0.04),
+                                          blurRadius: 6,
+                                          offset: const Offset(0, 2),
+                                        ),
+                                      ],
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(14),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Container(
+                                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                                decoration: BoxDecoration(
+                                                  color: const Color(0xFFFEE2E2),
+                                                  borderRadius: BorderRadius.circular(6),
+                                                ),
+                                                child: Row(
+                                                  children: [
+                                                    const Icon(Icons.mark_chat_unread, size: 12, color: Color(0xFFDC2626)),
+                                                    const SizedBox(width: 4),
+                                                    Text(
+                                                      'Secretary Action Needed',
+                                                      style: GoogleFonts.poppins(
+                                                        fontSize: 10,
+                                                        fontWeight: FontWeight.w600,
+                                                        color: const Color(0xFFDC2626),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              Text(
+                                                filing.referenceNo,
+                                                style: GoogleFonts.poppins(
+                                                  fontSize: 11,
+                                                  fontWeight: FontWeight.w600,
+                                                  color: const Color(0xFF062AAE),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(height: 10),
+                                          Text(
+                                            filing.title,
+                                            style: GoogleFonts.poppins(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black87,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 4),
+                                          Text(
+                                            'Company: ${filing.companyName} • Sec: ${filing.assignedSecretary}',
+                                            style: GoogleFonts.poppins(
+                                              fontSize: 11,
+                                              color: Colors.grey.shade600,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 10),
+                                          Container(
+                                            padding: const EdgeInsets.all(10),
+                                            decoration: BoxDecoration(
+                                              color: const Color(0xFFFFF1F2),
+                                              borderRadius: BorderRadius.circular(8),
+                                              border: Border.all(color: const Color(0xFFFFE4E6)),
+                                            ),
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Row(
+                                                  children: [
+                                                    const Icon(Icons.support_agent_rounded, size: 14, color: Color(0xFFDC2626)),
+                                                    const SizedBox(width: 6),
+                                                    Text(
+                                                      '${lastSecMsg.senderName} (${lastSecMsg.time}):',
+                                                      style: GoogleFonts.poppins(
+                                                        fontSize: 11,
+                                                        fontWeight: FontWeight.w600,
+                                                        color: const Color(0xFF991B1B),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                const SizedBox(height: 4),
+                                                Text(
+                                                  lastSecMsg.text,
+                                                  style: GoogleFonts.poppins(
+                                                    fontSize: 11,
+                                                    color: Colors.black87,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          const SizedBox(height: 12),
+                                          SizedBox(
+                                            width: double.infinity,
+                                            child: ElevatedButton.icon(
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor: const Color(0xFF062AAE),
+                                                foregroundColor: Colors.white,
+                                                elevation: 0,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(8),
+                                                ),
+                                                padding: const EdgeInsets.symmetric(vertical: 10),
+                                              ),
+                                              onPressed: () {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) => SsmFilingDetailPage(filingId: filing.id),
+                                                  ),
+                                                );
+                                              },
+                                              icon: const Icon(Icons.reply_rounded, size: 16),
+                                              label: Text(
+                                                'Open Thread & Reply to Secretary',
+                                                style: GoogleFonts.poppins(
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                      ),
+                    ],
                   ),
-                  IconButton(
-                    icon: const Icon(
-                      Icons.send,
-                      color: Color(0xFF062AAE),
-                      size: 20,
-                    ),
-                    onPressed: _sendReply,
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ],
-      ),
+          ),
+          bottomNavigationBar: CustomBottomNavBar(
+            currentIndex: 0,
+            onTap: (index) => _onItemTapped(context, index),
+          ),
+        );
+      },
     );
   }
 }

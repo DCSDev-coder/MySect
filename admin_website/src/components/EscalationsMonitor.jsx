@@ -130,7 +130,7 @@ const EscalationsMonitor = ({
                       <span className="text-xs font-mono font-bold text-gray-500">{esc.caseNumber}</span>
                       <h3 className="font-semibold text-sm text-gray-900 mt-0.5">{esc.companyName}</h3>
                     </div>
-                    <span className={`px-2 py-0.5 text-[11px] font-semibold rounded-full ${
+                    <span className={`px-2.5 py-1 text-[11px] font-semibold rounded-full text-center inline-flex items-center justify-center shrink-0 leading-tight ${
                       esc.severity.includes('High') 
                         ? 'bg-rose-100 text-rose-800 border border-rose-200' 
                         : 'bg-amber-100 text-amber-800 border border-amber-200'
@@ -165,7 +165,7 @@ const EscalationsMonitor = ({
                       <span className="text-xs font-mono font-bold text-gray-700 bg-white px-2 py-0.5 rounded border border-gray-200">
                         {selectedEscalation.caseNumber}
                       </span>
-                      <span className="px-2 py-0.5 text-xs font-semibold rounded-full bg-rose-100 text-rose-800">
+                      <span className="px-2.5 py-0.5 text-xs font-semibold rounded-full bg-rose-100 text-rose-800 text-center inline-flex items-center justify-center whitespace-nowrap">
                         {selectedEscalation.severity}
                       </span>
                       <span className="text-xs text-gray-500">
@@ -178,10 +178,10 @@ const EscalationsMonitor = ({
                     </p>
                   </div>
 
-                  <span className={`px-2.5 py-1 text-xs font-bold rounded-lg ${
+                  <span className={`px-3 py-1.5 text-xs font-bold rounded-lg text-center inline-flex items-center justify-center leading-tight shrink-0 ${
                     selectedEscalation.status.includes('Resolved') 
-                      ? 'bg-emerald-100 text-emerald-800' 
-                      : 'bg-amber-100 text-amber-800'
+                      ? 'bg-emerald-100 text-emerald-800 border border-emerald-200' 
+                      : 'bg-amber-100 text-amber-900 border border-amber-200'
                   }`}>
                     {selectedEscalation.status}
                   </span>

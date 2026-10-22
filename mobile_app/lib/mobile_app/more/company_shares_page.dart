@@ -4,6 +4,8 @@ import '../notifications/notifications_page.dart';
 import '../home/home_page.dart';
 import '../widgets/custom_bottom_nav_bar.dart';
 
+import '../services/company_service.dart';
+
 class CompanySharesPage extends StatefulWidget {
   const CompanySharesPage({super.key});
 
@@ -25,6 +27,9 @@ class _CompanySharesPageState extends State<CompanySharesPage> {
 
   @override
   Widget build(BuildContext context) {
+    final company = CompanyService.instance.selectedCompany;
+    final shareholders = company?.shareholders ?? [];
+
     return Scaffold(
       backgroundColor: const Color(0xFFFAFAFA),
       body: SafeArea(
@@ -71,12 +76,29 @@ class _CompanySharesPageState extends State<CompanySharesPage> {
                     constraints: const BoxConstraints(),
                   ),
                   const SizedBox(width: 16),
-                  Text(
-                    'Company Shares',
-                    style: GoogleFonts.poppins(
-                      color: Colors.black,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Company Shares',
+                          style: GoogleFonts.poppins(
+                            color: Colors.black,
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        if (company != null)
+                          Text(
+                            company.name,
+                            style: GoogleFonts.poppins(
+                              color: Colors.grey.shade600,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                      ],
                     ),
                   ),
                 ],
@@ -85,14 +107,32 @@ class _CompanySharesPageState extends State<CompanySharesPage> {
             const SizedBox(height: 16),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: Align(
-                alignment: Alignment.centerRight,
-                child: _buildDropdown(
-                  value: _selectedCurrency,
-                  items: ['SGD', 'MYR', 'USD'],
-                  onChanged: (v) =>
-                      setState(() => _selectedCurrency = v!),
-                ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    decoration: BoxDecoration(
+                      color: Colors.blue.shade50,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: Colors.blue.shade200),
+                    ),
+                    child: Text(
+                      'Paid-Up: ${company?.paidUpCapital ?? "MYR 100,000"}',
+                      style: GoogleFonts.poppins(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        color: const Color(0xFF062AAE),
+                      ),
+                    ),
+                  ),
+                  _buildDropdown(
+                    value: _selectedCurrency,
+                    items: ['MYR', 'SGD', 'USD'],
+                    onChanged: (v) =>
+                        setState(() => _selectedCurrency = v!),
+                  ),
+                ],
               ),
             ),
             const SizedBox(height: 16),
@@ -102,23 +142,31 @@ class _CompanySharesPageState extends State<CompanySharesPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(height: 32),
-
-                    _buildShareholderCard(
-                      shareholder: 'Adam Bin Hamzah',
-                      type: 'Ordinary',
-                      currency: _selectedCurrency,
-                      numberOfShares: '5,000',
-                      totalShares: '10,000',
-                    ),
                     const SizedBox(height: 16),
-                    _buildShareholderCard(
-                      shareholder: 'Eidza Binti Jumanis',
-                      type: 'Ordinary',
-                      currency: _selectedCurrency,
-                      numberOfShares: '5,000',
-                      totalShares: '10,000',
-                    ),
+
+                    if (shareholders.isEmpty)
+                      Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(32.0),
+                          child: Text(
+                            'No shareholder records on file.',
+                            style: GoogleFonts.poppins(color: Colors.grey),
+                          ),
+                        ),
+                      )
+                    else
+                      ...shareholders.map((sh) {
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 16),
+                          child: _buildShareholderCard(
+                            shareholder: sh['shareholder']?.toString() ?? sh['name']?.toString() ?? 'Shareholder',
+                            type: sh['type']?.toString() ?? 'Ordinary',
+                            currency: _selectedCurrency,
+                            numberOfShares: sh['numberOfShares']?.toString() ?? sh['shares']?.toString() ?? '50,000',
+                            totalShares: sh['totalShares']?.toString() ?? '100,000',
+                          ),
+                        );
+                      }),
 
                     const SizedBox(height: 40),
                   ],

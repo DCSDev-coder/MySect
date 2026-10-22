@@ -5,6 +5,7 @@ import SecretaryFirms from './components/SecretaryFirms';
 import CompanyManagement from './components/CompanyManagement';
 import OperationsView from './components/OperationsView';
 import SettingsView from './components/SettingsView';
+import Login from './components/Login';
 
 import {
   initialFirms,
@@ -20,6 +21,25 @@ import {
 } from './data/mockData';
 
 function App() {
+  const [currentUser, setCurrentUser] = useState(() => {
+    try {
+      const saved = localStorage.getItem('mysect_admin_user');
+      if (saved === 'LOGGED_OUT') return null;
+      if (saved) return JSON.parse(saved);
+    } catch (e) {
+      console.error('Failed to parse cached user:', e);
+    }
+    return {
+      name: 'Ahmad Faizal',
+      email: 'admin@mysect.com.my',
+      role: 'Super Admin',
+      department: 'HQ Platform Operations',
+      avatar: 'AF',
+      token: 'tok_active_operator_session',
+      loginTime: new Date().toISOString()
+    };
+  });
+
   const [activePage, setActivePage] = useState('Overview');
   const [firms, setFirms] = useState(initialFirms);
   const [companies, setCompanies] = useState(initialCompanies);
@@ -38,13 +58,30 @@ function App() {
     const newLog = {
       id: 'aud-' + Math.floor(1000 + Math.random() * 9000),
       timestamp: new Date().toISOString().replace('T', ' ').substring(0, 19),
-      actor: 'Admin Moderator (admin@mysect.com.my)',
+      actor: currentUser ? `${currentUser.name} (${currentUser.email})` : 'Admin Operator (admin@mysect.com.my)',
       ipAddress: '10.200.14.88 (HQ VPN)',
       actionType,
       targetEntity,
       details,
     };
     setAuditLogs(prev => [newLog, ...prev]);
+  };
+
+  const handleLogin = (user, rememberMe = true) => {
+    setCurrentUser(user);
+    if (rememberMe) {
+      localStorage.setItem('mysect_admin_user', JSON.stringify(user));
+    } else {
+      localStorage.removeItem('mysect_admin_user');
+    }
+    logAudit('ADMIN_LOGIN', user.name, `Operator signed in successfully (${user.role} - ${user.department}).`);
+  };
+
+  const handleLogout = () => {
+    const actorName = currentUser?.name || 'Operator';
+    localStorage.setItem('mysect_admin_user', 'LOGGED_OUT');
+    setCurrentUser(null);
+    logAudit('ADMIN_LOGOUT', actorName, 'Operator administrative session signed out.');
   };
 
   // 1. Firm management handlers
@@ -112,6 +149,14 @@ function App() {
     }));
 
     logAudit('COMPANY_TRANSFERRED', `${comp?.name} (${comp?.ssmNo})`, `Transferred to ${targetFirmName}. Reason: ${reason}`);
+  };
+
+  const handleCreateCompany = (newCompany) => {
+    setCompanies(prev => [newCompany, ...prev]);
+    if (newCompany.assignedFirmId) {
+      setFirms(prev => prev.map(f => f.id === newCompany.assignedFirmId ? { ...f, companiesCount: f.companiesCount + 1 } : f));
+    }
+    logAudit('COMPANY_ONBOARDED', `${newCompany.name} (${newCompany.ssmNo})`, `New client company onboarded and assigned to ${newCompany.assignedFirmName}.`);
   };
 
   // 3. Plan management
@@ -196,6 +241,7 @@ function App() {
             companies={companies}
             firms={firms}
             onTransferCompany={handleTransferCompany}
+            onCreateCompany={handleCreateCompany}
           />
         );
       case 'Operations':
@@ -244,6 +290,10 @@ function App() {
   const pendingFirmsCount = firms.filter(f => f.status === 'Pending Verification').length;
   const urgentItemsCount = escalations.filter(e => !e.status.includes('Resolved')).length + disputes.filter(d => !d.status.includes('Resolved')).length;
 
+  if (!currentUser) {
+    return <Login onLogin={handleLogin} />;
+  }
+
   return (
     <div className="flex h-screen overflow-hidden bg-[#F8F9FA] text-gray-900 font-sans antialiased">
       <Sidebar 
@@ -251,6 +301,8 @@ function App() {
         setActivePage={setActivePage}
         pendingFirmsCount={pendingFirmsCount}
         urgentItemsCount={urgentItemsCount}
+        currentUser={currentUser}
+        onLogout={handleLogout}
       />
       {renderPage()}
     </div>

@@ -229,7 +229,7 @@ const Dashboard = ({
 
           <div>
             <div className="flex justify-between text-gray-600 mb-1">
-              <span>TM One Cloud Storage</span>
+              <span>Cloud Storage (Malaysia)</span>
               <strong className="text-gray-900">412 GB / 1 TB</strong>
             </div>
             <div className="w-full bg-gray-100 h-2 rounded-full overflow-hidden">

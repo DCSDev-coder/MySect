@@ -368,12 +368,12 @@ class _FilesPageState extends State<FilesPage> {
         heroTag: 'files_fab',
         onPressed: () => showAddMenu(
           context,
-          showFileOptions: false,
-          showFolderOption: true,
+          showFileOptions: true,
+          showFolderOption: false,
         ),
         backgroundColor: const Color(0xFF062AAE),
         shape: const CircleBorder(),
-        child: const Icon(Icons.create_new_folder, color: Colors.white, size: 32),
+        child: const Icon(Icons.upload_file_rounded, color: Colors.white, size: 28),
       ),
     );
   }

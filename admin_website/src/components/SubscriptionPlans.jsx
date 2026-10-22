@@ -4,6 +4,28 @@ import {
   Users, Building2, Zap
 } from 'lucide-react';
 
+const formatAiTokens = (limit) => {
+  if (!limit) return '-';
+  const str = String(limit);
+  if (str.toLowerCase().includes('unlimited')) return 'Unlimited';
+  if (str.includes('500,000') || str.includes('500000')) return '500K / mo';
+  if (str.includes('2,500,000') || str.includes('2500000')) return '2.5M / mo';
+  if (str.includes('10,000,000') || str.includes('10000000')) return '10M / mo';
+  return str.replace(' tokens/mo', ' / mo').replace(' tokens', '');
+};
+
+const formatCompanyLimit = (limit) => {
+  if (limit === undefined || limit === null) return '-';
+  const num = typeof limit === 'number' ? limit.toLocaleString() : limit;
+  return `${num} Co.`;
+};
+
+const formatStorage = (gb) => {
+  if (!gb) return '0 GB';
+  if (gb >= 1000) return `${gb / 1000} TB`;
+  return `${gb} GB`;
+};
+
 const SubscriptionPlans = ({ 
   plans = [], 
   firms = [], 
@@ -106,7 +128,7 @@ const SubscriptionPlans = ({
       </div>
 
       {/* Plans Tier Cards Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5 mt-6">
         {plans.map((plan) => {
           const firmsOnPlan = firms.filter(f => f.planId === plan.id);
           return (
@@ -120,7 +142,7 @@ const SubscriptionPlans = ({
                 </div>
               )}
 
-              <div className="p-6">
+              <div className="p-5">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-mono font-bold text-gray-400">{plan.tierCode}</span>
                   <span className="px-2 py-0.5 text-xs font-medium bg-blue-50 text-[#062AAE] rounded-full">
@@ -142,33 +164,39 @@ const SubscriptionPlans = ({
                 </div>
 
                 {/* Limits & Quotas Box */}
-                <div className="bg-gray-50 rounded-xl p-3.5 border border-gray-200 mt-5 space-y-2 text-xs">
-                  <div className="flex items-center justify-between">
-                    <span className="text-gray-500 flex items-center gap-1.5">
-                      <Building2 className="w-3.5 h-3.5 text-[#062AAE]" /> Company Limit:
+                <div className="bg-gray-50/90 rounded-xl py-3 px-3 border border-gray-200 mt-5 overflow-hidden">
+                  <div className="w-fit mx-auto grid grid-cols-[auto_auto] items-center gap-x-2.5 gap-y-2 text-xs">
+                    <span className="text-gray-500 flex items-center gap-1.5 whitespace-nowrap">
+                      <Building2 className="w-3.5 h-3.5 text-[#062AAE] shrink-0" />
+                      <span>Company Limit:</span>
                     </span>
-                    <strong className="text-gray-900 font-bold">{plan.companyLimit} Companies</strong>
-                  </div>
+                    <strong className="text-gray-900 font-bold whitespace-nowrap text-left">
+                      {formatCompanyLimit(plan.companyLimit)}
+                    </strong>
 
-                  <div className="flex items-center justify-between">
-                    <span className="text-gray-500 flex items-center gap-1.5">
-                      <Users className="w-3.5 h-3.5 text-emerald-600" /> Staff Seats:
+                    <span className="text-gray-500 flex items-center gap-1.5 whitespace-nowrap">
+                      <Users className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                      <span>Staff Seats:</span>
                     </span>
-                    <strong className="text-gray-900 font-bold">{plan.staffSeats} Users</strong>
-                  </div>
+                    <strong className="text-gray-900 font-bold whitespace-nowrap text-left">
+                      {plan.staffSeats} Users
+                    </strong>
 
-                  <div className="flex items-center justify-between">
-                    <span className="text-gray-500 flex items-center gap-1.5">
-                      <HardDrive className="w-3.5 h-3.5 text-blue-500" /> TM Cloud Storage:
+                    <span className="text-gray-500 flex items-center gap-1.5 whitespace-nowrap">
+                      <HardDrive className="w-3.5 h-3.5 text-blue-500 shrink-0" />
+                      <span>Cloud Storage:</span>
                     </span>
-                    <strong className="text-gray-900 font-bold">{plan.tmCloudStorageGB} GB</strong>
-                  </div>
+                    <strong className="text-gray-900 font-bold whitespace-nowrap text-left">
+                      {formatStorage(plan.tmCloudStorageGB)}
+                    </strong>
 
-                  <div className="flex items-center justify-between">
-                    <span className="text-gray-500 flex items-center gap-1.5">
-                      <Zap className="w-3.5 h-3.5 text-amber-500" /> AI Intake Token Limit:
+                    <span className="text-gray-500 flex items-center gap-1.5 whitespace-nowrap">
+                      <Zap className="w-3.5 h-3.5 text-amber-500 shrink-0" />
+                      <span>AI Tokens:</span>
                     </span>
-                    <strong className="text-gray-800 text-[11px] truncate max-w-[120px]">{plan.aiIntakeTokenLimit}</strong>
+                    <strong className="text-gray-900 font-bold whitespace-nowrap text-left">
+                      {formatAiTokens(plan.aiIntakeTokenLimit)}
+                    </strong>
                   </div>
                 </div>
 

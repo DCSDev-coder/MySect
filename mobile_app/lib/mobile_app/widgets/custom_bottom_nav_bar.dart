@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../services/ssm_filing_service.dart';
 
 class CustomBottomNavBar extends StatelessWidget {
   final int currentIndex;
@@ -11,7 +12,13 @@ class CustomBottomNavBar extends StatelessWidget {
     required this.onTap,
   });
 
-  Widget _buildNavItem(int index, IconData icon, IconData activeIcon, String label) {
+  Widget _buildNavItem(
+    int index,
+    IconData icon,
+    IconData activeIcon,
+    String label, {
+    int badgeCount = 0,
+  }) {
     final isSelected = currentIndex == index;
     return Expanded(
       child: GestureDetector(
@@ -31,10 +38,42 @@ class CustomBottomNavBar extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 6),
-            Icon(
-              isSelected ? activeIcon : icon,
-              color: isSelected ? const Color(0xFF062AAE) : Colors.grey,
-              size: 24,
+            Stack(
+              clipBehavior: Clip.none,
+              children: [
+                Icon(
+                  isSelected ? activeIcon : icon,
+                  color: isSelected ? const Color(0xFF062AAE) : Colors.grey,
+                  size: 24,
+                ),
+                if (badgeCount > 0)
+                  Positioned(
+                    right: -6,
+                    top: -4,
+                    child: Container(
+                      padding: const EdgeInsets.all(4),
+                      decoration: const BoxDecoration(
+                        color: Color(0xFFDC2626),
+                        shape: BoxShape.circle,
+                      ),
+                      constraints: const BoxConstraints(
+                        minWidth: 16,
+                        minHeight: 16,
+                      ),
+                      child: Center(
+                        child: Text(
+                          '$badgeCount',
+                          style: GoogleFonts.poppins(
+                            color: Colors.white,
+                            fontSize: 9,
+                            fontWeight: FontWeight.bold,
+                            height: 1,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
             ),
             const SizedBox(height: 4),
             Text(
@@ -53,30 +92,43 @@ class CustomBottomNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 80,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            blurRadius: 10,
-            color: Colors.black.withValues(alpha: 0.05),
-            offset: const Offset(0, -2),
+    return AnimatedBuilder(
+      animation: SsmFilingService.instance,
+      builder: (context, _) {
+        final repliesNeeded = SsmFilingService.instance.secretaryRepliesNeededCount;
+
+        return Container(
+          height: 80,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                blurRadius: 10,
+                color: Colors.black.withValues(alpha: 0.05),
+                offset: const Offset(0, -2),
+              ),
+            ],
           ),
-        ],
-      ),
-      child: SafeArea(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            _buildNavItem(0, Icons.home_outlined, Icons.home, 'Home'),
-            _buildNavItem(1, Icons.swap_horiz_outlined, Icons.swap_horiz, 'Transactions'),
-            _buildNavItem(2, Icons.folder_outlined, Icons.folder, 'Files'),
-            _buildNavItem(3, Icons.chat_bubble_outline, Icons.chat_bubble, 'Chat'),
-            _buildNavItem(4, Icons.more_horiz, Icons.more_horiz, 'More'),
-          ],
-        ),
-      ),
+          child: SafeArea(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                _buildNavItem(0, Icons.home_outlined, Icons.home, 'Home'),
+                _buildNavItem(
+                  1,
+                  Icons.assignment_outlined,
+                  Icons.assignment,
+                  'SSM Filings',
+                  badgeCount: repliesNeeded,
+                ),
+                _buildNavItem(2, Icons.folder_outlined, Icons.folder, 'Files'),
+                _buildNavItem(3, Icons.chat_bubble_outline, Icons.chat_bubble, 'Chat'),
+                _buildNavItem(4, Icons.more_horiz, Icons.more_horiz, 'More'),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }

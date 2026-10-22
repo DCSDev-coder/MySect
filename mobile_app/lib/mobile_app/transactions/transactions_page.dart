@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import '../notifications/notifications_page.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:file_picker/file_picker.dart';
-import '../files/document_viewer_page.dart';
-import 'transaction_data.dart';
+import '../notifications/notifications_page.dart';
+import '../models/ssm_filing_model.dart';
+import '../services/ssm_filing_service.dart';
+import 'ssm_filing_detail_page.dart';
+import 'submit_ssm_filing_page.dart';
 
 class TransactionsPage extends StatefulWidget {
   final bool initialDocumentsNeededFilter;
@@ -21,16 +21,21 @@ class TransactionsPage extends StatefulWidget {
 }
 
 class _TransactionsPageState extends State<TransactionsPage> {
-  DateTime? _selectedDate;
-  late bool _isDocumentsNeededFilterActive;
-  late bool _isReplyNeededFilterActive;
-  bool _isMatchingFile = false;
+  SsmFilingStatus? _selectedStatusFilter;
+  String _searchQuery = '';
 
   @override
   void initState() {
     super.initState();
-    _isDocumentsNeededFilterActive = widget.initialDocumentsNeededFilter;
-    _isReplyNeededFilterActive = widget.initialReplyNeededFilter;
+    _applyInitialFilters();
+  }
+
+  void _applyInitialFilters() {
+    if (widget.initialReplyNeededFilter) {
+      _selectedStatusFilter = SsmFilingStatus.secretaryReplied;
+    } else if (widget.initialDocumentsNeededFilter) {
+      _selectedStatusFilter = SsmFilingStatus.waitingSecretaryReview;
+    }
   }
 
   @override
@@ -38,715 +43,631 @@ class _TransactionsPageState extends State<TransactionsPage> {
     super.didUpdateWidget(oldWidget);
     if (widget.initialDocumentsNeededFilter != oldWidget.initialDocumentsNeededFilter ||
         widget.initialReplyNeededFilter != oldWidget.initialReplyNeededFilter) {
-      setState(() {
-        _isDocumentsNeededFilterActive = widget.initialDocumentsNeededFilter;
-        _isReplyNeededFilterActive = widget.initialReplyNeededFilter;
-      });
+      _applyInitialFilters();
     }
   }
 
-  List<Transaction> get _filteredTransactions {
-    return allTransactions.where((t) {
-      if (!t.isTransaction) return false;
-      if (_selectedDate != null && (t.date.year != _selectedDate!.year || t.date.month != _selectedDate!.month || t.date.day != _selectedDate!.day)) return false;
-      if (_isDocumentsNeededFilterActive && !t.documentsNeeded) return false;
-      if (_isReplyNeededFilterActive && !t.replyNeeded) return false;
-      return true;
-    }).toList();
-  }
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: SsmFilingService.instance,
+      builder: (context, _) {
+        final allFilings = SsmFilingService.instance.filings;
 
-  String _formatDate(DateTime date) {
-    return '${_getMonthString(date.month)} ${date.day}, ${date.year}';
-  }
+        final filteredFilings = allFilings.where((f) {
+          if (_selectedStatusFilter != null && f.status != _selectedStatusFilter) {
+            return false;
+          }
+          if (_searchQuery.isNotEmpty) {
+            final query = _searchQuery.toLowerCase();
+            final matches = f.title.toLowerCase().contains(query) ||
+                f.referenceNo.toLowerCase().contains(query) ||
+                f.filingType.toLowerCase().contains(query) ||
+                f.companyName.toLowerCase().contains(query);
+            if (!matches) return false;
+          }
+          return true;
+        }).toList();
 
-  String _getMonthString(int month) {
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    return months[month - 1];
-  }
+        final waitingSecCount = SsmFilingService.instance.waitingSecretaryCount;
+        final secRepliesNeededCount = SsmFilingService.instance.secretaryRepliesNeededCount;
+        final lodgedCount = allFilings.where((f) => f.status == SsmFilingStatus.lodgedToSsm).length;
+        final completedCount = allFilings.where((f) => f.status == SsmFilingStatus.completed).length;
 
-  final ImagePicker _picker = ImagePicker();
-
-  Future<void> _handleRefresh() async {
-    await Future.delayed(const Duration(seconds: 1));
-    setState(() {});
-  }
-
-  Future<void> _pickImage(ImageSource source) async {
-    try {
-      final XFile? image = await _picker.pickImage(source: source);
-      if (image != null) {
-        setState(() {
-          _isMatchingFile = true;
-        });
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('File ${image.name} selected.', style: GoogleFonts.poppins()),
-              backgroundColor: const Color(0xFF1E3A8A),
-            ),
-          );
-        }
-      }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Error selecting image: $e', style: GoogleFonts.poppins()),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
-    }
-  }
-
-  Future<void> _pickFile() async {
-    try {
-      PlatformFile? file = await FilePicker.pickFile();
-      if (file != null) {
-        setState(() {
-          _isMatchingFile = true;
-        });
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('File ${file.name} selected.', style: GoogleFonts.poppins()),
-              backgroundColor: const Color(0xFF1E3A8A),
-            ),
-          );
-        }
-      }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Error selecting file: $e', style: GoogleFonts.poppins()),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
-    }
-  }
-
-  void _showUploadOptions(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-      ),
-      builder: (BuildContext context) {
-        return Container(
-          padding: const EdgeInsets.only(top: 12, bottom: 24, left: 24, right: 24),
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                width: 40,
-                height: 4,
-                decoration: BoxDecoration(
-                  color: const Color(0xFF1E3A8A),
-                  borderRadius: BorderRadius.circular(2),
-                ),
-              ),
-              const SizedBox(height: 32),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildUploadOption(
-                    context,
-                    icon: Icons.camera_alt,
-                    label: 'Camera',
-                    onTap: () => _pickImage(ImageSource.camera),
-                  ),
-                  _buildUploadOption(
-                    context,
-                    icon: Icons.image,
-                    label: 'Library',
-                    onTap: () => _pickImage(ImageSource.gallery),
-                  ),
-                  _buildUploadOption(
-                    context,
-                    icon: Icons.insert_drive_file,
-                    label: 'File',
-                    onTap: () => _pickFile(),
-                  ),
-                  _buildUploadOption(
-                    context,
-                    icon: Icons.document_scanner,
-                    label: 'Scan',
-                    onTap: () => _pickImage(ImageSource.camera),
-                  ),
-                  GestureDetector(
-                    onTap: () => Navigator.pop(context),
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 8.0),
-                      child: Icon(
-                        Icons.arrow_downward,
-                        color: Colors.black,
-                        size: 24,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildUploadOption(BuildContext context, {required IconData icon, required String label, required VoidCallback onTap}) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.pop(context);
-        onTap();
-      },
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            icon,
-            color: Colors.black87,
-            size: 24,
-          ),
-          const SizedBox(height: 8),
-          Text(
-            label,
-            style: GoogleFonts.poppins(
-              fontSize: 12,
-              color: Colors.grey.shade600,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildExampleTransaction(String title, String date, {bool isReplyNeeded = false}) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(11),
-        child: Dismissible(
-          key: Key(title),
-          direction: DismissDirection.endToStart,
-          background: Container(
-            alignment: Alignment.centerRight,
-            padding: const EdgeInsets.only(right: 20),
-            color: Colors.red.shade400,
-            child: const Icon(Icons.delete_outline, color: Colors.white),
-          ),
-          onDismissed: (direction) {
-            setState(() {
-              allTransactions.removeWhere((t) => t.title == title);
-            });
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text('$title dismissed'),
-              duration: const Duration(seconds: 2),
-            ));
-          },
-          child: GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => DocumentViewerPage(fileName: title),
-                ),
-              );
-            },
-            child: Container(
-            padding: const EdgeInsets.all(12),
-            color: Colors.white,
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: isReplyNeeded ? Colors.red.shade400.withValues(alpha: 0.1) : Colors.blue.shade700.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Icon(
-              Icons.insert_drive_file,
-              color: isReplyNeeded ? Colors.red.shade400 : Colors.blue.shade700,
-              size: 20,
-            ),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
+        return Scaffold(
+          backgroundColor: const Color(0xFFF8FAFC),
+          body: SafeArea(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  title,
-                  style: GoogleFonts.poppins(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black87,
+                // Top App Bar
+                Padding(
+                  padding: const EdgeInsets.only(left: 16.0, top: 8.0, right: 16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Image.asset(
+                        'assets/mysect_logo.png',
+                        width: 110,
+                        fit: BoxFit.contain,
+                      ),
+                      Row(
+                        children: [
+                          IconButton(
+                            icon: const Icon(
+                              Icons.notifications_none,
+                              color: Colors.black87,
+                              size: 24,
+                            ),
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const NotificationsPage(),
+                                ),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
-                Text(
-                  date,
-                  style: GoogleFonts.poppins(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w400,
-                    color: Colors.grey.shade600,
+
+                // Main Content
+                Expanded(
+                  child: RefreshIndicator(
+                    onRefresh: () async {
+                      await Future.delayed(const Duration(milliseconds: 600));
+                      setState(() {});
+                    },
+                    child: ListView(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                      children: [
+                        // Page Title & Submit Action Button
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'SSM Filings',
+                                    style: GoogleFonts.poppins(
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black87,
+                                    ),
+                                  ),
+                                  Text(
+                                    'Submit files & track secretary replies',
+                                    style: GoogleFonts.poppins(
+                                      fontSize: 12,
+                                      color: Colors.grey.shade600,
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            ElevatedButton.icon(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xFF062AAE),
+                                foregroundColor: Colors.white,
+                                elevation: 1,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                              ),
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const SubmitSsmFilingPage(),
+                                  ),
+                                );
+                              },
+                              icon: const Icon(Icons.add, size: 16),
+                              label: Text(
+                                'Submit SSM',
+                                style: GoogleFonts.poppins(
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 16),
+
+                        // Stats Summary Row
+                        Row(
+                          children: [
+                            Expanded(
+                              child: _buildMetricCard(
+                                title: 'Review',
+                                count: '$waitingSecCount',
+                                color: const Color(0xFFD97706),
+                                bgColor: const Color(0xFFFEF3C7),
+                                icon: Icons.hourglass_top_rounded,
+                                isSelected: _selectedStatusFilter == SsmFilingStatus.waitingSecretaryReview,
+                                onTap: () {
+                                  setState(() {
+                                    _selectedStatusFilter = _selectedStatusFilter == SsmFilingStatus.waitingSecretaryReview
+                                        ? null
+                                        : SsmFilingStatus.waitingSecretaryReview;
+                                  });
+                                },
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: _buildMetricCard(
+                                title: 'Action',
+                                count: '$secRepliesNeededCount',
+                                color: const Color(0xFFDC2626),
+                                bgColor: const Color(0xFFFEE2E2),
+                                icon: Icons.mark_chat_unread_rounded,
+                                isSelected: _selectedStatusFilter == SsmFilingStatus.secretaryReplied,
+                                onTap: () {
+                                  setState(() {
+                                    _selectedStatusFilter = _selectedStatusFilter == SsmFilingStatus.secretaryReplied
+                                        ? null
+                                        : SsmFilingStatus.secretaryReplied;
+                                  });
+                                },
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: _buildMetricCard(
+                                title: 'Lodged',
+                                count: '$lodgedCount',
+                                color: const Color(0xFF7C3AED),
+                                bgColor: const Color(0xFFF5F3FF),
+                                icon: Icons.account_balance_rounded,
+                                isSelected: _selectedStatusFilter == SsmFilingStatus.lodgedToSsm,
+                                onTap: () {
+                                  setState(() {
+                                    _selectedStatusFilter = _selectedStatusFilter == SsmFilingStatus.lodgedToSsm
+                                        ? null
+                                        : SsmFilingStatus.lodgedToSsm;
+                                  });
+                                },
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: _buildMetricCard(
+                                title: 'Done',
+                                count: '$completedCount',
+                                color: const Color(0xFF059669),
+                                bgColor: const Color(0xFFECFDF5),
+                                icon: Icons.check_circle_rounded,
+                                isSelected: _selectedStatusFilter == SsmFilingStatus.completed,
+                                onTap: () {
+                                  setState(() {
+                                    _selectedStatusFilter = _selectedStatusFilter == SsmFilingStatus.completed
+                                        ? null
+                                        : SsmFilingStatus.completed;
+                                  });
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 16),
+
+                        // Search Bar
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(color: const Color(0xFFE2E8F0)),
+                          ),
+                          child: TextField(
+                            onChanged: (val) {
+                              setState(() {
+                                _searchQuery = val.trim();
+                              });
+                            },
+                            style: GoogleFonts.poppins(fontSize: 13),
+                            decoration: InputDecoration(
+                              hintText: 'Search filings, ref number, or section...',
+                              hintStyle: GoogleFonts.poppins(fontSize: 12, color: Colors.grey.shade400),
+                              prefixIcon: const Icon(Icons.search, size: 20, color: Color(0xFF062AAE)),
+                              border: InputBorder.none,
+                              contentPadding: const EdgeInsets.symmetric(vertical: 12),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+
+                        // Filter Chips
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: [
+                              _buildFilterChip(
+                                label: 'All Filings (${allFilings.length})',
+                                isSelected: _selectedStatusFilter == null,
+                                onTap: () => setState(() => _selectedStatusFilter = null),
+                              ),
+                              const SizedBox(width: 8),
+                              _buildFilterChip(
+                                label: 'Waiting Secretary ($waitingSecCount)',
+                                isSelected: _selectedStatusFilter == SsmFilingStatus.waitingSecretaryReview,
+                                onTap: () => setState(() => _selectedStatusFilter = SsmFilingStatus.waitingSecretaryReview),
+                                activeColor: const Color(0xFFD97706),
+                              ),
+                              const SizedBox(width: 8),
+                              _buildFilterChip(
+                                label: 'Action Needed ($secRepliesNeededCount)',
+                                isSelected: _selectedStatusFilter == SsmFilingStatus.secretaryReplied,
+                                onTap: () => setState(() => _selectedStatusFilter = SsmFilingStatus.secretaryReplied),
+                                activeColor: const Color(0xFFDC2626),
+                              ),
+                              const SizedBox(width: 8),
+                              _buildFilterChip(
+                                label: 'Lodged to SSM ($lodgedCount)',
+                                isSelected: _selectedStatusFilter == SsmFilingStatus.lodgedToSsm,
+                                onTap: () => setState(() => _selectedStatusFilter = SsmFilingStatus.lodgedToSsm),
+                                activeColor: const Color(0xFF7C3AED),
+                              ),
+                              const SizedBox(width: 8),
+                              _buildFilterChip(
+                                label: 'Completed ($completedCount)',
+                                isSelected: _selectedStatusFilter == SsmFilingStatus.completed,
+                                onTap: () => setState(() => _selectedStatusFilter = SsmFilingStatus.completed),
+                                activeColor: const Color(0xFF059669),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+
+                        // Filings List
+                        if (filteredFilings.isEmpty)
+                          Container(
+                            padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(color: const Color(0xFFE2E8F0)),
+                            ),
+                            child: Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.folder_open_rounded, size: 48, color: Colors.grey.shade400),
+                                  const SizedBox(height: 12),
+                                  Text(
+                                    'No filings match this filter',
+                                    style: GoogleFonts.poppins(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.black87,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    'Submit a new SSM file to initiate statutory review.',
+                                    style: GoogleFonts.poppins(fontSize: 12, color: Colors.grey.shade600),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  const SizedBox(height: 16),
+                                  ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: const Color(0xFF062AAE),
+                                      foregroundColor: Colors.white,
+                                    ),
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => const SubmitSsmFilingPage(),
+                                        ),
+                                      );
+                                    },
+                                    child: Text('Submit New SSM File', style: GoogleFonts.poppins(fontSize: 12)),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          )
+                        else
+                          ...filteredFilings.map((filing) => _buildFilingCard(filing)),
+
+                        const SizedBox(height: 24),
+                      ],
+                    ),
                   ),
                 ),
               ],
             ),
           ),
-
-        ],
-      ),
-    ),
-    ),
-    ),
-    ),
+        );
+      },
     );
   }
 
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
+  Widget _buildMetricCard({
+    required String title,
+    required String count,
+    required Color color,
+    required Color bgColor,
+    required IconData icon,
+    required bool isSelected,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(10),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 150),
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 6),
+        decoration: BoxDecoration(
+          color: bgColor,
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+            color: isSelected ? color : color.withValues(alpha: 0.25),
+            width: isSelected ? 2 : 1,
+          ),
+        ),
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 16.0, top: 8.0, right: 16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Image.asset(
-                    'assets/mysect_logo.png',
-                    width: 110,
-                    fit: BoxFit.contain,
-                  ),
-                  IconButton(
-                    icon: const Icon(
-                      Icons.notifications_none,
-                      color: Colors.black,
-                      size: 24,
-                    ),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const NotificationsPage(),
-                        ),
-                      );
-                    },
-                  ),
-                ],
+            Icon(icon, size: 18, color: color),
+            const SizedBox(height: 4),
+            Text(
+              count,
+              style: GoogleFonts.poppins(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: color,
               ),
             ),
-
-            Expanded(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(
-                        left: 24,
-                        right: 24,
-                        top: 16,
-                        bottom: 16,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              const Icon(Icons.arrow_back, color: Colors.black),
-                              const SizedBox(width: 16),
-                                Text(
-                                  'Transactions',
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 28,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ],
-                            ),
-                        ],
-                      ),
-                    ),
-
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 24),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          if (_isMatchingFile) ...[
-                            Container(
-                              padding: const EdgeInsets.all(16),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(8),
-                                border: Border.all(
-                                  color: const Color(0xFF1E3A8A).withValues(alpha: 0.1),
-                                  width: 1.5,
-                                ),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withValues(alpha: 0.02),
-                                    blurRadius: 10,
-                                    offset: const Offset(0, 4),
-                                  ),
-                                ],
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Container(
-                                        padding: const EdgeInsets.all(8),
-                                        decoration: BoxDecoration(
-                                          color: const Color(0xFF1E3A8A).withValues(alpha: 0.1),
-                                          borderRadius: BorderRadius.circular(8),
-                                        ),
-                                        child: const Icon(
-                                          Icons.receipt_long_outlined,
-                                          color: Color(0xFF1E3A8A),
-                                          size: 24,
-                                        ),
-                                      ),
-                                      const SizedBox(width: 12),
-                                      Expanded(
-                                        child: Text(
-                                          'Matching 1 file with transactions...',
-                                          style: GoogleFonts.poppins(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w600,
-                                            color: Colors.black,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 12),
-                                  Text(
-                                    'This can take up to 24 hours. You can add more files in the meantime.',
-                                    style: GoogleFonts.poppins(
-                                      fontSize: 12,
-                                      color: Colors.grey.shade600,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(height: 24),
-                          ],
-
-                          FittedBox(
-                            fit: BoxFit.scaleDown,
-                            alignment: Alignment.centerLeft,
-                            child: Row(
-                              children: [
-                                GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      _isDocumentsNeededFilterActive = !_isDocumentsNeededFilterActive;
-                                      if (_isDocumentsNeededFilterActive) _isReplyNeededFilterActive = false;
-                                    });
-                                  },
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                                    decoration: BoxDecoration(
-                                      color: _isDocumentsNeededFilterActive ? const Color(0xFF062AAE) : Colors.white,
-                                      borderRadius: BorderRadius.circular(24),
-                                      border: _isDocumentsNeededFilterActive ? null : Border.all(color: Colors.grey.shade300),
-                                    ),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Container(
-                                          padding: const EdgeInsets.all(4),
-                                          decoration: BoxDecoration(
-                                            color: _isDocumentsNeededFilterActive ? Colors.white : Colors.blue.shade700,
-                                            shape: BoxShape.circle,
-                                          ),
-                                          child: Text(
-                                            '$transactionDocsNeededCount',
-                                            style: GoogleFonts.poppins(
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w700,
-                                              color: _isDocumentsNeededFilterActive ? Colors.blue.shade700 : Colors.white,
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(width: 8),
-                                        Text(
-                                          'Documents needed',
-                                          style: GoogleFonts.poppins(
-                                            fontSize: 13,
-                                            fontWeight: FontWeight.w600,
-                                            color: _isDocumentsNeededFilterActive ? Colors.white : Colors.black87,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(width: 8),
-                                GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      _isReplyNeededFilterActive = !_isReplyNeededFilterActive;
-                                      if (_isReplyNeededFilterActive) _isDocumentsNeededFilterActive = false;
-                                    });
-                                  },
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(24),
-                                      border: Border.all(color: _isReplyNeededFilterActive ? Colors.red.shade400 : Colors.grey.shade300),
-                                    ),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Container(
-                                          padding: const EdgeInsets.all(4),
-                                          decoration: BoxDecoration(
-                                            color: _isReplyNeededFilterActive ? Colors.red.shade400 : Colors.grey.shade200,
-                                            shape: BoxShape.circle,
-                                          ),
-                                          child: Text(
-                                            '$transactionReplyNeededCount',
-                                            style: GoogleFonts.poppins(
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w700,
-                                              color: _isReplyNeededFilterActive ? Colors.white : Colors.black54,
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(width: 8),
-                                        Text(
-                                          'Reply needed',
-                                          style: GoogleFonts.poppins(
-                                            fontSize: 13,
-                                            fontWeight: FontWeight.w600,
-                                            color: _isReplyNeededFilterActive ? Colors.red.shade400 : Colors.black87,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(width: 8),
-                                GestureDetector(
-                                  onTap: () async {
-                                    final picked = await showDatePicker(
-                                      context: context,
-                                      initialDate: _selectedDate ?? DateTime.now(),
-                                      firstDate: DateTime(2020),
-                                      lastDate: DateTime(2030),
-                                      builder: (context, child) {
-                                        return Theme(
-                                          data: Theme.of(context).copyWith(
-                                            colorScheme: const ColorScheme.light(
-                                              primary: Color(0xFF062AAE),
-                                            ),
-                                          ),
-                                          child: child!,
-                                        );
-                                      },
-                                    );
-                                    if (picked != null) {
-                                      setState(() {
-                                        _selectedDate = picked;
-                                      });
-                                    }
-                                  },
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                                    decoration: BoxDecoration(
-                                      color: _selectedDate != null ? const Color(0xFF062AAE) : Colors.white,
-                                      borderRadius: BorderRadius.circular(24),
-                                      border: Border.all(
-                                        color: _selectedDate != null ? const Color(0xFF062AAE) : Colors.grey.shade300,
-                                      ),
-                                    ),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Icon(
-                                          Icons.calendar_today_outlined,
-                                          size: 16,
-                                          color: _selectedDate != null ? Colors.white : Colors.black87,
-                                        ),
-                                        const SizedBox(width: 8),
-                                        Text(
-                                          _selectedDate != null
-                                              ? '${_selectedDate!.day} ${_getMonthString(_selectedDate!.month)} ${_selectedDate!.year}'
-                                              : 'Select Date',
-                                          style: GoogleFonts.poppins(
-                                            fontSize: 13,
-                                            fontWeight: FontWeight.w600,
-                                            color: _selectedDate != null ? Colors.white : Colors.black87,
-                                          ),
-                                        ),
-                                        const SizedBox(width: 4),
-                                        if (_selectedDate != null)
-                                          GestureDetector(
-                                            onTap: () {
-                                              setState(() {
-                                                _selectedDate = null;
-                                              });
-                                            },
-                                            child: const Padding(
-                                              padding: EdgeInsets.only(left: 4.0),
-                                              child: Icon(
-                                                Icons.close,
-                                                size: 14,
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                          )
-                                        else
-                                          const Icon(
-                                            Icons.keyboard_arrow_down,
-                                            size: 14,
-                                            color: Colors.black87,
-                                          ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 24),
-                    Expanded(
-                      child: Align(
-                        alignment: _filteredTransactions.isNotEmpty
-                            ? Alignment.topCenter
-                            : const Alignment(0.0, -0.2),
-                        child: RefreshIndicator(
-                          onRefresh: _handleRefresh,
-                          child: SingleChildScrollView(
-                            physics: const AlwaysScrollableScrollPhysics(),
-                            child: Container(
-                            width: double.infinity,
-                            padding: EdgeInsets.only(
-                              top: _filteredTransactions.isNotEmpty ? 0 : 24,
-                              bottom: 24,
-                              left: 24,
-                              right: 24,
-                            ),
-                            child: Column(
-                              mainAxisAlignment: _filteredTransactions.isNotEmpty
-                                  ? MainAxisAlignment.start
-                                  : MainAxisAlignment.center,
-                              children: [
-                                if (_filteredTransactions.isNotEmpty) ...[
-                                  Column(
-                                    children: _filteredTransactions.map((t) {
-                                      return Padding(
-                                        padding: const EdgeInsets.only(bottom: 12),
-                                        child: _buildExampleTransaction(t.title, _formatDate(t.date), isReplyNeeded: t.replyNeeded),
-                                      );
-                                    }).toList(),
-                                  ),
-                                ] else ...[
-                                  Image.asset(
-                                    'assets/transation_money.png',
-                                    height: 170,
-                                    errorBuilder: (context, error, stackTrace) {
-                                      return Icon(
-                                        Icons.check_circle_outline,
-                                        size: 120,
-                                        color: const Color(0xFF1E3A8A).withValues(alpha: 0.5),
-                                      );
-                                    },
-                                  ),
-                                  const SizedBox(height: 24),
-                                  Text(
-                                    (!_isDocumentsNeededFilterActive && !_isReplyNeededFilterActive) ? 'No Transactions Found' : 'No Pending Actions',
-                                    textAlign: TextAlign.center,
-                                    style: GoogleFonts.poppins(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w600,
-                                      color: Colors.black87,
-                                      height: 1.3,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 8),
-                                  Text(
-                                    _isDocumentsNeededFilterActive
-                                        ? 'There are currently no transactions\nrequiring documents.'
-                                        : _isReplyNeededFilterActive
-                                            ? 'There are currently no transactions\nrequiring a reply.'
-                                            : 'There are currently no transactions\nfor the selected date.',
-                                    textAlign: TextAlign.center,
-                                    style: GoogleFonts.poppins(
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.w400,
-                                      color: Colors.grey.shade600,
-                                      height: 1.5,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 24),
-                                  ElevatedButton.icon(
-                                    onPressed: () {
-                                      _showUploadOptions(context);
-                                    },
-                                    icon: const Icon(Icons.upload_file, size: 18),
-                                    label: const Text('Upload Document'),
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: const Color(0xFF062AAE),
-                                      foregroundColor: Colors.white,
-                                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(24),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ],
-                            ),
-                          ),
-                        ),
-                        ),
-                      ),
-                ),
-                ],
+            const SizedBox(height: 2),
+            Text(
+              title,
+              textAlign: TextAlign.center,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: GoogleFonts.poppins(
+                fontSize: 9,
+                fontWeight: FontWeight.w600,
+                color: color,
               ),
             ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _showUploadOptions(context);
+    );
+  }
+
+  Widget _buildFilterChip({
+    required String label,
+    required bool isSelected,
+    required VoidCallback onTap,
+    Color activeColor = const Color(0xFF062AAE),
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(20),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        decoration: BoxDecoration(
+          color: isSelected ? activeColor : Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: isSelected ? activeColor : const Color(0xFFCBD5E1),
+          ),
+        ),
+        child: Text(
+          label,
+          style: GoogleFonts.poppins(
+            fontSize: 11,
+            fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+            color: isSelected ? Colors.white : Colors.black87,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFilingCard(SsmFiling filing) {
+    final hasSecretaryQuery = filing.status == SsmFilingStatus.secretaryReplied;
+    final lastMessage = filing.messages.isNotEmpty ? filing.messages.last : null;
+
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(
+          color: hasSecretaryQuery ? const Color(0xFFFCA5A5) : const Color(0xFFE2E8F0),
+          width: hasSecretaryQuery ? 1.5 : 1,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.03),
+            blurRadius: 6,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: InkWell(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => SsmFilingDetailPage(filingId: filing.id),
+            ),
+          );
         },
-        backgroundColor: const Color(0xFF062AAE),
-        elevation: 2,
-        shape: const CircleBorder(),
-        child: const Icon(Icons.upload_file, color: Colors.white, size: 32),
+        borderRadius: BorderRadius.circular(14),
+        child: Padding(
+          padding: const EdgeInsets.all(14),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Header Row: Reference & Status Badge
+              Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFEFF6FF),
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    child: const Icon(Icons.assignment_outlined, size: 14, color: Color(0xFF062AAE)),
+                  ),
+                  const SizedBox(width: 6),
+                  Expanded(
+                    child: Text(
+                      filing.referenceNo,
+                      style: GoogleFonts.poppins(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w700,
+                        color: const Color(0xFF062AAE),
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
+                    decoration: BoxDecoration(
+                      color: filing.status.bgColor,
+                      borderRadius: BorderRadius.circular(6),
+                      border: Border.all(color: filing.status.color.withValues(alpha: 0.3)),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(filing.status.icon, size: 11, color: filing.status.color),
+                        const SizedBox(width: 4),
+                        Text(
+                          filing.status.shortLabel,
+                          style: GoogleFonts.poppins(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w600,
+                            color: filing.status.color,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+
+              // Title
+              Text(
+                filing.title,
+                style: GoogleFonts.poppins(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                ),
+              ),
+              const SizedBox(height: 4),
+
+              // Company & Secretary
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      '${filing.companyName} • Sec: ${filing.assignedSecretary}',
+                      style: GoogleFonts.poppins(
+                        fontSize: 11,
+                        color: Colors.grey.shade600,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+
+              // Latest Message Banner if available
+              if (lastMessage != null)
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: lastMessage.isFromSecretary
+                        ? (hasSecretaryQuery ? const Color(0xFFFEF2F2) : const Color(0xFFF0FDF4))
+                        : const Color(0xFFF8FAFC),
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(
+                      color: lastMessage.isFromSecretary
+                          ? (hasSecretaryQuery ? const Color(0xFFFECACA) : const Color(0xFFDCFCE7))
+                          : const Color(0xFFE2E8F0),
+                    ),
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Icon(
+                        lastMessage.isFromSecretary ? Icons.mark_chat_unread : Icons.chat_bubble_outline,
+                        size: 14,
+                        color: lastMessage.isFromSecretary
+                            ? (hasSecretaryQuery ? const Color(0xFFDC2626) : const Color(0xFF16A34A))
+                            : Colors.grey.shade700,
+                      ),
+                      const SizedBox(width: 6),
+                      Expanded(
+                        child: Text(
+                          '${lastMessage.senderName}: "${lastMessage.text}"',
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: GoogleFonts.poppins(
+                            fontSize: 11,
+                            color: Colors.black87,
+                            fontStyle: FontStyle.italic,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              const SizedBox(height: 10),
+
+              // Footer: Attached Files and Deadline
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      const Icon(Icons.attach_file, size: 14, color: Colors.grey),
+                      const SizedBox(width: 2),
+                      Text(
+                        '${filing.attachedFiles.length} file(s)',
+                        style: GoogleFonts.poppins(fontSize: 11, color: Colors.grey.shade600),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        'Deadline: ${filing.deadline}',
+                        style: GoogleFonts.poppins(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.grey.shade700,
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                      const Icon(Icons.arrow_forward_ios, size: 11, color: Color(0xFF062AAE)),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

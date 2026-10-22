@@ -2,18 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../notifications/notifications_page.dart';
-import 'invoices_page.dart';
-import 'report_page.dart';
 import 'calendar_page.dart';
-import 'bank_accounts_page.dart';
 import 'referral_page.dart';
 import 'company_page.dart';
 import 'settings_page.dart';
 import '../authentication/login_page.dart';
 import 'profile_page.dart';
-import 'ecommerce_integrations_page.dart';
-import 'mailbox_page.dart';
-import 'advisory_calls_page.dart';
+import '../services/company_service.dart';
 
 class MorePage extends StatelessWidget {
   const MorePage({super.key});
@@ -60,84 +55,9 @@ class MorePage extends StatelessWidget {
                   children: [
                     _buildProfileHeader(context),
                     const SizedBox(height: 16),
-                    _buildSectionHeader('FINANCIAL TOOLS'),
+                    _buildSectionHeader('TOOLS & SERVICES'),
                     _buildSectionContainer(
                       children: [
-                        _buildMoreItem(
-                          context: context,
-                          title: 'Invoices',
-                          iconData: Icons.description_outlined,
-                          iconColor: Colors.black,
-                          iconBgColor: Colors.grey.shade200,
-                          onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => const InvoicesPage(),
-                            ),
-                          ),
-                        ),
-                        _buildDivider(),
-                        _buildMoreItem(
-                          context: context,
-                          title: 'Reports',
-                          iconData: Icons.bar_chart,
-                          iconColor: Colors.black,
-                          iconBgColor: Colors.grey.shade200,
-                          onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => const ReportPage(),
-                            ),
-                          ),
-                        ),
-                        _buildDivider(),
-                        _buildMoreItem(
-                          context: context,
-                          title: 'Bank accounts',
-                          iconData: Icons.credit_card_outlined,
-                          iconColor: Colors.black,
-                          iconBgColor: Colors.grey.shade200,
-                          onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => const BankAccountsPage(),
-                            ),
-                          ),
-                        ),
-                        _buildDivider(),
-                        _buildMoreItem(
-                          context: context,
-                          title: 'E-commerce integrations',
-                          iconData: Icons.shopping_bag_outlined,
-                          iconColor: Colors.black,
-                          iconBgColor: Colors.grey.shade200,
-                          onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => const EcommerceIntegrationsPage(),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 24),
-                    _buildSectionHeader('CONNECT & INBOX'),
-                    _buildSectionContainer(
-                      children: [
-                        _buildMoreItem(
-                          context: context,
-                          title: 'Mailbox',
-                          iconData: Icons.mail_outline,
-                          iconColor: Colors.black,
-                          iconBgColor: Colors.grey.shade200,
-                          onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => const MailboxPage(),
-                            ),
-                          ),
-                        ),
-                        _buildDivider(),
                         _buildMoreItem(
                           context: context,
                           title: 'Calendar',
@@ -148,20 +68,6 @@ class MorePage extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                               builder: (_) => const CalendarPage(),
-                            ),
-                          ),
-                        ),
-                        _buildDivider(),
-                        _buildMoreItem(
-                          context: context,
-                          title: 'Advisory calls',
-                          iconData: Icons.call_outlined,
-                          iconColor: Colors.black,
-                          iconBgColor: Colors.grey.shade200,
-                          onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => const AdvisoryCallsPage(),
                             ),
                           ),
                         ),
@@ -203,18 +109,51 @@ class MorePage extends StatelessWidget {
                     _buildSectionHeader('APP PREFERENCES'),
                     _buildSectionContainer(
                       children: [
-                        _buildMoreItem(
-                          context: context,
-                          title: 'Company',
-                          iconData: Icons.business_center_outlined,
-                          iconColor: Colors.black,
-                          iconBgColor: Colors.grey.shade200,
-                          onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => const CompanyPage(),
-                            ),
-                          ),
+                        ListenableBuilder(
+                          listenable: CompanyService.instance,
+                          builder: (context, _) {
+                            final comp = CompanyService.instance.selectedCompany;
+                            return _buildMoreItem(
+                              context: context,
+                              title: 'Company',
+                              iconData: Icons.business_center_outlined,
+                              iconColor: Colors.black,
+                              iconBgColor: Colors.grey.shade200,
+                              trailing: comp != null
+                                  ? Container(
+                                      constraints: const BoxConstraints(maxWidth: 130),
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 8,
+                                        vertical: 3,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: Colors.blue.shade50,
+                                        borderRadius: BorderRadius.circular(10),
+                                        border: Border.all(
+                                          color: Colors.blue.shade200,
+                                          width: 0.8,
+                                        ),
+                                      ),
+                                      child: Text(
+                                        comp.name,
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 11,
+                                          fontWeight: FontWeight.w600,
+                                          color: const Color(0xFF062AAE),
+                                        ),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    )
+                                  : null,
+                              onTap: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => const CompanyPage(),
+                                ),
+                              ),
+                            );
+                          },
                         ),
                         _buildDivider(),
                         _buildMoreItem(
@@ -411,20 +350,10 @@ class MorePage extends StatelessWidget {
                 ],
               ),
             ),
-            InkWell(
-              onTap: () {},
-              child: Container(
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade200,
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(
-                  Icons.qr_code_scanner,
-                  color: Colors.black87,
-                  size: 24,
-                ),
-              ),
+            Icon(
+              Icons.chevron_right,
+              color: Colors.grey.shade400,
+              size: 24,
             ),
           ],
         ),
@@ -500,23 +429,24 @@ class MorePage extends StatelessWidget {
             ),
             const SizedBox(width: 16),
             Expanded(
-              child: Row(
-                children: [
-                  Text(
-                    title,
-                    style: GoogleFonts.poppins(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      color: isDestructive ? Colors.red : Colors.black87,
-                    ),
-                  ),
-                  if (trailing != null) ...[
-                    const SizedBox(width: 12),
-                    trailing,
-                  ],
-                ],
+              child: Text(
+                title,
+                style: GoogleFonts.poppins(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  color: isDestructive ? Colors.red : Colors.black87,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
             ),
+            if (trailing != null) ...[
+              const SizedBox(width: 8),
+              Flexible(child: trailing),
+              const SizedBox(width: 6),
+            ] else ...[
+              const SizedBox(width: 6),
+            ],
             Icon(
               Icons.chevron_right,
               color: isDestructive ? Colors.red : Colors.grey.shade400,

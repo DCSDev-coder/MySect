@@ -106,7 +106,7 @@ const SupportDisputes = ({
                       <span className="text-xs font-mono font-bold text-gray-500">{d.ticketNo}</span>
                       <h4 className="font-semibold text-sm text-gray-900 mt-0.5">{d.subject}</h4>
                     </div>
-                    <span className={`px-2 py-0.5 text-[11px] font-semibold rounded-full ${
+                    <span className={`px-2.5 py-1 text-[11px] font-semibold rounded-full text-center inline-flex items-center justify-center shrink-0 leading-tight ${
                       d.priority === 'Critical' 
                         ? 'bg-rose-50 text-rose-700 border border-rose-200' 
                         : 'bg-amber-50 text-amber-700 border border-amber-200'
@@ -148,10 +148,10 @@ const SupportDisputes = ({
                     <p className="text-xs text-gray-500 mt-0.5">Category: {selectedDispute.category}</p>
                   </div>
 
-                  <span className={`px-2.5 py-1 text-xs font-semibold rounded-lg ${
+                  <span className={`px-3 py-1.5 text-xs font-semibold rounded-lg text-center inline-flex items-center justify-center leading-tight shrink-0 ${
                     selectedDispute.status.includes('Resolved') 
-                      ? 'bg-emerald-100 text-emerald-800' 
-                      : 'bg-amber-100 text-amber-800'
+                      ? 'bg-emerald-100 text-emerald-800 border border-emerald-200' 
+                      : 'bg-amber-100 text-amber-800 border border-amber-200'
                   }`}>
                     {selectedDispute.status}
                   </span>

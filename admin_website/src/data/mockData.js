@@ -219,7 +219,14 @@ export const initialCompanies = [
     assignedFirmId: 'firm-01',
     assignedFirmName: 'SectPro Corporate Services Sdn Bhd',
     assignedSecretary: 'Lim Mei Ling (MIA)',
+    assignedSecretaryLicense: 'MIA CA 48192',
+    assignedFirmContact: '+60 3-2148 9920',
+    assignedFirmEmail: 'azman@sectpro.com.my',
     status: 'Active',
+    subscriptionExpiresAt: '2027-06-14',
+    subscriptionPlan: 'Growth Plan',
+    subscriptionStatus: 'Active',
+    billingCycle: 'Annual Prepaid',
     directorsCount: 2,
     shareholdersCount: 2,
     paidUpCapital: 'MYR 250,000',
@@ -228,6 +235,26 @@ export const initialCompanies = [
     pendingRequestsCount: 2,
     clientContact: 'Adam Bin Hamzah (Director)',
     clientEmail: 'adam@dcs.com.my',
+    officialEmail: 'contact@dcs.com.my',
+    registeredAddress: 'Level 18, Menara Binjai, No. 2 Jalan Binjai, 50450 Kuala Lumpur',
+    businessAddress: 'Level 12, Axiata Tower, 9 Jalan Stesen Sentral 5, 50470 Kuala Lumpur',
+    mobileAppConnected: true,
+    lastMobileSync: '2026-10-22 08:45 (Active)',
+    directors: [
+      { name: 'Adam Bin Hamzah', identification: '880512-14-5521', role: 'Managing Director', appointedDate: '2021-06-14' },
+      { name: 'Eidza Binti Jumanis', identification: '910304-10-5842', role: 'Executive Director', appointedDate: '2021-06-14' }
+    ],
+    shareholders: [
+      { shareholder: 'Adam Bin Hamzah', type: 'Ordinary', numberOfShares: '125,000', totalShares: '250,000', percentage: '50%' },
+      { shareholder: 'Eidza Binti Jumanis', type: 'Ordinary', numberOfShares: '125,000', totalShares: '250,000', percentage: '50%' }
+    ],
+    statutoryDocuments: [
+      { id: 'doc-01', title: 'Company Constitution (M&AA)', category: 'Statutory', date: '2021-06-14', size: '2.4 MB' },
+      { id: 'doc-02', title: 'SSM Section 14 Certificate of Incorporation', category: 'SSM Filing', date: '2021-06-14', size: '850 KB' },
+      { id: 'doc-03', title: 'SSM Corporate Profile (e-Info)', category: 'Statutory', date: '2026-09-01', size: '1.1 MB' },
+      { id: 'doc-04', title: 'Section 58 Notice of Appointment of Secretary', category: 'CoSec Lodgement', date: '2024-03-15', size: '420 KB' },
+      { id: 'doc-05', title: 'Section 68 Annual Return 2025', category: 'Annual Compliance', date: '2025-11-10', size: '3.6 MB' }
+    ]
   },
   {
     id: 'comp-02',
@@ -238,15 +265,41 @@ export const initialCompanies = [
     assignedFirmId: 'firm-01',
     assignedFirmName: 'SectPro Corporate Services Sdn Bhd',
     assignedSecretary: 'Azman bin Ibrahim (MAICSA)',
+    assignedSecretaryLicense: 'MAICSA 7019284',
+    assignedFirmContact: '+60 3-2148 9920',
+    assignedFirmEmail: 'azman@sectpro.com.my',
     status: 'Active',
+    subscriptionExpiresAt: '2027-04-20',
+    subscriptionPlan: 'Growth Plan',
+    subscriptionStatus: 'Active',
+    billingCycle: 'Annual Prepaid',
     directorsCount: 2,
     shareholdersCount: 2,
     paidUpCapital: 'MYR 100,000',
     annualReturnDeadline: '2026-10-25',
     financialStatementsDeadline: '2026-11-30',
     pendingRequestsCount: 1,
-    clientContact: 'Eidza Binti Jumanis (Director)',
-    clientEmail: 'eidza@c2coffee.com.my',
+    clientContact: 'Adam Bin Hamzah (Director)',
+    clientEmail: 'adam@c2coffee.com.my',
+    officialEmail: 'hello@c2coffee.com.my',
+    registeredAddress: 'Level 18, Menara Binjai, No. 2 Jalan Binjai, 50450 Kuala Lumpur',
+    businessAddress: 'No. 15, Jalan Telawi 3, Bangsar Baru, 59100 Kuala Lumpur',
+    mobileAppConnected: true,
+    lastMobileSync: '2026-10-22 07:50 (Active)',
+    directors: [
+      { name: 'Adam Bin Hamzah', identification: '880512-14-5521', role: 'Managing Director', appointedDate: '2020-04-20' },
+      { name: 'Eidza Binti Jumanis', identification: '910304-10-5842', role: 'Director', appointedDate: '2020-04-20' }
+    ],
+    shareholders: [
+      { shareholder: 'Adam Bin Hamzah', type: 'Ordinary', numberOfShares: '60,000', totalShares: '100,000', percentage: '60%' },
+      { shareholder: 'Eidza Binti Jumanis', type: 'Ordinary', numberOfShares: '40,000', totalShares: '100,000', percentage: '40%' }
+    ],
+    statutoryDocuments: [
+      { id: 'doc-06', title: 'Company Constitution (M&AA)', category: 'Statutory', date: '2020-04-20', size: '2.1 MB' },
+      { id: 'doc-07', title: 'SSM Section 14 Certificate of Incorporation', category: 'SSM Filing', date: '2020-04-20', size: '780 KB' },
+      { id: 'doc-08', title: 'SSM Corporate Profile (e-Info)', category: 'Statutory', date: '2026-08-15', size: '950 KB' },
+      { id: 'doc-09', title: 'Section 58 Notice of Appointment of Secretary', category: 'CoSec Lodgement', date: '2024-03-15', size: '410 KB' }
+    ]
   },
   {
     id: 'comp-03',
@@ -257,15 +310,39 @@ export const initialCompanies = [
     assignedFirmId: 'firm-02',
     assignedFirmName: 'Apex Corporate Secretarial Partners',
     assignedSecretary: 'Sarah binti Ahmad (MAICSA)',
+    assignedSecretaryLicense: 'MAICSA 6028192',
+    assignedFirmContact: '+60 3-7955 8812',
+    assignedFirmEmail: 'sarah@apexcorp.com.my',
     status: 'Active',
-    directorsCount: 2,
-    shareholdersCount: 2,
+    subscriptionExpiresAt: '2027-08-12',
+    subscriptionPlan: 'Starter Plan',
+    subscriptionStatus: 'Active',
+    billingCycle: 'Annual Prepaid',
+    directorsCount: 1,
+    shareholdersCount: 1,
     paidUpCapital: 'MYR 50,000',
     annualReturnDeadline: '2026-11-12',
     financialStatementsDeadline: '2026-12-15',
     pendingRequestsCount: 0,
-    clientContact: 'Adam Bin Hamzah',
-    clientEmail: 'adam@5luxescents.my',
+    clientContact: 'Eidza Binti Jumanis (Director)',
+    clientEmail: 'eidza@5luxescents.my',
+    officialEmail: 'admin@5luxescents.my',
+    registeredAddress: 'Unit 9-02, Block B, Phileo Damansara II, 46350 Petaling Jaya, Selangor',
+    businessAddress: 'No. 42-2, Jalan Eco Forest 6/1C, Eco Forest, 43500 Semenyih, Selangor',
+    mobileAppConnected: true,
+    lastMobileSync: '2026-10-21 18:30 (Active)',
+    directors: [
+      { name: 'Eidza Binti Jumanis', identification: '910304-10-5842', role: 'Managing Director', appointedDate: '2022-08-12' }
+    ],
+    shareholders: [
+      { shareholder: 'Eidza Binti Jumanis', type: 'Ordinary', numberOfShares: '50,000', totalShares: '50,000', percentage: '100%' }
+    ],
+    statutoryDocuments: [
+      { id: 'doc-10', title: 'Company Constitution (M&AA)', category: 'Statutory', date: '2022-08-12', size: '1.9 MB' },
+      { id: 'doc-11', title: 'SSM Section 14 Certificate of Incorporation', category: 'SSM Filing', date: '2022-08-12', size: '820 KB' },
+      { id: 'doc-12', title: 'SSM Corporate Profile (e-Info)', category: 'Statutory', date: '2026-07-20', size: '1.0 MB' },
+      { id: 'doc-13', title: 'Section 58 Notice of Appointment of Secretary', category: 'CoSec Lodgement', date: '2024-01-10', size: '430 KB' }
+    ]
   },
   {
     id: 'comp-06',
@@ -276,15 +353,40 @@ export const initialCompanies = [
     assignedFirmId: 'firm-02',
     assignedFirmName: 'Apex Corporate Secretarial Partners',
     assignedSecretary: 'Mohd Firdaus (LS)',
+    assignedSecretaryLicense: 'LS 0009841',
+    assignedFirmContact: '+60 3-7955 8812',
+    assignedFirmEmail: 'sarah@apexcorp.com.my',
     status: 'Active',
+    subscriptionExpiresAt: '2026-11-30',
+    subscriptionPlan: 'Professional Plan',
+    subscriptionStatus: 'Expiring Soon',
+    billingCycle: 'Annual Prepaid',
     directorsCount: 4,
-    shareholdersCount: 3,
+    shareholdersCount: 2,
     paidUpCapital: 'MYR 1,000,000',
     annualReturnDeadline: '2026-12-05',
     financialStatementsDeadline: '2027-01-31',
     pendingRequestsCount: 0,
     clientContact: 'Captain Dennis Wong',
     clientEmail: 'dennis@borneomarine.my',
+    officialEmail: 'ops@borneomarine.my',
+    registeredAddress: 'Unit 9-02, Block B, Phileo Damansara II, 46350 Petaling Jaya, Selangor',
+    businessAddress: 'Lot 8, Industrial Zone 4, Kota Kinabalu Port, 88450 Kota Kinabalu, Sabah',
+    mobileAppConnected: true,
+    lastMobileSync: '2026-10-22 06:15 (Active)',
+    directors: [
+      { name: 'Captain Dennis Wong', identification: '750419-12-5123', role: 'Managing Director', appointedDate: '2019-11-05' },
+      { name: 'Julian Kong', identification: '810611-12-5401', role: 'Executive Director', appointedDate: '2019-11-05' }
+    ],
+    shareholders: [
+      { shareholder: 'Captain Dennis Wong', type: 'Ordinary', numberOfShares: '600,000', totalShares: '1,000,000', percentage: '60%' },
+      { shareholder: 'Sabah Marine Holdings', type: 'Ordinary', numberOfShares: '400,000', totalShares: '1,000,000', percentage: '40%' }
+    ],
+    statutoryDocuments: [
+      { id: 'doc-14', title: 'Company Constitution (M&AA)', category: 'Statutory', date: '2019-11-05', size: '2.2 MB' },
+      { id: 'doc-15', title: 'SSM Section 14 Certificate of Incorporation', category: 'SSM Filing', date: '2019-11-05', size: '890 KB' },
+      { id: 'doc-16', title: 'SSM Corporate Profile (e-Info)', category: 'Statutory', date: '2026-08-30', size: '1.2 MB' }
+    ]
   },
   {
     id: 'comp-04',
@@ -295,7 +397,14 @@ export const initialCompanies = [
     assignedFirmId: 'firm-02',
     assignedFirmName: 'Apex Corporate Secretarial Partners',
     assignedSecretary: 'Sarah binti Ahmad (MAICSA)',
+    assignedSecretaryLicense: 'MAICSA 6028192',
+    assignedFirmContact: '+60 3-7955 8812',
+    assignedFirmEmail: 'sarah@apexcorp.com.my',
     status: 'Active',
+    subscriptionExpiresAt: '2027-08-12',
+    subscriptionPlan: 'Starter Plan',
+    subscriptionStatus: 'Active',
+    billingCycle: 'Annual Prepaid',
     directorsCount: 2,
     shareholdersCount: 2,
     paidUpCapital: 'MYR 100,000',
@@ -304,6 +413,23 @@ export const initialCompanies = [
     pendingRequestsCount: 1,
     clientContact: 'Dr. Zulkifli Harun',
     clientEmail: 'dr.zul@kvbiopharma.com',
+    officialEmail: 'info@kvbiopharma.com',
+    registeredAddress: 'Unit 9-02, Block B, Phileo Damansara II, 46350 Petaling Jaya, Selangor',
+    businessAddress: 'Block C, Technology Park Malaysia, Bukit Jalil, 57000 Kuala Lumpur',
+    mobileAppConnected: false,
+    lastMobileSync: 'Invite Sent (Pending Activation)',
+    directors: [
+      { name: 'Dr. Zulkifli Harun', identification: '790814-10-5321', role: 'Managing Director', appointedDate: '2022-08-12' },
+      { name: 'Dr. Aina Sofea', identification: '840221-14-5112', role: 'Scientific Director', appointedDate: '2022-08-12' }
+    ],
+    shareholders: [
+      { shareholder: 'Dr. Zulkifli Harun', type: 'Ordinary', numberOfShares: '70,000', totalShares: '100,000', percentage: '70%' },
+      { shareholder: 'Dr. Aina Sofea', type: 'Ordinary', numberOfShares: '30,000', totalShares: '100,000', percentage: '30%' }
+    ],
+    statutoryDocuments: [
+      { id: 'doc-17', title: 'Company Constitution (M&AA)', category: 'Statutory', date: '2022-08-12', size: '2.0 MB' },
+      { id: 'doc-18', title: 'SSM Section 14 Certificate of Incorporation', category: 'SSM Filing', date: '2022-08-12', size: '830 KB' }
+    ]
   },
   {
     id: 'comp-05',
@@ -314,16 +440,41 @@ export const initialCompanies = [
     assignedFirmId: 'firm-05',
     assignedFirmName: 'Metro Advisory & Secretarial Services (Suspended)',
     assignedSecretary: 'Desmond Chong (LS)',
+    assignedSecretaryLicense: 'LS 0004921 (Expired)',
+    assignedFirmContact: '+60 3-7728 4110',
+    assignedFirmEmail: 'desmond@metroadvisory.com.my',
     status: 'Transfer Pending',
+    subscriptionExpiresAt: '2026-10-31',
+    subscriptionPlan: 'Enterprise Plan',
+    subscriptionStatus: 'Renewal Due',
+    billingCycle: 'Annual Prepaid',
     directorsCount: 3,
-    shareholdersCount: 5,
+    shareholdersCount: 2,
     paidUpCapital: 'MYR 2,000,000',
     annualReturnDeadline: '2026-10-22', // Urgent!
     financialStatementsDeadline: '2026-11-15',
     pendingRequestsCount: 3,
     clientContact: 'Datin Jenny Tan',
     clientEmail: 'jenny@silverline.my',
+    officialEmail: 'management@silverline.my',
+    registeredAddress: 'Suite 22-01, Menara Silverline, Jalan Ampang, 50450 Kuala Lumpur',
+    businessAddress: 'Suite 22-01, Menara Silverline, Jalan Ampang, 50450 Kuala Lumpur',
+    mobileAppConnected: true,
+    lastMobileSync: '2026-10-20 14:15 (Alert: Secretary Lic. Expired)',
     transferReason: 'Previous secretary firm Metro Advisory suspended due to expired practising licence. Handover in progress.',
+    directors: [
+      { name: 'Datin Jenny Tan', identification: '720315-08-5422', role: 'Managing Director', appointedDate: '2017-03-22' },
+      { name: 'Dato’ Robert Low', identification: '681120-10-5011', role: 'Executive Chairman', appointedDate: '2017-03-22' }
+    ],
+    shareholders: [
+      { shareholder: 'Datin Jenny Tan', type: 'Ordinary', numberOfShares: '1,000,000', totalShares: '2,000,000', percentage: '50%' },
+      { shareholder: 'Silverline Holdings Sdn Bhd', type: 'Ordinary', numberOfShares: '1,000,000', totalShares: '2,000,000', percentage: '50%' }
+    ],
+    statutoryDocuments: [
+      { id: 'doc-19', title: 'Company Constitution (M&AA)', category: 'Statutory', date: '2017-03-22', size: '2.8 MB' },
+      { id: 'doc-20', title: 'SSM Certificate of Incorporation', category: 'SSM Filing', date: '2017-03-22', size: '910 KB' },
+      { id: 'doc-21', title: 'Section 68 Annual Return 2025', category: 'Annual Compliance', date: '2025-10-18', size: '3.4 MB' }
+    ]
   }
 ];
 

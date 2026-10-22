@@ -75,32 +75,32 @@ const AuditLogs = ({ auditLogs = [] }) => {
           <table className="min-w-full divide-y divide-gray-200 text-xs">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-5 py-3.5 text-left font-semibold text-gray-600">Timestamp</th>
-                <th className="px-5 py-3.5 text-left font-semibold text-gray-600">Action Type</th>
-                <th className="px-5 py-3.5 text-left font-semibold text-gray-600">Actor & IP</th>
-                <th className="px-5 py-3.5 text-left font-semibold text-gray-600">Target Entity</th>
-                <th className="px-5 py-3.5 text-left font-semibold text-gray-600">Event Details</th>
+                <th className="px-5 py-3.5 text-left font-semibold text-gray-600 whitespace-nowrap">Timestamp</th>
+                <th className="px-5 py-3.5 text-left font-semibold text-gray-600 whitespace-nowrap">Action Type</th>
+                <th className="px-5 py-3.5 text-left font-semibold text-gray-600 whitespace-nowrap">Actor & IP</th>
+                <th className="px-5 py-3.5 text-left font-semibold text-gray-600 whitespace-nowrap">Target Entity</th>
+                <th className="px-5 py-3.5 text-left font-semibold text-gray-600 min-w-[420px] w-1/2">Event Details</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100 bg-white">
               {filtered.map((log) => (
                 <tr key={log.id} className="hover:bg-gray-50">
-                  <td className="px-5 py-4 font-mono text-gray-500 whitespace-nowrap">
+                  <td className="px-5 py-4 font-mono text-gray-500 whitespace-nowrap text-xs">
                     {log.timestamp}
                   </td>
                   <td className="px-5 py-4 whitespace-nowrap">
-                    <span className="px-2.5 py-1 text-[11px] font-bold rounded-md bg-blue-50 text-[#062AAE] border border-blue-100">
+                    <span className="px-2.5 py-1 text-[11px] font-bold rounded-md bg-blue-50 text-[#062AAE] border border-blue-100 whitespace-nowrap">
                       {log.actionType}
                     </span>
                   </td>
                   <td className="px-5 py-4 whitespace-nowrap">
-                    <div className="font-semibold text-gray-900">{log.actor}</div>
+                    <div className="font-semibold text-gray-900 text-xs">{log.actor}</div>
                     <div className="text-gray-400 font-mono text-[10px] mt-0.5">{log.ipAddress}</div>
                   </td>
-                  <td className="px-5 py-4 font-medium text-gray-800 max-w-xs truncate">
+                  <td className="px-5 py-4 font-medium text-gray-800 text-xs whitespace-nowrap">
                     {log.targetEntity}
                   </td>
-                  <td className="px-5 py-4 text-gray-600 leading-relaxed max-w-md">
+                  <td className="px-5 py-4 text-gray-700 leading-relaxed text-xs sm:text-[13px] min-w-[420px]">
                     {log.details}
                   </td>
                 </tr>

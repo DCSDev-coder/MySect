@@ -130,7 +130,7 @@ const FeesCommissions = ({
                 <th className="px-5 py-3.5 text-left font-semibold text-gray-600">Description</th>
                 <th className="px-5 py-3.5 text-left font-semibold text-gray-600">Applies To</th>
                 <th className="px-5 py-3.5 text-left font-semibold text-gray-600">Effective Since</th>
-                <th className="px-5 py-3.5 text-right font-semibold text-gray-600">Actions</th>
+                <th className="px-5 py-3.5 text-center font-semibold text-gray-600">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100 bg-white">
@@ -162,10 +162,10 @@ const FeesCommissions = ({
                     {rule.effectiveSince}
                   </td>
 
-                  <td className="px-5 py-4 text-right">
+                  <td className="px-5 py-4 text-center">
                     <button
                       onClick={() => handleOpenEdit(rule)}
-                      className="px-3 py-1.5 bg-white border border-gray-200 hover:bg-gray-100 text-gray-700 rounded-lg text-xs font-semibold inline-flex items-center gap-1 transition-colors"
+                      className="px-3 py-1.5 bg-white border border-gray-200 hover:bg-gray-100 text-gray-700 rounded-lg text-xs font-semibold inline-flex items-center justify-center gap-1 transition-colors"
                     >
                       <Edit className="w-3 h-3" />
                       Configure

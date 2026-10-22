@@ -68,35 +68,40 @@ class _MySectStrokeLoadingScreenState extends State<MySectStrokeLoadingScreen>
               final double textOpacity = Curves.easeOut.transform(textProgress);
               final double textSlideOffset = (1.0 - textOpacity) * 8.0;
 
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  MySectStrokeLogoLoader(
-                    progress: progress,
-                    width: 170,
-                    height: 120,
-                    strokeWidth: 4.5,
-                  ),
-                  const SizedBox(height: 28),
+              return Center(
+                child: SingleChildScrollView(
+                  physics: const NeverScrollableScrollPhysics(),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      MySectStrokeLogoLoader(
+                        progress: progress,
+                        width: 170,
+                        height: 120,
+                        strokeWidth: 4.5,
+                      ),
+                      const SizedBox(height: 28),
 
-                  Opacity(
-                    opacity: textOpacity,
-                    child: Transform.translate(
-                      offset: Offset(0, textSlideOffset),
-                      child: Text(
-                        "YOUR COMPANY SECRETARY",
-                        textAlign: TextAlign.center,
-                        style: GoogleFonts.poppins(
-                          color: const Color(0xFF101144),
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: 1.1,
+                      Opacity(
+                        opacity: textOpacity,
+                        child: Transform.translate(
+                          offset: Offset(0, textSlideOffset),
+                          child: Text(
+                            "YOUR COMPANY SECRETARY",
+                            textAlign: TextAlign.center,
+                            style: GoogleFonts.poppins(
+                              color: const Color(0xFF101144),
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700,
+                              letterSpacing: 1.1,
+                            ),
+                          ),
                         ),
                       ),
-                    ),
+                    ],
                   ),
-                ],
+                ),
               );
             },
           ),
