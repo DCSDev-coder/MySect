@@ -4,6 +4,7 @@ import 'login_page.dart';
 import 'slide_transition_route.dart';
 
 import 'verification_page.dart';
+import '../widgets/app_top_header.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -30,46 +31,70 @@ class _SignupPageState extends State<SignupPage> {
 
   @override
   Widget build(BuildContext context) {
+    final bottomInset = MediaQuery.of(context).padding.bottom;
+    final isKeyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
     return Scaffold(
       backgroundColor: const Color(0xFFF9FAFB),
       body: SafeArea(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 16.0, top: 16.0),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Image.asset(
-                  'assets/mysect_logo.png',
-                  width: 110,
-                  fit: BoxFit.contain,
-                ),
-              ),
-            ),
-            const SizedBox(height: 10),
-            Expanded(
-              child: Center(
-                child: Image.asset('assets/signup.png', height: 200),
-              ),
-            ),
-            Container(
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(32),
-                  topRight: Radius.circular(32),
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black12,
-                    blurRadius: 10,
-                    offset: Offset(0, -5),
-                  ),
-                ],
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(24.0),
-                child: Column(
+        top: false,
+        bottom: false,
+        child: GestureDetector(
+          onTap: () => FocusScope.of(context).unfocus(),
+          behavior: HitTestBehavior.opaque,
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              return SingleChildScrollView(
+                physics: const ClampingScrollPhysics(),
+                keyboardDismissBehavior:
+                    ScrollViewKeyboardDismissBehavior.onDrag,
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                  child: IntrinsicHeight(
+                    child: Column(
+                      children: [
+                        const AppTopHeader(showNotificationBell: false),
+                        SizedBox(height: isKeyboardOpen ? 4 : 10),
+                        AnimatedContainer(
+                          duration: const Duration(milliseconds: 200),
+                          curve: Curves.easeOut,
+                          clipBehavior: Clip.hardEdge,
+                          height: isKeyboardOpen ? 0 : 160,
+                          child: OverflowBox(
+                            minHeight: 0,
+                            maxHeight: 160,
+                            alignment: Alignment.center,
+                            child: Image.asset(
+                              'assets/signup.png',
+                              height: 160,
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: isKeyboardOpen ? 8 : 16),
+                        Expanded(
+                          child: Container(
+                            width: double.infinity,
+                            decoration: const BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(32),
+                                topRight: Radius.circular(32),
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black12,
+                                  blurRadius: 10,
+                                  offset: Offset(0, -5),
+                                ),
+                              ],
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.fromLTRB(
+                                24.0,
+                                24.0,
+                                24.0,
+                                24.0 + (isKeyboardOpen ? 0 : bottomInset),
+                              ),
+                              child: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -388,9 +413,16 @@ class _SignupPageState extends State<SignupPage> {
                 ),
               ),
             ),
-          ],
+          ),
+        ],
+      ),
+    ),
+  ),
+);
+          },
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 }

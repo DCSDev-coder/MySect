@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../authentication/login_page.dart';
 import '../authentication/slide_transition_route.dart';
+import '../widgets/app_top_header.dart';
 
 class Intro3Page extends StatelessWidget {
   const Intro3Page({super.key});
@@ -11,6 +12,7 @@ class Intro3Page extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
+        top: false,
         child: LayoutBuilder(
           builder: (context, constraints) {
             return SingleChildScrollView(
@@ -19,29 +21,23 @@ class Intro3Page extends StatelessWidget {
                 child: IntrinsicHeight(
                   child: Column(
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 16.0, top: 16.0, right: 16.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Image.asset('assets/mysect_logo.png', width: 110, fit: BoxFit.contain),
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pushAndRemoveUntil(
-                                  SlideTransitionRoute(page: const LoginPage()),
-                                  (route) => false,
-                                );
-                              },
-                              child: Text(
-                                'Skip',
-                                style: GoogleFonts.poppins(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.grey[600],
-                                ),
-                              ),
+                      AppTopHeader(
+                        showNotificationBell: false,
+                        trailing: TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pushAndRemoveUntil(
+                              SlideTransitionRoute(page: const LoginPage()),
+                              (route) => false,
+                            );
+                          },
+                          child: Text(
+                            'Skip',
+                            style: GoogleFonts.poppins(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.grey[600],
                             ),
-                          ],
+                          ),
                         ),
                       ),
                       Expanded(

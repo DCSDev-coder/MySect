@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../notifications/notifications_page.dart';
 import '../home/home_page.dart';
 import '../widgets/custom_bottom_nav_bar.dart';
 import '../models/ssm_filing_model.dart';
 import '../services/ssm_filing_service.dart';
 import '../transactions/ssm_filing_detail_page.dart';
 import '../transactions/submit_ssm_filing_page.dart';
+import '../widgets/app_top_header.dart';
 
 class DocumentNeededPage extends StatelessWidget {
   const DocumentNeededPage({super.key});
@@ -36,36 +36,10 @@ class DocumentNeededPage extends StatelessWidget {
         return Scaffold(
           backgroundColor: const Color(0xFFF8FAFC),
           body: SafeArea(
+            top: false,
             child: Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 16.0, top: 8.0, right: 16.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Image.asset(
-                        'assets/mysect_logo.png',
-                        width: 110,
-                        fit: BoxFit.contain,
-                      ),
-                      IconButton(
-                        icon: const Icon(
-                          Icons.notifications_none,
-                          color: Colors.black87,
-                          size: 24,
-                        ),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const NotificationsPage(),
-                            ),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                ),
+                const AppTopHeader(),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                   child: Row(

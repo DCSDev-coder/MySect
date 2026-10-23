@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
-import '../notifications/notifications_page.dart';
+import '../widgets/app_top_header.dart';
 
 class PaymentMethodsPage extends StatefulWidget {
   const PaymentMethodsPage({super.key});
@@ -301,40 +301,10 @@ class _PaymentMethodsPageState extends State<PaymentMethodsPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
+        top: false,
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.only(
-                left: 16.0,
-                top: 8.0,
-                right: 16.0,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Image.asset(
-                    'assets/mysect_logo.png',
-                    width: 110,
-                    fit: BoxFit.contain,
-                  ),
-                  IconButton(
-                    icon: const Icon(
-                      Icons.notifications_none,
-                      color: Colors.black,
-                      size: 24,
-                    ),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const NotificationsPage(),
-                        ),
-                      );
-                    },
-                  ),
-                ],
-              ),
-            ),
+            const AppTopHeader(),
             
             Expanded(
               child: Padding(

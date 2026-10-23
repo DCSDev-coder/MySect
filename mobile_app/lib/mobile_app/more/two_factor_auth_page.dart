@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../widgets/custom_bottom_nav_bar.dart';
 import '../home/home_page.dart';
 import 'two_factor_verification_page.dart';
+import '../widgets/app_top_header.dart';
 
 class TwoFactorAuthPage extends StatefulWidget {
   const TwoFactorAuthPage({super.key});
@@ -73,21 +74,11 @@ class _TwoFactorAuthPageState extends State<TwoFactorAuthPage> {
     return Scaffold(
       backgroundColor: const Color(0xFFFAFAFA),
       body: SafeArea(
+        top: false,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 16.0, top: 8.0, right: 16.0),
-              child: Row(
-                children: [
-                  Image.asset(
-                    'assets/mysect_logo.png',
-                    width: 110,
-                    fit: BoxFit.contain,
-                  ),
-                ],
-              ),
-            ),
+            const AppTopHeader(showNotificationBell: false),
 
             Expanded(
               child: Padding(

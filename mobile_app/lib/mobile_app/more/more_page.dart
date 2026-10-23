@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../notifications/notifications_page.dart';
+import '../widgets/app_top_header.dart';
 import 'calendar_page.dart';
 import 'referral_page.dart';
 import 'company_page.dart';
@@ -18,36 +18,10 @@ class MorePage extends StatelessWidget {
     return Scaffold(
       backgroundColor: const Color(0xFFF7F7F9),
       body: SafeArea(
+        top: false,
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 16.0, top: 8.0, right: 16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Image.asset(
-                    'assets/mysect_logo.png',
-                    width: 110,
-                    fit: BoxFit.contain,
-                  ),
-                  IconButton(
-                    icon: const Icon(
-                      Icons.notifications_none,
-                      color: Colors.black,
-                      size: 24,
-                    ),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const NotificationsPage(),
-                        ),
-                      );
-                    },
-                  ),
-                ],
-              ),
-            ),
+            const AppTopHeader(),
             Expanded(
               child: SingleChildScrollView(
                 child: Column(

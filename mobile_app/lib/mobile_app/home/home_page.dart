@@ -13,6 +13,7 @@ import '../tasks/document_needed_page.dart';
 import '../tasks/replies_needed_page.dart';
 import '../services/company_service.dart';
 import '../services/ssm_filing_service.dart';
+import '../widgets/app_top_header.dart';
 
 class HomePage extends StatefulWidget {
   final int initialIndex;
@@ -392,59 +393,33 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildHomeView() {
-    final topPadding = MediaQuery.of(context).padding.top;
     return SafeArea(
       top: false,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: EdgeInsets.only(
-              left: 16.0,
-              top: topPadding > 0 ? (topPadding - 12).clamp(8.0, 44.0) : 10.0,
-              right: 16.0,
-              bottom: 2.0,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Image.asset(
-                  'assets/mysect_logo.png',
-                  width: 105,
-                  fit: BoxFit.contain,
-                ),
-                IconButton(
-                  icon: const Icon(
-                    Icons.notifications_none,
-                    color: Colors.black,
-                    size: 24,
+          AppTopHeader(
+            onNotificationTap: () {
+              if (_selectedCompany == 'Test Enterprise') {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      'Notifications are unavailable to view.',
+                      style: GoogleFonts.poppins(color: Colors.white),
+                    ),
+                    backgroundColor: Colors.red,
+                    duration: const Duration(seconds: 2),
                   ),
-                  padding: EdgeInsets.zero,
-                  constraints: const BoxConstraints(),
-                  onPressed: () {
-                    if (_selectedCompany == 'Test Enterprise') {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                            'Notifications are unavailable to view.',
-                            style: GoogleFonts.poppins(color: Colors.white),
-                          ),
-                          backgroundColor: Colors.red,
-                          duration: const Duration(seconds: 2),
-                        ),
-                      );
-                      return;
-                    }
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const NotificationsPage(),
-                      ),
-                    );
-                  },
+                );
+                return;
+              }
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const NotificationsPage(),
                 ),
-              ],
-            ),
+              );
+            },
           ),
           Expanded(
             child: RefreshIndicator(
@@ -510,6 +485,7 @@ class _HomePageState extends State<HomePage> {
                                         fontWeight: FontWeight.w700,
                                         color: Colors.black,
                                       ),
+                                      maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
                                     ),
                                   ),
@@ -558,7 +534,10 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                           const SizedBox(height: 4),
-                          Row(
+                          Wrap(
+                            crossAxisAlignment: WrapCrossAlignment.center,
+                            spacing: 8,
+                            runSpacing: 4,
                             children: [
                               Text(
                                 'Financial Year 2026',
@@ -568,7 +547,6 @@ class _HomePageState extends State<HomePage> {
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
-                              const SizedBox(width: 8),
                               Container(
                                 width: 4,
                                 height: 4,
@@ -577,37 +555,31 @@ class _HomePageState extends State<HomePage> {
                                   shape: BoxShape.circle,
                                 ),
                               ),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      width: 6,
-                                      height: 6,
-                                      decoration: BoxDecoration(
-                                        color: _companyService.isConnectedToAdmin
-                                            ? const Color(0xFF10B981)
-                                            : const Color(0xFF062AAE),
-                                        shape: BoxShape.circle,
-                                      ),
+                              Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Container(
+                                    width: 6,
+                                    height: 6,
+                                    decoration: BoxDecoration(
+                                      color: _companyService.isConnectedToAdmin
+                                          ? const Color(0xFF10B981)
+                                          : const Color(0xFF062AAE),
+                                      shape: BoxShape.circle,
                                     ),
-                                    const SizedBox(width: 4),
-                                    Expanded(
-                                      child: Text(
-                                        _companyService.selectedCompany?.assignedFirmName ?? 'MySect Verified',
-                                        style: GoogleFonts.poppins(
-                                          fontSize: 11,
-                                          color: _companyService.isConnectedToAdmin
-                                              ? const Color(0xFF065F46)
-                                              : const Color(0xFF062AAE),
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                        overflow: TextOverflow.ellipsis,
-                                        maxLines: 1,
-                                      ),
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    _companyService.selectedCompany?.assignedFirmName ?? 'MySect Verified',
+                                    style: GoogleFonts.poppins(
+                                      fontSize: 11,
+                                      color: _companyService.isConnectedToAdmin
+                                          ? const Color(0xFF065F46)
+                                          : const Color(0xFF062AAE),
+                                      fontWeight: FontWeight.w600,
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
@@ -670,38 +642,35 @@ class _HomePageState extends State<HomePage> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            Wrap(
+                              alignment: WrapAlignment.spaceBetween,
+                              crossAxisAlignment: WrapCrossAlignment.center,
+                              spacing: 8,
+                              runSpacing: 6,
                               children: [
-                                Flexible(
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white.withValues(alpha: 0.2),
-                                      borderRadius: BorderRadius.circular(6),
-                                    ),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        const Icon(Icons.verified, color: Colors.white, size: 14),
-                                        const SizedBox(width: 4),
-                                        Flexible(
-                                          child: Text(
-                                            'SSM Statutory Lodgement',
-                                            style: GoogleFonts.poppins(
-                                              fontSize: 10,
-                                              fontWeight: FontWeight.w600,
-                                              color: Colors.white,
-                                            ),
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white.withValues(alpha: 0.2),
+                                    borderRadius: BorderRadius.circular(6),
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      const Icon(Icons.verified, color: Colors.white, size: 14),
+                                      const SizedBox(width: 4),
+                                      Text(
+                                        'SSM Statutory Lodgement',
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.white,
                                         ),
-                                      ],
-                                    ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                                if (SsmFilingService.instance.secretaryRepliesNeededCount > 0) ...[
-                                  const SizedBox(width: 6),
+                                if (SsmFilingService.instance.secretaryRepliesNeededCount > 0)
                                   Container(
                                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                                     decoration: BoxDecoration(
@@ -717,7 +686,6 @@ class _HomePageState extends State<HomePage> {
                                       ),
                                     ),
                                   ),
-                                ],
                               ],
                             ),
                             const SizedBox(height: 10),
@@ -1024,55 +992,34 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: Colors.white,
       body: _selectedCompany == 'Test Enterprise' && _selectedIndex != 0
           ? SafeArea(
+              top: false,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      left: 16.0,
-                      top: 8.0,
-                      right: 16.0,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Image.asset(
-                          'assets/mysect_logo.png',
-                          width: 110,
-                          fit: BoxFit.contain,
-                        ),
-                        IconButton(
-                          icon: const Icon(
-                            Icons.notifications_none,
-                            color: Colors.black,
-                            size: 24,
-                          ),
-                          onPressed: () {
-                            if (_selectedCompany == 'Test Enterprise') {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    'Notifications are unavailable to view.',
-                                    style: GoogleFonts.poppins(
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  backgroundColor: Colors.red,
-                                  duration: const Duration(seconds: 2),
-                                ),
-                              );
-                              return;
-                            }
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const NotificationsPage(),
+                  AppTopHeader(
+                    onNotificationTap: () {
+                      if (_selectedCompany == 'Test Enterprise') {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              'Notifications are unavailable to view.',
+                              style: GoogleFonts.poppins(
+                                color: Colors.white,
                               ),
-                            );
-                          },
+                            ),
+                            backgroundColor: Colors.red,
+                            duration: const Duration(seconds: 2),
+                          ),
+                        );
+                        return;
+                      }
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const NotificationsPage(),
                         ),
-                      ],
-                    ),
+                      );
+                    },
                   ),
                   Expanded(
                     child: Center(

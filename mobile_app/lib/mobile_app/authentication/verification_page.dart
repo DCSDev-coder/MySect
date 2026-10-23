@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../home/home_page.dart';
+import '../widgets/app_top_header.dart';
 
 class VerificationPage extends StatefulWidget {
   const VerificationPage({super.key});
@@ -107,20 +108,11 @@ class _VerificationPageState extends State<VerificationPage> {
       backgroundColor: Colors.white,
       resizeToAvoidBottomInset: false,
       body: SafeArea(
+        top: false,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 16.0, top: 16.0),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Image.asset(
-                  'assets/mysect_logo.png',
-                  width: 110,
-                  fit: BoxFit.contain,
-                ),
-              ),
-            ),
+            const AppTopHeader(showNotificationBell: false),
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(24.0),

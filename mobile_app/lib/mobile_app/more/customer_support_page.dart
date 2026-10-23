@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
+import '../widgets/app_top_header.dart';
 
 class CustomerSupportPage extends StatefulWidget {
   const CustomerSupportPage({super.key});
@@ -74,21 +75,10 @@ class _CustomerSupportPageState extends State<CustomerSupportPage> {
     return Scaffold(
       backgroundColor: const Color(0xFFFAFAFA),
       body: SafeArea(
+        top: false,
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 16.0, top: 8.0, right: 16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Image.asset(
-                    'assets/mysect_logo.png',
-                    width: 110,
-                    fit: BoxFit.contain,
-                  ),
-                ],
-              ),
-            ),
+            const AppTopHeader(showNotificationBell: false),
             const SizedBox(height: 16),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),

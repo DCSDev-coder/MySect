@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../notifications/notifications_page.dart';
 import '../models/ssm_filing_model.dart';
 import '../services/ssm_filing_service.dart';
 import 'ssm_filing_detail_page.dart';
 import 'submit_ssm_filing_page.dart';
+import '../widgets/app_top_header.dart';
 
 class TransactionsPage extends StatefulWidget {
   final bool initialDocumentsNeededFilter;
@@ -77,41 +77,10 @@ class _TransactionsPageState extends State<TransactionsPage> {
         return Scaffold(
           backgroundColor: const Color(0xFFF8FAFC),
           body: SafeArea(
+            top: false,
             child: Column(
               children: [
-                // Top App Bar
-                Padding(
-                  padding: const EdgeInsets.only(left: 16.0, top: 8.0, right: 16.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Image.asset(
-                        'assets/mysect_logo.png',
-                        width: 110,
-                        fit: BoxFit.contain,
-                      ),
-                      Row(
-                        children: [
-                          IconButton(
-                            icon: const Icon(
-                              Icons.notifications_none,
-                              color: Colors.black87,
-                              size: 24,
-                            ),
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const NotificationsPage(),
-                                ),
-                              );
-                            },
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
+                const AppTopHeader(),
 
                 // Main Content
                 Expanded(
@@ -145,7 +114,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
                                       fontSize: 12,
                                       color: Colors.grey.shade600,
                                     ),
-                                    maxLines: 1,
+                                    maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                 ],
@@ -585,6 +554,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
                         fontSize: 11,
                         color: Colors.grey.shade600,
                       ),
+                      maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
@@ -640,6 +610,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Row(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       const Icon(Icons.attach_file, size: 14, color: Colors.grey),
                       const SizedBox(width: 2),
@@ -649,19 +620,25 @@ class _TransactionsPageState extends State<TransactionsPage> {
                       ),
                     ],
                   ),
-                  Row(
-                    children: [
-                      Text(
-                        'Deadline: ${filing.deadline}',
-                        style: GoogleFonts.poppins(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.grey.shade700,
+                  Flexible(
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Flexible(
+                          child: Text(
+                            'Deadline: ${filing.deadline}',
+                            style: GoogleFonts.poppins(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.grey.shade700,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: 4),
-                      const Icon(Icons.arrow_forward_ios, size: 11, color: Color(0xFF062AAE)),
-                    ],
+                        const SizedBox(width: 4),
+                        const Icon(Icons.arrow_forward_ios, size: 11, color: Color(0xFF062AAE)),
+                      ],
+                    ),
                   ),
                 ],
               ),

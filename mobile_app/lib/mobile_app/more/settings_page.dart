@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import '../notifications/notifications_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../home/home_page.dart';
 import '../widgets/custom_bottom_nav_bar.dart';
 import 'two_factor_auth_page.dart';
 import '../authentication/signup_page.dart';
+import '../widgets/app_top_header.dart';
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
 
@@ -258,40 +258,10 @@ class _SettingsPageState extends State<SettingsPage> {
     return Scaffold(
       backgroundColor: const Color(0xFFFAFAFA),
       body: SafeArea(
+        top: false,
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.only(
-                left: 16.0,
-                top: 8.0,
-                right: 16.0,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Image.asset(
-                    'assets/mysect_logo.png',
-                    width: 110,
-                    fit: BoxFit.contain,
-                  ),
-                  IconButton(
-                    icon: const Icon(
-                      Icons.notifications_none,
-                      color: Colors.black,
-                      size: 24,
-                    ),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const NotificationsPage(),
-                        ),
-                      );
-                    },
-                  ),
-                ],
-              ),
-            ),
+            const AppTopHeader(),
 
             const SizedBox(height: 16),
             Padding(

@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../tasks/document_needed_page.dart';
 import '../files/attention_page.dart';
 import '../more/calendar_page.dart';
+import '../widgets/app_top_header.dart';
 
 class NotificationsPage extends StatefulWidget {
   const NotificationsPage({super.key});
@@ -19,25 +20,10 @@ class _NotificationsPageState extends State<NotificationsPage> {
     return Scaffold(
       backgroundColor: const Color(0xFFFAFAFA),
       body: SafeArea(
+        top: false,
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.only(
-                left: 16.0,
-                top: 16.0,
-                right: 16.0,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Image.asset(
-                    'assets/mysect_logo.png',
-                    width: 110,
-                    fit: BoxFit.contain,
-                  ),
-                ],
-              ),
-            ),
+            const AppTopHeader(showNotificationBell: false),
             Expanded(
               child: Column(
                 children: [
