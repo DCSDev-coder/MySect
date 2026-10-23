@@ -144,28 +144,28 @@ class _ActiveChatPageState extends State<ActiveChatPage> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.arrow_back, color: Colors.black),
-                        onPressed: () => Navigator.pop(context),
-                        padding: EdgeInsets.zero,
-                        constraints: const BoxConstraints(),
-                      ),
-                      const SizedBox(width: 16),
-                      Text(
-                        widget.title,
-                        style: GoogleFonts.poppins(
-                          color: Colors.black,
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
+                  IconButton(
+                    icon: const Icon(Icons.arrow_back, color: Colors.black),
+                    onPressed: () => Navigator.pop(context),
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
                   ),
-                  if (!widget.isResolved)
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      widget.title,
+                      style: GoogleFonts.poppins(
+                        color: Colors.black,
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  if (!widget.isResolved) ...[
+                    const SizedBox(width: 8),
                     TextButton(
                       onPressed: () {
                         Navigator.pushReplacement(
@@ -176,7 +176,7 @@ class _ActiveChatPageState extends State<ActiveChatPage> {
                         );
                       },
                       style: TextButton.styleFrom(
-                        padding: EdgeInsets.zero,
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                         minimumSize: Size.zero,
                         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                       ),
@@ -185,10 +185,11 @@ class _ActiveChatPageState extends State<ActiveChatPage> {
                         style: GoogleFonts.poppins(
                           color: const Color(0xFF062AAE),
                           fontWeight: FontWeight.w600,
-                          fontSize: 16,
+                          fontSize: 15,
                         ),
                       ),
                     ),
+                  ],
                 ],
               ),
             ),
@@ -284,7 +285,6 @@ class _ActiveChatPageState extends State<ActiveChatPage> {
     }
 
     return Container(
-      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
         boxShadow: [
@@ -295,36 +295,47 @@ class _ActiveChatPageState extends State<ActiveChatPage> {
           ),
         ],
       ),
-      child: Row(
-        children: [
-          IconButton(
-            icon: const Icon(Icons.attach_file, color: Colors.grey),
-            onPressed: _pickFile,
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: TextField(
-              controller: _textController,
-              onSubmitted: (_) => _sendMessage(),
-              decoration: InputDecoration(
-                hintText: 'Type a message...',
-                hintStyle: GoogleFonts.poppins(color: Colors.grey),
-                border: InputBorder.none,
+      child: SafeArea(
+        top: false,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          child: Row(
+            children: [
+              IconButton(
+                icon: const Icon(Icons.attach_file, color: Colors.grey),
+                onPressed: _pickFile,
+                padding: EdgeInsets.zero,
+                constraints: const BoxConstraints(),
               ),
-            ),
-          ),
-          InkWell(
-            onTap: _sendMessage,
-            child: Container(
-              padding: const EdgeInsets.all(10),
-              decoration: const BoxDecoration(
-                color: Color(0xFF062AAE),
-                shape: BoxShape.circle,
+              const SizedBox(width: 12),
+              Expanded(
+                child: TextField(
+                  controller: _textController,
+                  onSubmitted: (_) => _sendMessage(),
+                  decoration: InputDecoration(
+                    hintText: 'Type a message...',
+                    hintStyle: GoogleFonts.poppins(color: Colors.grey),
+                    border: InputBorder.none,
+                    isDense: true,
+                    contentPadding: const EdgeInsets.symmetric(vertical: 8),
+                  ),
+                ),
               ),
-              child: const Icon(Icons.send, color: Colors.white, size: 20),
-            ),
+              const SizedBox(width: 8),
+              InkWell(
+                onTap: _sendMessage,
+                child: Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: const BoxDecoration(
+                    color: Color(0xFF062AAE),
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(Icons.send, color: Colors.white, size: 20),
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

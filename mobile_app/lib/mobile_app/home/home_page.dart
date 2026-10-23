@@ -392,18 +392,25 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildHomeView() {
+    final topPadding = MediaQuery.of(context).padding.top;
     return SafeArea(
+      top: false,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.only(left: 16.0, top: 8.0, right: 16.0),
+            padding: EdgeInsets.only(
+              left: 16.0,
+              top: topPadding > 0 ? (topPadding - 12).clamp(8.0, 44.0) : 10.0,
+              right: 16.0,
+              bottom: 2.0,
+            ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Image.asset(
                   'assets/mysect_logo.png',
-                  width: 110,
+                  width: 105,
                   fit: BoxFit.contain,
                 ),
                 IconButton(
@@ -412,6 +419,8 @@ class _HomePageState extends State<HomePage> {
                     color: Colors.black,
                     size: 24,
                   ),
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
                   onPressed: () {
                     if (_selectedCompany == 'Test Enterprise') {
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -446,9 +455,11 @@ class _HomePageState extends State<HomePage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16.0,
-                        vertical: 8.0,
+                      padding: const EdgeInsets.only(
+                        left: 16.0,
+                        right: 16.0,
+                        top: 2.0,
+                        bottom: 6.0,
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -792,6 +803,7 @@ class _HomePageState extends State<HomePage> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16.0),
                         child: Container(
+                          padding: const EdgeInsets.only(bottom: 12.0),
                           decoration: BoxDecoration(
                             border: Border.all(color: Colors.grey.shade300),
                             borderRadius: BorderRadius.circular(16),
@@ -971,7 +983,7 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 40),
+                      const SizedBox(height: 100),
                     ],
                   ],
                 ),

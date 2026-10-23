@@ -98,7 +98,6 @@ class CustomBottomNavBar extends StatelessWidget {
         final repliesNeeded = SsmFilingService.instance.secretaryRepliesNeededCount;
 
         return Container(
-          height: 80,
           decoration: BoxDecoration(
             color: Colors.white,
             boxShadow: [
@@ -110,21 +109,25 @@ class CustomBottomNavBar extends StatelessWidget {
             ],
           ),
           child: SafeArea(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                _buildNavItem(0, Icons.home_outlined, Icons.home, 'Home'),
-                _buildNavItem(
-                  1,
-                  Icons.assignment_outlined,
-                  Icons.assignment,
-                  'SSM Filings',
-                  badgeCount: repliesNeeded,
-                ),
-                _buildNavItem(2, Icons.folder_outlined, Icons.folder, 'Files'),
-                _buildNavItem(3, Icons.chat_bubble_outline, Icons.chat_bubble, 'Chat'),
-                _buildNavItem(4, Icons.more_horiz, Icons.more_horiz, 'More'),
-              ],
+            top: false,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 6, bottom: 4),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  _buildNavItem(0, Icons.home_outlined, Icons.home, 'Home'),
+                  _buildNavItem(
+                    1,
+                    Icons.assignment_outlined,
+                    Icons.assignment,
+                    'SSM Filings',
+                    badgeCount: repliesNeeded,
+                  ),
+                  _buildNavItem(2, Icons.folder_outlined, Icons.folder, 'Files'),
+                  _buildNavItem(3, Icons.chat_bubble_outline, Icons.chat_bubble, 'Chat'),
+                  _buildNavItem(4, Icons.more_horiz, Icons.more_horiz, 'More'),
+                ],
+              ),
             ),
           ),
         );
