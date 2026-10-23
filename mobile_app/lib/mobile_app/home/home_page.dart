@@ -827,6 +827,28 @@ class _HomePageState extends State<HomePage> {
                               formatButtonVisible: false,
                               titleCentered: true,
                             ),
+                            daysOfWeekHeight: 32.0,
+                            rowHeight: 46.0,
+                            daysOfWeekStyle: const DaysOfWeekStyle(
+                              weekdayStyle: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 13,
+                                color: Colors.black87,
+                              ),
+                              weekendStyle: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 13,
+                                color: Color(0xFFD71920),
+                              ),
+                              decoration: BoxDecoration(
+                                border: Border(
+                                  bottom: BorderSide(
+                                    color: Color(0xFFEEEEEE),
+                                    width: 1.0,
+                                  ),
+                                ),
+                              ),
+                            ),
                             calendarBuilders: CalendarBuilders(
                               markerBuilder: (context, date, events) {
                                 if (events.isNotEmpty) {
@@ -854,6 +876,7 @@ class _HomePageState extends State<HomePage> {
                               },
                             ),
                             calendarStyle: const CalendarStyle(
+                              cellMargin: EdgeInsets.all(4.0),
                               selectedDecoration: BoxDecoration(
                                 color: Color(0xFF062AAE),
                                 shape: BoxShape.circle,
