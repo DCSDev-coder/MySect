@@ -150,85 +150,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
                             ),
                           ],
                         ),
-                        const SizedBox(height: 16),
-
-                        // Stats Summary Row
-                        Row(
-                          children: [
-                            Expanded(
-                              child: _buildMetricCard(
-                                title: 'Review',
-                                count: '$waitingSecCount',
-                                color: const Color(0xFFD97706),
-                                bgColor: const Color(0xFFFEF3C7),
-                                icon: Icons.hourglass_top_rounded,
-                                isSelected: _selectedStatusFilter == SsmFilingStatus.waitingSecretaryReview,
-                                onTap: () {
-                                  setState(() {
-                                    _selectedStatusFilter = _selectedStatusFilter == SsmFilingStatus.waitingSecretaryReview
-                                        ? null
-                                        : SsmFilingStatus.waitingSecretaryReview;
-                                  });
-                                },
-                              ),
-                            ),
-                            const SizedBox(width: 8),
-                            Expanded(
-                              child: _buildMetricCard(
-                                title: 'Action',
-                                count: '$secRepliesNeededCount',
-                                color: const Color(0xFFDC2626),
-                                bgColor: const Color(0xFFFEE2E2),
-                                icon: Icons.mark_chat_unread_rounded,
-                                isSelected: _selectedStatusFilter == SsmFilingStatus.secretaryReplied,
-                                onTap: () {
-                                  setState(() {
-                                    _selectedStatusFilter = _selectedStatusFilter == SsmFilingStatus.secretaryReplied
-                                        ? null
-                                        : SsmFilingStatus.secretaryReplied;
-                                  });
-                                },
-                              ),
-                            ),
-                            const SizedBox(width: 8),
-                            Expanded(
-                              child: _buildMetricCard(
-                                title: 'Lodged',
-                                count: '$lodgedCount',
-                                color: const Color(0xFF7C3AED),
-                                bgColor: const Color(0xFFF5F3FF),
-                                icon: Icons.account_balance_rounded,
-                                isSelected: _selectedStatusFilter == SsmFilingStatus.lodgedToSsm,
-                                onTap: () {
-                                  setState(() {
-                                    _selectedStatusFilter = _selectedStatusFilter == SsmFilingStatus.lodgedToSsm
-                                        ? null
-                                        : SsmFilingStatus.lodgedToSsm;
-                                  });
-                                },
-                              ),
-                            ),
-                            const SizedBox(width: 8),
-                            Expanded(
-                              child: _buildMetricCard(
-                                title: 'Done',
-                                count: '$completedCount',
-                                color: const Color(0xFF059669),
-                                bgColor: const Color(0xFFECFDF5),
-                                icon: Icons.check_circle_rounded,
-                                isSelected: _selectedStatusFilter == SsmFilingStatus.completed,
-                                onTap: () {
-                                  setState(() {
-                                    _selectedStatusFilter = _selectedStatusFilter == SsmFilingStatus.completed
-                                        ? null
-                                        : SsmFilingStatus.completed;
-                                  });
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 16),
+                        const SizedBox(height: 12),
 
                         // Search Bar
                         Container(
@@ -270,28 +192,24 @@ class _TransactionsPageState extends State<TransactionsPage> {
                                 label: 'Waiting Secretary ($waitingSecCount)',
                                 isSelected: _selectedStatusFilter == SsmFilingStatus.waitingSecretaryReview,
                                 onTap: () => setState(() => _selectedStatusFilter = SsmFilingStatus.waitingSecretaryReview),
-                                activeColor: const Color(0xFFD97706),
                               ),
                               const SizedBox(width: 8),
                               _buildFilterChip(
                                 label: 'Action Needed ($secRepliesNeededCount)',
                                 isSelected: _selectedStatusFilter == SsmFilingStatus.secretaryReplied,
                                 onTap: () => setState(() => _selectedStatusFilter = SsmFilingStatus.secretaryReplied),
-                                activeColor: const Color(0xFFDC2626),
                               ),
                               const SizedBox(width: 8),
                               _buildFilterChip(
                                 label: 'Lodged to SSM ($lodgedCount)',
                                 isSelected: _selectedStatusFilter == SsmFilingStatus.lodgedToSsm,
                                 onTap: () => setState(() => _selectedStatusFilter = SsmFilingStatus.lodgedToSsm),
-                                activeColor: const Color(0xFF7C3AED),
                               ),
                               const SizedBox(width: 8),
                               _buildFilterChip(
                                 label: 'Completed ($completedCount)',
                                 isSelected: _selectedStatusFilter == SsmFilingStatus.completed,
                                 onTap: () => setState(() => _selectedStatusFilter = SsmFilingStatus.completed),
-                                activeColor: const Color(0xFF059669),
                               ),
                             ],
                           ),
@@ -363,58 +281,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
     );
   }
 
-  Widget _buildMetricCard({
-    required String title,
-    required String count,
-    required Color color,
-    required Color bgColor,
-    required IconData icon,
-    required bool isSelected,
-    required VoidCallback onTap,
-  }) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(10),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 150),
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 6),
-        decoration: BoxDecoration(
-          color: bgColor,
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(
-            color: isSelected ? color : color.withValues(alpha: 0.25),
-            width: isSelected ? 2 : 1,
-          ),
-        ),
-        child: Column(
-          children: [
-            Icon(icon, size: 18, color: color),
-            const SizedBox(height: 4),
-            Text(
-              count,
-              style: GoogleFonts.poppins(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: color,
-              ),
-            ),
-            const SizedBox(height: 2),
-            Text(
-              title,
-              textAlign: TextAlign.center,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: GoogleFonts.poppins(
-                fontSize: 9,
-                fontWeight: FontWeight.w600,
-                color: color,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+
 
   Widget _buildFilterChip({
     required String label,
@@ -448,7 +315,6 @@ class _TransactionsPageState extends State<TransactionsPage> {
 
   Widget _buildFilingCard(SsmFiling filing) {
     final hasSecretaryQuery = filing.status == SsmFilingStatus.secretaryReplied;
-    final lastMessage = filing.messages.isNotEmpty ? filing.messages.last : null;
 
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
@@ -562,41 +428,26 @@ class _TransactionsPageState extends State<TransactionsPage> {
               ),
               const SizedBox(height: 8),
 
-              // Latest Message Banner if available
-              if (lastMessage != null)
+              // Action Needed Alert Banner
+              if (hasSecretaryQuery)
                 Container(
-                  padding: const EdgeInsets.all(8),
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
                   decoration: BoxDecoration(
-                    color: lastMessage.isFromSecretary
-                        ? (hasSecretaryQuery ? const Color(0xFFFEF2F2) : const Color(0xFFF0FDF4))
-                        : const Color(0xFFF8FAFC),
+                    color: const Color(0xFFFEF2F2),
                     borderRadius: BorderRadius.circular(8),
-                    border: Border.all(
-                      color: lastMessage.isFromSecretary
-                          ? (hasSecretaryQuery ? const Color(0xFFFECACA) : const Color(0xFFDCFCE7))
-                          : const Color(0xFFE2E8F0),
-                    ),
+                    border: Border.all(color: const Color(0xFFFECACA)),
                   ),
                   child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Icon(
-                        lastMessage.isFromSecretary ? Icons.mark_chat_unread : Icons.chat_bubble_outline,
-                        size: 14,
-                        color: lastMessage.isFromSecretary
-                            ? (hasSecretaryQuery ? const Color(0xFFDC2626) : const Color(0xFF16A34A))
-                            : Colors.grey.shade700,
-                      ),
+                      const Icon(Icons.info_outline_rounded, size: 14, color: Color(0xFFDC2626)),
                       const SizedBox(width: 6),
                       Expanded(
                         child: Text(
-                          '${lastMessage.senderName}: "${lastMessage.text}"',
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
+                          'Action required: Secretary requested clarification or document update.',
                           style: GoogleFonts.poppins(
-                            fontSize: 11,
-                            color: Colors.black87,
-                            fontStyle: FontStyle.italic,
+                            fontSize: 10,
+                            fontWeight: FontWeight.w600,
+                            color: const Color(0xFF991B1B),
                           ),
                         ),
                       ),

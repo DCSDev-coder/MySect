@@ -57,6 +57,7 @@ class _SignupPageState extends State<SignupPage> {
                         AnimatedContainer(
                           duration: const Duration(milliseconds: 200),
                           curve: Curves.easeOut,
+                          decoration: const BoxDecoration(),
                           clipBehavior: Clip.hardEdge,
                           height: isKeyboardOpen ? 0 : 160,
                           child: OverflowBox(
@@ -186,9 +187,13 @@ class _SignupPageState extends State<SignupPage> {
                     TextField(
                       controller: _passwordController,
                       obscureText: _obscurePassword,
+                      style: GoogleFonts.poppins(fontSize: 14),
                       decoration: InputDecoration(
-                        hintText: 'Create a secure password',
-                        hintStyle: GoogleFonts.poppins(color: Colors.grey[400]),
+                        hintText: 'Create a password',
+                        hintStyle: GoogleFonts.poppins(
+                          fontSize: 13,
+                          color: Colors.grey[400],
+                        ),
                         prefixIcon: Icon(
                           Icons.lock_outline,
                           color: Colors.grey[600],

@@ -54,6 +54,7 @@ class _LoginPageState extends State<LoginPage> {
                         AnimatedContainer(
                           duration: const Duration(milliseconds: 200),
                           curve: Curves.easeOut,
+                          decoration: const BoxDecoration(),
                           clipBehavior: Clip.hardEdge,
                           height: isKeyboardOpen ? 0 : 180,
                           child: OverflowBox(
@@ -148,9 +149,11 @@ class _LoginPageState extends State<LoginPage> {
                               TextField(
                                 controller: _passwordController,
                                 obscureText: _obscurePassword,
+                                style: GoogleFonts.poppins(fontSize: 14),
                                 decoration: InputDecoration(
-                                  hintText: 'Enter your secure password',
+                                  hintText: 'Enter your password',
                                   hintStyle: GoogleFonts.poppins(
+                                    fontSize: 13,
                                     color: Colors.grey[400],
                                   ),
                                   prefixIcon: Icon(

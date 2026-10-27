@@ -5,7 +5,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import '../services/ssm_filing_service.dart';
 import '../services/company_service.dart';
+import '../services/secretary_document_service.dart';
 import 'ssm_filing_detail_page.dart';
+import '../widgets/app_top_header.dart';
 
 class SubmitSsmFilingPage extends StatefulWidget {
   final String? initialFilingType;
@@ -223,6 +225,26 @@ class _SubmitSsmFilingPageState extends State<SubmitSsmFilingPage> {
       initialNote: _noteController.text.trim(),
     );
 
+    // Register each attached file into Secretary Document review queue
+    final activeComp = CompanyService.instance.selectedCompany;
+    for (final file in _attachedFiles) {
+      final cleanName = file.split(' (').first;
+      SecretaryDocumentService.instance.addClientDocument(
+        title: cleanName,
+        category: _selectedFilingType,
+        fileSize: file.contains('(') ? file.split('(').last.replaceAll(')', '') : '1.5 MB',
+        companyId: activeComp?.id ?? 'comp-01',
+        companyName: _selectedCompany,
+        companySsmNo: _companySsmNo,
+        uploadedBy: 'Adam Bin Hamzah',
+        uploadedByRole: 'Managing Director (Client)',
+        linkedFilingRef: newFiling.referenceNo,
+        notes: _noteController.text.trim().isNotEmpty
+            ? _noteController.text.trim()
+            : 'Submitted under $_selectedFilingType for Secretary Review.',
+      );
+    }
+
     if (!mounted) return;
 
     setState(() {
@@ -321,7 +343,7 @@ class _SubmitSsmFilingPageState extends State<SubmitSsmFilingPage> {
                 ),
               );
             },
-            child: Text('View Filing Status & Chat', style: GoogleFonts.poppins(fontWeight: FontWeight.w600)),
+            child: Text('View Filing Status', style: GoogleFonts.poppins(fontWeight: FontWeight.w600)),
           ),
         ],
       ),
@@ -338,24 +360,40 @@ class _SubmitSsmFilingPageState extends State<SubmitSsmFilingPage> {
 
     return Scaffold(
       backgroundColor: const Color(0xFFF8FAFC),
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        centerTitle: false,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.black87, size: 20),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: Text(
-          'Submit SSM Filing',
-          style: GoogleFonts.poppins(
-            fontSize: 18,
-            fontWeight: FontWeight.w700,
-            color: Colors.black87,
-          ),
-        ),
-      ),
-      body: SingleChildScrollView(
+      body: SafeArea(
+        top: false,
+        child: Column(
+          children: [
+            const AppTopHeader(),
+            Padding(
+              padding: const EdgeInsets.only(
+                left: 16.0,
+                right: 16.0,
+                top: 8.0,
+                bottom: 6.0,
+              ),
+              child: Row(
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.arrow_back_ios_new, color: Colors.black87, size: 20),
+                    onPressed: () => Navigator.pop(context),
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                  ),
+                  const SizedBox(width: 12),
+                  Text(
+                    'Submit SSM Filing',
+                    style: GoogleFonts.poppins(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.black87,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Form(
@@ -895,6 +933,10 @@ class _SubmitSsmFilingPageState extends State<SubmitSsmFilingPage> {
           ),
         ),
       ),
-    );
-  }
+    ),
+  ],
+),
+),
+);
+}
 }

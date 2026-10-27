@@ -81,32 +81,33 @@ class _TwoFactorVerificationPageState extends State<TwoFactorVerificationPage> {
   }
 
   Widget _buildOtpBox(int index) {
-    return Container(
-      width: 48,
-      height: 56,
-      margin: const EdgeInsets.symmetric(horizontal: 4),
-      child: TextField(
-        controller: _controllers[index],
-        focusNode: _focusNodes[index],
-        onChanged: (value) => _onChanged(value, index),
-        keyboardType: TextInputType.number,
-        textAlign: TextAlign.center,
-        maxLength: 1,
-        style: GoogleFonts.poppins(
-          fontSize: 24,
-          fontWeight: FontWeight.bold,
-          color: Colors.black,
-        ),
-        decoration: InputDecoration(
-          counterText: '',
-          contentPadding: EdgeInsets.zero,
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide(color: Colors.grey.shade300, width: 1.5),
+    return Expanded(
+      child: Container(
+        height: 54,
+        margin: const EdgeInsets.symmetric(horizontal: 3),
+        child: TextField(
+          controller: _controllers[index],
+          focusNode: _focusNodes[index],
+          onChanged: (value) => _onChanged(value, index),
+          keyboardType: TextInputType.number,
+          textAlign: TextAlign.center,
+          maxLength: 1,
+          style: GoogleFonts.poppins(
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
           ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: const BorderSide(color: Color(0xFF1E50FF), width: 2),
+          decoration: InputDecoration(
+            counterText: '',
+            contentPadding: EdgeInsets.zero,
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide(color: Colors.grey.shade300, width: 1.5),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: const BorderSide(color: Color(0xFF1E50FF), width: 2),
+            ),
           ),
         ),
       ),

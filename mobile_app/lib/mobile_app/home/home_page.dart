@@ -14,6 +14,7 @@ import '../tasks/replies_needed_page.dart';
 import '../services/company_service.dart';
 import '../services/ssm_filing_service.dart';
 import '../widgets/app_top_header.dart';
+import '../widgets/mysect_stroke_logo_loader.dart';
 
 class HomePage extends StatefulWidget {
   final int initialIndex;
@@ -40,6 +41,22 @@ class _HomePageState extends State<HomePage> {
   DateTime? _selectedDay;
   late bool _docsFilterForTransactions;
   late bool _replyFilterForTransactions;
+  bool _isSwitchingTab = false;
+
+  void _onTabSelected(int index) {
+    if (index == _selectedIndex) return;
+    setState(() {
+      _isSwitchingTab = true;
+      _selectedIndex = index;
+    });
+    Future.delayed(const Duration(milliseconds: 2000), () {
+      if (mounted) {
+        setState(() {
+          _isSwitchingTab = false;
+        });
+      }
+    });
+  }
 
   Future<void> _handleRefresh() async {
     await _companyService.syncFromAdmin();
@@ -990,87 +1007,115 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: _selectedCompany == 'Test Enterprise' && _selectedIndex != 0
-          ? SafeArea(
-              top: false,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  AppTopHeader(
-                    onNotificationTap: () {
-                      if (_selectedCompany == 'Test Enterprise') {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              'Notifications are unavailable to view.',
-                              style: GoogleFonts.poppins(
-                                color: Colors.white,
+      body: Stack(
+        children: [
+          _selectedCompany == 'Test Enterprise' && _selectedIndex != 0
+              ? SafeArea(
+                  top: false,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      AppTopHeader(
+                        onNotificationTap: () {
+                          if (_selectedCompany == 'Test Enterprise') {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  'Notifications are unavailable to view.',
+                                  style: GoogleFonts.poppins(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                backgroundColor: Colors.red,
+                                duration: const Duration(seconds: 2),
                               ),
+                            );
+                            return;
+                          }
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const NotificationsPage(),
                             ),
-                            backgroundColor: Colors.red,
-                            duration: const Duration(seconds: 2),
-                          ),
-                        );
-                        return;
-                      }
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const NotificationsPage(),
-                        ),
-                      );
-                    },
-                  ),
-                  Expanded(
-                    child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset('assets/locked_icon.png', height: 250),
-                          const SizedBox(height: 16),
-                          Text(
-                            'Company Locked',
-                            style: GoogleFonts.poppins(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            'You do not have access to this company.',
-                            style: GoogleFonts.poppins(
-                              fontSize: 16,
-                              color: Colors.grey,
-                            ),
-                          ),
-                        ],
+                          );
+                        },
                       ),
-                    ),
+                      Expanded(
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset('assets/locked_icon.png', height: 250),
+                              const SizedBox(height: 16),
+                              Text(
+                                'Company Locked',
+                                style: GoogleFonts.poppins(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                'You do not have access to this company.',
+                                style: GoogleFonts.poppins(
+                                  fontSize: 16,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            )
-          : IndexedStack(
-              index: _selectedIndex,
-              children: [
-                _buildHomeView(),
-                TransactionsPage(
-                  initialDocumentsNeededFilter: _docsFilterForTransactions,
-                  initialReplyNeededFilter: _replyFilterForTransactions,
+                )
+              : IndexedStack(
+                  index: _selectedIndex,
+                  children: [
+                    _buildHomeView(),
+                    TransactionsPage(
+                      initialDocumentsNeededFilter: _docsFilterForTransactions,
+                      initialReplyNeededFilter: _replyFilterForTransactions,
+                    ),
+                    const FilesPage(),
+                    const ChatPage(),
+                    const MorePage(),
+                  ],
                 ),
-                const FilesPage(),
-                const ChatPage(),
-                const MorePage(),
-              ],
+          if (_isSwitchingTab)
+            Positioned.fill(
+              child: Container(
+                color: Colors.white.withValues(alpha: 0.90),
+                child: Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const RepeatingStrokeLogoLoader(
+                        width: 90,
+                        height: 60,
+                        cycleDuration: Duration(milliseconds: 750),
+                      ),
+                      const SizedBox(height: 12),
+                      Text(
+                        'Loading...',
+                        style: GoogleFonts.poppins(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w600,
+                          color: const Color(0xFF062AAE),
+                          letterSpacing: 0.4,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ),
+        ],
+      ),
       bottomNavigationBar: CustomBottomNavBar(
         currentIndex: _selectedIndex,
-        onTap: (index) {
-          setState(() {
-            _selectedIndex = index;
-          });
-        },
+        onTap: _onTabSelected,
       ),
     );
   }

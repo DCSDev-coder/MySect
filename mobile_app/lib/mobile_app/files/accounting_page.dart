@@ -6,6 +6,9 @@ import 'document_file.dart';
 import 'document_viewer_page.dart';
 import '../widgets/custom_bottom_nav_bar.dart';
 import '../widgets/app_top_header.dart';
+import '../services/secretary_document_service.dart';
+import '../models/client_document_model.dart';
+import '../services/company_service.dart';
 
 class AccountingPage extends StatefulWidget {
   const AccountingPage({super.key});
@@ -53,147 +56,276 @@ class _AccountingPageState extends State<AccountingPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        top: false,
-        child: Column(
-          children: [
-            const AppTopHeader(),
-            const SizedBox(height: 16),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Row(
-                children: [
-                  IconButton(
-                    icon: const Icon(
-                      Icons.arrow_back_ios,
-                      color: Colors.black,
-                      size: 20,
-                    ),
-                    onPressed: () => Navigator.pop(context),
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
-                  ),
-                  const SizedBox(width: 8),
-                  Text(
-                    'Accounting',
-                    style: GoogleFonts.poppins(
-                      color: Colors.black,
-                      fontSize: 24,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 16),
-            Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 10),
+    return AnimatedBuilder(
+      animation: SecretaryDocumentService.instance,
+      builder: (context, _) {
+        final secDocs = SecretaryDocumentService.instance.getDocumentsForFolder('Accounting');
 
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        borderRadius: BorderRadius.circular(30),
+        return Scaffold(
+          backgroundColor: Colors.white,
+          body: SafeArea(
+            top: false,
+            child: Column(
+              children: [
+                const AppTopHeader(),
+                const SizedBox(height: 16),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Row(
+                    children: [
+                      IconButton(
+                        icon: const Icon(
+                          Icons.arrow_back_ios,
+                          color: Colors.black,
+                          size: 20,
+                        ),
+                        onPressed: () => Navigator.pop(context),
+                        padding: EdgeInsets.zero,
+                        constraints: const BoxConstraints(),
                       ),
-                      child: TextField(
-                        onChanged: (value) {
-                          setState(() {
-                            _searchQuery = value.toLowerCase();
-                          });
-                        },
-                        decoration: InputDecoration(
-                          icon: const Icon(
-                            Icons.search,
-                            color: Colors.grey,
-                            size: 28,
-                          ),
-                          hintText: 'Search documents',
-                          hintStyle: GoogleFonts.poppins(
-                            color: Colors.grey[600],
-                          ),
-                          border: InputBorder.none,
+                      const SizedBox(width: 8),
+                      Text(
+                        'Accounting',
+                        style: GoogleFonts.poppins(
+                          color: Colors.black,
+                          fontSize: 24,
+                          fontWeight: FontWeight.w700,
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 32),
-                    Text(
-                      '21 NOV 2025',
-                      style: GoogleFonts.poppins(
-                        fontWeight: FontWeight.w700,
-                        fontSize: 14,
-                        color: Colors.grey[700],
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-
-                    ..._myFiles.where((f) => f.title.toLowerCase().contains(_searchQuery)).map((file) {
-                      return _buildDocumentCard(
-                        title: file.title,
-                        subtitle: file.subtitle,
-                        badgeText: file.badgeText,
-                        badgeBgColor: file.progressColor.withValues(alpha: 0.1),
-                        badgeTextColor: file.progressColor == Colors.green
-                            ? Colors.green[800]!
-                            : (file.progressColor == Colors.blue
-                                  ? Colors.blue[800]!
-                                  : Colors.red[800]!),
-                        timeText: 'Today, 10:24 AM',
-                        progressText: file.progressText,
-                        progressColor: file.progressColor,
-                        onTap: () {
-                          setState(() {
-                            file.isExpanded = !file.isExpanded;
-                          });
-                        },
-                        isExpanded: file.isExpanded,
-                        uploadedFiles: file.uploadedFiles,
-                        onUpload: () async {
-                          if (file.uploadedFiles.length <
-                              file.requiredActions) {
-                            var result = await FilePicker.pickFile();
-                            if (result != null) {
-                              setState(() {
-                                file.uploadedFiles.add(result.name);
-                              });
-                            }
-                          }
-                        },
-                        onRemoveFile: (index) {
-                          setState(() {
-                            file.uploadedFiles.removeAt(index);
-                          });
-                        },
-                      );
-                    }),
-                    const SizedBox(height: 80),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
+                const SizedBox(height: 16),
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 10),
+
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          decoration: BoxDecoration(
+                            color: Colors.grey[300],
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          child: TextField(
+                            onChanged: (value) {
+                              setState(() {
+                                _searchQuery = value.toLowerCase();
+                              });
+                            },
+                            decoration: InputDecoration(
+                              icon: const Icon(
+                                Icons.search,
+                                color: Colors.grey,
+                                size: 28,
+                              ),
+                              hintText: 'Search documents',
+                              hintStyle: GoogleFonts.poppins(
+                                color: Colors.grey[600],
+                              ),
+                              border: InputBorder.none,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 32),
+                        Text(
+                          'STATUTORY FINANCIAL STATEMENTS',
+                          style: GoogleFonts.poppins(
+                            fontWeight: FontWeight.w700,
+                            fontSize: 12,
+                            color: Colors.grey[700],
+                            letterSpacing: 0.5,
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+
+                        ..._myFiles.where((f) => f.title.toLowerCase().contains(_searchQuery)).map((file) {
+                          return _buildDocumentCard(
+                            title: file.title,
+                            subtitle: file.subtitle,
+                            badgeText: file.badgeText,
+                            badgeBgColor: file.progressColor.withValues(alpha: 0.1),
+                            badgeTextColor: file.progressColor == Colors.green
+                                ? Colors.green[800]!
+                                : (file.progressColor == Colors.blue
+                                      ? Colors.blue[800]!
+                                      : Colors.red[800]!),
+                            timeText: 'Today, 10:24 AM',
+                            progressText: file.progressText,
+                            progressColor: file.progressColor,
+                            onTap: () {
+                              setState(() {
+                                file.isExpanded = !file.isExpanded;
+                              });
+                            },
+                            isExpanded: file.isExpanded,
+                            uploadedFiles: file.uploadedFiles,
+                            onUpload: () async {
+                              if (file.uploadedFiles.length < file.requiredActions) {
+                                var result = await FilePicker.pickFile();
+                                if (result != null && context.mounted) {
+                                  final activeComp = CompanyService.instance.selectedCompany;
+                                  SecretaryDocumentService.instance.addClientDocument(
+                                    title: result.name,
+                                    category: 'Management Accounts',
+                                    fileSize: '1.5 MB',
+                                    companyId: activeComp?.id ?? 'comp-01',
+                                    companyName: activeComp?.name ?? 'Data Center Specialists Sdn Bhd (M)',
+                                    companySsmNo: activeComp?.ssmNo ?? '202101039281 (1429581-X)',
+                                    uploadedBy: 'Adam Bin Hamzah',
+                                    uploadedByRole: 'Managing Director (Client)',
+                                    notes: 'Uploaded supporting accounts document.',
+                                    folder: 'Accounting',
+                                  );
+                                  setState(() {
+                                    file.uploadedFiles.add(result.name);
+                                  });
+                                }
+                              }
+                            },
+                            onRemoveFile: (index) {
+                              setState(() {
+                                file.uploadedFiles.removeAt(index);
+                              });
+                            },
+                          );
+                        }),
+
+                        if (secDocs.isNotEmpty) ...[
+                          const SizedBox(height: 24),
+                          Text(
+                            'UPLOADED STATUTORY DOCUMENTS (${secDocs.length})',
+                            style: GoogleFonts.poppins(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 12,
+                              color: Colors.grey[700],
+                              letterSpacing: 0.5,
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          ...secDocs
+                              .where((d) => d.title.toLowerCase().contains(_searchQuery))
+                              .map((doc) => _buildDynamicDocCard(doc)),
+                        ],
+
+                        const SizedBox(height: 80),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          floatingActionButton: FloatingActionButton(
+            heroTag: null,
+            onPressed: () => showAddMenu(
+              context,
+              showFileOptions: true,
+              showFolderOption: false,
+              targetFolder: 'Accounting',
+            ),
+            backgroundColor: const Color(0xFF062AAE),
+            shape: const CircleBorder(),
+            child: const Icon(Icons.upload_file, color: Colors.white, size: 32),
+          ),
+          bottomNavigationBar: CustomBottomNavBar(
+            currentIndex: _selectedIndex,
+            onTap: _onItemTapped,
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildDynamicDocCard(ClientDocument doc) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => DocumentViewerPage(fileName: doc.title),
+          ),
+        );
+      },
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 16),
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: Colors.grey.shade100, width: 1.5),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.05),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
             ),
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        heroTag: null,
-        onPressed: () => showAddMenu(
-          context,
-          showFileOptions: true,
-          showFolderOption: false,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: doc.status.bgColor,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Text(
+                    doc.status.shortLabel,
+                    style: GoogleFonts.poppins(
+                      color: doc.status.color,
+                      fontSize: 10,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+                Text(
+                  doc.uploadedAt,
+                  style: GoogleFonts.poppins(color: Colors.grey[600], fontSize: 12),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Image.asset('assets/pdf.png', width: 48, height: 48),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        doc.title,
+                        style: GoogleFonts.poppins(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 14,
+                          color: Colors.black,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        '${doc.fileSize} • TM Cloud Storage',
+                        style: GoogleFonts.poppins(fontSize: 12, color: Colors.grey[600]),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ],
         ),
-        backgroundColor: const Color(0xFF062AAE),
-        shape: const CircleBorder(),
-        child: const Icon(Icons.upload_file, color: Colors.white, size: 32),
-      ),
-      bottomNavigationBar: CustomBottomNavBar(
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
       ),
     );
   }

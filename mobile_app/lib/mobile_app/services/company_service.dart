@@ -151,45 +151,6 @@ class CompanyService extends ChangeNotifier {
         ],
       ),
       const Company(
-        id: 'comp-06',
-        name: 'Borneo Marine Innovations Sdn Bhd',
-        ssmNo: '201901048291 (1349582-M)',
-        type: 'Sdn Bhd',
-        incorporationDate: '2019-11-05',
-        paidUpCapital: 'MYR 1,000,000',
-        registeredAddress: 'Unit 9-02, Block B, Phileo Damansara II, 46350 Petaling Jaya, Selangor',
-        businessAddress: 'Lot 8, Industrial Zone 4, Kota Kinabalu Port, 88450 Kota Kinabalu, Sabah',
-        officialEmail: 'ops@borneomarine.my',
-        status: 'Active',
-        assignedFirmId: 'firm-02',
-        assignedFirmName: 'Apex Corporate Secretarial Partners',
-        assignedSecretary: 'Mohd Firdaus (LS)',
-        assignedSecretaryLicense: 'LS 0009841',
-        assignedFirmContact: '+60 3-7955 8812',
-        assignedFirmEmail: 'sarah@apexcorp.com.my',
-        annualReturnDeadline: '2026-12-05',
-        financialStatementsDeadline: '2027-01-31',
-        subscriptionExpiresAt: '2026-11-30',
-        subscriptionPlan: 'Professional Plan',
-        subscriptionStatus: 'Expiring Soon',
-        clientContact: 'Captain Dennis Wong',
-        clientEmail: 'dennis@borneomarine.my',
-        mobileAppConnected: true,
-        lastMobileSync: 'Active Now',
-        directors: [
-          {'name': 'Captain Dennis Wong', 'identification': '750419-12-5123', 'role': 'Managing Director', 'appointedDate': '2019-11-05'},
-          {'name': 'Julian Kong', 'identification': '810611-12-5401', 'role': 'Executive Director', 'appointedDate': '2019-11-05'}
-        ],
-        shareholders: [
-          {'shareholder': 'Captain Dennis Wong', 'type': 'Ordinary', 'numberOfShares': '600,000', 'totalShares': '1,000,000', 'percentage': '60%'},
-          {'shareholder': 'Sabah Marine Holdings', 'type': 'Ordinary', 'numberOfShares': '400,000', 'totalShares': '1,000,000', 'percentage': '40%'}
-        ],
-        statutoryDocuments: [
-          {'id': 'doc-14', 'title': 'Company Constitution (M&AA)', 'category': 'Statutory', 'date': '2019-11-05', 'size': '2.2 MB'},
-          {'id': 'doc-15', 'title': 'SSM Section 14 Certificate of Incorporation', 'category': 'SSM Filing', 'date': '2019-11-05', 'size': '890 KB'}
-        ],
-      ),
-      const Company(
         id: 'comp-locked',
         name: 'Test Enterprise',
         ssmNo: '202401999999 (999999-T)',

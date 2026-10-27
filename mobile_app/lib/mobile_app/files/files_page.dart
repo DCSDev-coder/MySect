@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../notifications/notifications_page.dart';
+import '../widgets/app_top_header.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'add_file_menu.dart';
 import 'accounting_page.dart';
@@ -8,7 +8,9 @@ import 'unsorted_page.dart';
 import 'corporate_page.dart';
 import 'personal_page.dart';
 import 'other_page.dart';
-import '../transactions/transaction_data.dart';
+import '../services/secretary_document_service.dart';
+import '../services/ssm_filing_service.dart';
+import '../services/company_service.dart';
 
 class FilesPage extends StatefulWidget {
   const FilesPage({super.key});
@@ -19,362 +21,283 @@ class FilesPage extends StatefulWidget {
 
 class _FilesPageState extends State<FilesPage> {
   String _searchQuery = '';
-  bool _isConnectingTMCloud = false;
-  bool _tmCloudConnected = false;
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 16.0, top: 8.0, right: 16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Image.asset(
-                    'assets/mysect_logo.png',
-                    width: 110,
-                    fit: BoxFit.contain,
-                  ),
-                  IconButton(
-                    icon: const Icon(
-                      Icons.notifications_none,
-                      color: Colors.black,
-                      size: 24,
-                    ),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const NotificationsPage(),
-                        ),
-                      );
-                    },
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 16),
-                    Text(
-                      'Files',
-                      style: GoogleFonts.poppins(
-                        color: Colors.black,
-                        fontSize: 24,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
+    return AnimatedBuilder(
+      animation: Listenable.merge([
+        SecretaryDocumentService.instance,
+        SsmFilingService.instance,
+        CompanyService.instance,
+      ]),
+      builder: (context, _) {
+        final secService = SecretaryDocumentService.instance;
+        final ssmService = SsmFilingService.instance;
 
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      child: TextField(
-                        onChanged: (value) {
-                          setState(() {
-                            _searchQuery = value.toLowerCase();
-                          });
-                        },
-                        decoration: InputDecoration(
-                          icon: const Icon(
-                            Icons.search,
-                            color: Colors.grey,
-                            size: 28,
-                          ),
-                          hintText: 'Search files or folders',
-                          hintStyle: GoogleFonts.poppins(
-                            color: Colors.grey[600],
-                          ),
-                          border: InputBorder.none,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 24),
+        // Dynamic counts from services
+        final attentionCount = secService.moreDetailsCount +
+            secService.rejectedCount +
+            ssmService.secretaryRepliesNeededCount;
 
-                    Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(16),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.05),
-                            blurRadius: 10,
-                            offset: const Offset(0, 4),
+        final unsortedCount = secService.unsortedCount;
+
+        final accountingCount = 3 + secService.getDocumentsForFolder('Accounting').length;
+        final corporateCount = 4 + secService.getDocumentsForFolder('Corporate').length;
+        final personalCount = 3 + secService.getDocumentsForFolder('Personal').length;
+        final otherCount = 3 + secService.getDocumentsForFolder('Other').length;
+
+        return Scaffold(
+          backgroundColor: Colors.white,
+          body: SafeArea(
+            top: false,
+            child: Column(
+              children: [
+                const AppTopHeader(),
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 16),
+                        Text(
+                          'Files',
+                          style: GoogleFonts.poppins(
+                            color: Colors.black,
+                            fontSize: 24,
+                            fontWeight: FontWeight.w700,
                           ),
-                        ],
-                      ),
-                      child: Row(
-                        children: [
-                          Image.asset(
-                            'assets/tm_cloud.png',
-                            width: 50,
-                            height: 50,
+                        ),
+                        const SizedBox(height: 16),
+
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          decoration: BoxDecoration(
+                            color: Colors.grey[300],
+                            borderRadius: BorderRadius.circular(30),
                           ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Connect file storage',
-                                  style: GoogleFonts.poppins(
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 14,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  'Sync your files automatically\nPowered by TM Cloud',
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 12,
-                                    color: Colors.grey[600],
-                                  ),
-                                ),
-                              ],
+                          child: TextField(
+                            onChanged: (value) {
+                              setState(() {
+                                _searchQuery = value.toLowerCase();
+                              });
+                            },
+                            decoration: InputDecoration(
+                              icon: const Icon(
+                                Icons.search,
+                                color: Colors.grey,
+                                size: 28,
+                              ),
+                              hintText: 'Search files or folders',
+                              hintStyle: GoogleFonts.poppins(
+                                color: Colors.grey[600],
+                              ),
+                              border: InputBorder.none,
                             ),
                           ),
-                          OutlinedButton(
-                            onPressed: _isConnectingTMCloud || _tmCloudConnected
-                                ? null
-                                : () async {
-                                    setState(() {
-                                      _isConnectingTMCloud = true;
-                                    });
-                                    await Future.delayed(
-                                      const Duration(seconds: 2),
-                                    );
-                                    if (context.mounted) {
-                                      setState(() {
-                                        _isConnectingTMCloud = false;
-                                        _tmCloudConnected = true;
-                                      });
-                                      ScaffoldMessenger.of(
-                                        context,
-                                      ).showSnackBar(
-                                        const SnackBar(
-                                          content: Text(
-                                            'Successfully connected to TM Cloud!',
-                                          ),
-                                          backgroundColor: Colors.green,
-                                        ),
-                                      );
-                                    }
-                                  },
-                            style: OutlinedButton.styleFrom(
-                              side: BorderSide(
-                                color: _tmCloudConnected
-                                    ? Colors.green
-                                    : const Color(0xFF062AAE),
+                        ),
+                        const SizedBox(height: 24),
+
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(16),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withValues(alpha: 0.05),
+                                blurRadius: 10,
+                                offset: const Offset(0, 4),
                               ),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20),
+                            ],
+                          ),
+                          child: Row(
+                            children: [
+                              Image.asset(
+                                'assets/tm_cloud.png',
+                                width: 48,
+                                height: 48,
                               ),
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 16,
-                                vertical: 8,
-                              ),
-                            ),
-                            child: _isConnectingTMCloud
-                                ? const SizedBox(
-                                    width: 16,
-                                    height: 16,
-                                    child: CircularProgressIndicator(
-                                      strokeWidth: 2,
-                                      valueColor: AlwaysStoppedAnimation<Color>(
-                                        Color(0xFF062AAE),
+                              const SizedBox(width: 14),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Powered by TM Cloud',
+                                      style: GoogleFonts.poppins(
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 14,
+                                        color: Colors.black87,
                                       ),
                                     ),
-                                  )
-                                : Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      if (_tmCloudConnected) ...[
-                                        const Icon(
-                                          Icons.check,
-                                          size: 16,
-                                          color: Colors.green,
-                                        ),
-                                        const SizedBox(width: 4),
-                                      ],
-                                      Text(
-                                        _tmCloudConnected
-                                            ? 'Connected'
-                                            : 'Connect',
-                                        style: GoogleFonts.poppins(
-                                          color: _tmCloudConnected
-                                              ? Colors.green
-                                              : const Color(0xFF062AAE),
-                                          fontWeight: FontWeight.w600,
-                                        ),
+                                    const SizedBox(height: 3),
+                                    Text(
+                                      'Sync your files automatically with secure cloud storage.',
+                                      style: GoogleFonts.poppins(
+                                        fontSize: 12,
+                                        color: Colors.grey[600],
+                                        height: 1.3,
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 32),
-                    Text(
-                      'QUICK ACCESS',
-                      style: GoogleFonts.poppins(
-                        fontWeight: FontWeight.w700,
-                        fontSize: 14,
-                        color: Colors.black,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
+                        ),
+                        const SizedBox(height: 32),
+                        Text(
+                          'QUICK ACCESS',
+                          style: GoogleFonts.poppins(
+                            fontWeight: FontWeight.w700,
+                            fontSize: 14,
+                            color: Colors.black,
+                          ),
+                        ),
+                        const SizedBox(height: 16),
 
-                    Row(
-                      children: [
-                        if ('Attention'.toLowerCase().contains(_searchQuery))
-                          Expanded(
-                            child: _buildQuickAccessCard(
-                              icon: Icons.warning_amber_rounded,
-                              iconBgColor: Colors.red[100]!,
-                              iconColor: Colors.red,
-                              badgeText: '$documentsNeededCount files',
-                              badgeColor: Colors.red,
-                              badgeTextColor: Colors.white,
-                              title: 'Attention',
-                              subtitle: 'Action needed',
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const AttentionPage(),
-                                  ),
-                                );
-                              },
-                            ),
+                        Row(
+                          children: [
+                            if ('Attention'.toLowerCase().contains(_searchQuery))
+                              Expanded(
+                                child: _buildQuickAccessCard(
+                                  icon: Icons.warning_amber_rounded,
+                                  iconBgColor: Colors.red[100]!,
+                                  iconColor: Colors.red,
+                                  badgeText: '$attentionCount ${attentionCount == 1 ? 'file' : 'files'}',
+                                  badgeColor: Colors.red,
+                                  badgeTextColor: Colors.white,
+                                  title: 'Attention',
+                                  subtitle: 'Action needed',
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => const AttentionPage(),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                            if ('Attention'.toLowerCase().contains(_searchQuery) &&
+                                'Unsorted'.toLowerCase().contains(_searchQuery))
+                              const SizedBox(width: 16),
+                            if ('Unsorted'.toLowerCase().contains(_searchQuery))
+                              Expanded(
+                                child: _buildQuickAccessCard(
+                                  icon: Icons.folder_outlined,
+                                  iconBgColor: Colors.blue[100]!,
+                                  iconColor: Colors.blue[800]!,
+                                  badgeText: '$unsortedCount ${unsortedCount == 1 ? 'file' : 'files'}',
+                                  badgeColor: Colors.blue[100]!,
+                                  badgeTextColor: Colors.blue[800]!,
+                                  title: 'Unsorted',
+                                  subtitle: 'Pending review',
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => const UnsortedPage(),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                          ],
+                        ),
+                        const SizedBox(height: 32),
+                        Text(
+                          'FOLDERS',
+                          style: GoogleFonts.poppins(
+                            fontWeight: FontWeight.w700,
+                            fontSize: 14,
+                            color: Colors.black,
                           ),
-                        if ('Attention'.toLowerCase().contains(_searchQuery) &&
-                            'Unsorted'.toLowerCase().contains(_searchQuery))
-                          const SizedBox(width: 16),
-                        if ('Unsorted'.toLowerCase().contains(_searchQuery))
-                          Expanded(
-                            child: _buildQuickAccessCard(
-                              icon: Icons.folder_outlined,
-                              iconBgColor: Colors.blue[100]!,
-                              iconColor: Colors.blue[800]!,
-                              badgeText: '3 files',
-                              badgeColor: Colors.blue[100]!,
-                              badgeTextColor: Colors.blue[800]!,
-                              title: 'Unsorted',
-                              subtitle: 'Pending review',
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const UnsortedPage(),
-                                  ),
-                                );
-                              },
-                            ),
+                        ),
+                        const SizedBox(height: 16),
+
+                        if ('Accounting'.toLowerCase().contains(_searchQuery))
+                          _buildFolderItem(
+                            icon: Icons.folder,
+                            iconColor: Colors.teal[300]!,
+                            title: 'Accounting',
+                            subtitle: '$accountingCount files',
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const AccountingPage(),
+                                ),
+                              );
+                            },
                           ),
+                        if ('Corporate'.toLowerCase().contains(_searchQuery))
+                          _buildFolderItem(
+                            icon: Icons.folder,
+                            iconColor: Colors.orange[300]!,
+                            title: 'Corporate',
+                            subtitle: '$corporateCount files',
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const CorporatePage(),
+                                ),
+                              );
+                            },
+                          ),
+                        if ('Personal'.toLowerCase().contains(_searchQuery))
+                          _buildFolderItem(
+                            icon: Icons.folder,
+                            iconColor: Colors.green[300]!,
+                            title: 'Personal',
+                            subtitle: '$personalCount files',
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const PersonalPage(),
+                                ),
+                              );
+                            },
+                          ),
+                        if ('Other'.toLowerCase().contains(_searchQuery))
+                          _buildFolderItem(
+                            icon: Icons.folder,
+                            iconColor: Colors.blue[300]!,
+                            title: 'Other',
+                            subtitle: '$otherCount files',
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const OtherPage(),
+                                ),
+                              );
+                            },
+                          ),
+                        const SizedBox(height: 80),
                       ],
                     ),
-                    const SizedBox(height: 32),
-                    Text(
-                      'FOLDERS',
-                      style: GoogleFonts.poppins(
-                        fontWeight: FontWeight.w700,
-                        fontSize: 14,
-                        color: Colors.black,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-
-                    if ('Accounting'.toLowerCase().contains(_searchQuery))
-                      _buildFolderItem(
-                        icon: Icons.folder,
-                        iconColor: Colors.teal[300]!,
-                        title: 'Accounting',
-                        subtitle: '3 files',
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const AccountingPage(),
-                            ),
-                          );
-                        },
-                      ),
-                    if ('Corporate'.toLowerCase().contains(_searchQuery))
-                      _buildFolderItem(
-                        icon: Icons.folder,
-                        iconColor: Colors.orange[300]!,
-                        title: 'Corporate',
-                        subtitle: '4 files',
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const CorporatePage(),
-                            ),
-                          );
-                        },
-                      ),
-                    if ('Personal'.toLowerCase().contains(_searchQuery))
-                      _buildFolderItem(
-                        icon: Icons.folder,
-                        iconColor: Colors.green[300]!,
-                        title: 'Personal',
-                        subtitle: '3 files',
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const PersonalPage(),
-                            ),
-                          );
-                        },
-                      ),
-                    if ('Other'.toLowerCase().contains(_searchQuery))
-                      _buildFolderItem(
-                        icon: Icons.folder,
-                        iconColor: Colors.blue[300]!,
-                        title: 'Other',
-                        subtitle: '3 files',
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const OtherPage(),
-                            ),
-                          );
-                        },
-                      ),
-                    const SizedBox(height: 80),
-                  ],
+                  ),
                 ),
-              ),
+              ],
             ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        heroTag: 'files_fab',
-        onPressed: () => showAddMenu(
-          context,
-          showFileOptions: true,
-          showFolderOption: false,
-        ),
-        backgroundColor: const Color(0xFF062AAE),
-        shape: const CircleBorder(),
-        child: const Icon(Icons.upload_file_rounded, color: Colors.white, size: 28),
-      ),
+          ),
+          floatingActionButton: FloatingActionButton(
+            heroTag: 'files_fab',
+            onPressed: () => showAddMenu(
+              context,
+              showFileOptions: true,
+              showFolderOption: false,
+            ),
+            backgroundColor: const Color(0xFF062AAE),
+            shape: const CircleBorder(),
+            child: const Icon(Icons.upload_file_rounded, color: Colors.white, size: 28),
+          ),
+        );
+      },
     );
   }
 

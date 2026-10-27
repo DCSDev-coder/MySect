@@ -62,23 +62,34 @@ class Intro2Page extends StatelessWidget {
                               ),
                               const SizedBox(height: 16),
                               Text(
-                                'Trouble-free bookkeeping on the cloud to deliver timely\naccount that suit your needs.',
+                                'Trouble-free bookkeeping on the cloud to deliver timely accounts that suit your needs.',
                                 textAlign: TextAlign.center,
                                 style: GoogleFonts.poppins(
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.w500,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w400,
                                   color: Colors.grey[600],
                                   height: 1.5,
                                 ),
                               ),
-                              const SizedBox(height: 40),
+                              const SizedBox(height: 32),
                               GestureDetector(
                                 onTap: () {
-                                  Navigator.of(context).push(SlideTransitionRoute(page: const Intro3Page()));
+                                  Navigator.of(context).push(
+                                    SlideTransitionRoute(
+                                      page: const Intro3Page(),
+                                    ),
+                                  );
                                 },
-                                child: Image.asset('assets/nextbutton.png', height: 70),
+                                child: SizedBox(
+                                  width: 40,
+                                  height: 40,
+                                  child: Image.asset(
+                                    'assets/nextbutton.png',
+                                    fit: BoxFit.contain,
+                                  ),
+                                ),
                               ),
-                              const SizedBox(height: 50),
+                              const SizedBox(height: 36),
                             ],
                           ),
                         ),

@@ -33,6 +33,7 @@ class ForgotPasswordPage extends StatelessWidget {
                         AnimatedContainer(
                           duration: const Duration(milliseconds: 200),
                           curve: Curves.easeOut,
+                          decoration: const BoxDecoration(),
                           clipBehavior: Clip.hardEdge,
                           height: isKeyboardOpen ? 0 : 200,
                           child: OverflowBox(

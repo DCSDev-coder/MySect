@@ -48,7 +48,10 @@ class Intro1Page extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               const SizedBox(width: double.infinity),
-                              Image.asset('assets/incorporation.png', height: 200),
+                              Image.asset(
+                                'assets/incorporation.png',
+                                height: 200,
+                              ),
                               const SizedBox(height: 20),
                               Text(
                                 'Incorporation and\nCompany Secretary',
@@ -62,23 +65,34 @@ class Intro1Page extends StatelessWidget {
                               ),
                               const SizedBox(height: 16),
                               Text(
-                                'Get our help to meet tax compliance requirements and\nsave your business from devasting tax issue',
+                                'Get our help to meet tax compliance requirements and save your business from devastating tax issues.',
                                 textAlign: TextAlign.center,
                                 style: GoogleFonts.poppins(
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.w500,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w400,
                                   color: Colors.grey[600],
                                   height: 1.5,
                                 ),
                               ),
-                              const SizedBox(height: 40),
+                              const SizedBox(height: 32),
                               GestureDetector(
                                 onTap: () {
-                                  Navigator.of(context).push(SlideTransitionRoute(page: const Intro2Page()));
+                                  Navigator.of(context).push(
+                                    SlideTransitionRoute(
+                                      page: const Intro2Page(),
+                                    ),
+                                  );
                                 },
-                                child: Image.asset('assets/nextbutton.png', height: 70),
+                                child: SizedBox(
+                                  width: 40,
+                                  height: 40,
+                                  child: Image.asset(
+                                    'assets/nextbutton.png',
+                                    fit: BoxFit.contain,
+                                  ),
+                                ),
                               ),
-                              const SizedBox(height: 50),
+                              const SizedBox(height: 36),
                             ],
                           ),
                         ),

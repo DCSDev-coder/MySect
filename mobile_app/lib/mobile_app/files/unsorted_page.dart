@@ -3,6 +3,9 @@ import 'package:google_fonts/google_fonts.dart';
 import '../home/home_page.dart';
 import '../widgets/custom_bottom_nav_bar.dart';
 import '../widgets/app_top_header.dart';
+import '../services/secretary_document_service.dart';
+import '../models/client_document_model.dart';
+import 'document_viewer_page.dart';
 
 class UnsortedPage extends StatefulWidget {
   const UnsortedPage({super.key});
@@ -13,6 +16,7 @@ class UnsortedPage extends StatefulWidget {
 
 class _UnsortedPageState extends State<UnsortedPage> {
   bool _isSelectionMode = false;
+  final Set<String> _selectedDocIds = {};
 
   void _onItemTapped(int index) {
     if (index == 2) return;
@@ -22,32 +26,12 @@ class _UnsortedPageState extends State<UnsortedPage> {
     );
   }
 
-  final Set<int> _selectedIndices = {};
-
-  final List<Map<String, String>> _files = [
-    {
-      'badgeText': 'New',
-      'timeText': 'Today, 11:15 AM',
-      'title': 'Scanned Document 01',
-    },
-    {
-      'badgeText': 'New',
-      'timeText': 'Yesterday, 02:20 PM',
-      'title': 'IMG_20251120.jpg',
-    },
-    {
-      'badgeText': 'New',
-      'timeText': 'Yesterday, 10:05 AM',
-      'title': 'Unknown_Attachment.pdf',
-    },
-  ];
-
-  void _toggleSelection(int index) {
+  void _toggleSelection(String docId) {
     setState(() {
-      if (_selectedIndices.contains(index)) {
-        _selectedIndices.remove(index);
+      if (_selectedDocIds.contains(docId)) {
+        _selectedDocIds.remove(docId);
       } else {
-        _selectedIndices.add(index);
+        _selectedDocIds.add(docId);
       }
     });
   }
@@ -95,7 +79,7 @@ class _UnsortedPageState extends State<UnsortedPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Move ${_selectedIndices.length} files',
+                          'Move ${_selectedDocIds.length} files',
                           style: GoogleFonts.poppins(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
@@ -103,7 +87,7 @@ class _UnsortedPageState extends State<UnsortedPage> {
                           ),
                         ),
                         Text(
-                          'Select a destination folder',
+                          'Select a destination statutory folder',
                           style: GoogleFonts.poppins(
                             fontSize: 13,
                             color: Colors.grey.shade600,
@@ -115,13 +99,13 @@ class _UnsortedPageState extends State<UnsortedPage> {
                 ],
               ),
               const SizedBox(height: 24),
-              _buildMoveOption('Personal', 'Individual files & records', Icons.person_outline),
+              _buildMoveOption('Personal', 'Individual files, IC & director records', Icons.person_outline),
               const SizedBox(height: 12),
-              _buildMoveOption('Corporate', 'Business & statutory docs', Icons.business_outlined),
+              _buildMoveOption('Corporate', 'Business, SSM & statutory returns', Icons.business_outlined),
               const SizedBox(height: 12),
-              _buildMoveOption('Accounting', 'Financial & tax statements', Icons.account_balance_wallet_outlined),
+              _buildMoveOption('Accounting', 'Financial & tax statements, invoices', Icons.account_balance_wallet_outlined),
               const SizedBox(height: 12),
-              _buildMoveOption('Other', 'Miscellaneous documents', Icons.folder_open_outlined),
+              _buildMoveOption('Other', 'Agreements, tenancy & miscellaneous', Icons.folder_open_outlined),
             ],
           ),
         );
@@ -132,11 +116,13 @@ class _UnsortedPageState extends State<UnsortedPage> {
   Widget _buildMoveOption(String title, String subtitle, IconData icon) {
     return InkWell(
       onTap: () {
+        final count = _selectedDocIds.length;
+        SecretaryDocumentService.instance.moveDocuments(_selectedDocIds.toList(), title);
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              'Successfully moved ${_selectedIndices.length} files to $title',
+              'Successfully moved $count ${count == 1 ? 'file' : 'files'} to $title',
               style: GoogleFonts.poppins(),
             ),
             backgroundColor: const Color(0xFF062AAE),
@@ -146,7 +132,7 @@ class _UnsortedPageState extends State<UnsortedPage> {
         );
         setState(() {
           _isSelectionMode = false;
-          _selectedIndices.clear();
+          _selectedDocIds.clear();
         });
       },
       borderRadius: BorderRadius.circular(16),
@@ -199,150 +185,184 @@ class _UnsortedPageState extends State<UnsortedPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        top: false,
-        child: Column(
-          children: [
-            const AppTopHeader(),
-            const SizedBox(height: 16),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
+    return AnimatedBuilder(
+      animation: SecretaryDocumentService.instance,
+      builder: (context, _) {
+        final unsortedList = SecretaryDocumentService.instance.unsortedDocuments;
+
+        return Scaffold(
+          backgroundColor: Colors.white,
+          body: SafeArea(
+            top: false,
+            child: Column(
+              children: [
+                const AppTopHeader(),
+                const SizedBox(height: 16),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      IconButton(
-                        icon: const Icon(
-                          Icons.arrow_back_ios,
-                          color: Colors.black,
-                          size: 20,
-                        ),
-                        onPressed: () => Navigator.pop(context),
-                        padding: EdgeInsets.zero,
-                        constraints: const BoxConstraints(),
+                      Row(
+                        children: [
+                          IconButton(
+                            icon: const Icon(
+                              Icons.arrow_back_ios,
+                              color: Colors.black,
+                              size: 20,
+                            ),
+                            onPressed: () => Navigator.pop(context),
+                            padding: EdgeInsets.zero,
+                            constraints: const BoxConstraints(),
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            'Unsorted',
+                            style: GoogleFonts.poppins(
+                              color: Colors.black,
+                              fontSize: 24,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ],
                       ),
-                      const SizedBox(width: 8),
-                      Text(
-                        'Unsorted',
-                        style: GoogleFonts.poppins(
-                          color: Colors.black,
-                          fontSize: 24,
-                          fontWeight: FontWeight.w700,
+                      if (unsortedList.isNotEmpty)
+                        TextButton(
+                          onPressed: () {
+                            setState(() {
+                              _isSelectionMode = !_isSelectionMode;
+                              if (!_isSelectionMode) {
+                                _selectedDocIds.clear();
+                              }
+                            });
+                          },
+                          child: Text(
+                            _isSelectionMode ? 'Cancel' : 'Select',
+                            style: GoogleFonts.poppins(
+                              color: const Color(0xFF062AAE),
+                              fontWeight: FontWeight.w600,
+                              fontSize: 16,
+                            ),
+                          ),
                         ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Expanded(
+                  child: unsortedList.isEmpty
+                      ? Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(24.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.all(16),
+                                  decoration: const BoxDecoration(
+                                    color: Color(0xFFECFDF5),
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: const Icon(Icons.check_circle_outline, color: Color(0xFF059669), size: 48),
+                                ),
+                                const SizedBox(height: 16),
+                                Text(
+                                  'All Organized!',
+                                  style: GoogleFonts.poppins(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black87,
+                                  ),
+                                ),
+                                const SizedBox(height: 6),
+                                Text(
+                                  'No unsorted documents. All files have been categorized into statutory folders.',
+                                  style: GoogleFonts.poppins(fontSize: 13, color: Colors.grey.shade600),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
+                          ),
+                        )
+                      : SingleChildScrollView(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              ...unsortedList.map((doc) {
+                                return _buildDocumentCard(doc);
+                              }),
+                            ],
+                          ),
+                        ),
+                ),
+              ],
+            ),
+          ),
+          bottomNavigationBar: _selectedDocIds.isNotEmpty
+              ? Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.1),
+                        blurRadius: 10,
+                        offset: const Offset(0, -4),
                       ),
                     ],
                   ),
-                  TextButton(
-                    onPressed: () {
-                      setState(() {
-                        _isSelectionMode = !_isSelectionMode;
-                        if (!_isSelectionMode) {
-                          _selectedIndices.clear();
-                        }
-                      });
-                    },
-                    child: Text(
-                      _isSelectionMode ? 'Cancel' : 'Select',
-                      style: GoogleFonts.poppins(
-                        color: const Color(0xFF062AAE),
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16,
+                  child: SafeArea(
+                    child: ElevatedButton(
+                      onPressed: _showMoveBottomSheet,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF062AAE),
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: Text(
+                        'Move ${_selectedDocIds.length} ${_selectedDocIds.length == 1 ? 'File' : 'Files'}',
+                        style: GoogleFonts.poppins(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 16),
-            Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    ...List.generate(_files.length, (index) {
-                      final file = _files[index];
-                      return _buildDocumentCard(
-                        index: index,
-                        badgeText: file['badgeText']!,
-                        badgeBgColor: Colors.blue[100]!,
-                        badgeTextColor: Colors.blue[800]!,
-                        timeText: file['timeText']!,
-                        title: file['title']!,
-                      );
-                    }),
-                  ],
+                )
+              : CustomBottomNavBar(
+                  currentIndex: 2,
+                  onTap: _onItemTapped,
                 ),
-              ),
-            ),
-          ],
-        ),
-      ),
-      bottomNavigationBar: _selectedIndices.isNotEmpty
-          ? Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.1),
-                    blurRadius: 10,
-                    offset: const Offset(0, -4),
-                  ),
-                ],
-              ),
-              child: SafeArea(
-                child: ElevatedButton(
-                  onPressed: _showMoveBottomSheet,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF062AAE),
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                  child: Text(
-                    'Move ${_selectedIndices.length} Files',
-                    style: GoogleFonts.poppins(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-            )
-          : CustomBottomNavBar(
-              currentIndex: 2,
-              onTap: _onItemTapped,
-            ),
+        );
+      },
     );
   }
 
-  Widget _buildDocumentCard({
-    required int index,
-    required String badgeText,
-    required Color badgeBgColor,
-    required Color badgeTextColor,
-    required String timeText,
-    required String title,
-  }) {
-    final isSelected = _selectedIndices.contains(index);
+  Widget _buildDocumentCard(ClientDocument doc) {
+    final isSelected = _selectedDocIds.contains(doc.id);
 
     return GestureDetector(
       onTap: () {
         if (_isSelectionMode) {
-          _toggleSelection(index);
-        } else {}
+          _toggleSelection(doc.id);
+        } else {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => DocumentViewerPage(fileName: doc.title),
+            ),
+          );
+        }
       },
       onLongPress: () {
         if (!_isSelectionMode) {
           setState(() {
             _isSelectionMode = true;
-            _selectedIndices.add(index);
+            _selectedDocIds.add(doc.id);
           });
         }
       },
@@ -354,7 +374,7 @@ class _UnsortedPageState extends State<UnsortedPage> {
           borderRadius: BorderRadius.circular(16),
           border: isSelected
               ? Border.all(color: const Color(0xFF062AAE), width: 2)
-              : Border.all(color: Colors.transparent, width: 2),
+              : Border.all(color: Colors.grey.shade100, width: 1.5),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.05),
@@ -385,20 +405,20 @@ class _UnsortedPageState extends State<UnsortedPage> {
                           vertical: 4,
                         ),
                         decoration: BoxDecoration(
-                          color: badgeBgColor,
+                          color: Colors.blue[100]!,
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Text(
-                          badgeText,
+                          doc.status.label,
                           style: GoogleFonts.poppins(
-                            color: badgeTextColor,
+                            color: Colors.blue[800]!,
                             fontSize: 10,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
                       ),
                       Text(
-                        timeText,
+                        doc.uploadedAt,
                         style: GoogleFonts.poppins(
                           color: Colors.grey[600],
                           fontSize: 12,
@@ -417,7 +437,7 @@ class _UnsortedPageState extends State<UnsortedPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              title,
+                              doc.title,
                               style: GoogleFonts.poppins(
                                 fontWeight: FontWeight.w700,
                                 fontSize: 14,
@@ -426,7 +446,7 @@ class _UnsortedPageState extends State<UnsortedPage> {
                             ),
                             const SizedBox(height: 4),
                             Text(
-                              'Needs categorization',
+                              '${doc.fileSize} • ${doc.category}',
                               style: GoogleFonts.poppins(
                                 fontSize: 12,
                                 color: Colors.grey[600],

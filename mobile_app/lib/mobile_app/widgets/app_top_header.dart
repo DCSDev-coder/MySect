@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../notifications/notifications_page.dart';
+import '../services/notification_service.dart';
 
 /// Standardized top header with the MySect logo and notification bell.
 /// Positioned higher up (closer to the status bar / camera cutout) uniformly across all pages.
@@ -40,23 +41,48 @@ class AppTopHeader extends StatelessWidget {
           if (trailing != null)
             trailing!
           else if (showNotificationBell)
-            IconButton(
-              padding: EdgeInsets.zero,
-              constraints: const BoxConstraints(),
-              icon: const Icon(
-                Icons.notifications_none,
-                color: Colors.black87,
-                size: 24,
-              ),
-              onPressed: onNotificationTap ??
-                  () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const NotificationsPage(),
+            AnimatedBuilder(
+              animation: NotificationService.instance,
+              builder: (context, _) {
+                final unreadCount = NotificationService.instance.unreadCount;
+                return IconButton(
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
+                  icon: Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      const Icon(
+                        Icons.notifications_none,
+                        color: Colors.black87,
+                        size: 24,
                       ),
-                    );
-                  },
+                      if (unreadCount > 0)
+                        Positioned(
+                          right: 1,
+                          top: 1,
+                          child: Container(
+                            width: 7,
+                            height: 7,
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFDC2626),
+                              shape: BoxShape.circle,
+                              border: Border.all(color: Colors.white, width: 1),
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                  onPressed: onNotificationTap ??
+                      () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const NotificationsPage(),
+                          ),
+                        );
+                      },
+                );
+              },
             )
           else
             const SizedBox(width: 24, height: 24),

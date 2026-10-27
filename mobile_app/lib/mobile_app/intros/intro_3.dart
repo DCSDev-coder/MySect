@@ -61,26 +61,35 @@ class Intro3Page extends StatelessWidget {
                               ),
                               const SizedBox(height: 16),
                               Text(
-                                'Get your help to meet tax compliance requirements and save\nyour business from devastating tax issues.',
+                                'Get your help to meet tax compliance requirements and save your business from devastating tax issues.',
                                 textAlign: TextAlign.center,
                                 style: GoogleFonts.poppins(
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.w500,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w400,
                                   color: Colors.grey[600],
                                   height: 1.5,
                                 ),
                               ),
-                              const SizedBox(height: 40),
+                              const SizedBox(height: 32),
                               GestureDetector(
                                 onTap: () {
                                   Navigator.of(context).pushAndRemoveUntil(
-                                    SlideTransitionRoute(page: const LoginPage()),
+                                    SlideTransitionRoute(
+                                      page: const LoginPage(),
+                                    ),
                                     (route) => false,
                                   );
                                 },
-                                child: Image.asset('assets/nextbutton.png', height: 70),
+                                child: SizedBox(
+                                  width: 40,
+                                  height: 40,
+                                  child: Image.asset(
+                                    'assets/nextbutton.png',
+                                    fit: BoxFit.contain,
+                                  ),
+                                ),
                               ),
-                              const SizedBox(height: 50),
+                              const SizedBox(height: 36),
                             ],
                           ),
                         ),

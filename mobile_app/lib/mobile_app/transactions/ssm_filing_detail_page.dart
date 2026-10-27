@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../models/ssm_filing_model.dart';
 import '../services/ssm_filing_service.dart';
-import '../chat/active_chat_page.dart';
+import '../widgets/app_top_header.dart';
 
 class SsmFilingDetailPage extends StatefulWidget {
   final String filingId;
@@ -15,7 +15,6 @@ class SsmFilingDetailPage extends StatefulWidget {
 
 class _SsmFilingDetailPageState extends State<SsmFilingDetailPage> {
   final ScrollController _scrollController = ScrollController();
-  bool _showSimToolbar = true;
 
   @override
   void dispose() {
@@ -33,8 +32,42 @@ class _SsmFilingDetailPageState extends State<SsmFilingDetailPage> {
 
         if (filingIndex == -1) {
           return Scaffold(
-            appBar: AppBar(title: const Text('Filing Not Found')),
-            body: const Center(child: Text('This filing could not be found.')),
+            backgroundColor: const Color(0xFFF8FAFC),
+            body: SafeArea(
+              top: false,
+              child: Column(
+                children: [
+                  const AppTopHeader(),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                    child: Row(
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.black87, size: 20),
+                          onPressed: () => Navigator.pop(context),
+                          padding: EdgeInsets.zero,
+                          constraints: const BoxConstraints(),
+                        ),
+                        const SizedBox(width: 12),
+                        Text(
+                          'Filing Not Found',
+                          style: GoogleFonts.poppins(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.black87,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Expanded(
+                    child: Center(
+                      child: Text('This filing could not be found.'),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           );
         }
 
@@ -42,108 +75,55 @@ class _SsmFilingDetailPageState extends State<SsmFilingDetailPage> {
 
         return Scaffold(
           backgroundColor: const Color(0xFFF8FAFC),
-          appBar: AppBar(
-            backgroundColor: Colors.white,
-            elevation: 0.5,
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back_ios_new, color: Colors.black87, size: 20),
-              onPressed: () => Navigator.pop(context),
-            ),
-            title: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+          body: SafeArea(
+            top: false,
+            child: Column(
               children: [
-                Text(
-                  filing.referenceNo,
-                  style: GoogleFonts.poppins(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
-                    color: const Color(0xFF062AAE),
+                const AppTopHeader(),
+                Padding(
+                  padding: const EdgeInsets.only(
+                    left: 16.0,
+                    right: 16.0,
+                    top: 8.0,
+                    bottom: 6.0,
                   ),
-                ),
-                Text(
-                  filing.companyName,
-                  style: GoogleFonts.poppins(
-                    fontSize: 11,
-                    color: Colors.grey.shade600,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ],
-            ),
-            actions: [
-              IconButton(
-                tooltip: 'Toggle Simulation Toolbar',
-                icon: Icon(
-                  _showSimToolbar ? Icons.smart_toy_rounded : Icons.smart_toy_outlined,
-                  color: const Color(0xFF062AAE),
-                ),
-                onPressed: () {
-                  setState(() {
-                    _showSimToolbar = !_showSimToolbar;
-                  });
-                },
-              ),
-            ],
-          ),
-          body: Column(
-            children: [
-              // Interactive Secretary Demo Simulation Bar (forPair programming testing)
-              if (_showSimToolbar)
-                Container(
-                  color: const Color(0xFFEFF6FF),
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   child: Row(
                     children: [
-                      const Icon(Icons.auto_awesome, color: Color(0xFF1D4ED8), size: 16),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: Text(
-                          'Secretary Demo Triggers:',
-                          style: GoogleFonts.poppins(
-                            fontSize: 11,
-                            fontWeight: FontWeight.w600,
-                            color: const Color(0xFF1E40AF),
-                          ),
-                        ),
+                      IconButton(
+                        icon: const Icon(Icons.arrow_back_ios_new, color: Colors.black87, size: 20),
+                        onPressed: () => Navigator.pop(context),
+                        padding: EdgeInsets.zero,
+                        constraints: const BoxConstraints(),
                       ),
-                      Wrap(
-                        spacing: 6,
-                        children: [
-                          _buildSimButton(
-                            label: 'Secretary Reply',
-                            color: const Color(0xFFDC2626),
-                            bgColor: const Color(0xFFFEE2E2),
-                            onTap: () {
-                              SsmFilingService.instance.simulateSecretaryClarification(
-                                filing.id,
-                                'Hi Adam, please provide the signed Form 48A Consent to Act and clear director NRIC copy so we can finalize the SSM lodgement.',
-                              );
-                            },
-                          ),
-                          _buildSimButton(
-                            label: 'Lodge to SSM',
-                            color: const Color(0xFF7C3AED),
-                            bgColor: const Color(0xFFF5F3FF),
-                            onTap: () {
-                              SsmFilingService.instance.simulateSecretaryApproval(filing.id);
-                            },
-                          ),
-                          _buildSimButton(
-                            label: 'SSM Approved',
-                            color: const Color(0xFF059669),
-                            bgColor: const Color(0xFFECFDF5),
-                            onTap: () {
-                              SsmFilingService.instance.simulateSsmCompletion(filing.id);
-                            },
-                          ),
-                        ],
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              filing.referenceNo,
+                              style: GoogleFonts.poppins(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w700,
+                                color: const Color(0xFF062AAE),
+                              ),
+                            ),
+                            Text(
+                              filing.companyName,
+                              style: GoogleFonts.poppins(
+                                fontSize: 11,
+                                color: Colors.grey.shade600,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
                 ),
-
-              // Main Scrollable Content
-              Expanded(
+                // Main Scrollable Content
+                Expanded(
                 child: ListView(
                   controller: _scrollController,
                   padding: const EdgeInsets.all(16),
@@ -168,38 +148,13 @@ class _SsmFilingDetailPageState extends State<SsmFilingDetailPage> {
               ),
             ],
           ),
-        );
+        ),
+      );
       },
     );
   }
 
-  Widget _buildSimButton({
-    required String label,
-    required Color color,
-    required Color bgColor,
-    required VoidCallback onTap,
-  }) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(6),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-        decoration: BoxDecoration(
-          color: bgColor,
-          borderRadius: BorderRadius.circular(6),
-          border: Border.all(color: color.withValues(alpha: 0.3)),
-        ),
-        child: Text(
-          label,
-          style: GoogleFonts.poppins(
-            fontSize: 10,
-            fontWeight: FontWeight.w600,
-            color: color,
-          ),
-        ),
-      ),
-    );
-  }
+
 
   Widget _buildStatusHeroCard(SsmFiling filing) {
     return Container(
@@ -261,8 +216,11 @@ class _SsmFilingDetailPageState extends State<SsmFilingDetailPage> {
           const SizedBox(height: 14),
 
           // Status Badge Row
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          Wrap(
+            alignment: WrapAlignment.spaceBetween,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            spacing: 8,
+            runSpacing: 8,
             children: [
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
@@ -288,6 +246,7 @@ class _SsmFilingDetailPageState extends State<SsmFilingDetailPage> {
                 ),
               ),
               Row(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Icon(Icons.calendar_today_rounded, size: 13, color: Colors.grey.shade600),
                   const SizedBox(width: 4),
@@ -397,22 +356,16 @@ class _SsmFilingDetailPageState extends State<SsmFilingDetailPage> {
                         : const Color(0xFF059669),
                   ),
                 ),
-              ],
-            ),
-          ),
-          IconButton(
-            icon: const Icon(Icons.chat_bubble_outline_rounded, color: Color(0xFF062AAE), size: 22),
-            tooltip: 'Chat with Secretary',
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ActiveChatPage(
-                    title: '${filing.assignedSecretary} (${filing.assignedFirmName})',
+                const SizedBox(height: 4),
+                Text(
+                  'To discuss this filing with your secretary, please open the Chats tab.',
+                  style: GoogleFonts.poppins(
+                    fontSize: 10,
+                    color: Colors.grey.shade500,
                   ),
                 ),
-              );
-            },
+              ],
+            ),
           ),
         ],
       ),
