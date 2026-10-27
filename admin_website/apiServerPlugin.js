@@ -1,8 +1,9 @@
-import { initialCompanies, initialFirms } from './src/data/mockData.js';
+import { initialCompanies, initialFirms, initialClientDocuments } from './src/data/mockData.js';
 
 // In-memory persistent state during dev server run
 let companies = [...initialCompanies];
 let firms = [...initialFirms];
+let documents = [...initialClientDocuments];
 
 export function apiServerPlugin() {
   return {
@@ -194,6 +195,169 @@ export function apiServerPlugin() {
                 synced: true,
                 company: companies[companyIndex]
               }));
+            });
+            return;
+          }
+        }
+
+        // ==========================================
+        // Secretary Document Intake & Review API Routes
+        // ==========================================
+
+        // 1. GET all documents & POST new uploaded document
+        if (pathname === '/api/documents') {
+          if (req.method === 'GET') {
+            const companyIdFilter = url.searchParams.get('companyId');
+            const statusFilter = url.searchParams.get('status');
+            let results = [...documents];
+
+            if (companyIdFilter) {
+              results = results.filter(d => d.companyId === companyIdFilter);
+            }
+            if (statusFilter) {
+              results = results.filter(d => d.status.toLowerCase() === statusFilter.toLowerCase());
+            }
+
+            res.setHeader('Content-Type', 'application/json');
+            res.end(JSON.stringify(results));
+            return;
+          }
+
+          if (req.method === 'POST') {
+            let body = '';
+            req.on('data', chunk => { body += chunk; });
+            req.on('end', () => {
+              try {
+                const payload = JSON.parse(body || '{}');
+                const newId = 'DOC-2026-' + String(documents.length + 1).padStart(3, '0');
+                const newDoc = {
+                  id: newId,
+                  title: payload.title || payload.originalName || 'Client_Uploaded_Document.pdf',
+                  originalName: payload.originalName || payload.title || 'Client_Uploaded_Document.pdf',
+                  category: payload.category || 'General Statutory Filing',
+                  fileSize: payload.fileSize || '1.5 MB',
+                  fileType: payload.fileType || 'application/pdf',
+                  companyId: payload.companyId || 'comp-01',
+                  companyName: payload.companyName || 'Data Center Specialists Sdn Bhd (M)',
+                  companySsmNo: payload.companySsmNo || '202101039281 (1429581-X)',
+                  assignedFirmId: payload.assignedFirmId || 'firm-01',
+                  assignedFirmName: payload.assignedFirmName || 'SectPro Corporate Services Sdn Bhd',
+                  assignedSecretary: payload.assignedSecretary || 'Lim Mei Ling (MIA CA 48192)',
+                  uploadedBy: payload.uploadedBy || 'Client User (Director)',
+                  uploadedByRole: payload.uploadedByRole || 'Managing Director (Client)',
+                  uploadedAt: new Date().toISOString().replace('T', ' ').substring(0, 16),
+                  storageLocation: 'TM One Cloud Alpha (DC1-Cyberjaya)',
+                  storageUrl: `tmcloud://alpha-dc1/vault/${payload.companyId || 'comp-01'}/${payload.title || 'doc.pdf'}`,
+                  sha256Hash: Math.random().toString(16).substring(2) + Math.random().toString(16).substring(2),
+                  status: 'Pending Review',
+                  linkedFilingRef: payload.linkedFilingRef || 'SSM/GEN/2026/' + Math.floor(1000 + Math.random() * 9000),
+                  submissionNotes: payload.submissionNotes || 'Uploaded via MySect Mobile App for Secretary verification.',
+                  reviewDetails: null,
+                  auditTrail: [
+                    {
+                      timestamp: new Date().toISOString().replace('T', ' ').substring(0, 19),
+                      action: 'FILE_UPLOADED',
+                      actor: `${payload.uploadedBy || 'Client Director'} (${payload.uploadedByRole || 'Client'})`,
+                      details: 'Uploaded document via MySect Mobile App.'
+                    }
+                  ]
+                };
+
+                documents.unshift(newDoc);
+                res.statusCode = 201;
+                res.setHeader('Content-Type', 'application/json');
+                res.end(JSON.stringify(newDoc));
+              } catch (err) {
+                res.statusCode = 400;
+                res.setHeader('Content-Type', 'application/json');
+                res.end(JSON.stringify({ error: err.message }));
+              }
+            });
+            return;
+          }
+        }
+
+        // 2. Single document & Review decision routes
+        const docReviewMatch = pathname.match(/^\/api\/documents\/([^/]+)(\/review)?$/);
+        if (docReviewMatch) {
+          const docId = docReviewMatch[1];
+          const isReviewAction = !!docReviewMatch[2];
+
+          const docIndex = documents.findIndex(d => d.id === docId);
+          if (docIndex === -1) {
+            res.statusCode = 404;
+            res.setHeader('Content-Type', 'application/json');
+            res.end(JSON.stringify({ error: 'Document not found' }));
+            return;
+          }
+
+          if (!isReviewAction && req.method === 'GET') {
+            res.setHeader('Content-Type', 'application/json');
+            res.end(JSON.stringify(documents[docIndex]));
+            return;
+          }
+
+          // Secretary review action: Approved, Rejected, More Details Needed
+          if (isReviewAction && (req.method === 'POST' || req.method === 'PATCH' || req.method === 'PUT')) {
+            let body = '';
+            req.on('data', chunk => { body += chunk; });
+            req.on('end', () => {
+              try {
+                const {
+                  decision = 'Approved', // 'Approved' | 'Rejected' | 'More Details Needed'
+                  reviewedBy = 'Lim Mei Ling (MIA CA 48192)',
+                  remarks = '',
+                  rejectionReason = '',
+                  requestedDetails = '',
+                  internalNotes = ''
+                } = JSON.parse(body || '{}');
+
+                const targetDoc = documents[docIndex];
+                const nowStr = new Date().toISOString().replace('T', ' ').substring(0, 16);
+
+                targetDoc.status = decision;
+                targetDoc.reviewDetails = {
+                  reviewedBy,
+                  reviewedAt: nowStr,
+                  decision,
+                  internalNotes,
+                  remarks: decision === 'Approved' ? remarks : undefined,
+                  rejectionReason: decision === 'Rejected' ? rejectionReason : undefined,
+                  requestedDetails: decision === 'More Details Needed' ? requestedDetails : undefined
+                };
+
+                let auditAction = 'FILE_REVIEWED';
+                let auditDetail = `Secretary ${reviewedBy} marked file as ${decision}.`;
+
+                if (decision === 'Approved') {
+                  auditAction = 'FILE_APPROVED';
+                  auditDetail = `Secretary ${reviewedBy} approved the file for SSM compliance. Remarks: ${remarks || 'None'}`;
+                } else if (decision === 'Rejected') {
+                  auditAction = 'FILE_REJECTED';
+                  auditDetail = `Secretary ${reviewedBy} rejected the file. Reason: ${rejectionReason}`;
+                } else if (decision === 'More Details Needed') {
+                  auditAction = 'DETAILS_REQUESTED';
+                  auditDetail = `Secretary ${reviewedBy} requested more details from client: ${requestedDetails}`;
+                }
+
+                targetDoc.auditTrail.push({
+                  timestamp: new Date().toISOString().replace('T', ' ').substring(0, 19),
+                  action: auditAction,
+                  actor: reviewedBy,
+                  details: auditDetail
+                });
+
+                res.setHeader('Content-Type', 'application/json');
+                res.end(JSON.stringify({
+                  success: true,
+                  document: targetDoc,
+                  message: `Document status updated to ${decision}`
+                }));
+              } catch (err) {
+                res.statusCode = 400;
+                res.setHeader('Content-Type', 'application/json');
+                res.end(JSON.stringify({ error: err.message }));
+              }
             });
             return;
           }

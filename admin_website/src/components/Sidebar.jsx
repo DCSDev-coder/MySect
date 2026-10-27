@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {
   LayoutDashboard, Building2, Users, AlertCircle,
-  Settings, LogOut
+  Settings, LogOut, FileCheck
 } from 'lucide-react';
 import mysectLogo from '../assets/mysect_logo.png';
 
@@ -10,6 +10,7 @@ const Sidebar = ({
   setActivePage,
   pendingFirmsCount = 0,
   urgentItemsCount = 0,
+  pendingDocsCount = 0,
   currentUser = null,
   onLogout = () => {},
 }) => {
@@ -19,6 +20,13 @@ const Sidebar = ({
       id: 'Overview',
       label: 'Overview',
       icon: LayoutDashboard
+    },
+    {
+      id: 'SecretaryWorkspace',
+      label: 'Secretary Workspace',
+      icon: FileCheck,
+      badge: pendingDocsCount > 0 ? pendingDocsCount : null,
+      badgeColor: 'bg-amber-100 text-amber-800'
     },
     {
       id: 'Firms',

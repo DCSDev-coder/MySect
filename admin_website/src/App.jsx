@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Sidebar from './components/Sidebar';
 import Dashboard from './components/Dashboard';
+import SecretaryWorkspace from './components/SecretaryWorkspace';
 import SecretaryFirms from './components/SecretaryFirms';
 import CompanyManagement from './components/CompanyManagement';
 import OperationsView from './components/OperationsView';
@@ -17,7 +18,8 @@ import {
   initialServiceCatalogue,
   initialGlobalNotifications,
   initialAuditLogs,
-  platformPolicies
+  platformPolicies,
+  initialClientDocuments
 } from './data/mockData';
 
 function App() {
@@ -51,7 +53,55 @@ function App() {
   const [notifications, setNotifications] = useState(initialGlobalNotifications);
   const [auditLogs, setAuditLogs] = useState(initialAuditLogs);
   const [policies, setPolicies] = useState(platformPolicies);
+  const [documents, setDocuments] = useState(initialClientDocuments);
   const [selectedFirmForDetail, setSelectedFirmForDetail] = useState(null);
+
+  // Secretary document review handler
+  const handleReviewDocument = async (docId, { decision, reviewedBy, remarks, rejectionReason, requestedDetails, internalNotes }) => {
+    setDocuments(prev => prev.map(d => {
+      if (d.id === docId) {
+        const nowStr = new Date().toISOString().replace('T', ' ').substring(0, 16);
+        return {
+          ...d,
+          status: decision,
+          reviewDetails: {
+            reviewedBy,
+            reviewedAt: nowStr,
+            decision,
+            internalNotes,
+            remarks: decision === 'Approved' ? remarks : undefined,
+            rejectionReason: decision === 'Rejected' ? rejectionReason : undefined,
+            requestedDetails: decision === 'More Details Needed' ? requestedDetails : undefined
+          },
+          auditTrail: [
+            ...(d.auditTrail || []),
+            {
+              timestamp: new Date().toISOString().replace('T', ' ').substring(0, 19),
+              action: `FILE_${decision.toUpperCase().replace(/\s+/g, '_')}`,
+              actor: reviewedBy,
+              details: decision === 'Approved'
+                ? `Approved: ${remarks || 'Passed'}`
+                : decision === 'Rejected'
+                  ? `Rejected: ${rejectionReason}`
+                  : `Clarification requested: ${requestedDetails}`
+            }
+          ]
+        };
+      }
+      return d;
+    }));
+
+    // Sync to backend API if reachable
+    try {
+      await fetch(`/api/documents/${docId}/review`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ decision, reviewedBy, remarks, rejectionReason, requestedDetails, internalNotes })
+      });
+    } catch (e) {
+      // Offline fallback
+    }
+  };
 
   // Helper to log audit actions
   const logAudit = (actionType, targetEntity, details) => {
@@ -244,6 +294,17 @@ function App() {
             onCreateCompany={handleCreateCompany}
           />
         );
+      case 'SecretaryWorkspace':
+        return (
+          <SecretaryWorkspace 
+            documents={documents}
+            firms={firms}
+            companies={companies}
+            currentUser={currentUser}
+            onReviewDocument={handleReviewDocument}
+            logAudit={logAudit}
+          />
+        );
       case 'Operations':
         return (
           <OperationsView 
@@ -289,6 +350,7 @@ function App() {
 
   const pendingFirmsCount = firms.filter(f => f.status === 'Pending Verification').length;
   const urgentItemsCount = escalations.filter(e => !e.status.includes('Resolved')).length + disputes.filter(d => !d.status.includes('Resolved')).length;
+  const pendingDocsCount = documents.filter(d => d.status === 'Pending Review').length;
 
   if (!currentUser) {
     return <Login onLogin={handleLogin} />;
@@ -301,6 +363,7 @@ function App() {
         setActivePage={setActivePage}
         pendingFirmsCount={pendingFirmsCount}
         urgentItemsCount={urgentItemsCount}
+        pendingDocsCount={pendingDocsCount}
         currentUser={currentUser}
         onLogout={handleLogout}
       />

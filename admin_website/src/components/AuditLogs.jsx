@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { 
+import {
   FileSearch, Search, Download
 } from 'lucide-react';
 
@@ -11,16 +11,15 @@ const AuditLogs = ({ auditLogs = [] }) => {
 
   const filtered = auditLogs.filter(log => {
     const matchesSearch = log.actor.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          log.targetEntity.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          log.details.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          log.actionType.toLowerCase().includes(searchTerm.toLowerCase());
+      log.targetEntity.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      log.details.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      log.actionType.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesType = filterType === 'All' || log.actionType === filterType;
     return matchesSearch && matchesType;
   });
 
   return (
     <div className="flex-1 overflow-y-auto bg-[#F8F9FA] p-8">
-      {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between pb-6 border-b border-gray-200 gap-4">
         <div>
           <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#062AAE]">
@@ -39,11 +38,10 @@ const AuditLogs = ({ auditLogs = [] }) => {
         </button>
       </div>
 
-      {/* Filters */}
       <div className="bg-white p-4 rounded-xl border border-gray-200 shadow-xs mt-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="relative flex-1 max-w-md">
           <Search className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
-          <input 
+          <input
             type="text"
             placeholder="Search by actor, entity, action type, IP..."
             value={searchTerm}
@@ -57,11 +55,10 @@ const AuditLogs = ({ auditLogs = [] }) => {
             <button
               key={t}
               onClick={() => setFilterType(t)}
-              className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${
-                filterType === t 
-                  ? 'bg-[#062AAE] text-white' 
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-              }`}
+              className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${filterType === t
+                ? 'bg-[#062AAE] text-white'
+                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                }`}
             >
               {t.replace(/_/g, ' ')}
             </button>
@@ -69,7 +66,6 @@ const AuditLogs = ({ auditLogs = [] }) => {
         </div>
       </div>
 
-      {/* Logs Table */}
       <div className="bg-white rounded-2xl border border-gray-200 shadow-xs overflow-hidden mt-6">
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200 text-xs">

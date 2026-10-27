@@ -828,3 +828,311 @@ export const platformPolicies = {
   sessionTimeoutMinutes: 30,
   maxCompanyLimitPerStaffRatio: 50,
 };
+
+// Client Files submitted from Mobile App to Secretary Workspace for Intake & Review
+export const initialClientDocuments = [
+  {
+    id: 'DOC-2026-001',
+    title: 'DCS_Management_Accounts_FY2026.pdf',
+    originalName: 'DCS_Management_Accounts_FY2026.pdf',
+    category: 'Annual Return (Section 68)',
+    fileSize: '2.4 MB',
+    fileType: 'application/pdf',
+    companyId: 'comp-01',
+    companyName: 'Data Center Specialists Sdn Bhd (M)',
+    companySsmNo: '202101039281 (1429581-X)',
+    assignedFirmId: 'firm-01',
+    assignedFirmName: 'SectPro Corporate Services Sdn Bhd',
+    assignedSecretary: 'Lim Mei Ling (MIA CA 48192)',
+    uploadedBy: 'Adam Bin Hamzah',
+    uploadedByRole: 'Managing Director (Client)',
+    uploadedAt: '2026-10-20 14:30',
+    storageLocation: 'TM One Cloud Alpha (DC1-Cyberjaya)',
+    storageUrl: 'tmcloud://alpha-dc1/vault/comp-01/DCS_Management_Accounts_FY2026.pdf',
+    sha256Hash: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
+    status: 'Pending Review',
+    linkedFilingRef: 'SSM/S68/2026/04812',
+    submissionNotes: 'Uploaded unaudited management accounts and draft statements for Annual Return lodgement.',
+    reviewDetails: null,
+    auditTrail: [
+      {
+        timestamp: '2026-10-20 14:30:12',
+        action: 'FILE_UPLOADED',
+        actor: 'Adam Bin Hamzah (Managing Director)',
+        details: 'Uploaded from MySect Mobile App to TM Cloud encrypted vault.'
+      }
+    ]
+  },
+  {
+    id: 'DOC-2026-002',
+    title: 'Dato_Kamal_Profile_Resume.pdf',
+    originalName: 'Dato_Kamal_Profile_Resume.pdf',
+    category: 'Director Appointment (Section 58)',
+    fileSize: '1.2 MB',
+    fileType: 'application/pdf',
+    companyId: 'comp-01',
+    companyName: 'Data Center Specialists Sdn Bhd (M)',
+    companySsmNo: '202101039281 (1429581-X)',
+    assignedFirmId: 'firm-01',
+    assignedFirmName: 'SectPro Corporate Services Sdn Bhd',
+    assignedSecretary: 'Lim Mei Ling (MIA CA 48192)',
+    uploadedBy: 'Adam Bin Hamzah',
+    uploadedByRole: 'Managing Director (Client)',
+    uploadedAt: '2026-10-18 10:00',
+    storageLocation: 'TM One Cloud Alpha (DC1-Cyberjaya)',
+    storageUrl: 'tmcloud://alpha-dc1/vault/comp-01/Dato_Kamal_Profile_Resume.pdf',
+    sha256Hash: '4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945',
+    status: 'More Details Needed',
+    linkedFilingRef: 'SSM/S58/2026/01192',
+    submissionNotes: 'Candidate profile for new non-executive board member appointment.',
+    reviewDetails: {
+      reviewedBy: 'Lim Mei Ling (MIA CA 48192)',
+      reviewedAt: '2026-10-19 11:20',
+      decision: 'More Details Needed',
+      internalNotes: 'Profile received, but statutory compliance requires Section 201 Consent to Act and clear NRIC copies.',
+      requestedDetails: 'Under Section 201 Companies Act 2016, please provide signed Form 48A (Consent to Act as Director) and clear scanned copy of Dato\' Kamal\'s NRIC (front and back).'
+    },
+    auditTrail: [
+      {
+        timestamp: '2026-10-18 10:00:22',
+        action: 'FILE_UPLOADED',
+        actor: 'Adam Bin Hamzah (Managing Director)',
+        details: 'Uploaded from MySect Mobile App.'
+      },
+      {
+        timestamp: '2026-10-19 11:20:45',
+        action: 'DETAILS_REQUESTED',
+        actor: 'Lim Mei Ling (MIA CA 48192)',
+        details: 'Requested Form 48A Consent to Act and NRIC copy before Section 58 submission.'
+      }
+    ]
+  },
+  {
+    id: 'DOC-2026-003',
+    title: 'Signed_Board_Resolution_S46.pdf',
+    originalName: 'Signed_Board_Resolution_S46.pdf',
+    category: 'Change of Registered Office (Section 46)',
+    fileSize: '640 KB',
+    fileType: 'application/pdf',
+    companyId: 'comp-02',
+    companyName: 'C2 Coffee + Candle',
+    companySsmNo: '202001019482 (1382941-T)',
+    assignedFirmId: 'firm-01',
+    assignedFirmName: 'SectPro Corporate Services Sdn Bhd',
+    assignedSecretary: 'Azman bin Ibrahim (MAICSA 7019284)',
+    uploadedBy: 'Adam Bin Hamzah',
+    uploadedByRole: 'Director (Client)',
+    uploadedAt: '2026-10-12 16:45',
+    storageLocation: 'TM One Cloud Alpha (DC1-Cyberjaya)',
+    storageUrl: 'tmcloud://alpha-dc1/vault/comp-02/Signed_Board_Resolution_S46.pdf',
+    sha256Hash: '9a8b7c6d5e4f3a2b1c0d9e8f7a6b5c4d3e2f1a0b9c8d7e6f5a4b3c2d1e0f9a8b',
+    status: 'Approved',
+    linkedFilingRef: 'SSM/S46/2026/00731',
+    submissionNotes: 'Directors circular resolution approving change of registered office address to Menara Binjai.',
+    reviewDetails: {
+      reviewedBy: 'Azman bin Ibrahim (MAICSA 7019284)',
+      reviewedAt: '2026-10-14 10:30',
+      decision: 'Approved',
+      internalNotes: 'Resolution verified against company constitution quorum requirements. Both directors signed.',
+      remarks: 'All signatures verified against records. Proceeded to lodge Form 46 via MBRS (Ref: MBRS-2026-99381).'
+    },
+    auditTrail: [
+      {
+        timestamp: '2026-10-12 16:45:00',
+        action: 'FILE_UPLOADED',
+        actor: 'Adam Bin Hamzah (Director)',
+        details: 'Uploaded from MySect Mobile App.'
+      },
+      {
+        timestamp: '2026-10-14 10:30:15',
+        action: 'FILE_APPROVED',
+        actor: 'Azman bin Ibrahim (MAICSA 7019284)',
+        details: 'Verified and approved for SSM lodgement.'
+      }
+    ]
+  },
+  {
+    id: 'DOC-2026-004',
+    title: 'Bank_In_Slip_Capital_RM30k.pdf',
+    originalName: 'Bank_In_Slip_Capital_RM30k.pdf',
+    category: 'Share Allotment (Section 78)',
+    fileSize: '890 KB',
+    fileType: 'application/pdf',
+    companyId: 'comp-03',
+    companyName: '5Luxe Scents Co.',
+    companySsmNo: '202201082918 (1482910-P)',
+    assignedFirmId: 'firm-02',
+    assignedFirmName: 'Apex Corporate Secretarial Partners',
+    assignedSecretary: 'Sarah binti Ahmad (MAICSA 6028192)',
+    uploadedBy: 'Eidza Binti Jumanis',
+    uploadedByRole: 'Managing Director (Client)',
+    uploadedAt: '2026-09-20 11:00',
+    storageLocation: 'TM One Cloud Alpha (DC1-Cyberjaya)',
+    storageUrl: 'tmcloud://alpha-dc1/vault/comp-03/Bank_In_Slip_Capital_RM30k.pdf',
+    sha256Hash: '1f2e3d4c5b6a798890abcdcdef0123456789abcdef0123456789abcdef012345',
+    status: 'Approved',
+    linkedFilingRef: 'SSM/S78/2026/00194',
+    submissionNotes: 'Proof of RM 30,000 capital injection for increase of paid-up capital.',
+    reviewDetails: {
+      reviewedBy: 'Sarah binti Ahmad (MAICSA 6028192)',
+      reviewedAt: '2026-09-22 14:15',
+      decision: 'Approved',
+      internalNotes: 'Bank transaction confirmed credited to company Maybank corporate account.',
+      remarks: 'Capital injection proof verified. Form 78 lodged and SSM certificate generated.'
+    },
+    auditTrail: [
+      {
+        timestamp: '2026-09-20 11:00:30',
+        action: 'FILE_UPLOADED',
+        actor: 'Eidza Binti Jumanis (Director)',
+        details: 'Uploaded from MySect Mobile App.'
+      },
+      {
+        timestamp: '2026-09-22 14:15:10',
+        action: 'FILE_APPROVED',
+        actor: 'Sarah binti Ahmad (MAICSA 6028192)',
+        details: 'Payment proof authenticated.'
+      }
+    ]
+  },
+  {
+    id: 'DOC-2026-005',
+    title: 'New_Investor_Passport_Scan.pdf',
+    originalName: 'New_Investor_Passport_Scan.pdf',
+    category: 'Identity Verification (e-KYC)',
+    fileSize: '1.8 MB',
+    fileType: 'application/pdf',
+    companyId: 'comp-03',
+    companyName: '5Luxe Scents Co.',
+    companySsmNo: '202201082918 (1482910-P)',
+    assignedFirmId: 'firm-02',
+    assignedFirmName: 'Apex Corporate Secretarial Partners',
+    assignedSecretary: 'Sarah binti Ahmad (MAICSA 6028192)',
+    uploadedBy: 'Eidza Binti Jumanis',
+    uploadedByRole: 'Managing Director (Client)',
+    uploadedAt: '2026-10-15 09:30',
+    storageLocation: 'TM One Cloud Alpha (DC1-Cyberjaya)',
+    storageUrl: 'tmcloud://alpha-dc1/vault/comp-03/New_Investor_Passport_Scan.pdf',
+    sha256Hash: '8b7a6c5d4e3f2a1b0c9d8e7f6a5b4c3d2e1f0a9b8c7d6e5f4a3b2c1d0e9f8a7b',
+    status: 'Rejected',
+    linkedFilingRef: 'SSM/S78/2026/00194',
+    submissionNotes: 'Foreign investor passport copy for member register entry.',
+    reviewDetails: {
+      reviewedBy: 'Sarah binti Ahmad (MAICSA 6028192)',
+      reviewedAt: '2026-10-16 11:00',
+      decision: 'Rejected',
+      internalNotes: 'Passport scan is blurry and passport expires in 2 months. Cannot be accepted for statutory lodgement.',
+      rejectionReason: 'Passport scan is blurry and expires in less than 3 months. SSM regulations require valid passport with minimum 6 months validity.'
+    },
+    auditTrail: [
+      {
+        timestamp: '2026-10-15 09:30:10',
+        action: 'FILE_UPLOADED',
+        actor: 'Eidza Binti Jumanis (Director)',
+        details: 'Uploaded from MySect Mobile App.'
+      },
+      {
+        timestamp: '2026-10-16 11:00:25',
+        action: 'FILE_REJECTED',
+        actor: 'Sarah binti Ahmad (MAICSA 6028192)',
+        details: 'Rejected due to expiry and poor scan resolution.'
+      }
+    ]
+  },
+  {
+    id: 'DOC-2026-006',
+    title: 'Audited_Financial_Statements_FY2025.pdf',
+    originalName: 'Audited_Financial_Statements_FY2025.pdf',
+    category: 'Annual Financial Statements',
+    fileSize: '4.6 MB',
+    fileType: 'application/pdf',
+    companyId: 'comp-06',
+    companyName: 'Borneo Marine Innovations Sdn Bhd',
+    companySsmNo: '201901048291 (1349582-M)',
+    assignedFirmId: 'firm-02',
+    assignedFirmName: 'Apex Corporate Secretarial Partners',
+    assignedSecretary: 'Mohd Firdaus (LS 0009841)',
+    uploadedBy: 'Captain Dennis Wong',
+    uploadedByRole: 'Managing Director (Client)',
+    uploadedAt: '2026-10-21 08:15',
+    storageLocation: 'TM One Cloud Alpha (DC1-Cyberjaya)',
+    storageUrl: 'tmcloud://alpha-dc1/vault/comp-06/Audited_Financial_Statements_FY2025.pdf',
+    sha256Hash: '5a4b3c2d1e0f9a8b7c6d5e4f3a2b1c0d9e8f7a6b5c4d3e2f1a0b9c8d7e6f5a4b',
+    status: 'Pending Review',
+    linkedFilingRef: 'SSM/S68/2026/09912',
+    submissionNotes: 'Signed audited financial statements for FY2025 by external auditor Crowe Malaysia.',
+    reviewDetails: null,
+    auditTrail: [
+      {
+        timestamp: '2026-10-21 08:15:40',
+        action: 'FILE_UPLOADED',
+        actor: 'Captain Dennis Wong (Managing Director)',
+        details: 'Uploaded from MySect Mobile App.'
+      }
+    ]
+  },
+  {
+    id: 'DOC-2026-007',
+    title: 'Director_Declaration_Form.pdf',
+    originalName: 'Director_Declaration_Form.pdf',
+    category: 'Director Statutory Declaration',
+    fileSize: '850 KB',
+    fileType: 'application/pdf',
+    companyId: 'comp-01',
+    companyName: 'Data Center Specialists Sdn Bhd (M)',
+    companySsmNo: '202101039281 (1429581-X)',
+    assignedFirmId: 'firm-01',
+    assignedFirmName: 'SectPro Corporate Services Sdn Bhd',
+    assignedSecretary: 'Lim Mei Ling (MIA CA 48192)',
+    uploadedBy: 'Adam Bin Hamzah',
+    uploadedByRole: 'Managing Director (Client)',
+    uploadedAt: '2026-10-20 14:35',
+    storageLocation: 'TM One Cloud Alpha (DC1-Cyberjaya)',
+    storageUrl: 'tmcloud://alpha-dc1/vault/comp-01/Director_Declaration_Form.pdf',
+    sha256Hash: '3c2d1e0f9a8b7c6d5e4f3a2b1c0d9e8f7a6b5c4d3e2f1a0b9c8d7e6f5a4b3c2d',
+    status: 'Pending Review',
+    linkedFilingRef: 'SSM/S68/2026/04812',
+    submissionNotes: 'Statutory declaration of solvency and director verification.',
+    reviewDetails: null,
+    auditTrail: [
+      {
+        timestamp: '2026-10-20 14:35:10',
+        action: 'FILE_UPLOADED',
+        actor: 'Adam Bin Hamzah (Managing Director)',
+        details: 'Uploaded from MySect Mobile App.'
+      }
+    ]
+  },
+  {
+    id: 'DOC-2026-008',
+    title: 'Tenancy_Agreement_Binjai_Office.pdf',
+    originalName: 'Tenancy_Agreement_Binjai_Office.pdf',
+    category: 'Proof of Address / Tenancy',
+    fileSize: '3.1 MB',
+    fileType: 'application/pdf',
+    companyId: 'comp-02',
+    companyName: 'C2 Coffee + Candle',
+    companySsmNo: '202001019482 (1382941-T)',
+    assignedFirmId: 'firm-01',
+    assignedFirmName: 'SectPro Corporate Services Sdn Bhd',
+    assignedSecretary: 'Azman bin Ibrahim (MAICSA 7019284)',
+    uploadedBy: 'Adam Bin Hamzah',
+    uploadedByRole: 'Director (Client)',
+    uploadedAt: '2026-10-12 16:40',
+    storageLocation: 'TM One Cloud Alpha (DC1-Cyberjaya)',
+    storageUrl: 'tmcloud://alpha-dc1/vault/comp-02/Tenancy_Agreement_Binjai_Office.pdf',
+    sha256Hash: '7e6f5a4b3c2d1e0f9a8b7c6d5e4f3a2b1c0d9e8f7a6b5c4d3e2f1a0b9c8d7e6f',
+    status: 'Pending Review',
+    linkedFilingRef: 'SSM/S46/2026/00731',
+    submissionNotes: 'Stamped tenancy agreement supporting change of registered address.',
+    reviewDetails: null,
+    auditTrail: [
+      {
+        timestamp: '2026-10-12 16:40:15',
+        action: 'FILE_UPLOADED',
+        actor: 'Adam Bin Hamzah (Director)',
+        details: 'Uploaded from MySect Mobile App.'
+      }
+    ]
+  }
+];
