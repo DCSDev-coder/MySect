@@ -57,11 +57,11 @@ const Sidebar = ({
   return (
     <div className="w-64 bg-white border-r border-gray-200 h-screen flex flex-col shrink-0 select-none">
       {/* Brand Header */}
-      <div className="px-6 pt-[30px] pb-6 border-b border-gray-100 flex items-center justify-center">
+      <div className="px-6 py-5 border-b border-gray-100 flex items-center justify-center">
         <img 
           src={mysectLogo} 
           alt="MySect - Your Secretary Company" 
-          className="h-9 w-auto max-w-[170px] object-contain" 
+          className="h-12 w-auto max-w-[190px] object-contain" 
         />
       </div>
 
@@ -79,7 +79,7 @@ const Sidebar = ({
                 }`}
             >
               <div className="flex items-center gap-3">
-                <item.icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-gray-400'}`} />
+                <item.icon className={`w-5 h-5 shrink-0 ${isActive ? 'text-white' : 'text-gray-400'}`} />
                 <span>{item.label}</span>
               </div>
               {item.badge && (
