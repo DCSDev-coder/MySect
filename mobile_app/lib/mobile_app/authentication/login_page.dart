@@ -56,12 +56,12 @@ class _LoginPageState extends State<LoginPage> {
                           curve: Curves.easeOut,
                           decoration: const BoxDecoration(),
                           clipBehavior: Clip.hardEdge,
-                          height: isKeyboardOpen ? 0 : 180,
+                          height: isKeyboardOpen ? 0 : 170,
                           child: OverflowBox(
                             minHeight: 0,
-                            maxHeight: 180,
+                            maxHeight: 170,
                             alignment: Alignment.center,
-                            child: Image.asset('assets/login.png', height: 180),
+                            child: Image.asset('assets/login.png', height: 170),
                           ),
                         ),
                         SizedBox(height: isKeyboardOpen ? 8 : 16),
@@ -96,76 +96,91 @@ class _LoginPageState extends State<LoginPage> {
                               Text(
                                 'EMAIL ADDRESS',
                                 style: GoogleFonts.poppins(
-                                  fontSize: 12,
+                                  fontSize: 11,
                                   fontWeight: FontWeight.w600,
-                                  color: Colors.grey[700],
+                                  color: Colors.grey.shade700,
+                                  letterSpacing: 0.5,
                                 ),
                               ),
                               const SizedBox(height: 8),
                               TextField(
                                 controller: _emailController,
+                                style: GoogleFonts.poppins(
+                                  fontSize: 13,
+                                  color: Colors.black87,
+                                ),
                                 decoration: InputDecoration(
                                   hintText: 'name@company.com',
                                   hintStyle: GoogleFonts.poppins(
-                                    color: Colors.grey[400],
+                                    color: Colors.grey.shade400,
+                                    fontSize: 13,
                                   ),
-                                  prefixIcon: Icon(
+                                  prefixIcon: const Icon(
                                     Icons.email_outlined,
-                                    color: Colors.grey[600],
+                                    size: 20,
+                                    color: Color(0xFF062AAE),
                                   ),
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(12),
                                     borderSide: BorderSide(
-                                      color: Colors.grey[300]!,
+                                      color: Colors.grey.shade300,
                                     ),
                                   ),
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(12),
                                     borderSide: BorderSide(
-                                      color: Colors.grey[300]!,
+                                      color: Colors.grey.shade300,
                                     ),
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(12),
                                     borderSide: const BorderSide(
-                                      color: Color(0xFF1E50FF),
+                                      color: Color(0xFF062AAE),
+                                      width: 1.5,
                                     ),
                                   ),
                                   contentPadding: const EdgeInsets.symmetric(
-                                    vertical: 16,
+                                    horizontal: 14,
+                                    vertical: 15,
                                   ),
                                 ),
                               ),
-                              const SizedBox(height: 20),
+                              const SizedBox(height: 18),
                               Text(
                                 'PASSWORD',
                                 style: GoogleFonts.poppins(
-                                  fontSize: 12,
+                                  fontSize: 11,
                                   fontWeight: FontWeight.w600,
-                                  color: Colors.grey[700],
+                                  color: Colors.grey.shade700,
+                                  letterSpacing: 0.5,
                                 ),
                               ),
                               const SizedBox(height: 8),
                               TextField(
                                 controller: _passwordController,
                                 obscureText: _obscurePassword,
-                                style: GoogleFonts.poppins(fontSize: 14),
+                                style: GoogleFonts.poppins(
+                                  fontSize: 13,
+                                  color: Colors.black87,
+                                ),
                                 decoration: InputDecoration(
                                   hintText: 'Enter your password',
                                   hintStyle: GoogleFonts.poppins(
+                                    color: Colors.grey.shade400,
                                     fontSize: 13,
-                                    color: Colors.grey[400],
                                   ),
-                                  prefixIcon: Icon(
+                                  prefixIcon: const Icon(
                                     Icons.lock_outline,
-                                    color: Colors.grey[600],
+                                    size: 20,
+                                    color: Color(0xFF062AAE),
                                   ),
                                   suffixIcon: IconButton(
                                     icon: Icon(
                                       _obscurePassword
-                                          ? Icons.visibility_outlined
-                                          : Icons.visibility_off_outlined,
-                                      color: Colors.grey[600],
+                                          ? Icons.visibility_off_outlined
+                                          : Icons.visibility_outlined,
+                                      size: 20,
+                                      color: Colors.grey.shade600,
                                     ),
                                     onPressed: () {
                                       setState(() {
@@ -176,34 +191,40 @@ class _LoginPageState extends State<LoginPage> {
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(12),
                                     borderSide: BorderSide(
-                                      color: Colors.grey[300]!,
+                                      color: Colors.grey.shade300,
                                     ),
                                   ),
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(12),
                                     borderSide: BorderSide(
-                                      color: Colors.grey[300]!,
+                                      color: Colors.grey.shade300,
                                     ),
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(12),
                                     borderSide: const BorderSide(
-                                      color: Color(0xFF1E50FF),
+                                      color: Color(0xFF062AAE),
+                                      width: 1.5,
                                     ),
                                   ),
                                   contentPadding: const EdgeInsets.symmetric(
-                                    vertical: 16,
+                                    horizontal: 14,
+                                    vertical: 15,
                                   ),
                                 ),
                               ),
-                              const SizedBox(height: 12),
+                              const SizedBox(height: 14),
                               Align(
                                 alignment: Alignment.centerRight,
                                 child: TextButton(
                                   onPressed: () {
                                     Navigator.of(context).push(
                                       SlideTransitionRoute(
-                                        page: const ForgotPasswordPage(),
+                                        page: ForgotPasswordPage(
+                                          initialEmail: _emailController.text.trim().isNotEmpty
+                                              ? _emailController.text.trim()
+                                              : null,
+                                        ),
                                       ),
                                     );
                                   },
@@ -216,17 +237,17 @@ class _LoginPageState extends State<LoginPage> {
                                   child: Text(
                                     'Forgot Password?',
                                     style: GoogleFonts.poppins(
-                                      fontSize: 13,
+                                      fontSize: 12,
                                       fontWeight: FontWeight.w600,
-                                      color: const Color(0xFF1E50FF),
+                                      color: const Color(0xFF062AAE),
                                     ),
                                   ),
                                 ),
                               ),
-                              const SizedBox(height: 24),
+                              const SizedBox(height: 26),
                               SizedBox(
                                 width: double.infinity,
-                                height: 56,
+                                height: 52,
                                 child: ElevatedButton(
                                   onPressed: () {
                                     final email = _emailController.text.trim();
@@ -302,22 +323,26 @@ class _LoginPageState extends State<LoginPage> {
 
                                     Navigator.of(context).push(
                                       SlideTransitionRoute(
-                                        page: const VerificationPage(),
+                                        page: VerificationPage(
+                                          email: _emailController.text.trim().isNotEmpty
+                                              ? _emailController.text.trim()
+                                              : null,
+                                        ),
                                       ),
                                     );
                                   },
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: const Color(0xFF1E50FF),
+                                    backgroundColor: const Color(0xFF062AAE),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(12),
                                     ),
                                     elevation: 0,
                                   ),
                                   child: Text(
-                                    'Sign In',
+                                    'Login',
                                     style: GoogleFonts.poppins(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w600,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
                                       color: Colors.white,
                                     ),
                                   ),
@@ -346,7 +371,7 @@ class _LoginPageState extends State<LoginPage> {
                                           style: GoogleFonts.poppins(
                                             fontSize: 14,
                                             fontWeight: FontWeight.w700,
-                                            color: const Color(0xFF1E50FF),
+                                            color: const Color(0xFF062AAE),
                                           ),
                                         ),
                                       ],

@@ -102,37 +102,52 @@ class _SignupPageState extends State<SignupPage> {
                     Text(
                       'FULL NAME',
                       style: GoogleFonts.poppins(
-                        fontSize: 12,
+                        fontSize: 11,
                         fontWeight: FontWeight.w600,
-                        color: Colors.grey[700],
+                        color: Colors.grey.shade700,
+                        letterSpacing: 0.5,
                       ),
                     ),
                     const SizedBox(height: 8),
                     TextField(
                       controller: _nameController,
+                      style: GoogleFonts.poppins(
+                        fontSize: 13,
+                        color: Colors.black87,
+                      ),
                       decoration: InputDecoration(
                         hintText: 'Elly Melissa',
-                        hintStyle: GoogleFonts.poppins(color: Colors.grey[400]),
-                        prefixIcon: Icon(
+                        hintStyle: GoogleFonts.poppins(
+                          color: Colors.grey.shade400,
+                          fontSize: 13,
+                        ),
+                        prefixIcon: const Icon(
                           Icons.person_outline,
-                          color: Colors.grey[600],
+                          size: 20,
+                          color: Color(0xFF062AAE),
                         ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(color: Colors.grey[300]!),
+                          borderSide: BorderSide(
+                            color: Colors.grey.shade300,
+                          ),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(color: Colors.grey[300]!),
+                          borderSide: BorderSide(
+                            color: Colors.grey.shade300,
+                          ),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                           borderSide: const BorderSide(
-                            color: Color(0xFF1E50FF),
+                            color: Color(0xFF062AAE),
+                            width: 1.5,
                           ),
                         ),
                         contentPadding: const EdgeInsets.symmetric(
-                          vertical: 16,
+                          horizontal: 14,
+                          vertical: 15,
                         ),
                       ),
                     ),
@@ -140,37 +155,52 @@ class _SignupPageState extends State<SignupPage> {
                     Text(
                       'EMAIL ADDRESS',
                       style: GoogleFonts.poppins(
-                        fontSize: 12,
+                        fontSize: 11,
                         fontWeight: FontWeight.w600,
-                        color: Colors.grey[700],
+                        color: Colors.grey.shade700,
+                        letterSpacing: 0.5,
                       ),
                     ),
                     const SizedBox(height: 8),
                     TextField(
                       controller: _emailController,
+                      style: GoogleFonts.poppins(
+                        fontSize: 13,
+                        color: Colors.black87,
+                      ),
                       decoration: InputDecoration(
                         hintText: 'name@company.com',
-                        hintStyle: GoogleFonts.poppins(color: Colors.grey[400]),
-                        prefixIcon: Icon(
+                        hintStyle: GoogleFonts.poppins(
+                          color: Colors.grey.shade400,
+                          fontSize: 13,
+                        ),
+                        prefixIcon: const Icon(
                           Icons.email_outlined,
-                          color: Colors.grey[600],
+                          size: 20,
+                          color: Color(0xFF062AAE),
                         ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(color: Colors.grey[300]!),
+                          borderSide: BorderSide(
+                            color: Colors.grey.shade300,
+                          ),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(color: Colors.grey[300]!),
+                          borderSide: BorderSide(
+                            color: Colors.grey.shade300,
+                          ),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                           borderSide: const BorderSide(
-                            color: Color(0xFF1E50FF),
+                            color: Color(0xFF062AAE),
+                            width: 1.5,
                           ),
                         ),
                         contentPadding: const EdgeInsets.symmetric(
-                          vertical: 16,
+                          horizontal: 14,
+                          vertical: 15,
                         ),
                       ),
                     ),
@@ -178,32 +208,38 @@ class _SignupPageState extends State<SignupPage> {
                     Text(
                       'PASSWORD',
                       style: GoogleFonts.poppins(
-                        fontSize: 12,
+                        fontSize: 11,
                         fontWeight: FontWeight.w600,
-                        color: Colors.grey[700],
+                        color: Colors.grey.shade700,
+                        letterSpacing: 0.5,
                       ),
                     ),
                     const SizedBox(height: 8),
                     TextField(
                       controller: _passwordController,
                       obscureText: _obscurePassword,
-                      style: GoogleFonts.poppins(fontSize: 14),
+                      style: GoogleFonts.poppins(
+                        fontSize: 13,
+                        color: Colors.black87,
+                      ),
                       decoration: InputDecoration(
                         hintText: 'Create a password',
                         hintStyle: GoogleFonts.poppins(
                           fontSize: 13,
-                          color: Colors.grey[400],
+                          color: Colors.grey.shade400,
                         ),
-                        prefixIcon: Icon(
+                        prefixIcon: const Icon(
                           Icons.lock_outline,
-                          color: Colors.grey[600],
+                          size: 20,
+                          color: Color(0xFF062AAE),
                         ),
                         suffixIcon: IconButton(
                           icon: Icon(
                             _obscurePassword
-                                ? Icons.visibility_outlined
-                                : Icons.visibility_off_outlined,
-                            color: Colors.grey[600],
+                                ? Icons.visibility_off_outlined
+                                : Icons.visibility_outlined,
+                            size: 20,
+                            color: Colors.grey.shade600,
                           ),
                           onPressed: () {
                             setState(() {
@@ -213,20 +249,26 @@ class _SignupPageState extends State<SignupPage> {
                         ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(color: Colors.grey[300]!),
+                          borderSide: BorderSide(
+                            color: Colors.grey.shade300,
+                          ),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(color: Colors.grey[300]!),
+                          borderSide: BorderSide(
+                            color: Colors.grey.shade300,
+                          ),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                           borderSide: const BorderSide(
-                            color: Color(0xFF1E50FF),
+                            color: Color(0xFF062AAE),
+                            width: 1.5,
                           ),
                         ),
                         contentPadding: const EdgeInsets.symmetric(
-                          vertical: 16,
+                          horizontal: 14,
+                          vertical: 15,
                         ),
                       ),
                     ),
@@ -234,44 +276,59 @@ class _SignupPageState extends State<SignupPage> {
                     Text(
                       'REFERRAL CODE (OPTIONAL)',
                       style: GoogleFonts.poppins(
-                        fontSize: 12,
+                        fontSize: 11,
                         fontWeight: FontWeight.w600,
-                        color: Colors.grey[700],
+                        color: Colors.grey.shade700,
+                        letterSpacing: 0.5,
                       ),
                     ),
                     const SizedBox(height: 8),
                     TextField(
                       controller: _referralController,
+                      style: GoogleFonts.poppins(
+                        fontSize: 13,
+                        color: Colors.black87,
+                      ),
                       decoration: InputDecoration(
                         hintText: 'e.g. 5EST5',
-                        hintStyle: GoogleFonts.poppins(color: Colors.grey[400]),
-                        prefixIcon: Icon(
+                        hintStyle: GoogleFonts.poppins(
+                          color: Colors.grey.shade400,
+                          fontSize: 13,
+                        ),
+                        prefixIcon: const Icon(
                           Icons.card_giftcard,
-                          color: Colors.grey[600],
+                          size: 20,
+                          color: Color(0xFF062AAE),
                         ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(color: Colors.grey[300]!),
+                          borderSide: BorderSide(
+                            color: Colors.grey.shade300,
+                          ),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(color: Colors.grey[300]!),
+                          borderSide: BorderSide(
+                            color: Colors.grey.shade300,
+                          ),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                           borderSide: const BorderSide(
-                            color: Color(0xFF1E50FF),
+                            color: Color(0xFF062AAE),
+                            width: 1.5,
                           ),
                         ),
                         contentPadding: const EdgeInsets.symmetric(
-                          vertical: 16,
+                          horizontal: 14,
+                          vertical: 15,
                         ),
                       ),
                     ),
                     const SizedBox(height: 16),
                     SizedBox(
                       width: double.infinity,
-                      height: 56,
+                      height: 52,
                       child: ElevatedButton(
                         onPressed: () {
                           final name = _nameController.text.trim();
@@ -361,12 +418,16 @@ class _SignupPageState extends State<SignupPage> {
 
                           Navigator.of(context).push(
                             SlideTransitionRoute(
-                              page: const VerificationPage(),
+                              page: VerificationPage(
+                                email: _emailController.text.trim().isNotEmpty
+                                    ? _emailController.text.trim()
+                                    : null,
+                              ),
                             ),
                           );
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF1E50FF),
+                          backgroundColor: const Color(0xFF062AAE),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
@@ -375,8 +436,8 @@ class _SignupPageState extends State<SignupPage> {
                         child: Text(
                           'Sign Up',
                           style: GoogleFonts.poppins(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
                             color: Colors.white,
                           ),
                         ),
@@ -404,7 +465,7 @@ class _SignupPageState extends State<SignupPage> {
                                 style: GoogleFonts.poppins(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w700,
-                                  color: const Color(0xFF1E50FF),
+                                  color: const Color(0xFF062AAE),
                                 ),
                               ),
                             ],

@@ -196,19 +196,18 @@ class _ResolvedChatsPageState extends State<ResolvedChatsPage> {
             child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Image.asset(
-              'assets/Profile.png',
-              width: 50,
-              height: 50,
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) => Container(
-                width: 50,
-                height: 50,
-                decoration: BoxDecoration(
-                  color: Colors.grey[200],
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(Icons.person, color: Colors.grey, size: 28),
+            Container(
+              width: 48,
+              height: 48,
+              decoration: BoxDecoration(
+                color: const Color(0xFFEFF6FF),
+                shape: BoxShape.circle,
+                border: Border.all(color: const Color(0xFFDBEAFE)),
+              ),
+              child: const Icon(
+                Icons.person_rounded,
+                color: Color(0xFF062AAE),
+                size: 26,
               ),
             ),
             const SizedBox(width: 12),

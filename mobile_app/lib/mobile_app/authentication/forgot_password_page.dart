@@ -1,9 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../widgets/app_top_header.dart';
+import 'verification_page.dart';
 
-class ForgotPasswordPage extends StatelessWidget {
-  const ForgotPasswordPage({super.key});
+class ForgotPasswordPage extends StatefulWidget {
+  final String? initialEmail;
+
+  const ForgotPasswordPage({super.key, this.initialEmail});
+
+  @override
+  State<ForgotPasswordPage> createState() => _ForgotPasswordPageState();
+}
+
+class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
+  late final TextEditingController _emailController;
+
+  @override
+  void initState() {
+    super.initState();
+    _emailController = TextEditingController(text: widget.initialEmail ?? '');
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,14 +57,14 @@ class ForgotPasswordPage extends StatelessWidget {
                           curve: Curves.easeOut,
                           decoration: const BoxDecoration(),
                           clipBehavior: Clip.hardEdge,
-                          height: isKeyboardOpen ? 0 : 200,
+                          height: isKeyboardOpen ? 0 : 170,
                           child: OverflowBox(
                             minHeight: 0,
-                            maxHeight: 200,
+                            maxHeight: 170,
                             alignment: Alignment.center,
                             child: Image.asset(
                               'assets/forgot_password.png',
-                              height: 200,
+                              height: 170,
                             ),
                           ),
                         ),
@@ -80,7 +102,7 @@ class ForgotPasswordPage extends StatelessWidget {
                       style: GoogleFonts.poppins(
                         fontSize: 20,
                         fontWeight: FontWeight.w700,
-                        color: Colors.black,
+                        color: Colors.black87,
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -95,72 +117,96 @@ class ForgotPasswordPage extends StatelessWidget {
                     Text(
                       'EMAIL ADDRESS',
                       style: GoogleFonts.poppins(
-                        fontSize: 12,
+                        fontSize: 11,
                         fontWeight: FontWeight.w600,
-                        color: Colors.grey[700],
+                        color: Colors.grey.shade700,
+                        letterSpacing: 0.5,
                       ),
                     ),
                     const SizedBox(height: 8),
                     TextField(
+                      controller: _emailController,
+                      keyboardType: TextInputType.emailAddress,
+                      style: GoogleFonts.poppins(
+                        fontSize: 13,
+                        color: Colors.black87,
+                      ),
                       decoration: InputDecoration(
                         hintText: 'name@company.com',
-                        hintStyle: GoogleFonts.poppins(color: Colors.grey[400]),
-                        prefixIcon: Icon(
+                        hintStyle: GoogleFonts.poppins(
+                          color: Colors.grey.shade400,
+                          fontSize: 13,
+                        ),
+                        prefixIcon: const Icon(
                           Icons.email_outlined,
-                          color: Colors.grey[600],
+                          size: 20,
+                          color: Color(0xFF062AAE),
                         ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(color: Colors.grey[300]!),
+                          borderSide: BorderSide(
+                            color: Colors.grey.shade300,
+                          ),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(color: Colors.grey[300]!),
+                          borderSide: BorderSide(
+                            color: Colors.grey.shade300,
+                          ),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                           borderSide: const BorderSide(
-                            color: Color(0xFF1E50FF),
+                            color: Color(0xFF062AAE),
+                            width: 1.5,
                           ),
                         ),
                         contentPadding: const EdgeInsets.symmetric(
-                          vertical: 16,
+                          horizontal: 14,
+                          vertical: 15,
                         ),
                       ),
                     ),
                     const SizedBox(height: 32),
                     SizedBox(
                       width: double.infinity,
-                      height: 56,
+                      height: 52,
                       child: ElevatedButton(
                         onPressed: () {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                'A password reset link has been sent to your email address.',
-                                style: GoogleFonts.poppins(color: Colors.white),
+                          final email = _emailController.text.trim();
+                          if (email.isEmpty) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  'Please enter your email address.',
+                                  style: GoogleFonts.poppins(color: Colors.white),
+                                ),
+                                backgroundColor: Colors.red,
                               ),
-                              backgroundColor: const Color(0xFF1E50FF),
-                              behavior: SnackBarBehavior.floating,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
+                            );
+                            return;
+                          }
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => VerificationPage(
+                                email: email,
                               ),
-                              margin: const EdgeInsets.all(24),
                             ),
                           );
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF1E50FF),
+                          backgroundColor: const Color(0xFF062AAE),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
                           elevation: 0,
                         ),
                         child: Text(
-                          'Send Reset Link',
+                          'Send 6-Digit Code',
                           style: GoogleFonts.poppins(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
                             color: Colors.white,
                           ),
                         ),
@@ -185,7 +231,7 @@ class ForgotPasswordPage extends StatelessWidget {
                                 style: GoogleFonts.poppins(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w700,
-                                  color: const Color(0xFF1E50FF),
+                                  color: const Color(0xFF062AAE),
                                 ),
                               ),
                             ],

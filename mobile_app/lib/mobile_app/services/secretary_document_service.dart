@@ -5,7 +5,8 @@ import '../models/client_document_model.dart';
 import 'ssm_filing_service.dart';
 
 class SecretaryDocumentService extends ChangeNotifier {
-  static final SecretaryDocumentService _instance = SecretaryDocumentService._internal();
+  static final SecretaryDocumentService _instance =
+      SecretaryDocumentService._internal();
   static SecretaryDocumentService get instance => _instance;
 
   SecretaryDocumentService._internal() {
@@ -23,18 +24,36 @@ class SecretaryDocumentService extends ChangeNotifier {
   bool get isConnectedToBackend => _isConnectedToBackend;
   String get activeSecretary => _activeSecretary;
 
-  int get pendingCount => _documents.where((d) => d.status == DocumentReviewStatus.pendingReview).length;
-  int get approvedCount => _documents.where((d) => d.status == DocumentReviewStatus.approved).length;
-  int get rejectedCount => _documents.where((d) => d.status == DocumentReviewStatus.rejected).length;
-  int get moreDetailsCount => _documents.where((d) => d.status == DocumentReviewStatus.moreDetailsNeeded).length;
+  int get pendingCount => _documents
+      .where((d) => d.status == DocumentReviewStatus.pendingReview)
+      .length;
+  int get approvedCount =>
+      _documents.where((d) => d.status == DocumentReviewStatus.approved).length;
+  int get rejectedCount =>
+      _documents.where((d) => d.status == DocumentReviewStatus.rejected).length;
+  int get moreDetailsCount => _documents
+      .where((d) => d.status == DocumentReviewStatus.moreDetailsNeeded)
+      .length;
 
-  List<ClientDocument> get unsortedDocuments =>
-      _documents.where((d) => d.folder == 'Unsorted' || (d.folder == null && d.status == DocumentReviewStatus.pendingReview)).toList();
+  List<ClientDocument> get unsortedDocuments => _documents
+      .where(
+        (d) =>
+            d.folder == 'Unsorted' ||
+            (d.folder == null &&
+                d.status == DocumentReviewStatus.pendingReview),
+      )
+      .toList();
 
   int get unsortedCount => unsortedDocuments.length;
 
   List<ClientDocument> getDocumentsForFolder(String folderName) {
-    return _documents.where((d) => d.effectiveFolder.toLowerCase() == folderName.toLowerCase() && d.folder != 'Unsorted').toList();
+    return _documents
+        .where(
+          (d) =>
+              d.effectiveFolder.toLowerCase() == folderName.toLowerCase() &&
+              d.folder != 'Unsorted',
+        )
+        .toList();
   }
 
   int getFolderDocumentCount(String folderName) {
@@ -47,7 +66,10 @@ class SecretaryDocumentService extends ChangeNotifier {
       _documents[index].folder = targetFolder;
       _documents[index].auditTrail.add(
         DocumentAuditItem(
-          timestamp: DateTime.now().toIso8601String().substring(0, 16).replaceAll('T', ' '),
+          timestamp: DateTime.now()
+              .toIso8601String()
+              .substring(0, 16)
+              .replaceAll('T', ' '),
           action: 'MOVED_TO_FOLDER',
           actor: 'Adam Bin Hamzah (Managing Director)',
           details: 'Moved document to $targetFolder folder.',
@@ -58,7 +80,10 @@ class SecretaryDocumentService extends ChangeNotifier {
   }
 
   void moveDocuments(List<String> docIds, String targetFolder) {
-    final now = DateTime.now().toIso8601String().substring(0, 16).replaceAll('T', ' ');
+    final now = DateTime.now()
+        .toIso8601String()
+        .substring(0, 16)
+        .replaceAll('T', ' ');
     for (final docId in docIds) {
       final index = _documents.indexWhere((d) => d.id == docId);
       if (index != -1) {
@@ -76,7 +101,11 @@ class SecretaryDocumentService extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> reuploadDocument(String docId, String newFileName, String newFileSize) async {
+  Future<void> reuploadDocument(
+    String docId,
+    String newFileName,
+    String newFileSize,
+  ) async {
     final index = _documents.indexWhere((d) => d.id == docId);
     if (index == -1) return;
     final doc = _documents[index];
@@ -85,10 +114,14 @@ class SecretaryDocumentService extends ChangeNotifier {
     doc.status = DocumentReviewStatus.pendingReview;
     doc.auditTrail.add(
       DocumentAuditItem(
-        timestamp: DateTime.now().toIso8601String().substring(0, 16).replaceAll('T', ' '),
+        timestamp: DateTime.now()
+            .toIso8601String()
+            .substring(0, 16)
+            .replaceAll('T', ' '),
         action: 'FILE_REUPLOADED',
         actor: 'Adam Bin Hamzah (Managing Director)',
-        details: 'Uploaded replacement file $newFileName ($newFileSize) in response to secretary query.',
+        details:
+            'Uploaded replacement file $newFileName ($newFileSize) in response to secretary query.',
       ),
     );
     notifyListeners();
@@ -118,24 +151,28 @@ class SecretaryDocumentService extends ChangeNotifier {
         uploadedByRole: 'Managing Director (Client)',
         uploadedAt: '2026-10-20 14:30',
         storageLocation: 'TM One Cloud Alpha (DC1-Cyberjaya)',
-        storageUrl: 'tmcloud://alpha-dc1/vault/comp-01/DCS_Management_Accounts_FY2026.pdf',
-        sha256Hash: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
+        storageUrl:
+            'tmcloud://alpha-dc1/vault/comp-01/DCS_Management_Accounts_FY2026.pdf',
+        sha256Hash:
+            'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
         status: DocumentReviewStatus.pendingReview,
         linkedFilingRef: 'SSM/S68/2026/04812',
-        submissionNotes: 'Uploaded unaudited management accounts and draft statements for Annual Return lodgement.',
+        submissionNotes:
+            'Uploaded unaudited management accounts and draft statements for Annual Return lodgement.',
         auditTrail: [
           const DocumentAuditItem(
             timestamp: '2026-10-20 14:30:12',
             action: 'FILE_UPLOADED',
             actor: 'Adam Bin Hamzah (Managing Director)',
-            details: 'Uploaded from MySect Mobile App to TM Cloud encrypted vault.',
+            details:
+                'Uploaded from MySect Mobile App to TM Cloud encrypted vault.',
           ),
         ],
       ),
       ClientDocument(
         id: 'DOC-2026-002',
-        title: 'Dato_Kamal_Profile_Resume.pdf',
-        originalName: 'Dato_Kamal_Profile_Resume.pdf',
+        title: 'Dato_Adam_Profile_Resume.pdf',
+        originalName: 'Dato_Adam_Profile_Resume.pdf',
         category: 'Director Appointment (Section 58)',
         fileSize: '1.2 MB',
         fileType: 'application/pdf',
@@ -149,17 +186,22 @@ class SecretaryDocumentService extends ChangeNotifier {
         uploadedByRole: 'Managing Director (Client)',
         uploadedAt: '2026-10-18 10:00',
         storageLocation: 'TM One Cloud Alpha (DC1-Cyberjaya)',
-        storageUrl: 'tmcloud://alpha-dc1/vault/comp-01/Dato_Kamal_Profile_Resume.pdf',
-        sha256Hash: '4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945',
+        storageUrl:
+            'tmcloud://alpha-dc1/vault/comp-01/Dato_Adam_Profile_Resume.pdf',
+        sha256Hash:
+            '4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945',
         status: DocumentReviewStatus.moreDetailsNeeded,
         linkedFilingRef: 'SSM/S58/2026/01192',
-        submissionNotes: 'Candidate profile for new non-executive board member appointment.',
+        submissionNotes:
+            'Candidate profile for new non-executive board member appointment.',
         reviewDetails: const DocumentReviewDetails(
           reviewedBy: 'Lim Mei Ling (MIA CA 48192)',
           reviewedAt: '2026-10-19 11:20',
           decision: 'More Details Needed',
-          internalNotes: 'Profile received, but statutory compliance requires Section 201 Consent to Act and clear NRIC copies.',
-          requestedDetails: 'Under Section 201 Companies Act 2016, please provide signed Form 48A (Consent to Act as Director) and clear scanned copy of Dato\' Kamal\'s NRIC (front and back).',
+          internalNotes:
+              'Profile received, but statutory compliance requires Section 201 Consent to Act and clear NRIC copies.',
+          requestedDetails:
+              'Under Section 201 Companies Act 2016, please provide signed Form 48A (Consent to Act as Director) and clear scanned copy of Dato\' Adam\'s NRIC (front and back).',
         ),
         auditTrail: [
           const DocumentAuditItem(
@@ -172,7 +214,8 @@ class SecretaryDocumentService extends ChangeNotifier {
             timestamp: '2026-10-19 11:20:45',
             action: 'DETAILS_REQUESTED',
             actor: 'Lim Mei Ling (MIA CA 48192)',
-            details: 'Requested Form 48A Consent to Act and NRIC copy before Section 58 submission.',
+            details:
+                'Requested Form 48A Consent to Act and NRIC copy before Section 58 submission.',
           ),
         ],
       ),
@@ -193,16 +236,20 @@ class SecretaryDocumentService extends ChangeNotifier {
         uploadedByRole: 'Director (Client)',
         uploadedAt: '2026-10-12 16:45',
         storageLocation: 'TM One Cloud Alpha (DC1-Cyberjaya)',
-        storageUrl: 'tmcloud://alpha-dc1/vault/comp-02/Signed_Board_Resolution_S46.pdf',
-        sha256Hash: '9a8b7c6d5e4f3a2b1c0d9e8f7a6b5c4d3e2f1a0b9c8d7e6f5a4b3c2d1e0f9a8b',
+        storageUrl:
+            'tmcloud://alpha-dc1/vault/comp-02/Signed_Board_Resolution_S46.pdf',
+        sha256Hash:
+            '9a8b7c6d5e4f3a2b1c0d9e8f7a6b5c4d3e2f1a0b9c8d7e6f5a4b3c2d1e0f9a8b',
         status: DocumentReviewStatus.approved,
         linkedFilingRef: 'SSM/S46/2026/00731',
-        submissionNotes: 'Directors circular resolution approving change of registered office address to Menara Binjai.',
+        submissionNotes:
+            'Directors circular resolution approving change of registered office address to Menara Binjai.',
         reviewDetails: const DocumentReviewDetails(
           reviewedBy: 'Azman bin Ibrahim (MAICSA 7019284)',
           reviewedAt: '2026-10-14 10:30',
           decision: 'Approved',
-          remarks: 'All signatures verified against records. Form 46 lodged to SSM via MBRS portal.',
+          remarks:
+              'All signatures verified against records. Form 46 lodged to SSM via MBRS portal.',
         ),
         auditTrail: [
           const DocumentAuditItem(
@@ -236,16 +283,20 @@ class SecretaryDocumentService extends ChangeNotifier {
         uploadedByRole: 'Managing Director (Client)',
         uploadedAt: '2026-09-20 11:00',
         storageLocation: 'TM One Cloud Alpha (DC1-Cyberjaya)',
-        storageUrl: 'tmcloud://alpha-dc1/vault/comp-03/Bank_In_Slip_Capital_RM30k.pdf',
-        sha256Hash: '1f2e3d4c5b6a798890abcdcdef0123456789abcdef0123456789abcdef012345',
+        storageUrl:
+            'tmcloud://alpha-dc1/vault/comp-03/Bank_In_Slip_Capital_RM30k.pdf',
+        sha256Hash:
+            '1f2e3d4c5b6a798890abcdcdef0123456789abcdef0123456789abcdef012345',
         status: DocumentReviewStatus.approved,
         linkedFilingRef: 'SSM/S78/2026/00194',
-        submissionNotes: 'Proof of RM 30,000 capital injection for increase of paid-up capital.',
+        submissionNotes:
+            'Proof of RM 30,000 capital injection for increase of paid-up capital.',
         reviewDetails: const DocumentReviewDetails(
           reviewedBy: 'Sarah binti Ahmad (MAICSA 6028192)',
           reviewedAt: '2026-09-22 14:15',
           decision: 'Approved',
-          remarks: 'Capital injection proof verified. Form 78 lodged and SSM certificate generated.',
+          remarks:
+              'Capital injection proof verified. Form 78 lodged and SSM certificate generated.',
         ),
         auditTrail: [
           const DocumentAuditItem(
@@ -279,16 +330,20 @@ class SecretaryDocumentService extends ChangeNotifier {
         uploadedByRole: 'Managing Director (Client)',
         uploadedAt: '2026-10-15 09:30',
         storageLocation: 'TM One Cloud Alpha (DC1-Cyberjaya)',
-        storageUrl: 'tmcloud://alpha-dc1/vault/comp-03/New_Investor_Passport_Scan.pdf',
-        sha256Hash: '8b7a6c5d4e3f2a1b0c9d8e7f6a5b4c3d2e1f0a9b8c7d6e5f4a3b2c1d0e9f8a7b',
+        storageUrl:
+            'tmcloud://alpha-dc1/vault/comp-03/New_Investor_Passport_Scan.pdf',
+        sha256Hash:
+            '8b7a6c5d4e3f2a1b0c9d8e7f6a5b4c3d2e1f0a9b8c7d6e5f4a3b2c1d0e9f8a7b',
         status: DocumentReviewStatus.rejected,
         linkedFilingRef: 'SSM/S78/2026/00194',
-        submissionNotes: 'Foreign investor passport copy for member register entry.',
+        submissionNotes:
+            'Foreign investor passport copy for member register entry.',
         reviewDetails: const DocumentReviewDetails(
           reviewedBy: 'Sarah binti Ahmad (MAICSA 6028192)',
           reviewedAt: '2026-10-16 11:00',
           decision: 'Rejected',
-          rejectionReason: 'Passport scan is blurry and expires in less than 3 months. SSM regulations require valid passport with minimum 6 months validity.',
+          rejectionReason:
+              'Passport scan is blurry and expires in less than 3 months. SSM regulations require valid passport with minimum 6 months validity.',
         ),
         auditTrail: [
           const DocumentAuditItem(
@@ -322,11 +377,14 @@ class SecretaryDocumentService extends ChangeNotifier {
         uploadedByRole: 'Managing Director (Client)',
         uploadedAt: '2026-10-20 14:35',
         storageLocation: 'TM One Cloud Alpha (DC1-Cyberjaya)',
-        storageUrl: 'tmcloud://alpha-dc1/vault/comp-01/Director_Declaration_Form.pdf',
-        sha256Hash: '3c2d1e0f9a8b7c6d5e4f3a2b1c0d9e8f7a6b5c4d3e2f1a0b9c8d7e6f5a4b3c2d',
+        storageUrl:
+            'tmcloud://alpha-dc1/vault/comp-01/Director_Declaration_Form.pdf',
+        sha256Hash:
+            '3c2d1e0f9a8b7c6d5e4f3a2b1c0d9e8f7a6b5c4d3e2f1a0b9c8d7e6f5a4b3c2d',
         status: DocumentReviewStatus.pendingReview,
         linkedFilingRef: 'SSM/S68/2026/04812',
-        submissionNotes: 'Statutory declaration of solvency and director verification.',
+        submissionNotes:
+            'Statutory declaration of solvency and director verification.',
         auditTrail: [
           const DocumentAuditItem(
             timestamp: '2026-10-20 14:35:10',
@@ -338,8 +396,8 @@ class SecretaryDocumentService extends ChangeNotifier {
       ),
       ClientDocument(
         id: 'DOC-2026-008',
-        title: 'Tenancy_Agreement_Binjai_Office.pdf',
-        originalName: 'Tenancy_Agreement_Binjai_Office.pdf',
+        title: 'Tenancy_Agreement_DCS_Office.pdf',
+        originalName: 'Tenancy_Agreement_DCS_Office.pdf',
         category: 'Proof of Address / Tenancy',
         fileSize: '3.1 MB',
         fileType: 'application/pdf',
@@ -353,11 +411,14 @@ class SecretaryDocumentService extends ChangeNotifier {
         uploadedByRole: 'Director (Client)',
         uploadedAt: '2026-10-12 16:40',
         storageLocation: 'TM One Cloud Alpha (DC1-Cyberjaya)',
-        storageUrl: 'tmcloud://alpha-dc1/vault/comp-02/Tenancy_Agreement_Binjai_Office.pdf',
-        sha256Hash: '7e6f5a4b3c2d1e0f9a8b7c6d5e4f3a2b1c0d9e8f7a6b5c4d3e2f1a0b9c8d7e6f',
+        storageUrl:
+            'tmcloud://alpha-dc1/vault/comp-02/Tenancy_Agreement_DCS_Office.pdf',
+        sha256Hash:
+            '7e6f5a4b3c2d1e0f9a8b7c6d5e4f3a2b1c0d9e8f7a6b5c4d3e2f1a0b9c8d7e6f',
         status: DocumentReviewStatus.pendingReview,
         linkedFilingRef: 'SSM/S46/2026/00731',
-        submissionNotes: 'Stamped tenancy agreement supporting change of registered address.',
+        submissionNotes:
+            'Stamped tenancy agreement supporting change of registered address.',
         auditTrail: [
           const DocumentAuditItem(
             timestamp: '2026-10-12 16:40:15',
@@ -386,10 +447,12 @@ class SecretaryDocumentService extends ChangeNotifier {
         uploadedAt: 'Today, 11:15 AM',
         storageLocation: 'TM One Cloud Alpha (DC1-Cyberjaya)',
         storageUrl: 'tmcloud://alpha-dc1/vault/comp-01/Scanned_Doc_01.pdf',
-        sha256Hash: 'a1b2c3d4e5f678901234567890abcdef1234567890abcdef1234567890abcdef',
+        sha256Hash:
+            'a1b2c3d4e5f678901234567890abcdef1234567890abcdef1234567890abcdef',
         status: DocumentReviewStatus.pendingReview,
         linkedFilingRef: 'SSM/GEN/2026/01',
-        submissionNotes: 'Newly scanned document awaiting sorting and secretary review.',
+        submissionNotes:
+            'Newly scanned document awaiting sorting and secretary review.',
         auditTrail: [
           const DocumentAuditItem(
             timestamp: '2026-10-27 11:15:00',
@@ -418,7 +481,8 @@ class SecretaryDocumentService extends ChangeNotifier {
         uploadedAt: 'Yesterday, 02:20 PM',
         storageLocation: 'TM One Cloud Alpha (DC1-Cyberjaya)',
         storageUrl: 'tmcloud://alpha-dc1/vault/comp-01/IMG_20251120.jpg',
-        sha256Hash: 'b2c3d4e5f6a178901234567890abcdef1234567890abcdef1234567890abcdef',
+        sha256Hash:
+            'b2c3d4e5f6a178901234567890abcdef1234567890abcdef1234567890abcdef',
         status: DocumentReviewStatus.pendingReview,
         linkedFilingRef: 'SSM/GEN/2026/02',
         submissionNotes: 'Notice image uploaded from mobile camera.',
@@ -450,7 +514,8 @@ class SecretaryDocumentService extends ChangeNotifier {
         uploadedAt: 'Yesterday, 10:05 AM',
         storageLocation: 'TM One Cloud Alpha (DC1-Cyberjaya)',
         storageUrl: 'tmcloud://alpha-dc1/vault/comp-01/Unknown_Attachment.pdf',
-        sha256Hash: 'c3d4e5f6a1b278901234567890abcdef1234567890abcdef1234567890abcdef',
+        sha256Hash:
+            'c3d4e5f6a1b278901234567890abcdef1234567890abcdef1234567890abcdef',
         status: DocumentReviewStatus.pendingReview,
         linkedFilingRef: 'SSM/GEN/2026/03',
         submissionNotes: 'Uploaded document awaiting categorization.',
@@ -489,7 +554,11 @@ class SecretaryDocumentService extends ChangeNotifier {
           final List<dynamic> data = jsonDecode(response.body);
           if (data.isNotEmpty) {
             _documents = data
-                .map((item) => ClientDocument.fromJson(Map<String, dynamic>.from(item as Map)))
+                .map(
+                  (item) => ClientDocument.fromJson(
+                    Map<String, dynamic>.from(item as Map),
+                  ),
+                )
                 .toList();
             _isConnectedToBackend = true;
             _isSyncing = false;
@@ -523,21 +592,30 @@ class SecretaryDocumentService extends ChangeNotifier {
     final doc = _documents[docIndex];
     final reviewer = customReviewer ?? _activeSecretary;
     final now = DateTime.now();
-    final nowStr = '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')} ${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}';
+    final nowStr =
+        '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')} ${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}';
 
     doc.status = decision;
     doc.reviewDetails = DocumentReviewDetails(
       reviewedBy: reviewer,
       reviewedAt: nowStr,
       decision: decision.label,
-      remarks: decision == DocumentReviewStatus.approved ? (remarks ?? 'Approved for SSM compliance.') : null,
-      rejectionReason: decision == DocumentReviewStatus.rejected ? (rejectionReason ?? 'Discrepancy in submitted statutory file.') : null,
-      requestedDetails: decision == DocumentReviewStatus.moreDetailsNeeded ? (requestedDetails ?? 'Please provide additional supporting details.') : null,
+      remarks: decision == DocumentReviewStatus.approved
+          ? (remarks ?? 'Approved for SSM compliance.')
+          : null,
+      rejectionReason: decision == DocumentReviewStatus.rejected
+          ? (rejectionReason ?? 'Discrepancy in submitted statutory file.')
+          : null,
+      requestedDetails: decision == DocumentReviewStatus.moreDetailsNeeded
+          ? (requestedDetails ??
+                'Please provide additional supporting details.')
+          : null,
       internalNotes: internalNotes,
     );
 
     String auditAction = 'FILE_REVIEWED';
-    String auditDetail = 'Secretary $reviewer checked the file: ${decision.label}';
+    String auditDetail =
+        'Secretary $reviewer checked the file: ${decision.label}';
 
     if (decision == DocumentReviewStatus.approved) {
       auditAction = 'FILE_APPROVED';
@@ -561,7 +639,13 @@ class SecretaryDocumentService extends ChangeNotifier {
 
     // Cross-link with SsmFilingService if attached to an SSM filing
     if (doc.linkedFilingRef.isNotEmpty) {
-      _syncLinkedSsmFiling(doc, decision, remarks, rejectionReason, requestedDetails);
+      _syncLinkedSsmFiling(
+        doc,
+        decision,
+        remarks,
+        rejectionReason,
+        requestedDetails,
+      );
     }
 
     notifyListeners();
@@ -576,18 +660,20 @@ class SecretaryDocumentService extends ChangeNotifier {
     for (final url in candidateUrls) {
       try {
         final uri = Uri.parse(url);
-        final res = await http.patch(
-          uri,
-          headers: {'Content-Type': 'application/json'},
-          body: jsonEncode({
-            'decision': decision.label,
-            'reviewedBy': reviewer,
-            'remarks': remarks,
-            'rejectionReason': rejectionReason,
-            'requestedDetails': requestedDetails,
-            'internalNotes': internalNotes,
-          }),
-        ).timeout(const Duration(milliseconds: 1500));
+        final res = await http
+            .patch(
+              uri,
+              headers: {'Content-Type': 'application/json'},
+              body: jsonEncode({
+                'decision': decision.label,
+                'reviewedBy': reviewer,
+                'remarks': remarks,
+                'rejectionReason': rejectionReason,
+                'requestedDetails': requestedDetails,
+                'internalNotes': internalNotes,
+              }),
+            )
+            .timeout(const Duration(milliseconds: 1500));
 
         if (res.statusCode == 200) {
           _isConnectedToBackend = true;
@@ -608,15 +694,18 @@ class SecretaryDocumentService extends ChangeNotifier {
     try {
       final ssmService = SsmFilingService.instance;
       final matchingFiling = ssmService.filings.cast<dynamic>().firstWhere(
-            (f) => f.referenceNo == doc.linkedFilingRef || f.companyId == doc.companyId,
-            orElse: () => null,
-          );
+        (f) =>
+            f.referenceNo == doc.linkedFilingRef ||
+            f.companyId == doc.companyId,
+        orElse: () => null,
+      );
 
       if (matchingFiling != null) {
         if (decision == DocumentReviewStatus.moreDetailsNeeded) {
           ssmService.simulateSecretaryClarification(
             matchingFiling.id,
-            requestedDetails ?? 'Secretary requires additional clarification on ${doc.title}.',
+            requestedDetails ??
+                'Secretary requires additional clarification on ${doc.title}.',
           );
         } else if (decision == DocumentReviewStatus.approved) {
           ssmService.simulateSecretaryApproval(matchingFiling.id);
@@ -638,20 +727,19 @@ class SecretaryDocumentService extends ChangeNotifier {
     String? notes,
     String? linkedFilingRef,
     String? folder,
-  }) =>
-      uploadClientDocument(
-        title: title,
-        category: category,
-        fileSize: fileSize,
-        companyId: companyId,
-        companyName: companyName,
-        companySsmNo: companySsmNo,
-        uploadedBy: uploadedBy,
-        uploadedByRole: uploadedByRole,
-        notes: notes,
-        linkedFilingRef: linkedFilingRef,
-        folder: folder,
-      );
+  }) => uploadClientDocument(
+    title: title,
+    category: category,
+    fileSize: fileSize,
+    companyId: companyId,
+    companyName: companyName,
+    companySsmNo: companySsmNo,
+    uploadedBy: uploadedBy,
+    uploadedByRole: uploadedByRole,
+    notes: notes,
+    linkedFilingRef: linkedFilingRef,
+    folder: folder,
+  );
 
   // Upload a new document from client mobile app
   Future<ClientDocument> uploadClientDocument({
@@ -667,9 +755,11 @@ class SecretaryDocumentService extends ChangeNotifier {
     String? linkedFilingRef,
     String? folder,
   }) async {
-    final newId = 'DOC-2026-${(_documents.length + 1).toString().padLeft(3, '0')}';
+    final newId =
+        'DOC-2026-${(_documents.length + 1).toString().padLeft(3, '0')}';
     final now = DateTime.now();
-    final nowStr = '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')} ${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}';
+    final nowStr =
+        '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')} ${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}';
 
     final newDoc = ClientDocument(
       id: newId,
@@ -689,16 +779,21 @@ class SecretaryDocumentService extends ChangeNotifier {
       uploadedAt: nowStr,
       storageLocation: 'TM One Cloud Alpha (DC1-Cyberjaya)',
       storageUrl: 'tmcloud://alpha-dc1/vault/$companyId/$title',
-      sha256Hash: '${DateTime.now().millisecondsSinceEpoch.toRadixString(16)}abcdef1234567890',
+      sha256Hash:
+          '${DateTime.now().millisecondsSinceEpoch.toRadixString(16)}abcdef1234567890',
       status: DocumentReviewStatus.pendingReview,
-      linkedFilingRef: linkedFilingRef ?? 'SSM/GEN/2026/${DateTime.now().millisecondsSinceEpoch % 10000}',
-      submissionNotes: notes ?? 'Uploaded via MySect Mobile App for Secretary review.',
+      linkedFilingRef:
+          linkedFilingRef ??
+          'SSM/GEN/2026/${DateTime.now().millisecondsSinceEpoch % 10000}',
+      submissionNotes:
+          notes ?? 'Uploaded via MySect Mobile App for Secretary review.',
       auditTrail: [
         DocumentAuditItem(
           timestamp: nowStr,
           action: 'FILE_UPLOADED',
           actor: '$uploadedBy ($uploadedByRole)',
-          details: 'Uploaded from MySect Mobile App to TM Cloud encrypted storage.',
+          details:
+              'Uploaded from MySect Mobile App to TM Cloud encrypted storage.',
         ),
       ],
       folder: folder ?? 'Unsorted',
@@ -717,11 +812,13 @@ class SecretaryDocumentService extends ChangeNotifier {
     for (final url in candidateUrls) {
       try {
         final uri = Uri.parse(url);
-        final res = await http.post(
-          uri,
-          headers: {'Content-Type': 'application/json'},
-          body: jsonEncode(newDoc.toJson()),
-        ).timeout(const Duration(milliseconds: 1500));
+        final res = await http
+            .post(
+              uri,
+              headers: {'Content-Type': 'application/json'},
+              body: jsonEncode(newDoc.toJson()),
+            )
+            .timeout(const Duration(milliseconds: 1500));
         if (res.statusCode == 201) {
           break;
         }

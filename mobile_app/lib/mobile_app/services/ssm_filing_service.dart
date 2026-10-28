@@ -103,12 +103,12 @@ class SsmFilingService extends ChangeNotifier {
         filingType: 'Section 58 Notice of Director Change',
         title: 'Section 58 Notice of Appointment of Director',
         description:
-            'Appointment of new Non-Executive Director (Dato\' Ir. Kamal bin Osman).',
+            'Appointment of new Non-Executive Director (Dato\' Adam Bin Hamzah).',
         submittedDate: DateTime(2026, 10, 18, 10, 0),
         deadline: '2026-10-31',
         status: SsmFilingStatus.secretaryReplied,
         attachedFiles: [
-          'Dato_Kamal_Profile_Resume.pdf (1.2 MB)',
+          'Dato_Adam_Profile_Resume.pdf (1.2 MB)',
           'Draft_Board_Resolution_Director.docx (420 KB)',
         ],
         messages: [
@@ -117,7 +117,7 @@ class SsmFilingService extends ChangeNotifier {
             senderName: 'Adam Bin Hamzah',
             senderRole: 'Managing Director (Client)',
             text:
-                'Submitting the appointment documentation for Dato Kamal to join the board.',
+                'Submitting the appointment documentation for Dato Adam to join the board.',
             time: '18 Oct 2026, 10:00 AM',
             isFromSecretary: false,
           ),
@@ -126,7 +126,7 @@ class SsmFilingService extends ChangeNotifier {
             senderName: 'Lim Mei Ling (MIA)',
             senderRole: 'Licensed Corporate Secretary',
             text:
-                'Hi Adam, thank you for the documents. Under Section 201 of the Companies Act 2016, we also require a signed Form 48A / Statutory Declaration of Consent to Act, plus a clear scanned copy of Dato Kamal\'s NRIC (front and back). Could you please upload those here so we can complete Section 58 lodgement?',
+                'Hi Adam, thank you for the documents. Under Section 201 of the Companies Act 2016, we also require a signed Form 48A / Statutory Declaration of Consent to Act, plus a clear scanned copy of Dato Adam\'s NRIC (front and back). Could you please upload those here so we can complete Section 58 lodgement?',
             time: '19 Oct 2026, 11:20 AM',
             isFromSecretary: true,
           ),

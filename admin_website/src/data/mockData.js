@@ -236,8 +236,8 @@ export const initialCompanies = [
     clientContact: 'Adam Bin Hamzah (Director)',
     clientEmail: 'adam@dcs.com.my',
     officialEmail: 'contact@dcs.com.my',
-    registeredAddress: 'Level 18, Menara Binjai, No. 2 Jalan Binjai, 50450 Kuala Lumpur',
-    businessAddress: 'Level 12, Axiata Tower, 9 Jalan Stesen Sentral 5, 50470 Kuala Lumpur',
+    registeredAddress: 'No. 42-2, Jalan Eco Forest 6/1C, Eco Forest, 43500 Semenyih, Selangor',
+    businessAddress: 'No. 42-2, Jalan Eco Forest 6/1C, Eco Forest, 43500 Semenyih, Selangor',
     mobileAppConnected: true,
     lastMobileSync: '2026-10-22 08:45 (Active)',
     directors: [
@@ -900,8 +900,8 @@ export const initialClientDocuments = [
   },
   {
     id: 'DOC-2026-002',
-    title: 'Dato_Kamal_Profile_Resume.pdf',
-    originalName: 'Dato_Kamal_Profile_Resume.pdf',
+    title: 'Dato_Adam_Profile_Resume.pdf',
+    originalName: 'Dato_Adam_Profile_Resume.pdf',
     category: 'Director Appointment (Section 58)',
     fileSize: '1.2 MB',
     fileType: 'application/pdf',
@@ -915,7 +915,7 @@ export const initialClientDocuments = [
     uploadedByRole: 'Managing Director (Client)',
     uploadedAt: '2026-10-18 10:00',
     storageLocation: 'TM One Cloud Alpha (DC1-Cyberjaya)',
-    storageUrl: 'tmcloud://alpha-dc1/vault/comp-01/Dato_Kamal_Profile_Resume.pdf',
+    storageUrl: 'tmcloud://alpha-dc1/vault/comp-01/Dato_Adam_Profile_Resume.pdf',
     sha256Hash: '4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945',
     status: 'More Details Needed',
     linkedFilingRef: 'SSM/S58/2026/01192',
@@ -925,7 +925,7 @@ export const initialClientDocuments = [
       reviewedAt: '2026-10-19 11:20',
       decision: 'More Details Needed',
       internalNotes: 'Profile received, but statutory compliance requires Section 201 Consent to Act and clear NRIC copies.',
-      requestedDetails: 'Under Section 201 Companies Act 2016, please provide signed Form 48A (Consent to Act as Director) and clear scanned copy of Dato\' Kamal\'s NRIC (front and back).'
+      requestedDetails: 'Under Section 201 Companies Act 2016, please provide signed Form 48A (Consent to Act as Director) and clear scanned copy of Dato\' Adam\'s NRIC (front and back).'
     },
     auditTrail: [
       {
@@ -1075,38 +1075,6 @@ export const initialClientDocuments = [
     ]
   },
   {
-    id: 'DOC-2026-006',
-    title: 'Audited_Financial_Statements_FY2025.pdf',
-    originalName: 'Audited_Financial_Statements_FY2025.pdf',
-    category: 'Annual Financial Statements',
-    fileSize: '4.6 MB',
-    fileType: 'application/pdf',
-    companyId: 'comp-06',
-    companyName: 'Borneo Marine Innovations Sdn Bhd',
-    companySsmNo: '201901048291 (1349582-M)',
-    assignedFirmId: 'firm-02',
-    assignedFirmName: 'Apex Corporate Secretarial Partners',
-    assignedSecretary: 'Mohd Firdaus (LS 0009841)',
-    uploadedBy: 'Captain Dennis Wong',
-    uploadedByRole: 'Managing Director (Client)',
-    uploadedAt: '2026-10-21 08:15',
-    storageLocation: 'TM One Cloud Alpha (DC1-Cyberjaya)',
-    storageUrl: 'tmcloud://alpha-dc1/vault/comp-06/Audited_Financial_Statements_FY2025.pdf',
-    sha256Hash: '5a4b3c2d1e0f9a8b7c6d5e4f3a2b1c0d9e8f7a6b5c4d3e2f1a0b9c8d7e6f5a4b',
-    status: 'Pending Review',
-    linkedFilingRef: 'SSM/S68/2026/09912',
-    submissionNotes: 'Signed audited financial statements for FY2025 by external auditor Crowe Malaysia.',
-    reviewDetails: null,
-    auditTrail: [
-      {
-        timestamp: '2026-10-21 08:15:40',
-        action: 'FILE_UPLOADED',
-        actor: 'Captain Dennis Wong (Managing Director)',
-        details: 'Uploaded from MySect Mobile App.'
-      }
-    ]
-  },
-  {
     id: 'DOC-2026-007',
     title: 'Director_Declaration_Form.pdf',
     originalName: 'Director_Declaration_Form.pdf',
@@ -1140,8 +1108,8 @@ export const initialClientDocuments = [
   },
   {
     id: 'DOC-2026-008',
-    title: 'Tenancy_Agreement_Binjai_Office.pdf',
-    originalName: 'Tenancy_Agreement_Binjai_Office.pdf',
+    title: 'Tenancy_Agreement_DCS_Office.pdf',
+    originalName: 'Tenancy_Agreement_DCS_Office.pdf',
     category: 'Proof of Address / Tenancy',
     fileSize: '3.1 MB',
     fileType: 'application/pdf',
@@ -1155,7 +1123,7 @@ export const initialClientDocuments = [
     uploadedByRole: 'Director (Client)',
     uploadedAt: '2026-10-12 16:40',
     storageLocation: 'TM One Cloud Alpha (DC1-Cyberjaya)',
-    storageUrl: 'tmcloud://alpha-dc1/vault/comp-02/Tenancy_Agreement_Binjai_Office.pdf',
+    storageUrl: 'tmcloud://alpha-dc1/vault/comp-02/Tenancy_Agreement__Office.pdf',
     sha256Hash: '7e6f5a4b3c2d1e0f9a8b7c6d5e4f3a2b1c0d9e8f7a6b5c4d3e2f1a0b9c8d7e6f',
     status: 'Pending Review',
     linkedFilingRef: 'SSM/S46/2026/00731',

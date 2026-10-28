@@ -5,7 +5,9 @@ import '../home/home_page.dart';
 import '../widgets/app_top_header.dart';
 
 class VerificationPage extends StatefulWidget {
-  const VerificationPage({super.key});
+  final String? email;
+
+  const VerificationPage({super.key, this.email});
 
   @override
   State<VerificationPage> createState() => _VerificationPageState();
@@ -95,7 +97,7 @@ class _VerificationPageState extends State<VerificationPage> {
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
-              borderSide: const BorderSide(color: Color(0xFF1E50FF), width: 2),
+              borderSide: const BorderSide(color: Color(0xFF062AAE), width: 2),
             ),
           ),
         ),
@@ -140,7 +142,9 @@ class _VerificationPageState extends State<VerificationPage> {
                     ),
                     const SizedBox(height: 16),
                     Text(
-                      'Enter the 6-digit code we sent to your phone to\nverify your account.\nSMS to your phone number',
+                      widget.email != null && widget.email!.isNotEmpty
+                          ? 'Enter the 6-digit code we sent to\nyour email to verify your account.\n${widget.email}'
+                          : 'Enter the 6-digit code we sent to\nyour email to verify your account.',
                       textAlign: TextAlign.center,
                       style: GoogleFonts.poppins(
                         fontSize: 14,
@@ -162,6 +166,18 @@ class _VerificationPageState extends State<VerificationPage> {
                         onTap: _secondsRemaining == 0
                             ? () {
                                 _startTimer();
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      widget.email != null && widget.email!.isNotEmpty
+                                          ? 'A new 6-digit verification code has been sent to ${widget.email}.'
+                                          : 'A new 6-digit verification code has been sent to your email.',
+                                      style: GoogleFonts.poppins(color: Colors.white),
+                                    ),
+                                    backgroundColor: const Color(0xFF062AAE),
+                                    duration: const Duration(seconds: 2),
+                                  ),
+                                );
                               }
                             : null,
                         child: RichText(
@@ -181,7 +197,7 @@ class _VerificationPageState extends State<VerificationPage> {
                                   fontWeight: FontWeight.w700,
                                   color: _secondsRemaining > 0
                                       ? Colors.grey[500]
-                                      : const Color(0xFF1E50FF),
+                                      : const Color(0xFF062AAE),
                                 ),
                               ),
                             ],
@@ -191,7 +207,7 @@ class _VerificationPageState extends State<VerificationPage> {
                     ),
                     const SizedBox(height: 24),
                     SizedBox(
-                      height: 56,
+                      height: 52,
                       child: ElevatedButton(
                         onPressed: () {
                           final code = _controllers.map((c) => c.text).join();
@@ -217,7 +233,7 @@ class _VerificationPageState extends State<VerificationPage> {
                           );
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF1E50FF),
+                          backgroundColor: const Color(0xFF062AAE),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
@@ -226,8 +242,8 @@ class _VerificationPageState extends State<VerificationPage> {
                         child: Text(
                           'Verify and continue',
                           style: GoogleFonts.poppins(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
                             color: Colors.white,
                           ),
                         ),
