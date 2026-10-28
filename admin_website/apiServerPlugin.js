@@ -3,7 +3,7 @@ import { initialCompanies, initialFirms, initialClientDocuments } from './src/da
 // In-memory persistent state during dev server run
 let companies = [...initialCompanies];
 let firms = [...initialFirms];
-let documents = [...initialClientDocuments];
+let documents = initialClientDocuments.filter(d => d.id !== 'DOC-2026-006');
 
 export function apiServerPlugin() {
   return {
