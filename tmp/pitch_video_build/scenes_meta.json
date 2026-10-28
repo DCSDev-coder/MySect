@@ -1,0 +1,68 @@
+[
+  {
+    "id": 1,
+    "tag": "SCENE 01  \u2022  THE PROBLEM & THE MYSECT SOLUTION",
+    "title": "Replacing Scattered WhatsApp Chats with One Digital Platform",
+    "subtitle": "MySect Customer Mobile App \u2014 Purpose-built for Malaysian company owners & directors",
+    "caption": "For Malaysian business owners and company-secretary firms, statutory compliance is often stuck in scattered WhatsApp chats and lost email attachments. MySect changes that.",
+    "vo": "For Malaysian business owners and company-secretary firms, managing statutory compliance is still stuck in scattered WhatsApp messages, lost email attachments, and manual chasing. MySect changes that.",
+    "audio_path": "/Users/marketingdeveloper/DCStack_Development/MySect/tmp/pitch_video_build/audio/scene_1.m4a",
+    "audio_duration": 12.85,
+    "scene_duration": 13.85
+  },
+  {
+    "id": 2,
+    "tag": "SCENE 02  \u2022  MULTI-COMPANY CLARITY IN 5 SECONDS",
+    "title": "One Mobile App for Every Company You Own",
+    "subtitle": "Switch between Sdn Bhd entities, see pending actions, and track upcoming SSM deadlines",
+    "caption": "With the MySect Customer App, directors managing one or multiple Sdn Bhd companies see everything requiring their attention in five seconds\u2014documents needed, replies pending, and SSM deadlines.",
+    "vo": "With the MySect Customer App, directors managing one or multiple Sdn Bhd companies see everything that needs their attention in five seconds\u2014which documents are needed, which replies are pending, and what deadlines are coming up.",
+    "audio_path": "/Users/marketingdeveloper/DCStack_Development/MySect/tmp/pitch_video_build/audio/scene_2.m4a",
+    "audio_duration": 13.49,
+    "scene_duration": 14.49
+  },
+  {
+    "id": 3,
+    "tag": "SCENE 03  \u2022  ASK MYSECT GUIDED INTAKE & SSM REQUESTS",
+    "title": "Structured Intake \u2014 No More Incomplete Requests",
+    "subtitle": "Digital Assistant confirms company context & collects required documents before handover",
+    "caption": "Every request starts with guided intake. Whether for a Section 58 Director Change or Section 68 Annual Return, MySect confirms the company, prompts for required documents, and creates a structured case.",
+    "vo": "Instead of vague messages, every request starts with guided intake. Whether a client needs a Section 58 Director Change or a Section 68 Annual Return, MySect confirms the company, prompts for the exact required documents, and packages a complete case for their Secretary.",
+    "audio_path": "/Users/marketingdeveloper/DCStack_Development/MySect/tmp/pitch_video_build/audio/scene_3.m4a",
+    "audio_duration": 17.01,
+    "scene_duration": 18.01
+  },
+  {
+    "id": 4,
+    "tag": "SCENE 04  \u2022  CENTRALISED DOCUMENT VAULT & FORMAL APPROVALS",
+    "title": "Tracked Document Exchange & Timestamped Sign-Off",
+    "subtitle": "Company-isolated document folders, draft previews, and recorded customer approvals",
+    "caption": "Every corporate document, board resolution, and approval lives in a secure vault. Clients review prepared drafts and approve or reject with a reason\u2014recording an immutable timestamp.",
+    "vo": "Every corporate document, board resolution, and approval lives in a secure, company-isolated vault. Clients can review prepared drafts and approve or reject with a single tap, with every action timestamped for a clean audit trail.",
+    "audio_path": "/Users/marketingdeveloper/DCStack_Development/MySect/tmp/pitch_video_build/audio/scene_4.m4a",
+    "audio_duration": 13.67,
+    "scene_duration": 14.67
+  },
+  {
+    "id": 5,
+    "tag": "SCENE 05  \u2022  REAL-TIME HANDOFF TO THE SECRETARY WORKSPACE",
+    "title": "AI Prepares the Case. Licensed Secretaries Stay in Control.",
+    "subtitle": "Seamless sync between the Flutter Customer App and the Partner Secretary Firm Website",
+    "caption": "Partner company-secretary firms receive a pre-organised case in their web workspace. Licensed secretaries accept ownership, open direct human chat when needed, and complete the filing.",
+    "vo": "Behind the scenes, partner company-secretary firms receive a pre-organised case in their dedicated web workspace. Licensed secretaries accept ownership, open direct human conversation when needed, review documents, and complete the work in half the time.",
+    "audio_path": "/Users/marketingdeveloper/DCStack_Development/MySect/tmp/pitch_video_build/audio/scene_5.m4a",
+    "audio_duration": 15.58,
+    "scene_duration": 16.58
+  },
+  {
+    "id": 6,
+    "tag": "SCENE 06  \u2022  MYSECT ADMIN GOVERNANCE & 3-MONTH MVP ROADMAP",
+    "title": "One Shared Platform. Three Role-Specific Products.",
+    "subtitle": "Customer Mobile App  \u2022  Secretary Firm Website  \u2022  MySect Admin Portal",
+    "caption": "Backed by MySect Admin for partner firm onboarding, company assignment, and full audit history\u2014MySect delivers a complete end-to-end corporate secretarial platform.",
+    "vo": "Backed by MySect Admin for multi-firm onboarding, company assignment, and full audit governance, MySect connects clients and company secretaries on one trusted platform. Let us build the future of corporate secretarial services together.",
+    "audio_path": "/Users/marketingdeveloper/DCStack_Development/MySect/tmp/pitch_video_build/audio/scene_6.m4a",
+    "audio_duration": 14.4,
+    "scene_duration": 15.4
+  }
+]

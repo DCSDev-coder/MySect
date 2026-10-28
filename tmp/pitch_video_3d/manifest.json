@@ -1,0 +1,296 @@
+{
+  "total_duration": 67.92,
+  "master_audio": "/Users/marketingdeveloper/DCStack_Development/MySect/tmp/pitch_video_3d/audio/master_mix.m4a",
+  "scenes": [
+    {
+      "id": 1,
+      "badge": "MYSECT MOBILE EXPERIENCE",
+      "title": "Your Company Secretary.\nNow in Your Pocket.",
+      "subtitle": "No more messy WhatsApp threads or lost emails. Experience MySect in 3D.",
+      "pills": [
+        "5 Real Live Screens",
+        "Multi-Company Control",
+        "Direct CoSec Sync"
+      ],
+      "vo": "Tired of managing your company through messy WhatsApp chats and lost emails? Meet MySect \u2014 your entire company secretary experience, right in your pocket.",
+      "start_time": 0.0,
+      "vo_duration": 8.96,
+      "duration": 10.11,
+      "wav_path": "/Users/marketingdeveloper/DCStack_Development/MySect/tmp/pitch_video_3d/audio/vo_1.wav"
+    },
+    {
+      "id": 2,
+      "badge": "HOME & MULTI-COMPANY SWITCHER",
+      "title": "Switch Companies in One Tap.\nNever Miss a Dateline.",
+      "subtitle": "Data Center Specialists, C2 Coffee + Candle, 5Luxe Scents & Borneo Marine \u2014 all in one view.",
+      "pills": [
+        "Instant Company Dropdown",
+        "Role-Locked Access",
+        "Upcoming Dateline Calendar"
+      ],
+      "vo": "Own more than one business? Switch between Data Center Specialists, C2 Coffee, or Borneo Marine in a single tap, and spot every upcoming October deadline instantly.",
+      "start_time": 10.11,
+      "vo_duration": 10.16,
+      "duration": 11.31,
+      "wav_path": "/Users/marketingdeveloper/DCStack_Development/MySect/tmp/pitch_video_3d/audio/vo_2.wav"
+    },
+    {
+      "id": 3,
+      "badge": "SSM FILINGS & LIVE TRACKER",
+      "title": "Real-Time SSM Filings.\nZero Guessing Games.",
+      "subtitle": "Track Review, Action, Lodged & Done statuses with live notes from your licensed Secretary.",
+      "pills": [
+        "Section 68 Annual Return",
+        "Section 58 Director Change",
+        "+ Submit SSM in Seconds"
+      ],
+      "vo": "Tap into SSM Filings to see live progress across Review, Action Needed, Lodged, and Done. Read instant updates from your licensed secretary on Section 68 Annual Returns and Section 58 changes.",
+      "start_time": 21.42,
+      "vo_duration": 12.48,
+      "duration": 13.63,
+      "wav_path": "/Users/marketingdeveloper/DCStack_Development/MySect/tmp/pitch_video_3d/audio/vo_3.wav"
+    },
+    {
+      "id": 4,
+      "badge": "SMART CLOUD FILES & ALERTS",
+      "title": "Powered by TM Cloud.\n9 Attention Files Highlighted.",
+      "subtitle": "Auto-sync corporate folders and immediately spot which documents need your action.",
+      "pills": [
+        "TM Cloud Auto-Sync",
+        "Attention: 9 Files",
+        "Unsorted & Accounting Vault"
+      ],
+      "vo": "In the Files vault powered by TM Cloud, MySect automatically highlights the exact nine files needing your attention and organises unsorted and accounting documents cleanly.",
+      "start_time": 35.05,
+      "vo_duration": 9.56,
+      "duration": 10.71,
+      "wav_path": "/Users/marketingdeveloper/DCStack_Development/MySect/tmp/pitch_video_3d/audio/vo_4.wav"
+    },
+    {
+      "id": 5,
+      "badge": "INSTANT CHAT & ONE-TAP RESOLVE",
+      "title": "Direct Secretary Chat.\nFast, Tracked & Resolved.",
+      "subtitle": "Ask questions about your uploads, attach documents, and mark threads Resolved when done.",
+      "pills": [
+        "Live Support Thread",
+        "File Attachments",
+        "One-Tap Resolve"
+      ],
+      "vo": "Need quick help on a recent document upload? Jump straight into Chat, message your support and secretarial team in real time, and tap Resolve the moment your issue is settled.",
+      "start_time": 45.76,
+      "vo_duration": 9.72,
+      "duration": 10.87,
+      "wav_path": "/Users/marketingdeveloper/DCStack_Development/MySect/tmp/pitch_video_3d/audio/vo_5.wav"
+    },
+    {
+      "id": 6,
+      "badge": "READY FOR PARTNER LAUNCH",
+      "title": "MySect \u2014 Your Secretary Company.\nBuilt for Modern Business.",
+      "subtitle": "Home \u2022 SSM Filings \u2022 TM Cloud Files \u2022 Live Chat \u2014 Connected to the Secretary Workspace.",
+      "pills": [
+        "iOS & Android (Flutter)",
+        "Partner Firm Web Portal",
+        "MySect Admin Governance"
+      ],
+      "vo": "From multi-company switching and SSM filing trackers to TM Cloud file sync and instant chat \u2014 MySect makes corporate compliance effortless. Let us launch the future together!",
+      "start_time": 56.63,
+      "vo_duration": 10.14,
+      "duration": 11.29,
+      "wav_path": "/Users/marketingdeveloper/DCStack_Development/MySect/tmp/pitch_video_3d/audio/vo_6.wav"
+    }
+  ],
+  "slices": {
+    "s1_dropdown": {
+      "name": "s1_dropdown",
+      "path": "/Users/marketingdeveloper/DCStack_Development/MySect/tmp/pitch_video_3d/slices/s1_dropdown.png",
+      "box": [
+        14,
+        228,
+        352,
+        540
+      ],
+      "w": 338,
+      "h": 312,
+      "nx": -0.11063829787234042,
+      "ny": 0.125,
+      "nw": 0.7191489361702128,
+      "nh": 0.3046875
+    },
+    "s1_calendar": {
+      "name": "s1_calendar",
+      "path": "/Users/marketingdeveloper/DCStack_Development/MySect/tmp/pitch_video_3d/slices/s1_calendar.png",
+      "box": [
+        16,
+        590,
+        454,
+        885
+      ],
+      "w": 438,
+      "h": 295,
+      "nx": 0.0,
+      "ny": -0.22021484375,
+      "nw": 0.9319148936170213,
+      "nh": 0.2880859375
+    },
+    "s2_counters": {
+      "name": "s2_counters",
+      "path": "/Users/marketingdeveloper/DCStack_Development/MySect/tmp/pitch_video_3d/slices/s2_counters.png",
+      "box": [
+        14,
+        290,
+        456,
+        405
+      ],
+      "w": 442,
+      "h": 115,
+      "nx": 0.0,
+      "ny": 0.16064453125,
+      "nw": 0.9404255319148936,
+      "nh": 0.1123046875
+    },
+    "s2_card_s68": {
+      "name": "s2_card_s68",
+      "path": "/Users/marketingdeveloper/DCStack_Development/MySect/tmp/pitch_video_3d/slices/s2_card_s68.png",
+      "box": [
+        14,
+        535,
+        456,
+        792
+      ],
+      "w": 442,
+      "h": 257,
+      "nx": 0.0,
+      "ny": -0.14794921875,
+      "nw": 0.9404255319148936,
+      "nh": 0.2509765625
+    },
+    "s2_submit_btn": {
+      "name": "s2_submit_btn",
+      "path": "/Users/marketingdeveloper/DCStack_Development/MySect/tmp/pitch_video_3d/slices/s2_submit_btn.png",
+      "box": [
+        308,
+        214,
+        456,
+        274
+      ],
+      "w": 148,
+      "h": 60,
+      "nx": 0.31276595744680846,
+      "ny": 0.26171875,
+      "nw": 0.3148936170212766,
+      "nh": 0.05859375
+    },
+    "s3_tmcloud": {
+      "name": "s3_tmcloud",
+      "path": "/Users/marketingdeveloper/DCStack_Development/MySect/tmp/pitch_video_3d/slices/s3_tmcloud.png",
+      "box": [
+        18,
+        340,
+        452,
+        480
+      ],
+      "w": 434,
+      "h": 140,
+      "nx": 0.0,
+      "ny": 0.099609375,
+      "nw": 0.9234042553191489,
+      "nh": 0.13671875
+    },
+    "s3_attention": {
+      "name": "s3_attention",
+      "path": "/Users/marketingdeveloper/DCStack_Development/MySect/tmp/pitch_video_3d/slices/s3_attention.png",
+      "box": [
+        18,
+        555,
+        232,
+        720
+      ],
+      "w": 214,
+      "h": 165,
+      "nx": -0.23404255319148937,
+      "ny": -0.12255859375,
+      "nw": 0.4553191489361702,
+      "nh": 0.1611328125
+    },
+    "s3_unsorted": {
+      "name": "s3_unsorted",
+      "path": "/Users/marketingdeveloper/DCStack_Development/MySect/tmp/pitch_video_3d/slices/s3_unsorted.png",
+      "box": [
+        238,
+        555,
+        452,
+        720
+      ],
+      "w": 214,
+      "h": 165,
+      "nx": 0.23404255319148937,
+      "ny": -0.12255859375,
+      "nw": 0.4553191489361702,
+      "nh": 0.1611328125
+    },
+    "s4_chat_card": {
+      "name": "s4_chat_card",
+      "path": "/Users/marketingdeveloper/DCStack_Development/MySect/tmp/pitch_video_3d/slices/s4_chat_card.png",
+      "box": [
+        18,
+        412,
+        452,
+        520
+      ],
+      "w": 434,
+      "h": 108,
+      "nx": 0.0,
+      "ny": 0.044921875,
+      "nw": 0.9234042553191489,
+      "nh": 0.10546875
+    },
+    "s5_bubble_1": {
+      "name": "s5_bubble_1",
+      "path": "/Users/marketingdeveloper/DCStack_Development/MySect/tmp/pitch_video_3d/slices/s5_bubble_1.png",
+      "box": [
+        14,
+        305,
+        382,
+        396
+      ],
+      "w": 368,
+      "h": 91,
+      "nx": -0.07872340425531915,
+      "ny": 0.15771484375,
+      "nw": 0.7829787234042553,
+      "nh": 0.0888671875
+    },
+    "s5_bubble_2": {
+      "name": "s5_bubble_2",
+      "path": "/Users/marketingdeveloper/DCStack_Development/MySect/tmp/pitch_video_3d/slices/s5_bubble_2.png",
+      "box": [
+        14,
+        405,
+        456,
+        515
+      ],
+      "w": 442,
+      "h": 110,
+      "nx": 0.0,
+      "ny": 0.05078125,
+      "nw": 0.9404255319148936,
+      "nh": 0.107421875
+    },
+    "s5_bubble_3": {
+      "name": "s5_bubble_3",
+      "path": "/Users/marketingdeveloper/DCStack_Development/MySect/tmp/pitch_video_3d/slices/s5_bubble_3.png",
+      "box": [
+        14,
+        522,
+        456,
+        634
+      ],
+      "w": 442,
+      "h": 112,
+      "nx": 0.0,
+      "ny": -0.064453125,
+      "nw": 0.9404255319148936,
+      "nh": 0.109375
+    }
+  }
+}
