@@ -176,7 +176,13 @@ class ClientDocument {
       uploadedBy: json['uploadedBy'] ?? 'Client Representative',
       uploadedByRole: json['uploadedByRole'] ?? 'Managing Director (Client)',
       uploadedAt: json['uploadedAt'] ?? '',
-      storageLocation: json['storageLocation'] ?? 'TM One Cloud Alpha (DC1-Cyberjaya)',
+      storageLocation: () {
+        final loc = json['storageLocation']?.toString() ?? 'TM Cloud';
+        if (loc.contains('TM One Cloud Alpha') || loc.contains('Cyberjaya') || loc.contains('DC1')) {
+          return 'TM Cloud';
+        }
+        return loc;
+      }(),
       storageUrl: json['storageUrl'] ?? 'tmcloud://alpha-dc1/vault/default.pdf',
       sha256Hash: json['sha256Hash'] ?? 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
       status: DocumentReviewStatus.fromString(json['status'] ?? 'pending'),

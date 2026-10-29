@@ -18,6 +18,30 @@ const AuditLogs = ({ auditLogs = [] }) => {
     return matchesSearch && matchesType;
   });
 
+  const handleExportCSV = () => {
+    const headers = ['Log ID', 'Timestamp', 'Actor', 'Actor Role', 'Action Type', 'Target Entity', 'Details', 'IP Address'];
+    const rows = filtered.map(log => [
+      log.id || '',
+      log.timestamp || '',
+      `"${(log.actor || '').replace(/"/g, '""')}"`,
+      `"${(log.actorRole || '').replace(/"/g, '""')}"`,
+      `"${(log.actionType || '').replace(/"/g, '""')}"`,
+      `"${(log.targetEntity || '').replace(/"/g, '""')}"`,
+      `"${(log.details || '').replace(/"/g, '""')}"`,
+      log.ipAddress || '127.0.0.1'
+    ]);
+    const csvContent = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `mysect_audit_logs_${new Date().toISOString().split('T')[0]}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <div className="flex-1 overflow-y-auto bg-[#F8F9FA] p-8">
       <div className="flex flex-col md:flex-row md:items-center justify-between pb-6 border-b border-gray-200 gap-4">
@@ -32,7 +56,10 @@ const AuditLogs = ({ auditLogs = [] }) => {
           </p>
         </div>
 
-        <button className="px-4 py-2 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 rounded-lg text-sm font-semibold transition-colors shadow-xs flex items-center gap-2">
+        <button 
+          onClick={handleExportCSV}
+          className="px-4 py-2 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 rounded-lg text-sm font-semibold transition-colors shadow-xs flex items-center gap-2"
+        >
           <Download className="w-4 h-4" />
           Export Audit Trail (CSV)
         </button>

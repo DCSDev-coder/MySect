@@ -11,7 +11,7 @@ const PlatformSettings = ({
   const [policies, setPolicies] = useState({
     ekycStrictRequirement: true,
     ekycProvider: 'Epsilon ID V3 (Malaysia MyKad + Facial Liveness)',
-    tmCloudDataResidency: 'TM One Cloud Alpha (Kuala Lumpur Data Centre DC1/DC2)',
+    tmCloudDataResidency: 'TM Cloud (Malaysia)',
     statutoryRetentionYears: 7,
     crossBorderAiPolicy: 'Strict Local (Sensitive company records scrubbed before model reasoning)',
     defaultAiProvider: 'Gemini 2.5 Flash-Lite (Intake) + Mistral Small (Drafting)',
@@ -53,7 +53,7 @@ const PlatformSettings = ({
         )}
       </div>
 
-      <form onSubmit={handleSubmit} className="mt-6 max-w-4xl space-y-6 text-xs">
+      <form onSubmit={handleSubmit} className="mt-6 w-full space-y-6 text-xs">
         
         {/* 1. Identity & e-KYC Verification Policy */}
         <div className="bg-white rounded-2xl border border-gray-200 shadow-xs p-6">

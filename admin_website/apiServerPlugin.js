@@ -414,7 +414,7 @@ export function apiServerPlugin() {
                   uploadedBy: payload.uploadedBy || 'Client User (Director)',
                   uploadedByRole: payload.uploadedByRole || 'Managing Director (Client)',
                   uploadedAt: new Date().toISOString().replace('T', ' ').substring(0, 16),
-                  storageLocation: 'TM One Cloud Alpha (DC1-Cyberjaya)',
+                  storageLocation: 'TM Cloud',
                   storageUrl: `tmcloud://alpha-dc1/vault/${payload.companyId || 'comp-01'}/${payload.title || 'doc.pdf'}`,
                   sha256Hash: Math.random().toString(16).substring(2) + Math.random().toString(16).substring(2),
                   status: 'Pending Review',

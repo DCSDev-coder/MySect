@@ -76,7 +76,7 @@ const GlobalNotifications = ({
       </div>
 
       {/* Notifications List */}
-      <div className="mt-6 space-y-4 max-w-4xl">
+      <div className="mt-6 space-y-4 w-full">
         {notifList.map((notif) => (
           <div key={notif.id} className="bg-white rounded-2xl border border-gray-200 shadow-xs p-6 hover:shadow-md transition-shadow">
             <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">

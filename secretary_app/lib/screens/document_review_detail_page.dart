@@ -766,6 +766,52 @@ class _DocumentReviewDetailPageState extends State<DocumentReviewDetailPage> {
                   ),
                   const SizedBox(height: 16),
                   Text(
+                    'Quick Statutory Templates',
+                    style: GoogleFonts.poppins(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.grey.shade600,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Wrap(
+                    spacing: 6,
+                    runSpacing: 6,
+                    children: [
+                      _buildQuickTemplateChip(
+                        'Missing Form 48A Consent',
+                        'Please provide statutory Form 48A (Consent to Act as Director) pursuant to Section 201 of Companies Act 2016.',
+                        detailsController,
+                        setModalState,
+                      ),
+                      _buildQuickTemplateChip(
+                        'Certified NRIC (CTC)',
+                        'Please provide Certified True Copy (CTC) of NRIC / Passport (front & back with signature verified).',
+                        detailsController,
+                        setModalState,
+                      ),
+                      _buildQuickTemplateChip(
+                        'Section 251 Statement',
+                        'Financial statements must include signed Directors\' Statement pursuant to Section 251 of Companies Act 2016.',
+                        detailsController,
+                        setModalState,
+                      ),
+                      _buildQuickTemplateChip(
+                        'Quorum Signatures',
+                        'Board resolution requires formal signatures from the statutory director quorum before SSM filing.',
+                        detailsController,
+                        setModalState,
+                      ),
+                      _buildQuickTemplateChip(
+                        'Registered Address Proof',
+                        'Please provide latest tenancy agreement or utility bill for registered office address verification.',
+                        detailsController,
+                        setModalState,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 14),
+                  Text(
                     'Clarification Request to Client',
                     style: GoogleFonts.poppins(
                       fontSize: 12,
@@ -779,7 +825,7 @@ class _DocumentReviewDetailPageState extends State<DocumentReviewDetailPage> {
                     maxLines: 3,
                     style: GoogleFonts.poppins(fontSize: 12),
                     decoration: InputDecoration(
-                      hintText: 'Enter clarification instructions...',
+                      hintText: 'Select a template above or type clarification instructions...',
                       hintStyle: GoogleFonts.poppins(fontSize: 12, color: Colors.grey),
                       filled: true,
                       fillColor: const Color(0xFFF8FAFC),
@@ -843,6 +889,45 @@ class _DocumentReviewDetailPageState extends State<DocumentReviewDetailPage> {
           },
         );
       },
+    );
+  }
+
+  Widget _buildQuickTemplateChip(
+    String label,
+    String fullText,
+    TextEditingController controller,
+    StateSetter setModalState,
+  ) {
+    return InkWell(
+      onTap: () {
+        setModalState(() {
+          controller.text = fullText;
+        });
+      },
+      borderRadius: BorderRadius.circular(8),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
+        decoration: BoxDecoration(
+          color: const Color(0xFFEFF6FF),
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: const Color(0xFFBFDBFE)),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.add_circle_outline_rounded, size: 12, color: Color(0xFF2563EB)),
+            const SizedBox(width: 4),
+            Text(
+              label,
+              style: GoogleFonts.poppins(
+                fontSize: 10.5,
+                fontWeight: FontWeight.w600,
+                color: const Color(0xFF1E40AF),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -1191,8 +1276,9 @@ class _DocumentReviewDetailPageState extends State<DocumentReviewDetailPage> {
             const AppTopHeader(),
             Container(
               color: Colors.white,
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   IconButton(
                     icon: const Icon(Icons.arrow_back_ios_new, size: 18, color: Colors.black87),
@@ -1200,36 +1286,38 @@ class _DocumentReviewDetailPageState extends State<DocumentReviewDetailPage> {
                     padding: EdgeInsets.zero,
                     constraints: const BoxConstraints(),
                   ),
-                  const SizedBox(width: 12),
+                  const SizedBox(width: 14),
                   Expanded(
-                    child: FittedBox(
-                      fit: BoxFit.scaleDown,
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        'Document Review',
-                        style: GoogleFonts.poppins(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                          decoration: BoxDecoration(
+                            color: statusBg,
+                            borderRadius: BorderRadius.circular(6),
+                            border: Border.all(color: statusColor.withValues(alpha: 0.3)),
+                          ),
+                          child: Text(
+                            _doc.status.label,
+                            style: GoogleFonts.poppins(
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                              color: statusColor,
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: statusBg,
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: statusColor.withValues(alpha: 0.3)),
-                    ),
-                    child: Text(
-                      _doc.status.label,
-                      style: GoogleFonts.poppins(
-                        fontSize: 11,
-                        fontWeight: FontWeight.bold,
-                        color: statusColor,
-                      ),
+                        const SizedBox(height: 3),
+                        Text(
+                          'Document Review',
+                          style: GoogleFonts.poppins(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
@@ -1327,7 +1415,7 @@ class _DocumentReviewDetailPageState extends State<DocumentReviewDetailPage> {
                   _buildMetaRow('Company Registration', _doc.companySsmNo),
                   _buildMetaRow('Uploaded By', '${_doc.uploadedBy} (${_doc.uploadedByRole})'),
                   _buildMetaRow('Upload Timestamp', _doc.uploadedAt),
-                  _buildMetaRow('Encrypted Storage', _doc.storageLocation),
+                  _buildMetaRow('Encrypted Storage', _cleanStorageLocation(_doc.storageLocation)),
                   _buildMetaRow('SHA-256 Digest', '${_doc.sha256Hash.substring(0, 16)}...'),
                   if (_doc.linkedFilingRef.isNotEmpty)
                     _buildMetaRow('Linked SSM Filing Ref', _doc.linkedFilingRef),
@@ -1358,29 +1446,6 @@ class _DocumentReviewDetailPageState extends State<DocumentReviewDetailPage> {
                           onPressed: () => _openFullDocumentViewer(context),
                         ),
                       ),
-                      if (!_doc.isSigned && _doc.status != DocumentReviewStatus.rejected) ...[
-                        const SizedBox(width: 8),
-                        ElevatedButton.icon(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF059669),
-                            foregroundColor: Colors.white,
-                            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            elevation: 0,
-                          ),
-                          icon: const Icon(Icons.draw_rounded, size: 18),
-                          label: Text(
-                            'Sign',
-                            style: GoogleFonts.poppins(
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          onPressed: _showApproveBottomSheet,
-                        ),
-                      ],
                     ],
                   ),
                 ],
@@ -1698,14 +1763,21 @@ class _DocumentReviewDetailPageState extends State<DocumentReviewDetailPage> {
 
 
 
+  String _cleanStorageLocation(String loc) {
+    if (loc.contains('TM One Cloud Alpha') || loc.contains('Cyberjaya') || loc.contains('DC1')) {
+      return 'TM Cloud';
+    }
+    return loc;
+  }
+
   Widget _buildMetaRow(String label, String value) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 6),
+      padding: const EdgeInsets.only(bottom: 7),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
-            width: 130,
+            width: 145,
             child: Text(
               label,
               style: GoogleFonts.poppins(
@@ -1714,6 +1786,7 @@ class _DocumentReviewDetailPageState extends State<DocumentReviewDetailPage> {
               ),
             ),
           ),
+          const SizedBox(width: 12),
           Expanded(
             child: Text(
               value,

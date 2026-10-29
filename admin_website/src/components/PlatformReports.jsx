@@ -5,6 +5,28 @@ import {
 } from 'lucide-react';
 
 const PlatformReports = ({ firms = [], companies = [] }) => {
+  const handleExportReportCSV = () => {
+    const headers = ['Metric Section', 'Metric Name', 'Metric Value', 'Status / Notes'];
+    const rows = [
+      ['Network Scale', 'Total Active Managed Companies', firms.reduce((acc, f) => acc + (f.companiesCount || 0), 0) + companies.length, 'Verified Sdn Bhd Portfolios'],
+      ['Network Scale', 'Active Licensed Secretary Firms', firms.filter(f => f.status === 'Active').length, 'MIA & MAICSA Validated'],
+      ['AI Intake', 'Automated Intake Accuracy', '88.4%', 'Resolved before secretary handoff'],
+      ['SLA Compliance', 'SLA Response Adherence', '99.1%', 'Average response under 1.8 hrs'],
+      ['Cloud Storage', 'TM Cloud Storage Provider', 'TM Cloud (Malaysia)', 'SSM Section 47 7-Year Retention Compliant'],
+      ['Revenue', 'Platform ARR', 'MYR 2,420,000', 'Active Subscription Run-rate']
+    ];
+    const csvContent = [headers.join(','), ...rows.map(r => r.map(c => `"${String(c).replace(/"/g, '""')}"`).join(','))].join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `mysect_statutory_platform_report_${new Date().toISOString().split('T')[0]}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <div className="flex-1 overflow-y-auto bg-[#F8F9FA] p-8">
       {/* Header */}
@@ -20,9 +42,12 @@ const PlatformReports = ({ firms = [], companies = [] }) => {
           </p>
         </div>
 
-        <button className="px-4 py-2 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 rounded-lg text-sm font-semibold transition-colors shadow-xs flex items-center gap-2">
+        <button 
+          onClick={handleExportReportCSV}
+          className="px-4 py-2 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 rounded-lg text-sm font-semibold transition-colors shadow-xs flex items-center gap-2"
+        >
           <Download className="w-4 h-4" />
-          Export Audit PDF Report
+          Export Statutory Report (CSV)
         </button>
       </div>
 
@@ -97,7 +122,7 @@ const PlatformReports = ({ firms = [], companies = [] }) => {
           <div className="mt-4 pt-4 border-t border-gray-100 space-y-2 text-xs">
             <div className="flex justify-between text-gray-600">
               <span>Data Centre:</span>
-              <strong className="text-gray-900">TM One Cloud Alpha (MY)</strong>
+              <strong className="text-gray-900">TM Cloud (MY)</strong>
             </div>
             <div className="flex justify-between text-gray-600">
               <span>Statutory 7-Year Retention:</span>

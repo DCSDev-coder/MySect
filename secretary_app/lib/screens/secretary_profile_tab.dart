@@ -32,18 +32,22 @@ class SecretaryProfileTab extends StatelessWidget {
                   ),
                 ),
               ),
-                // Secretary Credential Card (Solid Color Redesign)
+                // Secretary Credential Card (Modern Blue Executive Design)
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.all(18),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF062AAE),
+                    gradient: const LinearGradient(
+                      colors: [Color(0xFF0827B0), Color(0xFF031666)],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
                     borderRadius: BorderRadius.circular(18),
                     boxShadow: [
                       BoxShadow(
-                        color: const Color(0xFF062AAE).withValues(alpha: 0.22),
-                        blurRadius: 12,
-                        offset: const Offset(0, 4),
+                        color: const Color(0xFF062AAE).withValues(alpha: 0.28),
+                        blurRadius: 14,
+                        offset: const Offset(0, 5),
                       ),
                     ],
                   ),
@@ -61,9 +65,9 @@ class SecretaryProfileTab extends StatelessWidget {
                               borderRadius: BorderRadius.circular(14),
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.black.withValues(alpha: 0.08),
-                                  blurRadius: 6,
-                                  offset: const Offset(0, 2),
+                                  color: Colors.black.withValues(alpha: 0.12),
+                                  blurRadius: 8,
+                                  offset: const Offset(0, 3),
                                 ),
                               ],
                             ),
@@ -127,14 +131,14 @@ class SecretaryProfileTab extends StatelessWidget {
                                   style: GoogleFonts.poppins(
                                     fontSize: 11,
                                     fontWeight: FontWeight.w500,
-                                    color: const Color(0xFFBFDBFE),
+                                    color: const Color(0xFF93C5FD),
                                   ),
                                 ),
                                 Text(
                                   profile.firmName,
                                   style: GoogleFonts.poppins(
                                     fontSize: 11,
-                                    color: Colors.white.withValues(alpha: 0.8),
+                                    color: Colors.white.withValues(alpha: 0.85),
                                   ),
                                   overflow: TextOverflow.ellipsis,
                                 ),
@@ -147,8 +151,9 @@ class SecretaryProfileTab extends StatelessWidget {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                         decoration: BoxDecoration(
-                          color: const Color(0xFF041E7A),
+                          color: Colors.white.withValues(alpha: 0.12),
                           borderRadius: BorderRadius.circular(8),
+                          border: Border.all(color: Colors.white.withValues(alpha: 0.18)),
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
@@ -173,15 +178,16 @@ class SecretaryProfileTab extends StatelessWidget {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                         decoration: BoxDecoration(
-                          color: const Color(0xFF041E7A),
+                          color: Colors.white.withValues(alpha: 0.10),
                           borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: Colors.white.withValues(alpha: 0.16)),
                         ),
                         child: Row(
                           children: [
                             _buildStatColumn('Client Portfolios', '${service.managedCompaniesCount}'),
-                            Container(width: 1, height: 28, color: Colors.white.withValues(alpha: 0.15)),
+                            Container(width: 1, height: 28, color: Colors.white.withValues(alpha: 0.20)),
                             _buildStatColumn('Pending Reviews', '${service.pendingCount}'),
-                            Container(width: 1, height: 28, color: Colors.white.withValues(alpha: 0.15)),
+                            Container(width: 1, height: 28, color: Colors.white.withValues(alpha: 0.20)),
                             _buildStatColumn('Approved Filings', '${service.approvedCount}'),
                           ],
                         ),
@@ -507,7 +513,7 @@ class SecretaryProfileTab extends StatelessWidget {
             style: GoogleFonts.poppins(
               fontSize: 10,
               fontWeight: FontWeight.w500,
-              color: Colors.white.withValues(alpha: 0.75),
+              color: Colors.white.withValues(alpha: 0.82),
             ),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,

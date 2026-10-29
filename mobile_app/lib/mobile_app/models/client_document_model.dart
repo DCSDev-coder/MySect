@@ -278,7 +278,13 @@ class ClientDocument {
       uploadedBy: json['uploadedBy'] ?? 'Client',
       uploadedByRole: json['uploadedByRole'] ?? 'Managing Director (Client)',
       uploadedAt: json['uploadedAt'] ?? '',
-      storageLocation: json['storageLocation'] ?? 'TM One Cloud Alpha (DC1-Cyberjaya)',
+      storageLocation: () {
+        final loc = json['storageLocation']?.toString() ?? 'TM Cloud';
+        if (loc.contains('TM One Cloud Alpha') || loc.contains('Cyberjaya') || loc.contains('DC1')) {
+          return 'TM Cloud';
+        }
+        return loc;
+      }(),
       storageUrl: json['storageUrl'] ?? '',
       sha256Hash: json['sha256Hash'] ?? '',
       status: DocumentReviewStatusExtension.fromString(json['status']),

@@ -119,7 +119,7 @@ class SecretaryDocumentService extends ChangeNotifier {
         uploadedBy: 'Adam Bin Hamzah',
         uploadedByRole: 'Managing Director (Client)',
         uploadedAt: '2026-10-20 14:30',
-        storageLocation: 'TM One Cloud Alpha (DC1-Cyberjaya)',
+        storageLocation: 'TM Cloud',
         storageUrl: 'tmcloud://alpha-dc1/vault/comp-01/DCS_Management_Accounts_FY2026.pdf',
         sha256Hash:
             'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
@@ -152,7 +152,7 @@ class SecretaryDocumentService extends ChangeNotifier {
         uploadedBy: 'Adam Bin Hamzah',
         uploadedByRole: 'Managing Director (Client)',
         uploadedAt: '2026-10-18 10:00',
-        storageLocation: 'TM One Cloud Alpha (DC1-Cyberjaya)',
+        storageLocation: 'TM Cloud',
         storageUrl:
             'tmcloud://alpha-dc1/vault/comp-01/Dato_Adam_Profile_Resume.pdf',
         sha256Hash:
@@ -200,7 +200,7 @@ class SecretaryDocumentService extends ChangeNotifier {
         uploadedBy: 'Adam Bin Hamzah',
         uploadedByRole: 'Director (Client)',
         uploadedAt: '2026-10-12 16:45',
-        storageLocation: 'TM One Cloud Alpha (DC1-Cyberjaya)',
+        storageLocation: 'TM Cloud',
         storageUrl:
             'tmcloud://alpha-dc1/vault/comp-02/Signed_Board_Resolution_S46.pdf',
         sha256Hash:
@@ -245,7 +245,7 @@ class SecretaryDocumentService extends ChangeNotifier {
         uploadedBy: 'Eidza Binti Jumanis',
         uploadedByRole: 'Managing Director (Client)',
         uploadedAt: '2026-09-20 11:00',
-        storageLocation: 'TM One Cloud Alpha (DC1-Cyberjaya)',
+        storageLocation: 'TM Cloud',
         storageUrl: 'tmcloud://alpha-dc1/vault/comp-03/Form_Section_78_Return_of_Allotment.pdf',
         sha256Hash:
             '1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b',
@@ -293,7 +293,7 @@ class SecretaryDocumentService extends ChangeNotifier {
         uploadedBy: 'Eidza Binti Jumanis',
         uploadedByRole: 'Managing Director (Client)',
         uploadedAt: '2026-10-15 09:30',
-        storageLocation: 'TM One Cloud Alpha (DC1-Cyberjaya)',
+        storageLocation: 'TM Cloud',
         storageUrl:
             'tmcloud://alpha-dc1/vault/comp-03/New_Investor_Passport_Scan.pdf',
         sha256Hash:
@@ -340,7 +340,7 @@ class SecretaryDocumentService extends ChangeNotifier {
         uploadedBy: 'Adam Bin Hamzah',
         uploadedByRole: 'Managing Director (Client)',
         uploadedAt: '2026-10-22 15:40',
-        storageLocation: 'TM One Cloud Alpha (DC1-Cyberjaya)',
+        storageLocation: 'TM Cloud',
         storageUrl: 'tmcloud://alpha-dc1/vault/comp-01/Statutory_Declaration_Section_201.pdf',
         sha256Hash:
             '3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d',
@@ -372,7 +372,7 @@ class SecretaryDocumentService extends ChangeNotifier {
         uploadedBy: 'MySect Security System',
         uploadedByRole: 'Platform Administrator',
         uploadedAt: '2026-10-24 09:00',
-        storageLocation: 'TM One Cloud Alpha (DC1-Cyberjaya)',
+        storageLocation: 'TM Cloud',
         storageUrl: 'tmcloud://alpha-dc1/vault/comp-locked/Notice_of_Access_Restriction.pdf',
         sha256Hash: '7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c',
         status: DocumentReviewStatus.rejected,
@@ -600,7 +600,7 @@ class SecretaryDocumentService extends ChangeNotifier {
       uploadedBy: uploadedBy,
       uploadedByRole: uploadedByRole,
       uploadedAt: nowStr,
-      storageLocation: 'TM One Cloud Alpha (DC1-Cyberjaya)',
+      storageLocation: 'TM Cloud',
       storageUrl: 'tmcloud://alpha-dc1/vault/$companyId/$title',
       sha256Hash:
           '${DateTime.now().millisecondsSinceEpoch.toRadixString(16)}abcdef1234567890',

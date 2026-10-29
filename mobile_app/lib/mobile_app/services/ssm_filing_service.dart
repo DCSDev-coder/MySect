@@ -389,6 +389,31 @@ class SsmFilingService extends ChangeNotifier {
     notifyListeners();
   }
 
+  // Director digitally approves and signs the statutory filing draft
+  void approveAndSignOffAsDirector(String filingId, {String? signatureNote}) {
+    final filing = _filings.firstWhere((f) => f.id == filingId);
+    filing.status = SsmFilingStatus.lodgedToSsm;
+    filing.messages.add(
+      SsmMessage(
+        id: 'sign-${DateTime.now().millisecondsSinceEpoch}',
+        senderName: 'Client Director',
+        senderRole: 'Managing Director (Authorised Signatory)',
+        text: signatureNote ?? 'Director digitally reviewed, signed, and approved statutory filing draft. Authorized secretary to lodge with SSM.',
+        time: 'Just now',
+        isFromSecretary: false,
+      ),
+    );
+    filing.timeline.add(
+      SsmTimelineStep(
+        title: 'Director Digitally Endorsed & Approved',
+        description: 'Statutory approval granted by Director. Queued for SSM lodgement.',
+        timestamp: 'Just now',
+        isCompleted: true,
+      ),
+    );
+    notifyListeners();
+  }
+
   // SIMULATION METHODS (for interactive demo testing!)
   void simulateSecretaryClarification(String filingId, [String? customMessage]) {
     final filing = _filings.firstWhere((f) => f.id == filingId);

@@ -437,7 +437,7 @@ const SecretaryWorkspace = ({
                           <span>•</span>
                           <span className="text-[#062AAE] font-medium flex items-center gap-1">
                             <ShieldCheck className="w-3 h-3" />
-                            TM Cloud Alpha Verified
+                            TM Cloud Verified
                           </span>
                         </div>
 
@@ -601,7 +601,7 @@ const SecretaryWorkspace = ({
                   <div className="mt-3 flex items-center justify-between text-xs text-gray-500 px-1">
                     <span className="flex items-center gap-1.5">
                       <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-                      Stored in TM One Cloud Alpha (Cyberjaya DC1)
+                      Stored in TM Cloud
                     </span>
                     <a
                       href="#"
