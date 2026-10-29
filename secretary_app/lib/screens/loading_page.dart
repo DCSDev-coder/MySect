@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
+
 import 'secretary_login_page.dart';
 
-/// Initial app open splash / loading page for MySect Secretary App.
-///
-/// Features the choreographed 3-image brand assembly animation:
 /// 1. [assets/y.png] pops in first with its own scale and fade animation.
 /// 2. [assets/sect.png] slides in next from the right with its own slide animation.
 /// 3. [assets/your_secretary_company.png] slides in next underneath with its own animation.
@@ -40,16 +38,11 @@ class _LoadingPageState extends State<LoadingPage>
   late Animation<Offset> _taglineSlide;
   late Animation<double> _taglineOpacity;
 
-
-
   @override
   void initState() {
     super.initState();
 
-    _controller = AnimationController(
-      vsync: this,
-      duration: widget.duration,
-    );
+    _controller = AnimationController(vsync: this, duration: widget.duration);
 
     // 1. y.png: Scale & fade in (0% -> 32%)
     _yScale = Tween<double>(begin: 0.5, end: 1.0).animate(
@@ -66,15 +59,13 @@ class _LoadingPageState extends State<LoadingPage>
     );
 
     // 2. sect.png: Slides in from the right (32% -> 60%)
-    _sectSlide = Tween<Offset>(
-      begin: const Offset(0.45, 0.0),
-      end: Offset.zero,
-    ).animate(
-      CurvedAnimation(
-        parent: _controller,
-        curve: const Interval(0.32, 0.60, curve: Curves.easeOutCubic),
-      ),
-    );
+    _sectSlide = Tween<Offset>(begin: const Offset(0.45, 0.0), end: Offset.zero)
+        .animate(
+          CurvedAnimation(
+            parent: _controller,
+            curve: const Interval(0.32, 0.60, curve: Curves.easeOutCubic),
+          ),
+        );
     _sectOpacity = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
         parent: _controller,
@@ -83,23 +74,19 @@ class _LoadingPageState extends State<LoadingPage>
     );
 
     // 3. your_secretary_company.png: Slides up from underneath (58% -> 84%)
-    _taglineSlide = Tween<Offset>(
-      begin: const Offset(0.0, 0.4),
-      end: Offset.zero,
-    ).animate(
-      CurvedAnimation(
-        parent: _controller,
-        curve: const Interval(0.58, 0.84, curve: Curves.easeOutCubic),
-      ),
-    );
+    _taglineSlide =
+        Tween<Offset>(begin: const Offset(0.0, 0.4), end: Offset.zero).animate(
+          CurvedAnimation(
+            parent: _controller,
+            curve: const Interval(0.58, 0.84, curve: Curves.easeOutCubic),
+          ),
+        );
     _taglineOpacity = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
         parent: _controller,
         curve: const Interval(0.58, 0.78, curve: Curves.easeIn),
       ),
     );
-
-
 
     _controller.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
@@ -111,9 +98,10 @@ class _LoadingPageState extends State<LoadingPage>
               pageBuilder: (context, animation, secondaryAnimation) =>
                   widget.nextPage ?? const SecretaryLoginPage(),
               transitionDuration: const Duration(milliseconds: 350),
-              transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                return FadeTransition(opacity: animation, child: child);
-              },
+              transitionsBuilder:
+                  (context, animation, secondaryAnimation, child) {
+                    return FadeTransition(opacity: animation, child: child);
+                  },
             ),
           );
         }
@@ -134,7 +122,10 @@ class _LoadingPageState extends State<LoadingPage>
     super.didChangeDependencies();
     precacheImage(const AssetImage('assets/y.png'), context);
     precacheImage(const AssetImage('assets/sect.png'), context);
-    precacheImage(const AssetImage('assets/your_secretary_company.png'), context);
+    precacheImage(
+      const AssetImage('assets/your_secretary_company.png'),
+      context,
+    );
     precacheImage(const AssetImage('assets/mysect_logo.png'), context);
     precacheImage(const AssetImage('assets/login.png'), context);
   }
