@@ -50,7 +50,7 @@ class _SsmFilingDetailPageState extends State<SsmFilingDetailPage> {
                         ),
                         const SizedBox(width: 12),
                         Text(
-                          'Filing Not Found',
+                          'Submission Not Found',
                           style: GoogleFonts.poppins(
                             fontSize: 18,
                             fontWeight: FontWeight.w700,
@@ -62,7 +62,7 @@ class _SsmFilingDetailPageState extends State<SsmFilingDetailPage> {
                   ),
                   const Expanded(
                     child: Center(
-                      child: Text('This filing could not be found.'),
+                      child: Text('This file submission could not be found.'),
                     ),
                   ),
                 ],
@@ -347,7 +347,7 @@ class _SsmFilingDetailPageState extends State<SsmFilingDetailPage> {
                 Text(
                   filing.status == SsmFilingStatus.secretaryReplied
                       ? 'Action needed from you to proceed'
-                      : 'Reviewing statutory compliance & schedule',
+                      : 'Reviewing your submitted files',
                   style: GoogleFonts.poppins(
                     fontSize: 11,
                     fontWeight: FontWeight.w500,
@@ -358,7 +358,7 @@ class _SsmFilingDetailPageState extends State<SsmFilingDetailPage> {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  'To discuss this filing with your secretary, please open the Chats tab.',
+                  'To discuss these files with your secretary, please open Chat.',
                   style: GoogleFonts.poppins(
                     fontSize: 10,
                     color: Colors.grey.shade500,
@@ -387,7 +387,7 @@ class _SsmFilingDetailPageState extends State<SsmFilingDetailPage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'STATUTORY FILING PROGRESS',
+                'SUBMISSION PROGRESS',
                 style: GoogleFonts.poppins(
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
@@ -450,29 +450,15 @@ class _SsmFilingDetailPageState extends State<SsmFilingDetailPage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Flexible(
-                                child: Text(
-                                  step.title,
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 13,
-                                    fontWeight: step.isCurrent ? FontWeight.bold : FontWeight.w600,
-                                    color: step.isCurrent ? const Color(0xFF062AAE) : Colors.black87,
-                                  ),
-                                ),
-                              ),
-                              Text(
-                                step.timestamp,
-                                style: GoogleFonts.poppins(
-                                  fontSize: 10,
-                                  color: Colors.grey.shade500,
-                                ),
-                              ),
-                            ],
+                          Text(
+                            step.title,
+                            style: GoogleFonts.poppins(
+                              fontSize: 13,
+                              fontWeight: step.isCurrent ? FontWeight.bold : FontWeight.w600,
+                              color: step.isCurrent ? const Color(0xFF062AAE) : Colors.black87,
+                            ),
                           ),
-                          const SizedBox(height: 2),
+                          const SizedBox(height: 3),
                           Text(
                             step.description,
                             style: GoogleFonts.poppins(
@@ -480,6 +466,40 @@ class _SsmFilingDetailPageState extends State<SsmFilingDetailPage> {
                               color: Colors.grey.shade600,
                             ),
                           ),
+                          if (step.timestamp.isNotEmpty) ...[
+                            const SizedBox(height: 4),
+                            Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  step.isCompleted
+                                      ? Icons.check_circle_outline_rounded
+                                      : (step.isCurrent
+                                          ? Icons.access_time_rounded
+                                          : Icons.schedule_rounded),
+                                  size: 11,
+                                  color: step.isCompleted
+                                      ? const Color(0xFF059669)
+                                      : (step.isCurrent
+                                          ? const Color(0xFFD97706)
+                                          : Colors.grey.shade500),
+                                ),
+                                const SizedBox(width: 4),
+                                Text(
+                                  step.timestamp,
+                                  style: GoogleFonts.poppins(
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w500,
+                                    color: step.isCompleted
+                                        ? const Color(0xFF059669)
+                                        : (step.isCurrent
+                                            ? const Color(0xFFD97706)
+                                            : Colors.grey.shade500),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
                         ],
                       ),
                     ),

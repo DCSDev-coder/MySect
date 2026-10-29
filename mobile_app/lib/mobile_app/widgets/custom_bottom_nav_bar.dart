@@ -95,7 +95,8 @@ class CustomBottomNavBar extends StatelessWidget {
     return AnimatedBuilder(
       animation: SsmFilingService.instance,
       builder: (context, _) {
-        final repliesNeeded = SsmFilingService.instance.secretaryRepliesNeededCount;
+        final repliesNeeded =
+            SsmFilingService.instance.secretaryRepliesNeededCount;
 
         return Container(
           decoration: BoxDecoration(
@@ -120,11 +121,21 @@ class CustomBottomNavBar extends StatelessWidget {
                     1,
                     Icons.assignment_outlined,
                     Icons.assignment,
-                    'SSM Filings',
+                    'Submissions',
                     badgeCount: repliesNeeded,
                   ),
-                  _buildNavItem(2, Icons.folder_outlined, Icons.folder, 'Files'),
-                  _buildNavItem(3, Icons.chat_bubble_outline, Icons.chat_bubble, 'Chat'),
+                  _buildNavItem(
+                    2,
+                    Icons.folder_outlined,
+                    Icons.folder,
+                    'Files',
+                  ),
+                  _buildNavItem(
+                    3,
+                    Icons.chat_bubble_outline,
+                    Icons.chat_bubble,
+                    'Chat',
+                  ),
                   _buildNavItem(4, Icons.more_horiz, Icons.more_horiz, 'More'),
                 ],
               ),

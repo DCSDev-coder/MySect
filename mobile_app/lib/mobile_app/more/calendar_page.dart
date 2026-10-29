@@ -265,10 +265,9 @@ class _CalendarPageState extends State<CalendarPage> {
   }
 
   Widget _buildCurrentTab(List<SsmFiling> filings, Company? company) {
-    final activeFilings =
-        filings
-            .where((f) => f.status != SsmFilingStatus.completed)
-            .toList();
+    final activeFilings = filings
+        .where((f) => f.status != SsmFilingStatus.completed)
+        .toList();
 
     return Column(
       children: [
@@ -307,7 +306,7 @@ class _CalendarPageState extends State<CalendarPage> {
               actionColor = const Color(0xFF2563EB);
               break;
             case SsmFilingStatus.lodgedToSsm:
-              timeRemaining = 'Lodged to SSM';
+              timeRemaining = 'Submitted to SSM';
               pillBgColor = const Color(0xFFF5F3FF);
               pillTextColor = const Color(0xFF7C3AED);
               actionText = 'Track SSM';
@@ -338,10 +337,9 @@ class _CalendarPageState extends State<CalendarPage> {
               month: month,
               day: day,
               title: filing.title,
-              subtitle:
-                  clarificationSnippet != null
-                      ? 'Secretary Query: $clarificationSnippet'
-                      : 'Statutory filing for ${filing.companyName} (${filing.referenceNo})',
+              subtitle: clarificationSnippet != null
+                  ? 'Secretary Query: $clarificationSnippet'
+                  : 'Statutory filing for ${filing.companyName} (${filing.referenceNo})',
               timeRemaining: timeRemaining,
               pillBgColor: pillBgColor,
               pillTextColor: pillTextColor,
@@ -351,7 +349,8 @@ class _CalendarPageState extends State<CalendarPage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => SsmFilingDetailPage(filingId: filing.id),
+                    builder: (context) =>
+                        SsmFilingDetailPage(filingId: filing.id),
                   ),
                 );
               },
@@ -371,19 +370,18 @@ class _CalendarPageState extends State<CalendarPage> {
             timeRemaining: 'In 34 days',
             pillBgColor: const Color(0xFFFFF7A3),
             pillTextColor: const Color(0xFFFF8A00),
-            actionText: 'File Now',
+            actionText: 'Submit Now',
             actionColor: const Color(0xFF062AAE),
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder:
-                      (context) => const SubmitSsmFilingPage(
-                        initialFilingType: 'Section 68 Annual Return',
-                        initialTitle: 'Annual Corporate Tax Return (Form C)',
-                        initialDescription:
-                            'Submission of Form C tax computation and audited accounts to LHDN Malaysia.',
-                      ),
+                  builder: (context) => const SubmitSsmFilingPage(
+                    initialFilingType: 'Section 68 Annual Return',
+                    initialTitle: 'Annual Corporate Tax Return (Form C)',
+                    initialDescription:
+                        'Submission of Form C tax computation and audited accounts to LHDN Malaysia.',
+                  ),
                 ),
               );
             },
@@ -396,25 +394,24 @@ class _CalendarPageState extends State<CalendarPage> {
           child: _buildDeadlineCard(
             month: 'DEC',
             day: '31',
-            title: 'Financial Statements & Reports Lodgement',
+            title: 'Financial Statements & Reports Submission',
             subtitle:
                 'Annual submission of audited accounts to SSM under Section 259',
             timeRemaining: 'In 65 days',
             pillBgColor: const Color(0xFFE8F5E9),
             pillTextColor: const Color(0xFF2E7D32),
-            actionText: 'File Now',
+            actionText: 'Submit Now',
             actionColor: const Color(0xFF062AAE),
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder:
-                      (context) => const SubmitSsmFilingPage(
-                        initialFilingType: 'Section 68 Annual Return',
-                        initialTitle: 'Audited Financial Statements Lodgement',
-                        initialDescription:
-                            'Audited financial statements and directors statutory report for SSM lodgement.',
-                      ),
+                  builder: (context) => const SubmitSsmFilingPage(
+                    initialFilingType: 'Section 68 Annual Return',
+                    initialTitle: 'Audited Financial Statements Submission',
+                    initialDescription:
+                        'Audited financial statements and directors report for SSM submission.',
+                  ),
                 ),
               );
             },
@@ -425,10 +422,9 @@ class _CalendarPageState extends State<CalendarPage> {
   }
 
   Widget _buildPastTab(List<SsmFiling> filings, Company? company) {
-    final completedFilings =
-        filings
-            .where((f) => f.status == SsmFilingStatus.completed)
-            .toList();
+    final completedFilings = filings
+        .where((f) => f.status == SsmFilingStatus.completed)
+        .toList();
 
     return Column(
       children: [
@@ -446,7 +442,7 @@ class _CalendarPageState extends State<CalendarPage> {
               title: filing.title,
               subtitle:
                   'Official SSM Receipt generated (${filing.referenceNo})',
-              timeRemaining: 'Completed & Lodged',
+              timeRemaining: 'Completed & Submitted',
               pillBgColor: const Color(0xFFECFDF5),
               pillTextColor: const Color(0xFF059669),
               actionText: 'View Receipt',
@@ -455,7 +451,8 @@ class _CalendarPageState extends State<CalendarPage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => SsmFilingDetailPage(filingId: filing.id),
+                    builder: (context) =>
+                        SsmFilingDetailPage(filingId: filing.id),
                   ),
                 );
               },
@@ -470,12 +467,11 @@ class _CalendarPageState extends State<CalendarPage> {
             month: 'AUG',
             day: '31',
             title: 'Q2 SST-02 Service Tax Return',
-            subtitle:
-                'Lodged to Royal Malaysian Customs Department & SSM registers',
+            subtitle: 'Submitted to Customs Department & SSM',
             timeRemaining: 'Completed',
             pillBgColor: Colors.grey.shade200,
             pillTextColor: Colors.grey.shade700,
-            actionText: 'View Filing',
+            actionText: 'View Submission',
             actionColor: Colors.grey.shade700,
             onTap: () {
               ScaffoldMessenger.of(context).showSnackBar(
@@ -530,25 +526,23 @@ class _CalendarPageState extends State<CalendarPage> {
           child: _buildDeadlineCard(
             month: 'JUN',
             day: '14',
-            title: 'Section 68 Annual Return Lodgement 2027',
-            subtitle:
-                'Statutory annual return filing under Companies Act 2016',
+            title: 'Section 68 Annual Return 2027',
+            subtitle: 'Annual return submission for company records',
             timeRemaining: 'In 230 days',
             pillBgColor: const Color(0xFFE3F2FD),
             pillTextColor: const Color(0xFF1565C0),
-            actionText: 'File Now',
+            actionText: 'Submit Now',
             actionColor: const Color(0xFF062AAE),
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder:
-                      (context) => const SubmitSsmFilingPage(
-                        initialFilingType: 'Section 68 Annual Return',
-                        initialTitle: 'Section 68 Annual Return Lodgement 2027',
-                        initialDescription:
-                            'Early preparation of Annual Return 2027 and director declarations.',
-                      ),
+                  builder: (context) => const SubmitSsmFilingPage(
+                    initialFilingType: 'Section 68 Annual Return',
+                    initialTitle: 'Section 68 Annual Return 2027',
+                    initialDescription:
+                        'Early preparation of Annual Return 2027 and director declarations.',
+                  ),
                 ),
               );
             },
@@ -562,24 +556,22 @@ class _CalendarPageState extends State<CalendarPage> {
             month: 'MAR',
             day: '31',
             title: 'Form E Employer Remittance Return',
-            subtitle:
-                'Annual employer remuneration return to LHDN Malaysia',
+            subtitle: 'Annual employer remuneration return to LHDN Malaysia',
             timeRemaining: 'In 155 days',
             pillBgColor: const Color(0xFFFFF7A3),
             pillTextColor: const Color(0xFFFF8A00),
-            actionText: 'File Now',
+            actionText: 'Submit Now',
             actionColor: const Color(0xFF062AAE),
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder:
-                      (context) => const SubmitSsmFilingPage(
-                        initialFilingType: 'Section 68 Annual Return',
-                        initialTitle: 'Form E Employer Remittance Return',
-                        initialDescription:
-                            'Employer annual remuneration submission for Inland Revenue Board.',
-                      ),
+                  builder: (context) => const SubmitSsmFilingPage(
+                    initialFilingType: 'Section 68 Annual Return',
+                    initialTitle: 'Form E Employer Remittance Return',
+                    initialDescription:
+                        'Employer annual remuneration submission for Inland Revenue Board.',
+                  ),
                 ),
               );
             },
@@ -598,19 +590,18 @@ class _CalendarPageState extends State<CalendarPage> {
             timeRemaining: 'In 246 days',
             pillBgColor: const Color(0xFFE3F2FD),
             pillTextColor: const Color(0xFF1565C0),
-            actionText: 'File Now',
+            actionText: 'Submit Now',
             actionColor: const Color(0xFF062AAE),
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder:
-                      (context) => const SubmitSsmFilingPage(
-                        initialFilingType: 'Section 58 Notice of Director Change',
-                        initialTitle: 'Annual Director Written Resolution',
-                        initialDescription:
-                            'Circulation and execution of annual directors written resolution.',
-                      ),
+                  builder: (context) => const SubmitSsmFilingPage(
+                    initialFilingType: 'Section 58 Notice of Director Change',
+                    initialTitle: 'Annual Director Written Resolution',
+                    initialDescription:
+                        'Circulation and execution of annual directors written resolution.',
+                  ),
                 ),
               );
             },
@@ -629,19 +620,19 @@ class _CalendarPageState extends State<CalendarPage> {
             timeRemaining: 'In 200 days',
             pillBgColor: const Color(0xFFE8F5E9),
             pillTextColor: const Color(0xFF2E7D32),
-            actionText: 'File Now',
+            actionText: 'Submit Now',
             actionColor: const Color(0xFF062AAE),
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder:
-                      (context) => const SubmitSsmFilingPage(
-                        initialFilingType: 'Section 46 Change of Registered Address',
-                        initialTitle: 'Annual Licence & Permit Statutory Renewal',
-                        initialDescription:
-                            'Premises operating licence renewal and local council filing.',
-                      ),
+                  builder: (context) => const SubmitSsmFilingPage(
+                    initialFilingType:
+                        'Section 46 Change of Registered Address',
+                    initialTitle: 'Annual Licence & Permit Statutory Renewal',
+                    initialDescription:
+                        'Premises operating licence renewal and local council filing.',
+                  ),
                 ),
               );
             },
@@ -824,11 +815,7 @@ class _CalendarPageState extends State<CalendarPage> {
                       ),
                     ),
                     const SizedBox(width: 4),
-                    Icon(
-                      Icons.arrow_forward,
-                      color: actionColor,
-                      size: 18,
-                    ),
+                    Icon(Icons.arrow_forward, color: actionColor, size: 18),
                   ],
                 ),
               ],

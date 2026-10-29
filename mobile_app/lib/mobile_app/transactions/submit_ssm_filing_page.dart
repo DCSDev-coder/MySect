@@ -42,14 +42,14 @@ class _SubmitSsmFilingPageState extends State<SubmitSsmFilingPage> {
   final List<Map<String, dynamic>> _filingTypes = [
     {
       'type': 'Section 68 Annual Return',
-      'title': 'Section 68 Annual Return Lodgement 2026',
-      'desc': 'Annual return filing along with management accounts and statutory director statements.',
+      'title': 'Section 68 Annual Return 2026',
+      'desc': 'Annual return submission with management accounts and director statements.',
       'requiredDocs': ['Unaudited/Audited Accounts (PDF)', 'Director Declaration Statement'],
     },
     {
       'type': 'Section 58 Notice of Director Change',
       'title': 'Section 58 Notice of Appointment / Resignation of Director',
-      'desc': 'Statutory notice of change in directors, managers, or company secretaries under Companies Act 2016.',
+      'desc': 'Notice of change in directors, managers, or company secretaries.',
       'requiredDocs': ['Form 48A / Section 201 Consent to Act', 'Director NRIC front & back', 'Signed Board Resolution'],
     },
     {
@@ -61,20 +61,20 @@ class _SubmitSsmFilingPageState extends State<SubmitSsmFilingPage> {
     {
       'type': 'Section 78 Return of Allotment of Shares',
       'title': 'Section 78 Return of Share Allotment (Capital Increase)',
-      'desc': 'Lodgement for newly issued shares and paid-up capital alteration.',
+      'desc': 'Submission for newly issued shares and paid-up capital alteration.',
       'requiredDocs': ['Bank-in slip / capital receipt confirmation', 'Members Resolution (S78)'],
     },
     {
       'type': 'Section 32 Alteration of Constitution',
       'title': 'Section 32 Adoption or Alteration of Company Constitution',
-      'desc': 'Special resolution lodgement for amending company constitution.',
+      'desc': 'Special resolution for amending company constitution.',
       'requiredDocs': ['Special Resolution', 'Copy of Altered Constitution'],
     },
     {
-      'type': 'General Statutory Filing & Inquiry',
-      'title': 'Custom Statutory Filing / Secretary Query',
+      'type': 'General Submission & Inquiry',
+      'title': 'Custom Submission / Secretary Query',
       'desc': 'Submit custom documents for corporate secretary verification and SSM submission advice.',
-      'requiredDocs': ['Relevant Statutory Draft Documents', 'Supporting Correspondence'],
+      'requiredDocs': ['Relevant Draft Documents', 'Supporting Correspondence'],
     },
   ];
 
@@ -103,7 +103,7 @@ class _SubmitSsmFilingPageState extends State<SubmitSsmFilingPage> {
       text: widget.initialDescription ?? matched['desc'] as String,
     );
     _noteController = TextEditingController(
-      text: 'Dear Secretary, please review the attached statutory files and prepare the lodgement draft for SSM.',
+      text: 'Dear Secretary, please review the attached files and prepare the submission for SSM.',
     );
 
     // Add 1 default sample file based on filing type for immediate convenience
@@ -270,7 +270,7 @@ class _SubmitSsmFilingPageState extends State<SubmitSsmFilingPage> {
             const SizedBox(width: 12),
             Expanded(
               child: Text(
-                'Filing Submitted!',
+                'Files Submitted!',
                 style: GoogleFonts.poppins(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -285,7 +285,7 @@ class _SubmitSsmFilingPageState extends State<SubmitSsmFilingPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Your statutory filing has been sent to your licensed secretary for review.',
+              'Your files have been sent to your licensed secretary for review.',
               style: GoogleFonts.poppins(fontSize: 13, color: Colors.black87),
             ),
             const SizedBox(height: 12),
@@ -343,7 +343,7 @@ class _SubmitSsmFilingPageState extends State<SubmitSsmFilingPage> {
                 ),
               );
             },
-            child: Text('View Filing Status', style: GoogleFonts.poppins(fontWeight: FontWeight.w600)),
+            child: Text('View Submission Status', style: GoogleFonts.poppins(fontWeight: FontWeight.w600)),
           ),
         ],
       ),
@@ -382,7 +382,7 @@ class _SubmitSsmFilingPageState extends State<SubmitSsmFilingPage> {
                   ),
                   const SizedBox(width: 12),
                   Text(
-                    'Submit SSM Filing',
+                    'Submit Files to Secretary',
                     style: GoogleFonts.poppins(
                       fontSize: 18,
                       fontWeight: FontWeight.w700,
@@ -473,7 +473,7 @@ class _SubmitSsmFilingPageState extends State<SubmitSsmFilingPage> {
 
                 // Step 1: Select Filing Type
                 Text(
-                  '1. SELECT SSM STATUTORY FILING',
+                  '1. SELECT SUBMISSION TYPE',
                   style: GoogleFonts.poppins(
                     fontSize: 12,
                     fontWeight: FontWeight.bold,
@@ -529,7 +529,7 @@ class _SubmitSsmFilingPageState extends State<SubmitSsmFilingPage> {
                           const Icon(Icons.info_outline_rounded, size: 16, color: Color(0xFF16A34A)),
                           const SizedBox(width: 6),
                           Text(
-                            'Required Documents for this Filing:',
+                            'Required Documents:',
                             style: GoogleFonts.poppins(
                               fontSize: 12,
                               fontWeight: FontWeight.w600,
@@ -594,7 +594,7 @@ class _SubmitSsmFilingPageState extends State<SubmitSsmFilingPage> {
                         controller: _titleController,
                         style: GoogleFonts.poppins(fontSize: 13),
                         decoration: InputDecoration(
-                          hintText: 'Enter title for this SSM lodgement',
+                          hintText: 'Enter title for this submission',
                           filled: true,
                           fillColor: const Color(0xFFF8FAFC),
                           contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),

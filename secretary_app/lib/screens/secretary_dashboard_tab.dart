@@ -3,6 +3,8 @@ import 'package:google_fonts/google_fonts.dart';
 import '../models/client_document_model.dart';
 import '../services/secretary_document_service.dart';
 import 'document_review_detail_page.dart';
+import 'package:intl/intl.dart';
+import '../services/secretary_compliance_service.dart';
 
 class SecretaryDashboardTab extends StatelessWidget {
   final VoidCallback onNavigateToQueue;
@@ -14,7 +16,7 @@ class SecretaryDashboardTab extends StatelessWidget {
     final service = SecretaryDocumentService.instance;
 
     return AnimatedBuilder(
-      animation: service,
+      animation: Listenable.merge([service, SecretaryComplianceService.instance]),
       builder: (context, _) {
         final pendingDocs = service.documents
             .where((d) => d.status == DocumentReviewStatus.pendingReview)
@@ -60,15 +62,15 @@ class SecretaryDashboardTab extends StatelessWidget {
                 const SizedBox(height: 10),
                 Container(
                   width: double.infinity,
-                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 12),
+                  padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: Colors.grey.shade200),
+                    borderRadius: BorderRadius.circular(14),
+                    border: Border.all(color: const Color(0xFFE2E8F0)),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.03),
-                        blurRadius: 6,
+                        color: Colors.black.withValues(alpha: 0.02),
+                        blurRadius: 8,
                         offset: const Offset(0, 2),
                       ),
                     ],
@@ -79,6 +81,8 @@ class SecretaryDashboardTab extends StatelessWidget {
                         label: 'Pending',
                         count: service.pendingCount,
                         icon: Icons.hourglass_top_rounded,
+                        color: const Color(0xFFD97706),
+                        bgColor: const Color(0xFFFEF3C7),
                         onTap: onNavigateToQueue,
                       ),
                       _buildStatusDivider(),
@@ -86,20 +90,26 @@ class SecretaryDashboardTab extends StatelessWidget {
                         label: 'Queries',
                         count: service.moreDetailsCount,
                         icon: Icons.help_outline_rounded,
+                        color: const Color(0xFF2563EB),
+                        bgColor: const Color(0xFFEFF6FF),
                         onTap: onNavigateToQueue,
                       ),
                       _buildStatusDivider(),
                       _buildCompactStatus(
                         label: 'Approved',
                         count: service.approvedCount,
-                        icon: Icons.check_circle_rounded,
+                        icon: Icons.check_circle_outline_rounded,
+                        color: const Color(0xFF059669),
+                        bgColor: const Color(0xFFECFDF5),
                         onTap: onNavigateToQueue,
                       ),
                       _buildStatusDivider(),
                       _buildCompactStatus(
                         label: 'Rejected',
                         count: service.rejectedCount,
-                        icon: Icons.cancel_rounded,
+                        icon: Icons.cancel_outlined,
+                        color: const Color(0xFFDC2626),
+                        bgColor: const Color(0xFFFEE2E2),
                         onTap: onNavigateToQueue,
                       ),
                     ],
@@ -166,6 +176,67 @@ class SecretaryDashboardTab extends StatelessWidget {
                   const SizedBox(height: 8),
                   ...clarificationDocs.map((doc) => _buildClarificationItemCard(context, doc)),
                 ],
+
+                const SizedBox(height: 20),
+                Text(
+                  'Client Statutory Deadlines (${SecretaryComplianceService.instance.tasks.length})',
+                  style: GoogleFonts.poppins(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                ...SecretaryComplianceService.instance.tasks.take(3).map((task) {
+                  return Container(
+                    margin: const EdgeInsets.only(bottom: 8),
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: Colors.grey.shade200),
+                    ),
+                    child: Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: task.pillBgColor,
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: Text(
+                            DateFormat('dd MMM').format(task.dueDate),
+                            style: GoogleFonts.poppins(
+                              fontSize: 11,
+                              fontWeight: FontWeight.bold,
+                              color: task.pillTextColor,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                task.title,
+                                style: GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.black87),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              Text(
+                                '${task.companyName} • ${task.timeRemainingText}',
+                                style: GoogleFonts.poppins(fontSize: 10, color: Colors.grey.shade600),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                }),
                 ],
               ),
             ),
@@ -179,40 +250,48 @@ class SecretaryDashboardTab extends StatelessWidget {
     required String label,
     required int count,
     required IconData icon,
+    required Color color,
+    required Color bgColor,
     required VoidCallback onTap,
   }) {
     return Expanded(
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(10),
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 4),
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 2),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Container(
-                padding: const EdgeInsets.all(7),
+                width: 32,
+                height: 32,
                 decoration: BoxDecoration(
-                  color: const Color(0xFFF1F5F9),
-                  borderRadius: BorderRadius.circular(10),
+                  color: bgColor,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: color.withValues(alpha: 0.2)),
                 ),
-                child: Icon(icon, color: const Color(0xFF062AAE), size: 18),
+                child: Center(
+                  child: Icon(icon, color: color, size: 16),
+                ),
               ),
-              const SizedBox(height: 6),
+              const SizedBox(height: 8),
               Text(
                 count.toString(),
                 style: GoogleFonts.poppins(
-                  fontSize: 16,
+                  fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: const Color(0xFF0F172A),
+                  height: 1,
                 ),
               ),
+              const SizedBox(height: 4),
               Text(
                 label,
                 style: GoogleFonts.poppins(
-                  fontSize: 10.5,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.grey.shade600,
+                  fontSize: 11,
+                  fontWeight: FontWeight.w600,
+                  color: const Color(0xFF64748B),
                 ),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
@@ -227,8 +306,8 @@ class SecretaryDashboardTab extends StatelessWidget {
   Widget _buildStatusDivider() {
     return Container(
       width: 1,
-      height: 40,
-      color: Colors.grey.shade200,
+      height: 36,
+      color: const Color(0xFFE2E8F0),
     );
   }
 

@@ -13,6 +13,7 @@ import '../tasks/document_needed_page.dart';
 import '../tasks/replies_needed_page.dart';
 import '../services/company_service.dart';
 import '../services/ssm_filing_service.dart';
+import '../services/compliance_service.dart';
 import '../widgets/app_top_header.dart';
 import '../widgets/mysect_stroke_logo_loader.dart';
 
@@ -60,57 +61,27 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _handleRefresh() async {
     await _companyService.syncFromAdmin();
+    await ComplianceService.instance.syncFromBackend();
     if (mounted) {
       setState(() {});
     }
   }
 
   List<Map<String, dynamic>> _getEventsForDay(DateTime day) {
-    if (day.day == 3) {
-      return [
-        {
-          'month': DateFormat('MMM').format(day).toUpperCase(),
-          'day': day.day.toString(),
-          'title': 'Complete Tax Return (C/C-s)',
-          'subtitle': 'Filling to IRAS for the year\nending 2025',
-          'timeRemaining': 'In 18 days',
-          'pillBgColor': const Color(0xFFFFF7A3),
-          'pillTextColor': const Color(0xFFFF8A00),
-        },
-        {
-          'month': DateFormat('MMM').format(day).toUpperCase(),
-          'day': day.day.toString(),
-          'title': 'Annual Return Submission',
-          'subtitle': 'Filing to ACRA for the year\nending 2024',
-          'timeRemaining': 'In 33 days',
-          'pillBgColor': const Color(0xFFE8F5E9),
-          'pillTextColor': const Color(0xFF2E7D32),
-        },
-      ];
-    } else if (day.day == 15) {
-      return [
-        {
-          'month': DateFormat('MMM').format(day).toUpperCase(),
-          'day': day.day.toString(),
-          'title': 'Q3 GST Return',
-          'subtitle': 'Filing to IRAS for Q3 2024',
-          'timeRemaining': 'Completed',
-          'pillBgColor': Colors.grey.shade200,
-          'pillTextColor': Colors.grey.shade700,
-        },
-      ];
-    } else if (day.day == 31) {
-      return [
-        {
-          'month': DateFormat('MMM').format(day).toUpperCase(),
-          'day': day.day.toString(),
-          'title': 'Q4 GST Return',
-          'subtitle': 'Filing to IRAS for Q4 2024',
-          'timeRemaining': 'In 80 days',
-          'pillBgColor': const Color(0xFFE3F2FD),
-          'pillTextColor': const Color(0xFF1565C0),
-        },
-      ];
+    final tasks = ComplianceService.instance.getTasksForDay(day, _selectedCompany);
+    if (tasks.isNotEmpty) {
+      return tasks.map((t) {
+        return {
+          'month': DateFormat('MMM').format(t.dueDate).toUpperCase(),
+          'day': t.dueDate.day.toString(),
+          'title': t.title,
+          'subtitle': t.subtitle.isNotEmpty ? t.subtitle : (t.instructions ?? ''),
+          'timeRemaining': t.timeRemainingText,
+          'pillBgColor': t.pillBgColor,
+          'pillTextColor': t.pillTextColor,
+          'category': t.category,
+        };
+      }).toList();
     }
     return [];
   }
@@ -125,12 +96,14 @@ class _HomePageState extends State<HomePage> {
     _selectedCompany = _companyService.selectedCompany?.name ?? 'Data Center Specialists Sdn Bhd (M)';
     _companyService.addListener(_onCompanyServiceUpdate);
     SsmFilingService.instance.addListener(_onFilingUpdate);
+    ComplianceService.instance.addListener(_onComplianceUpdate);
   }
 
   @override
   void dispose() {
     _companyService.removeListener(_onCompanyServiceUpdate);
     SsmFilingService.instance.removeListener(_onFilingUpdate);
+    ComplianceService.instance.removeListener(_onComplianceUpdate);
     super.dispose();
   }
 
@@ -143,6 +116,12 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _onFilingUpdate() {
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
+  void _onComplianceUpdate() {
     if (mounted) {
       setState(() {});
     }
@@ -637,142 +616,6 @@ class _HomePageState extends State<HomePage> {
                       )
                     else ...[
                       const SizedBox(height: 12),
-                      // Quick Action Banner: Submit SSM Filing
-                      Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 16.0),
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          gradient: const LinearGradient(
-                            colors: [Color(0xFF062AAE), Color(0xFF1E3A8A)],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                          ),
-                          borderRadius: BorderRadius.circular(16),
-                          boxShadow: [
-                            BoxShadow(
-                              color: const Color(0xFF062AAE).withValues(alpha: 0.25),
-                              blurRadius: 10,
-                              offset: const Offset(0, 4),
-                            ),
-                          ],
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Wrap(
-                              alignment: WrapAlignment.spaceBetween,
-                              crossAxisAlignment: WrapCrossAlignment.center,
-                              spacing: 8,
-                              runSpacing: 6,
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white.withValues(alpha: 0.2),
-                                    borderRadius: BorderRadius.circular(6),
-                                  ),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      const Icon(Icons.verified, color: Colors.white, size: 14),
-                                      const SizedBox(width: 4),
-                                      Text(
-                                        'SSM Statutory Lodgement',
-                                        style: GoogleFonts.poppins(
-                                          fontSize: 10,
-                                          fontWeight: FontWeight.w600,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                if (SsmFilingService.instance.secretaryRepliesNeededCount > 0)
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                                    decoration: BoxDecoration(
-                                      color: const Color(0xFFDC2626),
-                                      borderRadius: BorderRadius.circular(6),
-                                    ),
-                                    child: Text(
-                                      '${SsmFilingService.instance.secretaryRepliesNeededCount} Action Needed',
-                                      style: GoogleFonts.poppins(
-                                        fontSize: 10,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ),
-                              ],
-                            ),
-                            const SizedBox(height: 10),
-                            Text(
-                              'Submit SSM File & Await Secretary',
-                              style: GoogleFonts.poppins(
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              'Upload statutory documents (S68, S58, S46, S78) directly to your licensed secretary for review & lodgement.',
-                              style: GoogleFonts.poppins(
-                                fontSize: 11,
-                                color: Colors.white.withValues(alpha: 0.85),
-                              ),
-                            ),
-                            const SizedBox(height: 14),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: ElevatedButton.icon(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.white,
-                                      foregroundColor: const Color(0xFF062AAE),
-                                      elevation: 0,
-                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                                      padding: const EdgeInsets.symmetric(vertical: 10),
-                                    ),
-                                    onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => const SubmitSsmFilingPage(),
-                                        ),
-                                      );
-                                    },
-                                    icon: const Icon(Icons.upload_file_rounded, size: 16),
-                                    label: Text(
-                                      'Submit SSM File',
-                                      style: GoogleFonts.poppins(fontSize: 11, fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(width: 8),
-                                OutlinedButton(
-                                  style: OutlinedButton.styleFrom(
-                                    side: const BorderSide(color: Colors.white70),
-                                    foregroundColor: Colors.white,
-                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
-                                  ),
-                                  onPressed: () {
-                                    setState(() {
-                                      _selectedIndex = 1;
-                                    });
-                                  },
-                                  child: Text(
-                                    'View Filings',
-                                    style: GoogleFonts.poppins(fontSize: 11, fontWeight: FontWeight.w600),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 20),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16.0),
                         child: Text(
@@ -928,7 +771,7 @@ class _HomePageState extends State<HomePage> {
                                               initialDescription: event['subtitle'],
                                               initialFilingType: event['title'].toString().contains('Annual Return')
                                                   ? 'Section 68 Annual Return'
-                                                  : 'General Statutory Filing & Inquiry',
+                                                  : 'General Submission & Inquiry',
                                             ),
                                           ),
                                         );
@@ -953,10 +796,24 @@ class _HomePageState extends State<HomePage> {
                       ),
                       const SizedBox(height: 8),
                       _buildTaskCard(
+                        number: '1',
+                        color: const Color(0xFF062AAE),
+                        title: 'File That Needs to be Submitted',
+                        subtitle: 'Upload files for secretary review',
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const SubmitSsmFilingPage(),
+                            ),
+                          );
+                        },
+                      ),
+                      _buildTaskCard(
                         number: '${SsmFilingService.instance.waitingSecretaryCount}',
                         color: Colors.blue.shade700,
                         title: 'Waiting for Secretary Review',
-                        subtitle: 'Active filings queued with licensed secretary',
+                        subtitle: 'Files sent to your secretary for review',
                         onTap: () {
                           Navigator.push(
                             context,

@@ -132,7 +132,7 @@ class _AccountingPageState extends State<AccountingPage> {
                         ),
                         const SizedBox(height: 32),
                         Text(
-                          'STATUTORY FINANCIAL STATEMENTS',
+                          'FINANCIAL STATEMENTS',
                           style: GoogleFonts.poppins(
                             fontWeight: FontWeight.w700,
                             fontSize: 12,
@@ -197,7 +197,7 @@ class _AccountingPageState extends State<AccountingPage> {
                         if (secDocs.isNotEmpty) ...[
                           const SizedBox(height: 24),
                           Text(
-                            'UPLOADED STATUTORY DOCUMENTS (${secDocs.length})',
+                            'UPLOADED DOCUMENTS (${secDocs.length})',
                             style: GoogleFonts.poppins(
                               fontWeight: FontWeight.w700,
                               fontSize: 12,

@@ -16,39 +16,33 @@ class SecretaryProfileTab extends StatelessWidget {
     return AnimatedBuilder(
       animation: service,
       builder: (context, _) {
-        return Scaffold(
-          backgroundColor: Colors.white,
-          body: SingleChildScrollView(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 12),
-                  child: Text(
-                    'Secretary Profile',
-                    style: GoogleFonts.poppins(
-                      fontSize: 24,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.black,
-                    ),
+        return SingleChildScrollView(
+          padding: const EdgeInsets.fromLTRB(16, 4, 16, 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: Text(
+                  'Secretary Profile',
+                  style: GoogleFonts.poppins(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.black,
                   ),
                 ),
-                // Secretary Credential Card (Moved from Dashboard)
+              ),
+                // Secretary Credential Card (Solid Color Redesign)
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.all(18),
                   decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [Color(0xFF062AAE), Color(0xFF1E3A8A)],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                    borderRadius: BorderRadius.circular(20),
+                    color: const Color(0xFF062AAE),
+                    borderRadius: BorderRadius.circular(18),
                     boxShadow: [
                       BoxShadow(
-                        color: const Color(0xFF062AAE).withValues(alpha: 0.25),
-                        blurRadius: 10,
+                        color: const Color(0xFF062AAE).withValues(alpha: 0.22),
+                        blurRadius: 12,
                         offset: const Offset(0, 4),
                       ),
                     ],
@@ -57,18 +51,31 @@ class SecretaryProfileTab extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Container(
-                            width: 50,
-                            height: 50,
+                            width: 52,
+                            height: 52,
                             decoration: BoxDecoration(
-                              color: Colors.white.withValues(alpha: 0.15),
+                              color: Colors.white,
                               borderRadius: BorderRadius.circular(14),
-                              border: Border.all(color: Colors.white24),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withValues(alpha: 0.08),
+                                  blurRadius: 6,
+                                  offset: const Offset(0, 2),
+                                ),
+                              ],
                             ),
-                            child: const Center(
-                              child: Icon(Icons.verified_user_rounded, color: Colors.white, size: 28),
+                            child: Center(
+                              child: Text(
+                                profile.name.split(' ').map((e) => e.isNotEmpty ? e[0] : '').take(2).join(),
+                                style: GoogleFonts.poppins(
+                                  fontSize: 19,
+                                  fontWeight: FontWeight.bold,
+                                  color: const Color(0xFF062AAE),
+                                ),
+                              ),
                             ),
                           ),
                           const SizedBox(width: 14),
@@ -76,76 +83,106 @@ class SecretaryProfileTab extends StatelessWidget {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  profile.name,
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 17,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                  ),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        profile.name,
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
+                                      decoration: BoxDecoration(
+                                        color: const Color(0xFF059669),
+                                        borderRadius: BorderRadius.circular(6),
+                                      ),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          const Icon(Icons.check_circle_rounded, color: Colors.white, size: 11),
+                                          const SizedBox(width: 3),
+                                          Text(
+                                            'ACTIVE',
+                                            style: GoogleFonts.poppins(
+                                              fontSize: 9,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.white,
+                                              letterSpacing: 0.4,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
                                 ),
+                                const SizedBox(height: 2),
                                 Text(
                                   profile.licenseNo,
                                   style: GoogleFonts.poppins(
                                     fontSize: 11,
-                                    color: Colors.white.withValues(alpha: 0.85),
+                                    fontWeight: FontWeight.w500,
+                                    color: const Color(0xFFBFDBFE),
                                   ),
                                 ),
-                                const SizedBox(height: 2),
                                 Text(
                                   profile.firmName,
                                   style: GoogleFonts.poppins(
                                     fontSize: 11,
-                                    color: Colors.white.withValues(alpha: 0.7),
+                                    color: Colors.white.withValues(alpha: 0.8),
                                   ),
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ],
                             ),
                           ),
                         ],
                       ),
-                      const SizedBox(height: 12),
-                      FittedBox(
-                        fit: BoxFit.scaleDown,
-                        alignment: Alignment.centerLeft,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                          decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.15),
-                            borderRadius: BorderRadius.circular(8),
-                            border: Border.all(color: Colors.white24),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              const Icon(Icons.verified, color: Color(0xFF34D399), size: 14),
-                              const SizedBox(width: 4),
-                              Text(
+                      const SizedBox(height: 14),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF041E7A),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(Icons.verified_rounded, color: Color(0xFF34D399), size: 14),
+                            const SizedBox(width: 6),
+                            Flexible(
+                              child: Text(
                                 'SSM Registered & Practising Secretary',
                                 style: GoogleFonts.poppins(
                                   fontSize: 11,
-                                  fontWeight: FontWeight.bold,
+                                  fontWeight: FontWeight.w600,
                                   color: Colors.white,
                                 ),
+                                overflow: TextOverflow.ellipsis,
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 14),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                         decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.12),
+                          color: const Color(0xFF041E7A),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Row(
                           children: [
-                            _buildStatColumn('Client Portfolios', '${service.managedCompaniesCount} Active'),
-                            Container(width: 1, height: 28, color: Colors.white24),
-                            _buildStatColumn('Pending Reviews', '${service.pendingCount} Files'),
-                            Container(width: 1, height: 28, color: Colors.white24),
-                            _buildStatColumn('Approved Filings', '${service.approvedCount} Done'),
+                            _buildStatColumn('Client Portfolios', '${service.managedCompaniesCount}'),
+                            Container(width: 1, height: 28, color: Colors.white.withValues(alpha: 0.15)),
+                            _buildStatColumn('Pending Reviews', '${service.pendingCount}'),
+                            Container(width: 1, height: 28, color: Colors.white.withValues(alpha: 0.15)),
+                            _buildStatColumn('Approved Filings', '${service.approvedCount}'),
                           ],
                         ),
                       ),
@@ -420,8 +457,7 @@ class SecretaryProfileTab extends StatelessWidget {
                 const SizedBox(height: 20),
               ],
             ),
-          ),
-        );
+          );
       },
     );
   }
@@ -455,35 +491,26 @@ class SecretaryProfileTab extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          FittedBox(
-            fit: BoxFit.scaleDown,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 4),
-              child: Text(
-                value,
-                textAlign: TextAlign.center,
-                style: GoogleFonts.poppins(
-                  fontSize: 13,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
+          Text(
+            value,
+            textAlign: TextAlign.center,
+            style: GoogleFonts.poppins(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
             ),
           ),
           const SizedBox(height: 2),
-          FittedBox(
-            fit: BoxFit.scaleDown,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 4),
-              child: Text(
-                label,
-                textAlign: TextAlign.center,
-                style: GoogleFonts.poppins(
-                  fontSize: 9.5,
-                  color: Colors.white.withValues(alpha: 0.8),
-                ),
-              ),
+          Text(
+            label,
+            textAlign: TextAlign.center,
+            style: GoogleFonts.poppins(
+              fontSize: 10,
+              fontWeight: FontWeight.w500,
+              color: Colors.white.withValues(alpha: 0.75),
             ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
         ],
       ),

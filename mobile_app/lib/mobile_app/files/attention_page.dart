@@ -111,7 +111,7 @@ class AttentionPage extends StatelessWidget {
                                 ),
                                 const SizedBox(height: 6),
                                 Text(
-                                  'No documents or statutory filings currently require your attention.',
+                                  'No files or submissions currently require your attention.',
                                   style: GoogleFonts.poppins(
                                     fontSize: 13,
                                     color: Colors.grey.shade600,

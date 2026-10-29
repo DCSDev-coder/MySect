@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../models/client_document_model.dart';
 import '../services/secretary_document_service.dart';
+import '../models/ssm_filing_model.dart';
+import '../services/secretary_filing_service.dart';
 import '../widgets/app_top_header.dart';
 
 class DocumentReviewDetailPage extends StatefulWidget {
@@ -135,11 +137,7 @@ class _DocumentReviewDetailPageState extends State<DocumentReviewDetailPage> {
                     Container(
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        gradient: const LinearGradient(
-                          colors: [Color(0xFF062AAE), Color(0xFF1E3A8A)],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ),
+                        color: const Color(0xFF062AAE),
                         borderRadius: BorderRadius.circular(14),
                       ),
                       child: Row(
@@ -693,16 +691,7 @@ class _DocumentReviewDetailPageState extends State<DocumentReviewDetailPage> {
 
   // --- ACTION 3: ASK FOR MORE DETAILS BOTTOM SHEET ---
   void _showAskDetailsBottomSheet() {
-    final detailsController = TextEditingController(
-      text: 'Please provide certified true copies (CTC) signed by a practicing lawyer or company secretary.',
-    );
-
-    final templates = [
-      'Please upload a certified true copy (CTC) of NRIC / Passport.',
-      'Please provide statutory Form 48A signed before a Commissioner for Oaths.',
-      'Please provide the LHDN stamp duty certificate for the registered office agreement.',
-      'Please attach the latest board minutes confirming authorization.',
-    ];
+    final detailsController = TextEditingController();
 
     showModalBottomSheet(
       context: context,
@@ -776,42 +765,6 @@ class _DocumentReviewDetailPageState extends State<DocumentReviewDetailPage> {
                     ],
                   ),
                   const SizedBox(height: 16),
-                  Text(
-                    'Quick Templates',
-                    style: GoogleFonts.poppins(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black87,
-                    ),
-                  ),
-                  const SizedBox(height: 6),
-                  Wrap(
-                    spacing: 8,
-                    runSpacing: 6,
-                    children: templates.map((tpl) {
-                      return InkWell(
-                        onTap: () {
-                          setModalState(() {
-                            detailsController.text = tpl;
-                          });
-                        },
-                        borderRadius: BorderRadius.circular(8),
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFF1F5F9),
-                            borderRadius: BorderRadius.circular(8),
-                            border: Border.all(color: Colors.grey.shade300),
-                          ),
-                          child: Text(
-                            tpl.length > 36 ? '${tpl.substring(0, 36)}...' : tpl,
-                            style: GoogleFonts.poppins(fontSize: 11, color: Colors.black87),
-                          ),
-                        ),
-                      );
-                    }).toList(),
-                  ),
-                  const SizedBox(height: 14),
                   Text(
                     'Clarification Request to Client',
                     style: GoogleFonts.poppins(
@@ -893,6 +846,336 @@ class _DocumentReviewDetailPageState extends State<DocumentReviewDetailPage> {
     );
   }
 
+  void _showUpdateFilingProgressSheet(BuildContext context, SsmFiling filing) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (modalCtx) {
+        return StatefulBuilder(
+          builder: (ctx, setModalState) {
+            final currentIdx = filing.currentStepIndex;
+
+            return Padding(
+              padding: EdgeInsets.only(
+                left: 20,
+                right: 20,
+                top: 16,
+                bottom: MediaQuery.of(modalCtx).viewInsets.bottom + 24,
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: Container(
+                      width: 44,
+                      height: 4,
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade300,
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF062AAE).withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: const Icon(
+                          Icons.alt_route_rounded,
+                          color: Color(0xFF062AAE),
+                          size: 22,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Update Filing Stage',
+                              style: GoogleFonts.poppins(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black87,
+                              ),
+                            ),
+                            Text(
+                              '${filing.referenceNo} â€¢ ${filing.companyName}',
+                              style: GoogleFonts.poppins(
+                                fontSize: 11,
+                                color: Colors.grey.shade600,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'Select Current Milestone:',
+                    style: GoogleFonts.poppins(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.grey.shade700,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  ...filing.timeline.asMap().entries.map((entry) {
+                    final idx = entry.key;
+                    final step = entry.value;
+                    final isCurrent = idx == currentIdx;
+                    final isDone = idx < currentIdx;
+
+                    return Container(
+                      margin: const EdgeInsets.only(bottom: 8),
+                      decoration: BoxDecoration(
+                        color: isCurrent
+                            ? const Color(0xFFEFF6FF)
+                            : (isDone ? const Color(0xFFF8FAFC) : Colors.white),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: isCurrent
+                              ? const Color(0xFF2563EB)
+                              : Colors.grey.shade200,
+                          width: isCurrent ? 1.5 : 1,
+                        ),
+                      ),
+                      child: ListTile(
+                        dense: true,
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+                        leading: Icon(
+                          isDone
+                              ? Icons.check_circle_rounded
+                              : (isCurrent
+                                  ? Icons.timelapse_rounded
+                                  : Icons.radio_button_unchecked),
+                          color: isDone
+                              ? const Color(0xFF059669)
+                              : (isCurrent ? const Color(0xFF2563EB) : Colors.grey.shade400),
+                          size: 20,
+                        ),
+                        title: Text(
+                          step.title,
+                          style: GoogleFonts.poppins(
+                            fontSize: 12,
+                            fontWeight: isCurrent ? FontWeight.bold : FontWeight.w600,
+                            color: isCurrent ? const Color(0xFF1E40AF) : Colors.black87,
+                          ),
+                        ),
+                        subtitle: Text(
+                          step.description,
+                          style: GoogleFonts.poppins(fontSize: 10, color: Colors.grey.shade600),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        trailing: isCurrent
+                            ? Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFF2563EB),
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                                child: Text(
+                                  'ACTIVE',
+                                  style: GoogleFonts.poppins(
+                                    fontSize: 9,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              )
+                            : TextButton(
+                                style: TextButton.styleFrom(
+                                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                                  minimumSize: Size.zero,
+                                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                ),
+                                onPressed: () async {
+                                  await SecretaryFilingService.instance.updateFilingStep(
+                                    referenceNo: filing.referenceNo,
+                                    targetStepIndex: idx,
+                                  );
+                                  if (modalCtx.mounted) Navigator.pop(modalCtx);
+                                  if (context.mounted) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        backgroundColor: const Color(0xFF059669),
+                                        content: Text(
+                                          'Filing stage updated to "${step.title}"! Pushed to client mobile app.',
+                                          style: GoogleFonts.poppins(fontSize: 12, color: Colors.white),
+                                        ),
+                                        duration: const Duration(seconds: 3),
+                                      ),
+                                    );
+                                  }
+                                },
+                                child: Text(
+                                  'Set Stage',
+                                  style: GoogleFonts.poppins(
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.bold,
+                                    color: const Color(0xFF062AAE),
+                                  ),
+                                ),
+                              ),
+                      ),
+                    );
+                  }),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Widget _buildFilingProgressSection(BuildContext context) {
+    return AnimatedBuilder(
+      animation: SecretaryFilingService.instance,
+      builder: (context, _) {
+        final filing = SecretaryFilingService.instance.getFilingByRefOrCompany(
+          _doc.linkedFilingRef,
+          _doc.companyName,
+        );
+        if (filing == null) return const SizedBox.shrink();
+
+        final currentIdx = filing.currentStepIndex;
+        final currentStep = filing.timeline[currentIdx];
+
+        return Container(
+          margin: const EdgeInsets.only(bottom: 16),
+          padding: const EdgeInsets.all(14),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: Colors.grey.shade200),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.02),
+                blurRadius: 6,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(6),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF062AAE).withValues(alpha: 0.08),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: const Icon(
+                          Icons.linear_scale_rounded,
+                          color: Color(0xFF062AAE),
+                          size: 16,
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        'Statutory Filing Progress',
+                        style: GoogleFonts.poppins(
+                          fontSize: 13,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                    decoration: BoxDecoration(
+                      color: filing.status.bgColor,
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    child: Text(
+                      'Step ${currentIdx + 1} of ${filing.timeline.length}',
+                      style: GoogleFonts.poppins(
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                        color: filing.status.color,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFF8FAFC),
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: Colors.grey.shade200),
+                ),
+                child: Row(
+                  children: [
+                    Icon(
+                      currentStep.isCompleted
+                          ? Icons.check_circle_rounded
+                          : Icons.timelapse_rounded,
+                      size: 16,
+                      color: currentStep.isCompleted
+                          ? const Color(0xFF059669)
+                          : const Color(0xFFD97706),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        currentStep.title,
+                        style: GoogleFonts.poppins(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black87,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    TextButton.icon(
+                      style: TextButton.styleFrom(
+                        foregroundColor: const Color(0xFF062AAE),
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        minimumSize: Size.zero,
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      ),
+                      onPressed: () => _showUpdateFilingProgressSheet(context, filing),
+                      icon: const Icon(Icons.edit_note_rounded, size: 14),
+                      label: Text(
+                        'Update',
+                        style: GoogleFonts.poppins(
+                          fontSize: 11,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
   @override
   Widget build(BuildContext context) {
     final statusColor = _getStatusColor(_doc.status);
@@ -1229,6 +1512,8 @@ class _DocumentReviewDetailPageState extends State<DocumentReviewDetailPage> {
             ],
 
 
+
+            _buildFilingProgressSection(context),
 
             // Audit Trail Timeline
             Text(
@@ -2057,11 +2342,7 @@ class _FullDocumentViewerDialogState extends State<_FullDocumentViewerDialog> {
           Container(
             padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [Color(0xFFF0FDF4), Color(0xFFECFDF5)],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
+              color: const Color(0xFFF0FDF4),
               borderRadius: BorderRadius.circular(12),
               border: Border.all(color: const Color(0xFF10B981), width: 1.5),
               boxShadow: [

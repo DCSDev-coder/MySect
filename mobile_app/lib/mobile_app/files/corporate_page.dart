@@ -24,7 +24,7 @@ class _CorporatePageState extends State<CorporatePage> {
   final List<DocumentFile> _myFiles = [
     DocumentFile(
       title: 'SSM Annual Returns',
-      subtitle: 'Statutory Documents • PDF',
+      subtitle: 'Official Documents • PDF',
       badgeText: 'Signed by all',
       requiredActions: 3,
       uploadedFiles: [
@@ -33,7 +33,7 @@ class _CorporatePageState extends State<CorporatePage> {
       ],
     ),
     DocumentFile(
-      title: 'Statutory Registers',
+      title: 'Company Registers',
       subtitle: 'Share Transfers & Records • PDF',
       badgeText: 'Progress',
       requiredActions: 2,
@@ -138,7 +138,7 @@ class _CorporatePageState extends State<CorporatePage> {
                         ),
                         const SizedBox(height: 32),
                         Text(
-                          'STATUTORY REGISTERS & RETURNS',
+                          'REGISTERS & RETURNS',
                           style: GoogleFonts.poppins(
                             fontWeight: FontWeight.w700,
                             fontSize: 12,
@@ -202,7 +202,7 @@ class _CorporatePageState extends State<CorporatePage> {
                         if (secDocs.isNotEmpty) ...[
                           const SizedBox(height: 24),
                           Text(
-                            'UPLOADED STATUTORY DOCUMENTS (${secDocs.length})',
+                            'UPLOADED DOCUMENTS (${secDocs.length})',
                             style: GoogleFonts.poppins(
                               fontWeight: FontWeight.w700,
                               fontSize: 12,

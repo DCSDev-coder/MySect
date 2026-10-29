@@ -53,7 +53,7 @@ void showAddMenu(
                       final fileName = 'Scanned_Doc_${DateTime.now().millisecondsSinceEpoch % 10000}.jpg';
                       SecretaryDocumentService.instance.addClientDocument(
                         title: fileName,
-                        category: targetFolder != null ? '$targetFolder Document' : 'Scanned Statutory ID / Form',
+                        category: targetFolder != null ? '$targetFolder Document' : 'Scanned ID / Form',
                         fileSize: '1.2 MB',
                         companyId: activeComp?.id ?? 'comp-01',
                         companyName: activeComp?.name ?? 'Data Center Specialists Sdn Bhd (M)',
@@ -115,7 +115,7 @@ void showAddMenu(
                       final activeComp = CompanyService.instance.selectedCompany;
                       SecretaryDocumentService.instance.addClientDocument(
                         title: result.name,
-                        category: targetFolder != null ? '$targetFolder Document' : 'Corporate Statutory Document',
+                        category: targetFolder != null ? '$targetFolder Document' : 'Corporate Document',
                         fileSize: '1.4 MB',
                         companyId: activeComp?.id ?? 'comp-01',
                         companyName: activeComp?.name ?? 'Data Center Specialists Sdn Bhd (M)',

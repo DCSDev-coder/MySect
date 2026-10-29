@@ -4,6 +4,96 @@ import { initialCompanies, initialFirms, initialClientDocuments } from './src/da
 let companies = [...initialCompanies];
 let firms = [...initialFirms];
 let documents = initialClientDocuments.filter(d => d.id !== 'DOC-2026-006');
+let complianceTasks = [
+  {
+    id: 'task-sec-01',
+    companyId: 'comp-01',
+    companyName: 'Data Center Specialists Sdn Bhd (M)',
+    title: 'Section 68 Annual Return Lodgement',
+    subtitle: 'Filing to SSM with audited financial reports',
+    dueDate: new Date(new Date().getFullYear(), new Date().getMonth(), 14).toISOString().split('T')[0],
+    category: 'Section 68 Annual Return',
+    status: 'Pending',
+    createdBy: 'Lim Mei Ling (MIA CA 48192)',
+    instructions: 'Upload certified true copies of audited accounts and board declaration for Section 68 lodgement.'
+  },
+  {
+    id: 'task-sec-02',
+    companyId: 'comp-01',
+    companyName: 'Data Center Specialists Sdn Bhd (M)',
+    title: 'Statutory Tax Estimate (CP204)',
+    subtitle: 'LHDN statutory company tax schedule lodgement',
+    dueDate: new Date(new Date().getFullYear(), new Date().getMonth(), 28).toISOString().split('T')[0],
+    category: 'Tax Filing (CP204)',
+    status: 'Pending',
+    createdBy: 'Lim Mei Ling (MIA CA 48192)',
+    instructions: 'Submit revised CP204 tax estimate to LHDN Malaysia.'
+  },
+  {
+    id: 'task-sec-03',
+    companyId: 'comp-03',
+    companyName: '5Luxe Scents Co.',
+    title: 'Statutory Financial Statements Submission',
+    subtitle: 'Annual Financial Statements to SSM',
+    dueDate: new Date(new Date().getFullYear(), new Date().getMonth(), 20).toISOString().split('T')[0],
+    category: 'Financial Statements',
+    status: 'Pending',
+    createdBy: 'Sarah binti Ahmad (MAICSA 6028192)',
+    instructions: 'Prepare directors report and circulation to shareholders.'
+  }
+];
+let ssmFilings = [
+  {
+    id: 'SSM-01',
+    referenceNo: 'SSM/S68/2026/04812',
+    companyId: 'comp-01',
+    companyName: 'Data Center Specialists Sdn Bhd (M)',
+    companySsmNo: '202101039281 (1429581-X)',
+    assignedSecretary: 'Lim Mei Ling (MIA)',
+    assignedFirmName: 'SectPro Corporate Services Sdn Bhd',
+    filingType: 'Section 68 Annual Return',
+    title: 'Section 68 Annual Return Lodgement 2026',
+    description: 'Annual Return submission with unaudited management accounts and audited director report for statutory filing.',
+    submittedDate: '2026-10-20T14:30:00.000Z',
+    deadline: '2026-11-14',
+    status: 'waitingSecretaryReview',
+    attachedFiles: [
+      'DCS_Management_Accounts_FY2026.pdf (2.4 MB)',
+      'Director_Declaration_Form.pdf (850 KB)',
+      'Bank_Statement_Confirmation.pdf (1.1 MB)'
+    ],
+    timeline: [
+      {
+        title: 'SSM File Submitted by Client',
+        description: 'Uploaded management accounts and statutory declarations.',
+        timestamp: '20 Oct 2026, 2:30 PM',
+        isCompleted: true,
+        isCurrent: false
+      },
+      {
+        title: 'Waiting for Secretary Review',
+        description: 'Assigned to Lim Mei Ling (MIA) at SectPro Corporate Services.',
+        timestamp: 'In Progress',
+        isCompleted: false,
+        isCurrent: true
+      },
+      {
+        title: 'Secretary Preparation & Customer Approval',
+        description: 'Drafting Section 68 e-Filing schedule and resolution.',
+        timestamp: 'Pending review',
+        isCompleted: false,
+        isCurrent: false
+      },
+      {
+        title: 'Lodged to SSM MBRS Portal',
+        description: 'Official submission to Suruhanjaya Syarikat Malaysia.',
+        timestamp: 'Scheduled',
+        isCompleted: false,
+        isCurrent: false
+      }
+    ]
+  }
+];
 
 export function apiServerPlugin() {
   return {
@@ -198,6 +288,84 @@ export function apiServerPlugin() {
             });
             return;
           }
+        }
+
+        // ==========================================
+        // Compliance Tasks & Datelines API Routes
+        // ==========================================
+        if (pathname === '/api/compliance-tasks') {
+          if (req.method === 'GET') {
+            res.setHeader('Content-Type', 'application/json');
+            res.end(JSON.stringify(complianceTasks));
+            return;
+          }
+          if (req.method === 'POST') {
+            let body = '';
+            req.on('data', chunk => { body += chunk; });
+            req.on('end', () => {
+              try {
+                const newTask = JSON.parse(body || '{}');
+                const existingIdx = complianceTasks.findIndex(t => t.id === newTask.id);
+                if (existingIdx !== -1) {
+                  complianceTasks[existingIdx] = { ...complianceTasks[existingIdx], ...newTask };
+                  res.setHeader('Content-Type', 'application/json');
+                  res.end(JSON.stringify(complianceTasks[existingIdx]));
+                } else {
+                  complianceTasks.unshift(newTask);
+                  res.statusCode = 201;
+                  res.setHeader('Content-Type', 'application/json');
+                  res.end(JSON.stringify(newTask));
+                }
+              } catch (err) {
+                res.statusCode = 400;
+                res.setHeader('Content-Type', 'application/json');
+                res.end(JSON.stringify({ error: err.message }));
+              }
+            });
+            return;
+          }
+        }
+        if (pathname.startsWith('/api/compliance-tasks/') && req.method === 'DELETE') {
+          const taskId = pathname.replace('/api/compliance-tasks/', '');
+          complianceTasks = complianceTasks.filter(t => t.id !== taskId);
+          res.setHeader('Content-Type', 'application/json');
+          res.end(JSON.stringify({ success: true, deletedId: taskId }));
+          return;
+        }
+
+        // ==========================================
+        // SSM Filings & Progress API Routes
+        // ==========================================
+        if (pathname === '/api/ssm-filings') {
+          if (req.method === 'GET') {
+            res.setHeader('Content-Type', 'application/json');
+            res.end(JSON.stringify(ssmFilings));
+            return;
+          }
+        }
+        if (pathname.startsWith('/api/ssm-filings/') && req.method === 'PATCH') {
+          const ref = decodeURIComponent(pathname.replace('/api/ssm-filings/', ''));
+          let body = '';
+          req.on('data', chunk => { body += chunk; });
+          req.on('end', () => {
+            try {
+              const patch = JSON.parse(body || '{}');
+              const idx = ssmFilings.findIndex(f => f.referenceNo === ref || f.id === ref);
+              if (idx !== -1) {
+                ssmFilings[idx] = { ...ssmFilings[idx], ...patch };
+                res.setHeader('Content-Type', 'application/json');
+                res.end(JSON.stringify(ssmFilings[idx]));
+              } else {
+                ssmFilings.unshift(patch);
+                res.setHeader('Content-Type', 'application/json');
+                res.end(JSON.stringify(patch));
+              }
+            } catch (e) {
+              res.statusCode = 400;
+              res.end(JSON.stringify({ error: e.message }));
+            }
+          });
+          return;
         }
 
         // ==========================================

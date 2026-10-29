@@ -158,7 +158,7 @@ class SecretaryDocumentService extends ChangeNotifier {
         status: DocumentReviewStatus.pendingReview,
         linkedFilingRef: 'SSM/S68/2026/04812',
         submissionNotes:
-            'Uploaded unaudited management accounts and draft statements for Annual Return lodgement.',
+            'Uploaded unaudited management accounts and draft statements for Annual Return submission.',
         auditTrail: [
           const DocumentAuditItem(
             timestamp: '2026-10-20 14:30:12',
@@ -249,7 +249,7 @@ class SecretaryDocumentService extends ChangeNotifier {
           reviewedAt: '2026-10-14 10:30',
           decision: 'Approved',
           remarks:
-              'All signatures verified against records. Form 46 lodged to SSM via MBRS portal.',
+              'All signatures verified against records. Form 46 submitted to SSM.',
         ),
         auditTrail: [
           const DocumentAuditItem(
@@ -262,7 +262,7 @@ class SecretaryDocumentService extends ChangeNotifier {
             timestamp: '2026-10-14 10:30:15',
             action: 'FILE_APPROVED',
             actor: 'Azman bin Ibrahim (MAICSA 7019284)',
-            details: 'Verified and approved for SSM lodgement.',
+            details: 'Verified and approved for SSM submission.',
           ),
         ],
       ),
@@ -296,7 +296,7 @@ class SecretaryDocumentService extends ChangeNotifier {
           reviewedAt: '2026-09-22 14:15',
           decision: 'Approved',
           remarks:
-              'Capital injection proof verified. Form 78 lodged and SSM certificate generated.',
+              'Capital injection proof verified. Form 78 submitted and SSM certificate generated.',
         ),
         auditTrail: [
           const DocumentAuditItem(

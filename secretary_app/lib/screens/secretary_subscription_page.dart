@@ -275,11 +275,7 @@ class _SecretarySubscriptionPageState extends State<SecretarySubscriptionPage> {
                           width: double.infinity,
                           padding: const EdgeInsets.all(18),
                           decoration: BoxDecoration(
-                            gradient: const LinearGradient(
-                              colors: [Color(0xFF062AAE), Color(0xFF1E3A8A)],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                            ),
+                            color: const Color(0xFF062AAE),
                             borderRadius: BorderRadius.circular(20),
                             boxShadow: [
                               BoxShadow(

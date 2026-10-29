@@ -92,60 +92,23 @@ class _TransactionsPageState extends State<TransactionsPage> {
                     child: ListView(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                       children: [
-                        // Page Title & Submit Action Button
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
+                        // Page Title
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'SSM Filings',
-                                    style: GoogleFonts.poppins(
-                                      fontSize: 22,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black87,
-                                    ),
-                                  ),
-                                  Text(
-                                    'Submit files & track secretary replies',
-                                    style: GoogleFonts.poppins(
-                                      fontSize: 12,
-                                      color: Colors.grey.shade600,
-                                    ),
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ],
+                            Text(
+                              'Submissions',
+                              style: GoogleFonts.poppins(
+                                fontSize: 22,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black87,
                               ),
                             ),
-                            const SizedBox(width: 8),
-                            ElevatedButton.icon(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xFF062AAE),
-                                foregroundColor: Colors.white,
-                                elevation: 1,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                              ),
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const SubmitSsmFilingPage(),
-                                  ),
-                                );
-                              },
-                              icon: const Icon(Icons.add, size: 16),
-                              label: Text(
-                                'Submit SSM',
-                                style: GoogleFonts.poppins(
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.w600,
-                                ),
+                            Text(
+                              'Track submitted files & secretary replies',
+                              style: GoogleFonts.poppins(
+                                fontSize: 12,
+                                color: Colors.grey.shade600,
                               ),
                             ),
                           ],
@@ -167,7 +130,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
                             },
                             style: GoogleFonts.poppins(fontSize: 13),
                             decoration: InputDecoration(
-                              hintText: 'Search filings, ref number, or section...',
+                              hintText: 'Search submissions, ref number, or files...',
                               hintStyle: GoogleFonts.poppins(fontSize: 12, color: Colors.grey.shade400),
                               prefixIcon: const Icon(Icons.search, size: 20, color: Color(0xFF062AAE)),
                               border: InputBorder.none,
@@ -183,7 +146,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
                           child: Row(
                             children: [
                               _buildFilterChip(
-                                label: 'All Filings (${allFilings.length})',
+                                label: 'All Submissions (${allFilings.length})',
                                 isSelected: _selectedStatusFilter == null,
                                 onTap: () => setState(() => _selectedStatusFilter = null),
                               ),
@@ -201,7 +164,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
                               ),
                               const SizedBox(width: 8),
                               _buildFilterChip(
-                                label: 'Lodged to SSM ($lodgedCount)',
+                                label: 'Submitted to SSM ($lodgedCount)',
                                 isSelected: _selectedStatusFilter == SsmFilingStatus.lodgedToSsm,
                                 onTap: () => setState(() => _selectedStatusFilter = SsmFilingStatus.lodgedToSsm),
                               ),
@@ -232,7 +195,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
                                   Icon(Icons.folder_open_rounded, size: 48, color: Colors.grey.shade400),
                                   const SizedBox(height: 12),
                                   Text(
-                                    'No filings match this filter',
+                                    'No submissions match this filter',
                                     style: GoogleFonts.poppins(
                                       fontSize: 14,
                                       fontWeight: FontWeight.w600,

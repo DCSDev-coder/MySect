@@ -193,7 +193,7 @@ class _OtherPageState extends State<OtherPage> {
                         if (secDocs.isNotEmpty) ...[
                           const SizedBox(height: 24),
                           Text(
-                            'UPLOADED STATUTORY DOCUMENTS (${secDocs.length})',
+                            'UPLOADED DOCUMENTS (${secDocs.length})',
                             style: GoogleFonts.poppins(
                               fontWeight: FontWeight.w700,
                               fontSize: 12,

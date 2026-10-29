@@ -1,4 +1,6 @@
 import 'package:flutter/foundation.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import '../models/ssm_filing_model.dart';
 
 class SsmFilingService extends ChangeNotifier {
@@ -7,6 +9,7 @@ class SsmFilingService extends ChangeNotifier {
 
   SsmFilingService._internal() {
     _initDefaultFilings();
+    syncFromBackend();
   }
 
   List<SsmFiling> _filings = [];
@@ -32,9 +35,9 @@ class SsmFilingService extends ChangeNotifier {
         assignedSecretary: 'Lim Mei Ling (MIA)',
         assignedFirmName: 'SectPro Corporate Services Sdn Bhd',
         filingType: 'Section 68 Annual Return',
-        title: 'Section 68 Annual Return Lodgement 2026',
+        title: 'Section 68 Annual Return 2026',
         description:
-            'Annual Return submission with unaudited management accounts and audited director report for statutory filing.',
+            'Annual Return submission with management accounts and director report.',
         submittedDate: DateTime(2026, 10, 20, 14, 30),
         deadline: '2026-11-14',
         status: SsmFilingStatus.waitingSecretaryReview,
@@ -49,7 +52,7 @@ class SsmFilingService extends ChangeNotifier {
             senderName: 'Adam Bin Hamzah',
             senderRole: 'Managing Director (Client)',
             text:
-                'Hi Mei Ling, I have attached our management accounts and declarations for the upcoming Annual Return. Please check and let us know if anything else is needed before lodging to SSM.',
+                'Hi Mei Ling, I have attached our management accounts and declarations for the upcoming Annual Return. Please check and let us know if anything else is needed before submitting to SSM.',
             time: '20 Oct 2026, 2:30 PM',
             isFromSecretary: false,
             attachments: ['DCS_Management_Accounts_FY2026.pdf'],
@@ -66,8 +69,8 @@ class SsmFilingService extends ChangeNotifier {
         ],
         timeline: [
           const SsmTimelineStep(
-            title: 'SSM File Submitted by Client',
-            description: 'Uploaded management accounts and statutory declarations.',
+            title: 'File Submitted to Secretary',
+            description: 'Uploaded management accounts and declarations.',
             timestamp: '20 Oct 2026, 2:30 PM',
             isCompleted: true,
           ),
@@ -85,7 +88,7 @@ class SsmFilingService extends ChangeNotifier {
             isCompleted: false,
           ),
           const SsmTimelineStep(
-            title: 'Lodged to SSM MBRS Portal',
+            title: 'Submitted to SSM',
             description: 'Official submission to Suruhanjaya Syarikat Malaysia.',
             timestamp: 'Scheduled',
             isCompleted: false,
@@ -126,14 +129,14 @@ class SsmFilingService extends ChangeNotifier {
             senderName: 'Lim Mei Ling (MIA)',
             senderRole: 'Licensed Corporate Secretary',
             text:
-                'Hi Adam, thank you for the documents. Under Section 201 of the Companies Act 2016, we also require a signed Form 48A / Statutory Declaration of Consent to Act, plus a clear scanned copy of Dato Adam\'s NRIC (front and back). Could you please upload those here so we can complete Section 58 lodgement?',
+                'Hi Adam, thank you for the documents. Under Section 201 of the Companies Act 2016, we also require a signed Form 48A / Statutory Declaration of Consent to Act, plus a clear scanned copy of Dato Adam\'s NRIC (front and back). Could you please upload those here so we can complete Section 58 submission?',
             time: '19 Oct 2026, 11:20 AM',
             isFromSecretary: true,
           ),
         ],
         timeline: [
           const SsmTimelineStep(
-            title: 'SSM File Submitted by Client',
+            title: 'File Submitted to Secretary',
             description: 'Uploaded appointment documentation.',
             timestamp: '18 Oct 2026, 10:00 AM',
             isCompleted: true,
@@ -152,7 +155,7 @@ class SsmFilingService extends ChangeNotifier {
             isCompleted: false,
           ),
           const SsmTimelineStep(
-            title: 'Lodgement to SSM',
+            title: 'Submitted to SSM',
             description: 'Submission of Form 58 to SSM.',
             timestamp: 'Pending client response',
             isCompleted: false,
@@ -184,7 +187,7 @@ class SsmFilingService extends ChangeNotifier {
             senderName: 'Azman bin Ibrahim (MAICSA)',
             senderRole: 'Principal Secretary',
             text:
-                'Good day! Section 46 documents verified and signed. Lodgement successfully submitted to SSM MBRS portal (Ref: MBRS-2026-99381). Awaiting SSM Certificate generation.',
+                'Good day! Section 46 documents verified and signed. Successfully submitted to SSM (Ref: MBRS-2026-99381). Awaiting SSM Certificate generation.',
             time: '15 Oct 2026, 4:10 PM',
             isFromSecretary: true,
           ),
@@ -203,8 +206,8 @@ class SsmFilingService extends ChangeNotifier {
             isCompleted: true,
           ),
           const SsmTimelineStep(
-            title: 'Lodged to SSM MBRS Portal',
-            description: 'Lodged under SSM Reference MBRS-2026-99381.',
+            title: 'Submitted to SSM',
+            description: 'Submitted under SSM Reference MBRS-2026-99381.',
             timestamp: '15 Oct 2026, 4:10 PM',
             isCompleted: true,
             isCurrent: true,
@@ -261,8 +264,8 @@ class SsmFilingService extends ChangeNotifier {
             isCompleted: true,
           ),
           const SsmTimelineStep(
-            title: 'Lodged to SSM',
-            description: 'Lodged with SSM Section 78 schedule.',
+            title: 'Submitted to SSM',
+            description: 'Submitted with SSM Section 78 schedule.',
             timestamp: '25 Sep 2026, 9:30 AM',
             isCompleted: true,
           ),
@@ -343,7 +346,7 @@ class SsmFilingService extends ChangeNotifier {
           isCompleted: false,
         ),
         const SsmTimelineStep(
-          title: 'Lodgement to SSM',
+          title: 'Submitted to SSM',
           description: 'Submission to Suruhanjaya Syarikat Malaysia.',
           timestamp: 'Scheduled',
           isCompleted: false,
@@ -413,7 +416,7 @@ class SsmFilingService extends ChangeNotifier {
         senderName: filing.assignedSecretary,
         senderRole: 'Licensed Corporate Secretary',
         text:
-            'All documents and compliance criteria checked and verified! We have officially lodged this filing to SSM via MBRS. Waiting for SSM endorsement.',
+            'All documents and compliance criteria checked and verified! We have officially submitted this to SSM. Waiting for SSM endorsement.',
         time: 'Just now',
         isFromSecretary: true,
       ),
@@ -436,5 +439,28 @@ class SsmFilingService extends ChangeNotifier {
       ),
     );
     notifyListeners();
+  }
+
+  Future<void> syncFromBackend() async {
+    final candidateUrls = [
+      'http://127.0.0.1:5173/api/ssm-filings',
+      'http://localhost:5173/api/ssm-filings',
+      'http://10.0.2.2:5173/api/ssm-filings',
+    ];
+
+    for (final url in candidateUrls) {
+      try {
+        final uri = Uri.parse(url);
+        final res = await http.get(uri).timeout(const Duration(milliseconds: 1500));
+        if (res.statusCode == 200) {
+          final List<dynamic> data = jsonDecode(res.body);
+          if (data.isNotEmpty) {
+            _filings = data.map((json) => SsmFiling.fromJson(json)).toList();
+            notifyListeners();
+            return;
+          }
+        }
+      } catch (_) {}
+    }
   }
 }

@@ -31,7 +31,7 @@ class AppTopHeader extends StatelessWidget {
         left: 16.0,
         top: elevatedTop,
         right: 16.0,
-        bottom: isTransparent ? 2.0 : 8.0,
+        bottom: isTransparent ? 2.0 : 4.0,
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

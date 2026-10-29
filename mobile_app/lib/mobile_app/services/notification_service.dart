@@ -72,7 +72,7 @@ class NotificationService extends ChangeNotifier {
         id: 'notif-03',
         title: 'Upcoming Statutory Deadline',
         message:
-            'Section 68 Annual Return Lodgement 2026 is due in 18 days (14 Nov 2026) for Data Center Specialists Sdn Bhd (M).',
+            'Section 68 Annual Return 2026 is due in 18 days (14 Nov 2026) for Data Center Specialists Sdn Bhd (M).',
         time: '3 hours ago',
         type: NotificationType.deadlineReminder,
         isUnread: true,
@@ -81,9 +81,9 @@ class NotificationService extends ChangeNotifier {
       ),
       AppNotification(
         id: 'notif-04',
-        title: 'Filing Lodged to SSM',
+        title: 'Files Submitted to SSM',
         message:
-            'Section 46 Change of Registered Address (Ref: SSM/S46/2026/00731) has been successfully lodged to SSM MBRS Portal.',
+            'Section 46 Change of Registered Address (Ref: SSM/S46/2026/00731) has been successfully submitted to SSM.',
         time: '1 day ago',
         type: NotificationType.secretaryAction,
         isUnread: false,
@@ -92,7 +92,7 @@ class NotificationService extends ChangeNotifier {
       ),
       AppNotification(
         id: 'notif-05',
-        title: 'SSM Filing Completed & Approved',
+        title: 'Submission Completed & Approved',
         message:
             'Section 78 Return of Share Allotment (Capital Increase) completed. Official SSM Receipt generated.',
         time: '2 days ago',

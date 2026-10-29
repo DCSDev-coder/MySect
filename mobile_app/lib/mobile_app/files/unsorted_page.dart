@@ -87,7 +87,7 @@ class _UnsortedPageState extends State<UnsortedPage> {
                           ),
                         ),
                         Text(
-                          'Select a destination statutory folder',
+                          'Select a destination folder',
                           style: GoogleFonts.poppins(
                             fontSize: 13,
                             color: Colors.grey.shade600,
@@ -101,7 +101,7 @@ class _UnsortedPageState extends State<UnsortedPage> {
               const SizedBox(height: 24),
               _buildMoveOption('Personal', 'Individual files, IC & director records', Icons.person_outline),
               const SizedBox(height: 12),
-              _buildMoveOption('Corporate', 'Business, SSM & statutory returns', Icons.business_outlined),
+              _buildMoveOption('Corporate', 'Business, SSM & returns', Icons.business_outlined),
               const SizedBox(height: 12),
               _buildMoveOption('Accounting', 'Financial & tax statements, invoices', Icons.account_balance_wallet_outlined),
               const SizedBox(height: 12),
@@ -276,7 +276,7 @@ class _UnsortedPageState extends State<UnsortedPage> {
                                 ),
                                 const SizedBox(height: 6),
                                 Text(
-                                  'No unsorted documents. All files have been categorized into statutory folders.',
+                                  'No unsorted documents. All files have been categorized into folders.',
                                   style: GoogleFonts.poppins(fontSize: 13, color: Colors.grey.shade600),
                                   textAlign: TextAlign.center,
                                 ),
