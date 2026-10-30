@@ -15,6 +15,7 @@ const Sidebar = ({
   isOpen = false,
   onClose = () => {},
 }) => {
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const menuItems = [
     {
       id: 'Overview',
@@ -133,7 +134,7 @@ const Sidebar = ({
               </div>
             </div>
             <button
-              onClick={onLogout}
+              onClick={() => setShowLogoutConfirm(true)}
               title="Sign Out"
               className="px-2.5 py-1.5 text-xs font-semibold text-gray-600 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer shrink-0 flex items-center gap-1.5 border border-transparent hover:border-rose-100"
             >
@@ -143,6 +144,40 @@ const Sidebar = ({
           </div>
         </div>
       </div>
+
+      {/* Logout Confirmation Modal - placed OUTSIDE the transformed sidebar container so it centers on the full screen */}
+      {showLogoutConfirm && (
+        <div className="fixed inset-0 z-[100] bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-gray-100 animate-in fade-in zoom-in-95 duration-150">
+            <div className="w-12 h-12 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center mx-auto mb-3.5">
+              <LogOut className="w-6 h-6" />
+            </div>
+            <h3 className="text-base font-bold text-gray-900 text-center">Sign Out of Admin Console?</h3>
+            <p className="text-xs text-gray-500 mt-1.5 text-center leading-relaxed">
+              Are you sure you want to end your current session? You will need to sign in again to access the operator console.
+            </p>
+            <div className="flex items-center gap-3 mt-6">
+              <button
+                type="button"
+                onClick={() => setShowLogoutConfirm(false)}
+                className="flex-1 py-2.5 px-4 border border-gray-200 hover:bg-gray-50 rounded-xl text-xs font-semibold text-gray-700 transition-colors cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setShowLogoutConfirm(false);
+                  onLogout();
+                }}
+                className="flex-1 py-2.5 px-4 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-semibold shadow-xs transition-colors cursor-pointer"
+              >
+                Sign Out
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };
