@@ -23,7 +23,7 @@ const SettingsView = ({
   return (
     <div className="flex-1 flex flex-col h-screen overflow-hidden bg-[#F8F9FA]">
       {/* Clean Top Navigation Bar for Settings */}
-      <div className="bg-white border-b border-gray-200 px-8 pt-6 pb-0">
+      <div className="bg-white border-b border-gray-200 px-8 pt-6 pb-0 shrink-0">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Plans, Policies & Audit</h1>
           <p className="text-sm text-gray-500 mt-0.5">
@@ -32,7 +32,7 @@ const SettingsView = ({
         </div>
 
         {/* Clean Pill Tabs */}
-        <div className="flex items-center gap-2 mt-6 overflow-x-auto pb-0">
+        <div className="flex items-center gap-2 mt-6 overflow-x-auto overflow-y-hidden no-scrollbar pb-0">
           <button
             onClick={() => setActiveTab('plans')}
             className={`flex items-center gap-2 px-4 py-3 text-sm font-semibold border-b-2 transition-all -mb-[2px] ${
