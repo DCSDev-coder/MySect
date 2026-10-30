@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { 
+import {
   Bell, Plus, Send
 } from 'lucide-react';
 
-const GlobalNotifications = ({ 
-  notifications = [], 
-  onPublishNotification 
+const GlobalNotifications = ({
+  notifications = [],
+  onPublishNotification
 }) => {
   const [notifList, setNotifList] = useState(notifications);
   const [showModal, setShowModal] = useState(false);
@@ -66,7 +66,7 @@ const GlobalNotifications = ({
           </p>
         </div>
 
-        <button 
+        <button
           onClick={handleOpenCreate}
           className="px-3.5 py-2 bg-[#062AAE] hover:bg-[#05228D] text-white rounded-lg text-xs sm:text-sm font-semibold transition-colors shadow-xs flex items-center gap-2 self-start md:self-auto cursor-pointer"
         >
@@ -82,19 +82,17 @@ const GlobalNotifications = ({
             <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
               <div>
                 <div className="flex items-center gap-2">
-                  <span className={`px-2 py-0.5 text-xs font-semibold rounded-full ${
-                    notif.priority === 'High' 
-                      ? 'bg-rose-50 text-rose-700 border border-rose-200' 
+                  <span className={`px-2 py-0.5 text-xs font-semibold rounded-full ${notif.priority === 'High'
+                      ? 'bg-rose-50 text-rose-700 border border-rose-200'
                       : 'bg-blue-50 text-[#062AAE] border border-blue-200'
-                  }`}>
+                    }`}>
                     {notif.priority} Priority
                   </span>
                   <span className="text-xs font-medium text-gray-700 bg-gray-100 px-2.5 py-0.5 rounded-full">
                     Audience: {notif.targetAudience}
                   </span>
-                  <span className={`px-2 py-0.5 text-xs font-medium rounded-full ${
-                    notif.status === 'Published' ? 'bg-emerald-50 text-emerald-700' : 'bg-gray-100 text-gray-600'
-                  }`}>
+                  <span className={`px-2 py-0.5 text-xs font-medium rounded-full ${notif.status === 'Published' ? 'bg-emerald-50 text-emerald-700' : 'bg-gray-100 text-gray-600'
+                    }`}>
                     {notif.status}
                   </span>
                 </div>
