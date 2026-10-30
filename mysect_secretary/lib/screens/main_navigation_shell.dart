@@ -56,66 +56,77 @@ class _MainNavigationShellState extends State<MainNavigationShell> {
           body: SafeArea(
             top: false,
             bottom: false,
-            child: Column(
-              children: [
-                const AppTopHeader(),
-                Expanded(
-                  child: MediaQuery.removePadding(
-                    context: context,
-                    removeTop: true,
-                    child: Stack(
-                      children: [
-                        IndexedStack(
-                          index: _currentIndex,
+            child: Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 1024),
+                child: Column(
+                  children: [
+                    const AppTopHeader(),
+                    Expanded(
+                      child: MediaQuery.removePadding(
+                        context: context,
+                        removeTop: true,
+                        child: Stack(
                           children: [
-                            SecretaryDashboardTab(
-                              onNavigateToQueue: () => _onTabSelected(1),
+                            IndexedStack(
+                              index: _currentIndex,
+                              children: [
+                                SecretaryDashboardTab(
+                                  onNavigateToQueue: () => _onTabSelected(1),
+                                ),
+                                const DocumentIntakeQueueTab(),
+                                const ClientCompaniesTab(),
+                                const SecretaryProfileTab(),
+                              ],
                             ),
-                            const DocumentIntakeQueueTab(),
-                            const ClientCompaniesTab(),
-                            const SecretaryProfileTab(),
-                          ],
-                        ),
-                        if (_isSwitchingTab)
-                          Positioned.fill(
-                            child: Container(
-                              color: Colors.white.withValues(alpha: 0.90),
-                              child: Center(
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    const RepeatingStrokeLogoLoader(
-                                      width: 90,
-                                      height: 60,
-                                      cycleDuration: Duration(
-                                        milliseconds: 750,
-                                      ),
+                            if (_isSwitchingTab)
+                              Positioned.fill(
+                                child: Container(
+                                  color: Colors.white.withValues(alpha: 0.90),
+                                  child: Center(
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        const RepeatingStrokeLogoLoader(
+                                          width: 90,
+                                          height: 60,
+                                          cycleDuration: Duration(
+                                            milliseconds: 750,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 12),
+                                        Text(
+                                          'Loading...',
+                                          style: GoogleFonts.poppins(
+                                            fontSize: 11,
+                                            fontWeight: FontWeight.w600,
+                                            color: const Color(0xFF062AAE),
+                                            letterSpacing: 0.4,
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                    const SizedBox(height: 12),
-                                    Text(
-                                      'Loading...',
-                                      style: GoogleFonts.poppins(
-                                        fontSize: 11,
-                                        fontWeight: FontWeight.w600,
-                                        color: const Color(0xFF062AAE),
-                                        letterSpacing: 0.4,
-                                      ),
-                                    ),
-                                  ],
+                                  ),
                                 ),
                               ),
-                            ),
-                          ),
-                      ],
+                          ],
+                        ),
+                      ),
                     ),
-                  ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
-          bottomNavigationBar: CustomBottomNavBar(
-            currentIndex: _currentIndex,
-            onTap: _onTabSelected,
+          bottomNavigationBar: Center(
+            heightFactor: 1.0,
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 1024),
+              child: CustomBottomNavBar(
+                currentIndex: _currentIndex,
+                onTap: _onTabSelected,
+              ),
+            ),
           ),
         );
       },
