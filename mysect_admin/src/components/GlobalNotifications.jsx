@@ -52,7 +52,7 @@ const GlobalNotifications = ({
   };
 
   return (
-    <div className="flex-1 overflow-y-auto bg-[#F8F9FA] p-8">
+    <div className="flex-1 overflow-y-auto bg-[#F8F9FA] p-4 sm:p-8">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between pb-6 border-b border-gray-200 gap-4">
         <div>
@@ -60,25 +60,25 @@ const GlobalNotifications = ({
             <Bell className="w-4 h-4" />
             <span>Platform Broadcast & Regulatory Communications</span>
           </div>
-          <h1 className="text-2xl font-bold text-gray-900 mt-1">Global Notifications & Announcements</h1>
-          <p className="text-sm text-gray-500">
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900 mt-1">Global Notifications & Announcements</h1>
+          <p className="text-xs sm:text-sm text-gray-500">
             Publish network-wide regulatory notices, SSM MBRS scheduled maintenance advisories, and system alerts to secretary firms and mobile clients.
           </p>
         </div>
 
         <button 
           onClick={handleOpenCreate}
-          className="px-4 py-2 bg-[#062AAE] hover:bg-[#05228D] text-white rounded-lg text-sm font-semibold transition-colors shadow-xs flex items-center gap-2"
+          className="px-3.5 py-2 bg-[#062AAE] hover:bg-[#05228D] text-white rounded-lg text-xs sm:text-sm font-semibold transition-colors shadow-xs flex items-center gap-2 self-start md:self-auto cursor-pointer"
         >
           <Plus className="w-4 h-4" />
-          Broadcast Announcement
+          <span>Broadcast Announcement</span>
         </button>
       </div>
 
       {/* Notifications List */}
       <div className="mt-6 space-y-4 w-full">
         {notifList.map((notif) => (
-          <div key={notif.id} className="bg-white rounded-2xl border border-gray-200 shadow-xs p-6 hover:shadow-md transition-shadow">
+          <div key={notif.id} className="bg-white rounded-2xl border border-gray-200 shadow-xs p-4 sm:p-6 hover:shadow-md transition-shadow">
             <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
               <div>
                 <div className="flex items-center gap-2">

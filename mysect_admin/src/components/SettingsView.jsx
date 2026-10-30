@@ -32,64 +32,64 @@ const SettingsView = ({
         </div>
 
         {/* Clean Pill Tabs */}
-        <div className="flex items-center gap-2 mt-6 overflow-x-auto overflow-y-hidden no-scrollbar pb-0">
+        <div className="flex items-center gap-1 sm:gap-2 mt-4 sm:mt-6 overflow-x-auto overflow-y-hidden no-scrollbar pb-0">
           <button
             onClick={() => setActiveTab('plans')}
-            className={`flex items-center gap-2 px-4 py-3 text-sm font-semibold border-b-2 transition-all -mb-[2px] ${
+            className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold border-b-2 transition-all shrink-0 whitespace-nowrap -mb-[2px] ${
               activeTab === 'plans'
                 ? 'border-[#062AAE] text-[#062AAE]'
                 : 'border-transparent text-gray-500 hover:text-gray-800'
             }`}
           >
-            <CreditCard className="w-4 h-4" />
-            <span>Subscription Plans & Limits</span>
+            <CreditCard className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
+            <span>Subscription Plans</span>
           </button>
 
           <button
             onClick={() => setActiveTab('fees')}
-            className={`flex items-center gap-2 px-4 py-3 text-sm font-semibold border-b-2 transition-all -mb-[2px] ${
+            className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold border-b-2 transition-all shrink-0 whitespace-nowrap -mb-[2px] ${
               activeTab === 'fees'
                 ? 'border-[#062AAE] text-[#062AAE]'
                 : 'border-transparent text-gray-500 hover:text-gray-800'
             }`}
           >
-            <DollarSign className="w-4 h-4" />
+            <DollarSign className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
             <span>Fees & Commissions</span>
           </button>
 
           <button
             onClick={() => setActiveTab('policies')}
-            className={`flex items-center gap-2 px-4 py-3 text-sm font-semibold border-b-2 transition-all -mb-[2px] ${
+            className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold border-b-2 transition-all shrink-0 whitespace-nowrap -mb-[2px] ${
               activeTab === 'policies'
                 ? 'border-[#062AAE] text-[#062AAE]'
                 : 'border-transparent text-gray-500 hover:text-gray-800'
             }`}
           >
-            <Sliders className="w-4 h-4" />
-            <span>Platform Policies & e-KYC</span>
+            <Sliders className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
+            <span>Policies & e-KYC</span>
           </button>
 
           <button
             onClick={() => setActiveTab('reports')}
-            className={`flex items-center gap-2 px-4 py-3 text-sm font-semibold border-b-2 transition-all -mb-[2px] ${
+            className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold border-b-2 transition-all shrink-0 whitespace-nowrap -mb-[2px] ${
               activeTab === 'reports'
                 ? 'border-[#062AAE] text-[#062AAE]'
                 : 'border-transparent text-gray-500 hover:text-gray-800'
             }`}
           >
-            <BarChart3 className="w-4 h-4" />
+            <BarChart3 className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
             <span>Reports & Analytics</span>
           </button>
 
           <button
             onClick={() => setActiveTab('audit')}
-            className={`flex items-center gap-2 px-4 py-3 text-sm font-semibold border-b-2 transition-all -mb-[2px] ${
+            className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold border-b-2 transition-all shrink-0 whitespace-nowrap -mb-[2px] ${
               activeTab === 'audit'
                 ? 'border-[#062AAE] text-[#062AAE]'
                 : 'border-transparent text-gray-500 hover:text-gray-800'
             }`}
           >
-            <FileSearch className="w-4 h-4" />
+            <FileSearch className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
             <span>Audit Trail</span>
           </button>
         </div>

@@ -31,19 +31,19 @@ const OperationsView = ({
         </div>
 
         {/* Clean Pill Tabs */}
-        <div className="flex items-center gap-2 mt-6 overflow-x-auto overflow-y-hidden no-scrollbar pb-0">
+        <div className="flex items-center gap-1 sm:gap-2 mt-4 sm:mt-6 overflow-x-auto overflow-y-hidden no-scrollbar pb-0">
           <button
             onClick={() => setActiveTab('escalations')}
-            className={`flex items-center gap-2 px-4 py-3 text-sm font-semibold border-b-2 transition-all -mb-[2px] ${
+            className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold border-b-2 transition-all shrink-0 whitespace-nowrap -mb-[2px] ${
               activeTab === 'escalations'
                 ? 'border-[#062AAE] text-[#062AAE]'
                 : 'border-transparent text-gray-500 hover:text-gray-800'
             }`}
           >
-            <AlertTriangle className="w-4 h-4" />
+            <AlertTriangle className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
             <span>Escalations & Overdue</span>
             {openEscalationsCount > 0 && (
-              <span className="px-2 py-0.5 text-xs font-bold rounded-full bg-rose-100 text-rose-800">
+              <span className="px-1.5 py-0.5 text-[11px] font-bold rounded-full bg-rose-100 text-rose-800">
                 {openEscalationsCount}
               </span>
             )}
@@ -51,16 +51,16 @@ const OperationsView = ({
 
           <button
             onClick={() => setActiveTab('disputes')}
-            className={`flex items-center gap-2 px-4 py-3 text-sm font-semibold border-b-2 transition-all -mb-[2px] ${
+            className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold border-b-2 transition-all shrink-0 whitespace-nowrap -mb-[2px] ${
               activeTab === 'disputes'
                 ? 'border-[#062AAE] text-[#062AAE]'
                 : 'border-transparent text-gray-500 hover:text-gray-800'
             }`}
           >
-            <HelpCircle className="w-4 h-4" />
+            <HelpCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
             <span>Support & Disputes</span>
             {openDisputesCount > 0 && (
-              <span className="px-2 py-0.5 text-xs font-bold rounded-full bg-amber-100 text-amber-800">
+              <span className="px-1.5 py-0.5 text-[11px] font-bold rounded-full bg-amber-100 text-amber-800">
                 {openDisputesCount}
               </span>
             )}
@@ -68,13 +68,13 @@ const OperationsView = ({
 
           <button
             onClick={() => setActiveTab('announcements')}
-            className={`flex items-center gap-2 px-4 py-3 text-sm font-semibold border-b-2 transition-all -mb-[2px] ${
+            className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold border-b-2 transition-all shrink-0 whitespace-nowrap -mb-[2px] ${
               activeTab === 'announcements'
                 ? 'border-[#062AAE] text-[#062AAE]'
                 : 'border-transparent text-gray-500 hover:text-gray-800'
             }`}
           >
-            <Bell className="w-4 h-4" />
+            <Bell className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
             <span>Announcements & Notices</span>
           </button>
         </div>

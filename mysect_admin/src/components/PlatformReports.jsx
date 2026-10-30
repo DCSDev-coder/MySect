@@ -28,7 +28,7 @@ const PlatformReports = ({ firms = [], companies = [] }) => {
   };
 
   return (
-    <div className="flex-1 overflow-y-auto bg-[#F8F9FA] p-8">
+    <div className="flex-1 overflow-y-auto bg-[#F8F9FA] p-4 sm:p-8">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between pb-6 border-b border-gray-200 gap-4">
         <div>
@@ -36,18 +36,18 @@ const PlatformReports = ({ firms = [], companies = [] }) => {
             <BarChart3 className="w-4 h-4" />
             <span>Platform Analytics & Regulatory Reporting</span>
           </div>
-          <h1 className="text-2xl font-bold text-gray-900 mt-1">Platform-Wide Reports & Infrastructure Metrics</h1>
-          <p className="text-sm text-gray-500">
-            Comprehensive oversight on network adoption, SLA benchmarks, AI automated intake rates, and TM Cloud storage utilization.
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900 mt-1">Platform Reports & Metrics</h1>
+          <p className="text-xs sm:text-sm text-gray-500">
+            Oversight on network adoption, SLA benchmarks, AI automated intake rates, and TM Cloud storage utilization.
           </p>
         </div>
 
         <button 
           onClick={handleExportReportCSV}
-          className="px-4 py-2 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 rounded-lg text-sm font-semibold transition-colors shadow-xs flex items-center gap-2"
+          className="px-3.5 py-2 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 rounded-lg text-xs sm:text-sm font-semibold transition-colors shadow-xs flex items-center gap-2 self-start md:self-auto cursor-pointer"
         >
           <Download className="w-4 h-4" />
-          Export Statutory Report (CSV)
+          <span>Export CSV Report</span>
         </button>
       </div>
 
@@ -148,45 +148,47 @@ const PlatformReports = ({ firms = [], companies = [] }) => {
           </div>
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200 text-xs">
+        <div className="overflow-x-auto -mx-2 sm:mx-0">
+          <table className="min-w-[620px] w-full divide-y divide-gray-200 text-xs">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-5 py-3.5 text-left font-semibold text-gray-600">Firm Name</th>
-                <th className="px-5 py-3.5 text-left font-semibold text-gray-600">Portfolio Size</th>
-                <th className="px-5 py-3.5 text-left font-semibold text-gray-600">SLA Compliance Rate</th>
-                <th className="px-5 py-3.5 text-left font-semibold text-gray-600">Average Turnaround</th>
-                <th className="px-5 py-3.5 text-left font-semibold text-gray-600">Customer Rating</th>
-                <th className="px-5 py-3.5 text-left font-semibold text-gray-600">Standing</th>
+                <th className="px-4 sm:px-5 py-3 text-left font-semibold text-gray-600">Firm Name</th>
+                <th className="px-4 sm:px-5 py-3 text-left font-semibold text-gray-600">Portfolio Size</th>
+                <th className="px-4 sm:px-5 py-3 text-left font-semibold text-gray-600">SLA Compliance Rate</th>
+                <th className="px-4 sm:px-5 py-3 text-left font-semibold text-gray-600">Average Turnaround</th>
+                <th className="px-4 sm:px-5 py-3 text-left font-semibold text-gray-600">Customer Rating</th>
+                <th className="px-4 sm:px-5 py-3 text-left font-semibold text-gray-600">Standing</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100 bg-white">
               {firms.filter(f => f.status === 'Active').map((firm, idx) => (
                 <tr key={firm.id} className="hover:bg-gray-50">
-                  <td className="px-5 py-4">
+                  <td className="px-4 sm:px-5 py-3.5">
                     <div className="font-semibold text-gray-900">{firm.name}</div>
                     <div className="text-gray-400 text-[11px]">{firm.cosecLicenseNo}</div>
                   </td>
-                  <td className="px-5 py-4 font-medium text-gray-800">
+                  <td className="px-4 sm:px-5 py-3.5 font-medium text-gray-800 whitespace-nowrap">
                     {firm.companiesCount} Companies
                   </td>
-                  <td className="px-5 py-4">
+                  <td className="px-4 sm:px-5 py-3.5 whitespace-nowrap">
                     <span className="font-bold text-emerald-700">{firm.slaComplianceRate}%</span>
-                    <div className="w-24 bg-gray-100 h-1.5 rounded-full mt-1 overflow-hidden">
+                    <div className="w-20 sm:w-24 bg-gray-100 h-1.5 rounded-full mt-1 overflow-hidden">
                       <div 
                         className="h-full bg-emerald-500 rounded-full" 
                         style={{ width: `${firm.slaComplianceRate}%` }}
                       ></div>
                     </div>
                   </td>
-                  <td className="px-5 py-4 text-gray-700">
-                    2.8 Days (Target: 5.0)
+                  <td className="px-4 sm:px-5 py-3.5 text-gray-700 whitespace-nowrap">
+                    <div className="font-medium">2.8 Days</div>
+                    <div className="text-[10px] text-gray-400">(Target: 5.0)</div>
                   </td>
-                  <td className="px-5 py-4">
-                    <span className="font-bold text-gray-900">★ {firm.rating}</span> / 5.0
+                  <td className="px-4 sm:px-5 py-3.5 whitespace-nowrap">
+                    <span className="font-bold text-gray-900 text-amber-500">★ {firm.rating}</span>
+                    <span className="text-gray-400 text-[11px]"> / 5.0</span>
                   </td>
-                  <td className="px-5 py-4">
-                    <span className="px-2.5 py-1 text-xs font-semibold rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
+                  <td className="px-4 sm:px-5 py-3.5 whitespace-nowrap">
+                    <span className="inline-flex items-center px-2 py-0.5 text-[11px] font-semibold rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
                       Tier 1 Exemplary
                     </span>
                   </td>

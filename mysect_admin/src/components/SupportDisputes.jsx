@@ -35,7 +35,7 @@ const SupportDisputes = ({
   };
 
   return (
-    <div className="flex-1 overflow-y-auto bg-[#F8F9FA] p-8">
+    <div className="flex-1 overflow-y-auto bg-[#F8F9FA] p-4 sm:p-8">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between pb-6 border-b border-gray-200 gap-4">
         <div>
@@ -43,13 +43,13 @@ const SupportDisputes = ({
             <HelpCircle className="w-4 h-4" />
             <span>Support Arbitration & Dispute Resolution</span>
           </div>
-          <h1 className="text-2xl font-bold text-gray-900 mt-1">Platform Support Cases & Disputes</h1>
-          <p className="text-sm text-gray-500">
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900 mt-1">Platform Support Cases & Disputes</h1>
+          <p className="text-xs sm:text-sm text-gray-500">
             Mediate client-firm service disputes, investigate billing discrepancies, and maintain professional service standards across the network.
           </p>
         </div>
 
-        <div className="text-xs bg-white border border-gray-200 rounded-lg p-2.5 px-4 shadow-xs">
+        <div className="text-xs bg-white border border-gray-200 rounded-lg p-2.5 px-4 shadow-xs self-start md:self-auto">
           <span className="text-gray-500">Open Disputes:</span>{' '}
           <strong className="text-rose-600 font-bold">{disputeList.filter(d => !d.status.includes('Resolved')).length}</strong>
         </div>
@@ -71,12 +71,12 @@ const SupportDisputes = ({
               />
             </div>
 
-            <div className="flex gap-1.5 pt-1">
+            <div className="flex gap-1.5 pt-1 overflow-x-auto no-scrollbar">
               {['All', 'Critical', 'Medium'].map((pri) => (
                 <button
                   key={pri}
                   onClick={() => setFilterPriority(pri)}
-                  className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${
+                  className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-colors shrink-0 ${
                     filterPriority === pri 
                       ? 'bg-[#062AAE] text-white' 
                       : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
@@ -102,11 +102,14 @@ const SupportDisputes = ({
                   }`}
                 >
                   <div className="flex items-start justify-between gap-2">
-                    <div>
-                      <span className="text-xs font-mono font-bold text-gray-500">{d.ticketNo}</span>
-                      <h4 className="font-semibold text-sm text-gray-900 mt-0.5">{d.subject}</h4>
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-mono font-bold text-gray-500">{d.ticketNo}</span>
+                        <span className="text-[11px] text-gray-400">• {d.openedDate}</span>
+                      </div>
+                      <h4 className="font-semibold text-sm text-gray-900 mt-1 break-words line-clamp-2 leading-snug">{d.subject}</h4>
                     </div>
-                    <span className={`px-2.5 py-1 text-[11px] font-semibold rounded-full text-center inline-flex items-center justify-center shrink-0 leading-tight ${
+                    <span className={`px-2 py-0.5 text-[10px] font-semibold rounded-full text-center inline-flex items-center justify-center shrink-0 leading-tight whitespace-nowrap ${
                       d.priority === 'Critical' 
                         ? 'bg-rose-50 text-rose-700 border border-rose-200' 
                         : 'bg-amber-50 text-amber-700 border border-amber-200'
@@ -115,13 +118,13 @@ const SupportDisputes = ({
                     </span>
                   </div>
 
-                  <p className="text-xs text-gray-600 mt-2 line-clamp-2">
+                  <p className="text-xs text-gray-600 mt-2 break-words">
                     Claimant: <strong>{d.claimant}</strong> vs <strong>{d.respondentFirm}</strong>
                   </p>
 
-                  <div className="mt-3 flex items-center justify-between text-xs text-gray-500 pt-2 border-t border-gray-100">
-                    <span>Category: {d.category}</span>
-                    <span className={d.status.includes('Resolved') ? 'text-emerald-700 font-semibold' : 'text-amber-700 font-medium'}>
+                  <div className="mt-3 flex items-center justify-between text-xs text-gray-500 pt-2 border-t border-gray-100 gap-2">
+                    <span className="truncate">Category: {d.category}</span>
+                    <span className={`shrink-0 font-medium ${d.status.includes('Resolved') ? 'text-emerald-700 font-semibold' : 'text-amber-700'}`}>
                       {d.status}
                     </span>
                   </div>
@@ -135,20 +138,20 @@ const SupportDisputes = ({
         <div className="xl:col-span-7">
           {selectedDispute ? (
             <div className="bg-white rounded-xl border border-gray-200 shadow-xs overflow-hidden sticky top-8">
-              <div className="p-6 border-b border-gray-200 bg-gray-50/50">
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <div className="flex items-center gap-2">
+              <div className="p-4 sm:p-6 border-b border-gray-200 bg-gray-50/50">
+                <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-2 flex-wrap">
                       <span className="text-xs font-mono font-bold text-gray-600 bg-white px-2 py-0.5 rounded border border-gray-200">
                         {selectedDispute.ticketNo}
                       </span>
                       <span className="text-xs text-gray-500">Opened {selectedDispute.openedDate}</span>
                     </div>
-                    <h2 className="text-lg font-bold text-gray-900 mt-2">{selectedDispute.subject}</h2>
-                    <p className="text-xs text-gray-500 mt-0.5">Category: {selectedDispute.category}</p>
+                    <h2 className="text-base sm:text-lg font-bold text-gray-900 mt-2 break-words leading-snug">{selectedDispute.subject}</h2>
+                    <p className="text-xs text-gray-500 mt-1">Category: {selectedDispute.category}</p>
                   </div>
 
-                  <span className={`px-3 py-1.5 text-xs font-semibold rounded-lg text-center inline-flex items-center justify-center leading-tight shrink-0 ${
+                  <span className={`px-2.5 py-1 text-xs font-semibold rounded-lg text-center inline-flex items-center justify-center leading-tight shrink-0 self-start sm:self-auto ${
                     selectedDispute.status.includes('Resolved') 
                       ? 'bg-emerald-100 text-emerald-800 border border-emerald-200' 
                       : 'bg-amber-100 text-amber-800 border border-amber-200'

@@ -51,7 +51,7 @@ const EscalationsMonitor = ({
   };
 
   return (
-    <div className="flex-1 overflow-y-auto bg-[#F8F9FA] p-8">
+    <div className="flex-1 overflow-y-auto bg-[#F8F9FA] p-4 sm:p-8">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between pb-6 border-b border-gray-200 gap-4">
         <div>
@@ -59,16 +59,16 @@ const EscalationsMonitor = ({
             <AlertTriangle className="w-4 h-4" />
             <span>Platform Service Oversight & Escalations</span>
           </div>
-          <h1 className="text-2xl font-bold text-gray-900 mt-1">Overdue Work & AI Escalation Monitoring</h1>
-          <p className="text-sm text-gray-500">
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900 mt-1">Overdue Work & Escalation Monitoring</h1>
+          <p className="text-xs sm:text-sm text-gray-500">
             Real-time queue of Section 68 overdue filings, SSM queries, and AI chatbot escalations requiring operator intervention.
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
-          <div className="text-xs bg-white border border-gray-200 rounded-lg p-2.5 px-4 shadow-xs">
+        <div className="flex items-center gap-3 self-start md:self-auto">
+          <div className="text-xs bg-white border border-gray-200 rounded-lg p-2.5 px-3 sm:px-4 shadow-xs">
             <span className="text-gray-500">Active Escalations:</span>{' '}
-            <strong className="text-rose-600 text-sm font-bold">{escalations.length}</strong>
+            <strong className="text-rose-600 font-bold">{escalations.length}</strong>
             <span className="mx-2 text-gray-300">|</span>
             <span className="text-gray-700 font-medium">SLA Default Guard</span>
           </div>
