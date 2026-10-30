@@ -15,7 +15,6 @@ const Sidebar = ({
   isOpen = false,
   onClose = () => {},
 }) => {
-  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const menuItems = [
     {
       id: 'Overview',
@@ -118,13 +117,13 @@ const Sidebar = ({
         </div>
 
         {/* Operator Profile Footer */}
-        <div className="p-4 border-t border-gray-100 shrink-0">
-          <div className="flex items-center justify-between p-2.5 rounded-xl bg-gray-50 border border-gray-100">
-            <div className="flex items-center gap-2.5 overflow-hidden">
+        <div className="p-3.5 border-t border-gray-100 shrink-0">
+          <div className="flex items-center justify-between p-2 rounded-xl bg-gray-50 border border-gray-100">
+            <div className="flex items-center gap-2.5 overflow-hidden min-w-0">
               <div className="w-8 h-8 rounded-full bg-[#062AAE] text-white flex items-center justify-center font-bold text-xs shrink-0 shadow-2xs">
                 {currentUser?.avatar || 'AF'}
               </div>
-              <div className="overflow-hidden">
+              <div className="overflow-hidden min-w-0">
                 <p className="text-xs font-semibold text-gray-900 truncate">
                   {currentUser?.name || 'Ahmad Faizal'}
                 </p>
@@ -134,48 +133,15 @@ const Sidebar = ({
               </div>
             </div>
             <button
-              onClick={() => setShowLogoutConfirm(true)}
-              title="Sign out of Admin Console"
-              className="p-1.5 text-gray-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer shrink-0"
+              onClick={onLogout}
+              title="Sign Out"
+              className="px-2.5 py-1.5 text-xs font-semibold text-gray-600 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer shrink-0 flex items-center gap-1.5 border border-transparent hover:border-rose-100"
             >
-              <LogOut className="w-4 h-4" />
+              <LogOut className="w-3.5 h-3.5" />
+              <span className="text-[11px]">Logout</span>
             </button>
           </div>
         </div>
-
-        {/* Logout Confirmation Modal */}
-        {showLogoutConfirm && (
-          <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-2xs flex items-center justify-center p-4">
-            <div className="bg-white rounded-2xl max-w-xs w-full p-6 shadow-2xl border border-gray-100 animate-in fade-in zoom-in-95 duration-150">
-              <div className="w-10 h-10 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center mb-3">
-                <LogOut className="w-5 h-5" />
-              </div>
-              <h3 className="text-sm font-bold text-gray-900">Sign Out of MySect Admin?</h3>
-              <p className="text-xs text-gray-500 mt-1 leading-relaxed">
-                Your administrative session will be terminated and audit logs will record your sign-out.
-              </p>
-              <div className="flex items-center gap-2.5 mt-5">
-                <button
-                  type="button"
-                  onClick={() => setShowLogoutConfirm(false)}
-                  className="flex-1 py-2 px-3 border border-gray-200 rounded-xl text-xs font-semibold text-gray-700 hover:bg-gray-50 cursor-pointer"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setShowLogoutConfirm(false);
-                    onLogout();
-                  }}
-                  className="flex-1 py-2 px-3 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-semibold shadow-xs cursor-pointer"
-                >
-                  Sign Out
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </>
   );
