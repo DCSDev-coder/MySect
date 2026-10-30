@@ -1,21 +1,18 @@
 import React, { useState } from 'react';
-import { AlertTriangle, HelpCircle, Bell, FileSpreadsheet } from 'lucide-react';
+import { AlertTriangle, HelpCircle, Bell } from 'lucide-react';
 import EscalationsMonitor from './EscalationsMonitor';
 import SupportDisputes from './SupportDisputes';
 import GlobalNotifications from './GlobalNotifications';
-import ServiceCatalogue from './ServiceCatalogue';
 
 const OperationsView = ({
   escalations = [],
   firms = [],
   disputes = [],
   notifications = [],
-  services = [],
   onResolveEscalation,
   onReassignEscalation,
   onResolveDispute,
   onPublishNotification,
-  onSaveService,
 }) => {
   const [activeTab, setActiveTab] = useState('escalations');
 
@@ -29,7 +26,7 @@ const OperationsView = ({
         <div>
           <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Operations & Network Services</h1>
           <p className="text-xs sm:text-sm text-gray-500 mt-0.5">
-            Manage escalations, overdue Section 68 returns, disputes, service catalogues, and broadcasts.
+            Manage escalations, overdue Section 68 returns, disputes, and system-wide announcements.
           </p>
         </div>
 
@@ -80,18 +77,6 @@ const OperationsView = ({
             <Bell className="w-4 h-4" />
             <span>Announcements & Notices</span>
           </button>
-
-          <button
-            onClick={() => setActiveTab('catalogue')}
-            className={`flex items-center gap-2 px-4 py-3 text-sm font-semibold border-b-2 transition-all -mb-[2px] ${
-              activeTab === 'catalogue'
-                ? 'border-[#062AAE] text-[#062AAE]'
-                : 'border-transparent text-gray-500 hover:text-gray-800'
-            }`}
-          >
-            <FileSpreadsheet className="w-4 h-4" />
-            <span>Service Catalogue & SLAs</span>
-          </button>
         </div>
       </div>
 
@@ -117,13 +102,6 @@ const OperationsView = ({
           <GlobalNotifications
             notifications={notifications}
             onPublishNotification={onPublishNotification}
-          />
-        )}
-
-        {activeTab === 'catalogue' && (
-          <ServiceCatalogue
-            services={services}
-            onSaveService={onSaveService}
           />
         )}
       </div>
