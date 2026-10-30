@@ -70,8 +70,345 @@ class _SecretaryLoginPageState extends State<SecretaryLoginPage> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildEmailField() {
+    return TextField(
+      controller: _emailController,
+      style: GoogleFonts.poppins(
+        fontSize: 13,
+        color: Colors.black87,
+      ),
+      decoration: InputDecoration(
+        hintText: 'name@sectpro.com.my',
+        hintStyle: GoogleFonts.poppins(
+          color: Colors.grey.shade400,
+          fontSize: 13,
+        ),
+        prefixIcon: const Icon(
+          Icons.email_outlined,
+          size: 20,
+          color: Color(0xFF062AAE),
+        ),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: Colors.grey.shade300),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: Colors.grey.shade300),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(
+            color: Color(0xFF062AAE),
+            width: 1.5,
+          ),
+        ),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 14,
+          vertical: 15,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPasswordField() {
+    return TextField(
+      controller: _passwordController,
+      obscureText: _obscurePassword,
+      style: GoogleFonts.poppins(
+        fontSize: 13,
+        color: Colors.black87,
+      ),
+      decoration: InputDecoration(
+        hintText: 'Enter your password',
+        hintStyle: GoogleFonts.poppins(
+          color: Colors.grey.shade400,
+          fontSize: 13,
+        ),
+        prefixIcon: const Icon(
+          Icons.lock_outline,
+          size: 20,
+          color: Color(0xFF062AAE),
+        ),
+        suffixIcon: IconButton(
+          icon: Icon(
+            _obscurePassword
+                ? Icons.visibility_off_outlined
+                : Icons.visibility_outlined,
+            size: 20,
+            color: Colors.grey.shade600,
+          ),
+          onPressed: () {
+            setState(() {
+              _obscurePassword = !_obscurePassword;
+            });
+          },
+        ),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: Colors.grey.shade300),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: Colors.grey.shade300),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(
+            color: Color(0xFF062AAE),
+            width: 1.5,
+          ),
+        ),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 14,
+          vertical: 15,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildForgotPasswordButton() {
+    return TextButton(
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => SecretaryForgotPasswordPage(
+              initialEmail: _emailController.text.trim().isNotEmpty
+                  ? _emailController.text.trim()
+                  : null,
+            ),
+          ),
+        );
+      },
+      style: TextButton.styleFrom(
+        padding: EdgeInsets.zero,
+        minimumSize: Size.zero,
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+      ),
+      child: Text(
+        'Forgot Password?',
+        style: GoogleFonts.poppins(
+          fontSize: 12,
+          fontWeight: FontWeight.w600,
+          color: const Color(0xFF062AAE),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLoginButton() {
+    return SizedBox(
+      width: double.infinity,
+      height: 52,
+      child: ElevatedButton(
+        onPressed: _isLoading ? null : _handleLogin,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: const Color(0xFF062AAE),
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
+        child: _isLoading
+            ? const SizedBox(
+                width: 22,
+                height: 22,
+                child: CircularProgressIndicator(
+                  color: Colors.white,
+                  strokeWidth: 2.5,
+                ),
+              )
+            : Text(
+                'Login',
+                style: GoogleFonts.poppins(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+      ),
+    );
+  }
+
+  // Desktop Side-by-Side Layout
+  Widget _buildDesktopLayout(BuildContext context, BoxConstraints constraints) {
+    return Scaffold(
+      backgroundColor: const Color(0xFFF1F5FD),
+      body: Center(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(32),
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 1060),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(24),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.06),
+                    blurRadius: 32,
+                    offset: const Offset(0, 8),
+                  ),
+                ],
+              ),
+              clipBehavior: Clip.antiAlias,
+              child: IntrinsicHeight(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    // Left Brand & Illustration Panel
+                    Expanded(
+                      flex: 5,
+                      child: Container(
+                        color: const Color(0xFFF8FAFC),
+                        padding: const EdgeInsets.symmetric(horizontal: 44, vertical: 48),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset(
+                              'assets/mysect_logo.png',
+                              width: 145,
+                              fit: BoxFit.contain,
+                            ),
+                            const SizedBox(height: 32),
+                            Image.asset(
+                              'assets/login.png',
+                              height: 220,
+                              fit: BoxFit.contain,
+                            ),
+                            const SizedBox(height: 28),
+                            Text(
+                              'MySect Secretary Portal',
+                              style: GoogleFonts.poppins(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: const Color(0xFF0F172A),
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              'Authorized secretarial compliance workspace for licensed practitioners and firm teams.',
+                              style: GoogleFonts.poppins(
+                                fontSize: 12,
+                                color: Colors.grey.shade600,
+                                height: 1.5,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+
+                    // Vertical Divider
+                    Container(
+                      width: 1,
+                      color: Colors.grey.shade100,
+                    ),
+
+                    // Right Form Panel
+                    Expanded(
+                      flex: 6,
+                      child: Container(
+                        color: Colors.white,
+                        padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 48),
+                        child: Center(
+                          child: ConstrainedBox(
+                            constraints: const BoxConstraints(maxWidth: 400),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Sign In to Console',
+                                  style: GoogleFonts.poppins(
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black87,
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  'Enter your secretary credentials to continue.',
+                                  style: GoogleFonts.poppins(
+                                    fontSize: 13,
+                                    color: Colors.grey.shade500,
+                                  ),
+                                ),
+                                const SizedBox(height: 28),
+
+                                // Email Field
+                                Text(
+                                  'EMAIL ADDRESS',
+                                  style: GoogleFonts.poppins(
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.grey.shade700,
+                                    letterSpacing: 0.5,
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                _buildEmailField(),
+
+                                const SizedBox(height: 18),
+
+                                // Password Field
+                                Text(
+                                  'PASSWORD',
+                                  style: GoogleFonts.poppins(
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.grey.shade700,
+                                    letterSpacing: 0.5,
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                _buildPasswordField(),
+
+                                const SizedBox(height: 14),
+
+                                // Forgot Password Link
+                                Align(
+                                  alignment: Alignment.centerRight,
+                                  child: _buildForgotPasswordButton(),
+                                ),
+
+                                const SizedBox(height: 24),
+
+                                // Login Primary Button
+                                _buildLoginButton(),
+
+                                const SizedBox(height: 20),
+
+                                Center(
+                                  child: Text(
+                                    '256-Bit SSL Encrypted • Statutory Portal',
+                                    style: GoogleFonts.poppins(
+                                      fontSize: 11,
+                                      color: Colors.grey.shade400,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  // Mobile Stacked Layout (Preserved original phone design)
+  Widget _buildMobileLayout(BuildContext context, BoxConstraints constraints) {
     final bottomInset = MediaQuery.of(context).padding.bottom;
     final isKeyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
 
@@ -83,281 +420,122 @@ class _SecretaryLoginPageState extends State<SecretaryLoginPage> {
         child: GestureDetector(
           onTap: () => FocusScope.of(context).unfocus(),
           behavior: HitTestBehavior.opaque,
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              return SingleChildScrollView(
-                physics: const ClampingScrollPhysics(),
-                keyboardDismissBehavior:
-                    ScrollViewKeyboardDismissBehavior.onDrag,
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(minHeight: constraints.maxHeight),
-                  child: IntrinsicHeight(
-                    child: Column(
-                      children: [
-                        const AppTopHeader(
-                          showNotificationBell: false,
-                          backgroundColor: Colors.transparent,
-                        ),
-                        SizedBox(height: isKeyboardOpen ? 4 : 12),
-                        AnimatedContainer(
-                          duration: const Duration(milliseconds: 200),
-                          curve: Curves.easeOut,
-                          height: isKeyboardOpen ? 0 : 170,
-                          child: OverflowBox(
-                            minHeight: 0,
-                            maxHeight: 170,
-                            alignment: Alignment.center,
-                            child: Image.asset('assets/login.png', height: 170),
-                          ),
-                        ),
-                        SizedBox(height: isKeyboardOpen ? 8 : 16),
-                        Expanded(
-                          child: Container(
-                            width: double.infinity,
-                            decoration: const BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(32),
-                                topRight: Radius.circular(32),
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black12,
-                                  blurRadius: 10,
-                                  offset: Offset(0, -5),
-                                ),
-                              ],
-                            ),
-                            child: Padding(
-                              padding: EdgeInsets.fromLTRB(
-                                24.0,
-                                24.0,
-                                24.0,
-                                24.0 + (isKeyboardOpen ? 0 : bottomInset),
-                              ),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  // Email Field
-                                  Text(
-                                    'EMAIL ADDRESS',
-                                    style: GoogleFonts.poppins(
-                                      fontSize: 11,
-                                      fontWeight: FontWeight.w600,
-                                      color: Colors.grey.shade700,
-                                      letterSpacing: 0.5,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 8),
-                                  TextField(
-                                    controller: _emailController,
-                                    style: GoogleFonts.poppins(
-                                      fontSize: 13,
-                                      color: Colors.black87,
-                                    ),
-                                    decoration: InputDecoration(
-                                      hintText: 'name@sectpro.com.my',
-                                      hintStyle: GoogleFonts.poppins(
-                                        color: Colors.grey.shade400,
-                                        fontSize: 13,
-                                      ),
-                                      prefixIcon: const Icon(
-                                        Icons.email_outlined,
-                                        size: 20,
-                                        color: Color(0xFF062AAE),
-                                      ),
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(12),
-                                        borderSide: BorderSide(
-                                          color: Colors.grey.shade300,
-                                        ),
-                                      ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(12),
-                                        borderSide: BorderSide(
-                                          color: Colors.grey.shade300,
-                                        ),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(12),
-                                        borderSide: const BorderSide(
-                                          color: Color(0xFF062AAE),
-                                          width: 1.5,
-                                        ),
-                                      ),
-                                      contentPadding:
-                                          const EdgeInsets.symmetric(
-                                            horizontal: 14,
-                                            vertical: 15,
-                                          ),
-                                    ),
-                                  ),
-
-                                  const SizedBox(height: 18),
-
-                                  // Password Field
-                                  Text(
-                                    'PASSWORD',
-                                    style: GoogleFonts.poppins(
-                                      fontSize: 11,
-                                      fontWeight: FontWeight.w600,
-                                      color: Colors.grey.shade700,
-                                      letterSpacing: 0.5,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 8),
-                                  TextField(
-                                    controller: _passwordController,
-                                    obscureText: _obscurePassword,
-                                    style: GoogleFonts.poppins(
-                                      fontSize: 13,
-                                      color: Colors.black87,
-                                    ),
-                                    decoration: InputDecoration(
-                                      hintText: 'Enter your password',
-                                      hintStyle: GoogleFonts.poppins(
-                                        color: Colors.grey.shade400,
-                                        fontSize: 13,
-                                      ),
-                                      prefixIcon: const Icon(
-                                        Icons.lock_outline,
-                                        size: 20,
-                                        color: Color(0xFF062AAE),
-                                      ),
-                                      suffixIcon: IconButton(
-                                        icon: Icon(
-                                          _obscurePassword
-                                              ? Icons.visibility_off_outlined
-                                              : Icons.visibility_outlined,
-                                          size: 20,
-                                          color: Colors.grey.shade600,
-                                        ),
-                                        onPressed: () {
-                                          setState(() {
-                                            _obscurePassword =
-                                                !_obscurePassword;
-                                          });
-                                        },
-                                      ),
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(12),
-                                        borderSide: BorderSide(
-                                          color: Colors.grey.shade300,
-                                        ),
-                                      ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(12),
-                                        borderSide: BorderSide(
-                                          color: Colors.grey.shade300,
-                                        ),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(12),
-                                        borderSide: const BorderSide(
-                                          color: Color(0xFF062AAE),
-                                          width: 1.5,
-                                        ),
-                                      ),
-                                      contentPadding:
-                                          const EdgeInsets.symmetric(
-                                            horizontal: 14,
-                                            vertical: 15,
-                                          ),
-                                    ),
-                                  ),
-
-                                  const SizedBox(height: 14),
-
-                                  // Forgot Password link
-                                  Align(
-                                    alignment: Alignment.centerRight,
-                                    child: TextButton(
-                                      onPressed: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => SecretaryForgotPasswordPage(
-                                              initialEmail: _emailController.text.trim().isNotEmpty
-                                                  ? _emailController.text.trim()
-                                                  : null,
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                      style: TextButton.styleFrom(
-                                        padding: EdgeInsets.zero,
-                                        minimumSize: Size.zero,
-                                        tapTargetSize:
-                                            MaterialTapTargetSize.shrinkWrap,
-                                      ),
-                                      child: Text(
-                                        'Forgot Password?',
-                                        style: GoogleFonts.poppins(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w600,
-                                          color: const Color(0xFF062AAE),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-
-                                  const SizedBox(height: 26),
-
-                                  // Login Primary Button
-                                  SizedBox(
-                                    width: double.infinity,
-                                    height: 52,
-                                    child: ElevatedButton(
-                                      onPressed: _isLoading
-                                          ? null
-                                          : _handleLogin,
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: const Color(
-                                          0xFF062AAE,
-                                        ),
-                                        elevation: 0,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(
-                                            12,
-                                          ),
-                                        ),
-                                      ),
-                                      child: _isLoading
-                                          ? const SizedBox(
-                                              width: 22,
-                                              height: 22,
-                                              child: CircularProgressIndicator(
-                                                color: Colors.white,
-                                                strokeWidth: 2.5,
-                                              ),
-                                            )
-                                          : Text(
-                                              'Login',
-                                              style: GoogleFonts.poppins(
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                    ),
-                                  ),
-
-                                  const SizedBox(height: 16),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
+          child: SingleChildScrollView(
+            physics: const ClampingScrollPhysics(),
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            child: ConstrainedBox(
+              constraints: BoxConstraints(minHeight: constraints.maxHeight),
+              child: IntrinsicHeight(
+                child: Column(
+                  children: [
+                    const AppTopHeader(
+                      showNotificationBell: false,
+                      backgroundColor: Colors.transparent,
                     ),
-                  ),
+                    SizedBox(height: isKeyboardOpen ? 4 : 12),
+                    AnimatedContainer(
+                      duration: const Duration(milliseconds: 200),
+                      curve: Curves.easeOut,
+                      height: isKeyboardOpen ? 0 : 170,
+                      child: OverflowBox(
+                        minHeight: 0,
+                        maxHeight: 170,
+                        alignment: Alignment.center,
+                        child: Image.asset('assets/login.png', height: 170),
+                      ),
+                    ),
+                    SizedBox(height: isKeyboardOpen ? 8 : 16),
+                    Expanded(
+                      child: Container(
+                        width: double.infinity,
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(32),
+                            topRight: Radius.circular(32),
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black12,
+                              blurRadius: 10,
+                              offset: Offset(0, -5),
+                            ),
+                          ],
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.fromLTRB(
+                            24.0,
+                            24.0,
+                            24.0,
+                            24.0 + (isKeyboardOpen ? 0 : bottomInset),
+                          ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'EMAIL ADDRESS',
+                                style: GoogleFonts.poppins(
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.grey.shade700,
+                                  letterSpacing: 0.5,
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              _buildEmailField(),
+
+                              const SizedBox(height: 18),
+
+                              Text(
+                                'PASSWORD',
+                                style: GoogleFonts.poppins(
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.grey.shade700,
+                                  letterSpacing: 0.5,
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              _buildPasswordField(),
+
+                              const SizedBox(height: 14),
+
+                              Align(
+                                alignment: Alignment.centerRight,
+                                child: _buildForgotPasswordButton(),
+                              ),
+
+                              const SizedBox(height: 26),
+
+                              _buildLoginButton(),
+
+                              const SizedBox(height: 16),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              );
-            },
+              ),
+            ),
           ),
         ),
       ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        if (constraints.maxWidth >= 768) {
+          return _buildDesktopLayout(context, constraints);
+        } else {
+          return _buildMobileLayout(context, constraints);
+        }
+      },
     );
   }
 }

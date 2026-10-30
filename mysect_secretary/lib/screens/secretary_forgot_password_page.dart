@@ -53,8 +53,252 @@ class _SecretaryForgotPasswordPageState extends State<SecretaryForgotPasswordPag
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildEmailField() {
+    return TextField(
+      controller: _emailController,
+      style: GoogleFonts.poppins(
+        fontSize: 13,
+        color: Colors.black87,
+      ),
+      decoration: InputDecoration(
+        hintText: 'name@sectpro.com.my',
+        hintStyle: GoogleFonts.poppins(
+          color: Colors.grey.shade400,
+          fontSize: 13,
+        ),
+        prefixIcon: const Icon(
+          Icons.email_outlined,
+          size: 20,
+          color: Color(0xFF062AAE),
+        ),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(
+            color: Colors.grey.shade300,
+          ),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(
+            color: Colors.grey.shade300,
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(
+            color: Color(0xFF062AAE),
+            width: 1.5,
+          ),
+        ),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 14,
+          vertical: 15,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSubmitButton() {
+    return SizedBox(
+      width: double.infinity,
+      height: 52,
+      child: ElevatedButton(
+        onPressed: _handleSendCode,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: const Color(0xFF062AAE),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          elevation: 0,
+        ),
+        child: Text(
+          'Send 6-Digit Code',
+          style: GoogleFonts.poppins(
+            fontSize: 15,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildBackToLoginLink() {
+    return Center(
+      child: GestureDetector(
+        onTap: () => Navigator.of(context).pop(),
+        child: RichText(
+          text: TextSpan(
+            text: 'Remembered your password? ',
+            style: GoogleFonts.poppins(
+              fontSize: 13,
+              color: Colors.grey[700],
+            ),
+            children: [
+              TextSpan(
+                text: 'Back to Login',
+                style: GoogleFonts.poppins(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w700,
+                  color: const Color(0xFF062AAE),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  // Desktop Side-by-Side Layout
+  Widget _buildDesktopLayout(BuildContext context, BoxConstraints constraints) {
+    return Scaffold(
+      backgroundColor: const Color(0xFFF1F5FD),
+      body: Center(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(32),
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 1060),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(24),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.06),
+                    blurRadius: 32,
+                    offset: const Offset(0, 8),
+                  ),
+                ],
+              ),
+              clipBehavior: Clip.antiAlias,
+              child: IntrinsicHeight(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    // Left Brand & Illustration Panel
+                    Expanded(
+                      flex: 5,
+                      child: Container(
+                        color: const Color(0xFFF8FAFC),
+                        padding: const EdgeInsets.symmetric(horizontal: 44, vertical: 48),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset(
+                              'assets/mysect_logo.png',
+                              width: 145,
+                              fit: BoxFit.contain,
+                            ),
+                            const SizedBox(height: 32),
+                            Image.asset(
+                              'assets/forgot_password.png',
+                              height: 220,
+                              fit: BoxFit.contain,
+                            ),
+                            const SizedBox(height: 28),
+                            Text(
+                              'Account Recovery',
+                              style: GoogleFonts.poppins(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: const Color(0xFF0F172A),
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              'Verify your registered email to reset your secretarial console access password.',
+                              style: GoogleFonts.poppins(
+                                fontSize: 12,
+                                color: Colors.grey.shade600,
+                                height: 1.5,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+
+                    // Vertical Divider
+                    Container(
+                      width: 1,
+                      color: Colors.grey.shade100,
+                    ),
+
+                    // Right Form Panel
+                    Expanded(
+                      flex: 6,
+                      child: Container(
+                        color: Colors.white,
+                        padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 48),
+                        child: Center(
+                          child: ConstrainedBox(
+                            constraints: const BoxConstraints(maxWidth: 400),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Forgot Password?',
+                                  style: GoogleFonts.poppins(
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black87,
+                                  ),
+                                ),
+                                const SizedBox(height: 6),
+                                Text(
+                                  'Enter your registered email address to receive a 6-digit verification code.',
+                                  style: GoogleFonts.poppins(
+                                    fontSize: 13,
+                                    color: Colors.grey.shade500,
+                                    height: 1.4,
+                                  ),
+                                ),
+                                const SizedBox(height: 28),
+
+                                // Email Field
+                                Text(
+                                  'EMAIL ADDRESS',
+                                  style: GoogleFonts.poppins(
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.grey.shade700,
+                                    letterSpacing: 0.5,
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                _buildEmailField(),
+
+                                const SizedBox(height: 28),
+
+                                // Submit Button
+                                _buildSubmitButton(),
+
+                                const SizedBox(height: 24),
+
+                                // Back to Login
+                                _buildBackToLoginLink(),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  // Mobile Stacked Layout (Preserved original phone design)
+  Widget _buildMobileLayout(BuildContext context, BoxConstraints constraints) {
     final bottomInset = MediaQuery.of(context).padding.bottom;
     final isKeyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
 
@@ -66,199 +310,127 @@ class _SecretaryForgotPasswordPageState extends State<SecretaryForgotPasswordPag
         child: GestureDetector(
           onTap: () => FocusScope.of(context).unfocus(),
           behavior: HitTestBehavior.opaque,
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              return SingleChildScrollView(
-                physics: const ClampingScrollPhysics(),
-                keyboardDismissBehavior:
-                    ScrollViewKeyboardDismissBehavior.onDrag,
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(minHeight: constraints.maxHeight),
-                  child: IntrinsicHeight(
-                    child: Column(
-                      children: [
-                        const AppTopHeader(
-                          showNotificationBell: false,
-                          backgroundColor: Colors.transparent,
-                        ),
-                        SizedBox(height: isKeyboardOpen ? 4 : 16),
-                        AnimatedContainer(
-                          duration: const Duration(milliseconds: 200),
-                          curve: Curves.easeOut,
-                          decoration: const BoxDecoration(),
-                          clipBehavior: Clip.hardEdge,
-                          height: isKeyboardOpen ? 0 : 170,
-                          child: OverflowBox(
-                            minHeight: 0,
-                            maxHeight: 170,
-                            alignment: Alignment.center,
-                            child: Image.asset(
-                              'assets/forgot_password.png',
-                              height: 170,
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: isKeyboardOpen ? 8 : 16),
-                        Expanded(
-                          child: Container(
-                            width: double.infinity,
-                            decoration: const BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(32),
-                                topRight: Radius.circular(32),
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black12,
-                                  blurRadius: 10,
-                                  offset: Offset(0, -5),
-                                ),
-                              ],
-                            ),
-                            child: Padding(
-                              padding: EdgeInsets.fromLTRB(
-                                24.0,
-                                24.0,
-                                24.0,
-                                24.0 + (isKeyboardOpen ? 0 : bottomInset),
-                              ),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Forgot Password?',
-                                    style: GoogleFonts.poppins(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w700,
-                                      color: Colors.black87,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 8),
-                                  Text(
-                                    'Enter your email address to receive a 6-digit verification code.',
-                                    style: GoogleFonts.poppins(
-                                      fontSize: 13,
-                                      color: Colors.grey[600],
-                                    ),
-                                  ),
-                                  const SizedBox(height: 24),
-                                  Text(
-                                    'EMAIL ADDRESS',
-                                    style: GoogleFonts.poppins(
-                                      fontSize: 11,
-                                      fontWeight: FontWeight.w600,
-                                      color: Colors.grey.shade700,
-                                      letterSpacing: 0.5,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 8),
-                                  TextField(
-                                    controller: _emailController,
-                                    style: GoogleFonts.poppins(
-                                      fontSize: 13,
-                                      color: Colors.black87,
-                                    ),
-                                    decoration: InputDecoration(
-                                      hintText: 'name@sectpro.com.my',
-                                      hintStyle: GoogleFonts.poppins(
-                                        color: Colors.grey.shade400,
-                                        fontSize: 13,
-                                      ),
-                                      prefixIcon: const Icon(
-                                        Icons.email_outlined,
-                                        size: 20,
-                                        color: Color(0xFF062AAE),
-                                      ),
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(12),
-                                        borderSide: BorderSide(
-                                          color: Colors.grey.shade300,
-                                        ),
-                                      ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(12),
-                                        borderSide: BorderSide(
-                                          color: Colors.grey.shade300,
-                                        ),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(12),
-                                        borderSide: const BorderSide(
-                                          color: Color(0xFF062AAE),
-                                          width: 1.5,
-                                        ),
-                                      ),
-                                      contentPadding: const EdgeInsets.symmetric(
-                                        horizontal: 14,
-                                        vertical: 15,
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(height: 32),
-                                  SizedBox(
-                                    width: double.infinity,
-                                    height: 52,
-                                    child: ElevatedButton(
-                                      onPressed: _handleSendCode,
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: const Color(0xFF062AAE),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(12),
-                                        ),
-                                        elevation: 0,
-                                      ),
-                                      child: Text(
-                                        'Send 6-Digit Code',
-                                        style: GoogleFonts.poppins(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(height: 24),
-                                  Center(
-                                    child: GestureDetector(
-                                      onTap: () => Navigator.of(context).pop(),
-                                      child: RichText(
-                                        text: TextSpan(
-                                          text: 'Remembered your password? ',
-                                          style: GoogleFonts.poppins(
-                                            fontSize: 14,
-                                            color: Colors.grey[700],
-                                          ),
-                                          children: [
-                                            TextSpan(
-                                              text: 'Back to Login',
-                                              style: GoogleFonts.poppins(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w700,
-                                                color: const Color(0xFF062AAE),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(height: 8),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
+          child: SingleChildScrollView(
+            physics: const ClampingScrollPhysics(),
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            child: ConstrainedBox(
+              constraints: BoxConstraints(minHeight: constraints.maxHeight),
+              child: IntrinsicHeight(
+                child: Column(
+                  children: [
+                    const AppTopHeader(
+                      showNotificationBell: false,
+                      backgroundColor: Colors.transparent,
                     ),
-                  ),
+                    SizedBox(height: isKeyboardOpen ? 4 : 16),
+                    AnimatedContainer(
+                      duration: const Duration(milliseconds: 200),
+                      curve: Curves.easeOut,
+                      decoration: const BoxDecoration(),
+                      clipBehavior: Clip.hardEdge,
+                      height: isKeyboardOpen ? 0 : 170,
+                      child: OverflowBox(
+                        minHeight: 0,
+                        maxHeight: 170,
+                        alignment: Alignment.center,
+                        child: Image.asset(
+                          'assets/forgot_password.png',
+                          height: 170,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: isKeyboardOpen ? 8 : 16),
+                    Expanded(
+                      child: Container(
+                        width: double.infinity,
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(32),
+                            topRight: Radius.circular(32),
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black12,
+                              blurRadius: 10,
+                              offset: Offset(0, -5),
+                            ),
+                          ],
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.fromLTRB(
+                            24.0,
+                            24.0,
+                            24.0,
+                            24.0 + (isKeyboardOpen ? 0 : bottomInset),
+                          ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Forgot Password?',
+                                style: GoogleFonts.poppins(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.black87,
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                'Enter your email address to receive a 6-digit verification code.',
+                                style: GoogleFonts.poppins(
+                                  fontSize: 13,
+                                  color: Colors.grey[600],
+                                ),
+                              ),
+                              const SizedBox(height: 24),
+                              Text(
+                                'EMAIL ADDRESS',
+                                style: GoogleFonts.poppins(
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.grey.shade700,
+                                  letterSpacing: 0.5,
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              _buildEmailField(),
+
+                              const SizedBox(height: 32),
+
+                              _buildSubmitButton(),
+
+                              const SizedBox(height: 24),
+
+                              _buildBackToLoginLink(),
+
+                              const SizedBox(height: 8),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              );
-            },
+              ),
+            ),
           ),
         ),
       ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        if (constraints.maxWidth >= 768) {
+          return _buildDesktopLayout(context, constraints);
+        } else {
+          return _buildMobileLayout(context, constraints);
+        }
+      },
     );
   }
 }
