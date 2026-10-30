@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Sidebar from './components/Sidebar';
 import Dashboard from './components/Dashboard';
-import SecretaryWorkspace from './components/SecretaryWorkspace';
+import UsersManagement from './components/UsersManagement';
 import SecretaryFirms from './components/SecretaryFirms';
 import CompanyManagement from './components/CompanyManagement';
 import OperationsView from './components/OperationsView';
@@ -19,7 +19,7 @@ import {
   initialGlobalNotifications,
   initialAuditLogs,
   platformPolicies,
-  initialClientDocuments
+  initialUsers
 } from './data/mockData';
 
 function App() {
@@ -46,54 +46,28 @@ function App() {
   const [notifications, setNotifications] = useState(initialGlobalNotifications);
   const [auditLogs, setAuditLogs] = useState(initialAuditLogs);
   const [policies, setPolicies] = useState(platformPolicies);
-  const [documents, setDocuments] = useState(initialClientDocuments);
+  const [users, setUsers] = useState(initialUsers);
   const [selectedFirmForDetail, setSelectedFirmForDetail] = useState(null);
 
-  // Secretary document review handler
-  const handleReviewDocument = async (docId, { decision, reviewedBy, remarks, rejectionReason, requestedDetails, internalNotes }) => {
-    setDocuments(prev => prev.map(d => {
-      if (d.id === docId) {
-        const nowStr = new Date().toISOString().replace('T', ' ').substring(0, 16);
-        return {
-          ...d,
-          status: decision,
-          reviewDetails: {
-            reviewedBy,
-            reviewedAt: nowStr,
-            decision,
-            internalNotes,
-            remarks: decision === 'Approved' ? remarks : undefined,
-            rejectionReason: decision === 'Rejected' ? rejectionReason : undefined,
-            requestedDetails: decision === 'More Details Needed' ? requestedDetails : undefined
-          },
-          auditTrail: [
-            ...(d.auditTrail || []),
-            {
-              timestamp: new Date().toISOString().replace('T', ' ').substring(0, 19),
-              action: `FILE_${decision.toUpperCase().replace(/\s+/g, '_')}`,
-              actor: reviewedBy,
-              details: decision === 'Approved'
-                ? `Approved: ${remarks || 'Passed'}`
-                : decision === 'Rejected'
-                  ? `Rejected: ${rejectionReason}`
-                  : `Clarification requested: ${requestedDetails}`
-            }
-          ]
-        };
-      }
-      return d;
-    }));
+  // User & Access Management Handlers (Blueprint Section 5.4)
+  const handleToggleUserStatus = (userId, newStatus) => {
+    setUsers(prev => prev.map(u => u.id === userId ? { ...u, status: newStatus } : u));
+    logAudit('USER_STATUS_CHANGE', userId, `User status updated to ${newStatus}`);
+  };
 
-    // Sync to backend API if reachable
-    try {
-      await fetch(`/api/documents/${docId}/review`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ decision, reviewedBy, remarks, rejectionReason, requestedDetails, internalNotes })
-      });
-    } catch (e) {
-      // Offline fallback
-    }
+  const handleResetUser2FA = (userId) => {
+    setUsers(prev => prev.map(u => u.id === userId ? { ...u, twoFactorEnabled: true } : u));
+    logAudit('USER_2FA_RESET', userId, 'One-time security credentials reset dispatched to user');
+  };
+
+  const handleCreateUser = (newUser) => {
+    setUsers(prev => [newUser, ...prev]);
+    logAudit('USER_CREATED', newUser.email, `Created new ${newUser.userType} user (${newUser.role})`);
+  };
+
+  const handleUpdateUser = (userId, updatedFields) => {
+    setUsers(prev => prev.map(u => u.id === userId ? { ...u, ...updatedFields } : u));
+    logAudit('USER_UPDATED', userId, `Updated user attributes and role permissions`);
   };
 
   // Helper to log audit actions
@@ -287,14 +261,16 @@ function App() {
             onCreateCompany={handleCreateCompany}
           />
         );
-      case 'SecretaryWorkspace':
+      case 'Users':
         return (
-          <SecretaryWorkspace 
-            documents={documents}
+          <UsersManagement 
+            users={users}
             firms={firms}
             companies={companies}
-            currentUser={currentUser}
-            onReviewDocument={handleReviewDocument}
+            onToggleStatus={handleToggleUserStatus}
+            onReset2FA={handleResetUser2FA}
+            onCreateUser={handleCreateUser}
+            onUpdateUser={handleUpdateUser}
             logAudit={logAudit}
           />
         );
@@ -343,7 +319,6 @@ function App() {
 
   const pendingFirmsCount = firms.filter(f => f.status === 'Pending Verification').length;
   const urgentItemsCount = escalations.filter(e => !e.status.includes('Resolved')).length + disputes.filter(d => !d.status.includes('Resolved')).length;
-  const pendingDocsCount = documents.filter(d => d.status === 'Pending Review').length;
 
   if (!currentUser) {
     return <Login onLogin={handleLogin} />;
@@ -356,7 +331,6 @@ function App() {
         setActivePage={setActivePage}
         pendingFirmsCount={pendingFirmsCount}
         urgentItemsCount={urgentItemsCount}
-        pendingDocsCount={pendingDocsCount}
         currentUser={currentUser}
         onLogout={handleLogout}
       />
