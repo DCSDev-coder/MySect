@@ -136,16 +136,10 @@ const SubscriptionPlans = ({
               key={plan.id}
               className="bg-white rounded-2xl border border-gray-200 shadow-xs hover:shadow-md transition-all flex flex-col justify-between overflow-hidden relative"
             >
-              {plan.id === 'growth' && (
-                <div className="bg-[#062AAE] text-white text-[10px] font-bold uppercase tracking-wider py-1 text-center">
-                  Most Popular for Mid-Sized Firms
-                </div>
-              )}
-
               <div className="p-5">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-mono font-bold text-gray-400">{plan.tierCode}</span>
-                  <span className="px-2 py-0.5 text-xs font-medium bg-blue-50 text-[#062AAE] rounded-full">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-[11px] font-mono font-bold text-gray-400 whitespace-nowrap shrink-0">{plan.tierCode}</span>
+                  <span className="px-2 py-0.5 text-[10.5px] font-medium bg-blue-50 text-[#062AAE] rounded-full whitespace-nowrap shrink-0">
                     {firmsOnPlan.length} firm(s) subscribed
                   </span>
                 </div>
