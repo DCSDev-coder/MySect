@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Menu } from 'lucide-react';
 import Sidebar from './components/Sidebar';
 import Dashboard from './components/Dashboard';
 import UsersManagement from './components/UsersManagement';
@@ -7,6 +8,7 @@ import CompanyManagement from './components/CompanyManagement';
 import OperationsView from './components/OperationsView';
 import SettingsView from './components/SettingsView';
 import Login from './components/Login';
+import mysectLogo from './assets/mysect_logo.png';
 
 import {
   initialFirms,
@@ -317,6 +319,7 @@ function App() {
     }
   };
 
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pendingFirmsCount = firms.filter(f => f.status === 'Pending Verification').length;
   const urgentItemsCount = escalations.filter(e => !e.status.includes('Resolved')).length + disputes.filter(d => !d.status.includes('Resolved')).length;
 
@@ -333,8 +336,36 @@ function App() {
         urgentItemsCount={urgentItemsCount}
         currentUser={currentUser}
         onLogout={handleLogout}
+        isOpen={isMobileMenuOpen}
+        onClose={() => setIsMobileMenuOpen(false)}
       />
-      {renderPage()}
+      <div className="flex-1 flex flex-col h-screen overflow-hidden min-w-0">
+        {/* Mobile Top Header (Visible on screens < lg) */}
+        <div className="lg:hidden bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between shrink-0 z-30 shadow-2xs">
+          <button
+            onClick={() => setIsMobileMenuOpen(true)}
+            className="p-1.5 -ml-1 text-gray-700 hover:text-gray-900 rounded-lg hover:bg-gray-100 cursor-pointer"
+            aria-label="Open Navigation Menu"
+          >
+            <Menu className="w-5 h-5 text-gray-800" />
+          </button>
+
+          <img 
+            src={mysectLogo} 
+            alt="MySect" 
+            className="h-7 w-auto object-contain" 
+          />
+
+          <div className="w-7 h-7 rounded-full bg-[#062AAE] text-white flex items-center justify-center font-bold text-xs shadow-2xs">
+            {currentUser?.name ? currentUser.name.substring(0, 2).toUpperCase() : 'AF'}
+          </div>
+        </div>
+
+        {/* Dynamic Page Component */}
+        <div className="flex-1 flex flex-col overflow-hidden min-w-0">
+          {renderPage()}
+        </div>
+      </div>
     </div>
   );
 }

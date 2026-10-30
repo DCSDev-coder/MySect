@@ -207,21 +207,21 @@ const CompanyManagement = ({
       )}
 
       {/* Pinned Top Navigation Bar */}
-      <div className="bg-white border-b border-gray-200 px-8 py-5 shrink-0">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="bg-white border-b border-gray-200 px-4 sm:px-8 py-3.5 sm:py-5 shrink-0">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
           <div>
             <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#062AAE]">
               <Users className="w-4 h-4" />
               <span>Company Directory & Secretary Custody</span>
             </div>
-            <h1 className="text-2xl font-bold text-gray-900 mt-1">Managed Companies & Mobile Client Connections</h1>
-            <p className="text-sm text-gray-500 mt-0.5">
+            <h1 className="text-xl sm:text-2xl font-bold text-gray-900 mt-0.5 sm:mt-1">Managed Companies & Mobile Client Connections</h1>
+            <p className="text-xs sm:text-sm text-gray-500 mt-0.5">
               Oversee company portfolios, assign newly onboarded businesses, and monitor live connectivity with the MySect Client Mobile App.
             </p>
           </div>
 
-          <div className="flex items-center gap-3">
-            <div className="text-xs bg-gray-50 border border-gray-200 rounded-lg p-2.5 px-4 shadow-xs flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-3 self-start md:self-auto shrink-0">
+            <div className="text-xs bg-gray-50 border border-gray-200 rounded-lg p-2 sm:p-2.5 px-3 sm:px-4 shadow-xs flex items-center gap-2 overflow-x-auto no-scrollbar">
               <span className="text-gray-500 whitespace-nowrap">Total Companies:</span>{' '}
               <strong className="text-gray-900 text-sm whitespace-nowrap">{companies.length}</strong>
               <span className="mx-1 text-gray-300">|</span>
@@ -236,7 +236,7 @@ const CompanyManagement = ({
 
             <button
               onClick={() => setShowAddModal(true)}
-              className="flex items-center gap-1.5 px-4 py-2 bg-[#062AAE] hover:bg-[#05228D] text-white text-xs font-semibold rounded-lg shadow-sm transition-colors cursor-pointer whitespace-nowrap shrink-0"
+              className="flex items-center gap-1.5 px-3.5 py-2 bg-[#062AAE] hover:bg-[#05228D] text-white text-xs font-semibold rounded-lg shadow-sm transition-colors cursor-pointer whitespace-nowrap shrink-0"
             >
               <Plus className="w-4 h-4" />
               <span>Onboard Company</span>
@@ -246,7 +246,7 @@ const CompanyManagement = ({
       </div>
 
       {/* Scrollable Content Area */}
-      <div className="flex-1 overflow-y-auto p-8">
+      <div className="flex-1 overflow-y-auto p-4 sm:p-8">
         {/* Filters Bar */}
         <div className="bg-white p-4 rounded-xl border border-gray-200 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="relative flex-1 max-w-md">

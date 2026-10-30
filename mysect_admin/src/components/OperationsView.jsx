@@ -23,12 +23,12 @@ const OperationsView = ({
   const openDisputesCount = disputes.filter(d => !d.status.includes('Resolved')).length;
 
   return (
-    <div className="flex-1 flex flex-col h-screen overflow-hidden bg-[#F8F9FA]">
+    <div className="flex-1 flex flex-col h-full overflow-hidden bg-[#F8F9FA]">
       {/* Clean Top Navigation Bar for Operations */}
-      <div className="bg-white border-b border-gray-200 px-8 pt-6 pb-0 shrink-0">
+      <div className="bg-white border-b border-gray-200 px-4 sm:px-8 pt-4 sm:pt-6 pb-0 shrink-0">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Operations & Network Services</h1>
-          <p className="text-sm text-gray-500 mt-0.5">
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Operations & Network Services</h1>
+          <p className="text-xs sm:text-sm text-gray-500 mt-0.5">
             Manage escalations, overdue Section 68 returns, disputes, service catalogues, and broadcasts.
           </p>
         </div>

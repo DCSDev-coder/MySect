@@ -72,23 +72,23 @@ const SecretaryFirms = ({
   };
 
   return (
-    <div className="flex-1 flex flex-col h-screen overflow-hidden bg-[#F8F9FA]">
+    <div className="flex-1 flex flex-col h-full overflow-hidden bg-[#F8F9FA]">
       {/* Pinned Top Navigation Bar */}
-      <div className="bg-white border-b border-gray-200 px-8 py-5 shrink-0">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="bg-white border-b border-gray-200 px-4 sm:px-8 py-3.5 sm:py-5 shrink-0">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
           <div>
             <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#062AAE]">
               <Building2 className="w-4 h-4" />
               <span>Secretary Firm Network Governance</span>
             </div>
-            <h1 className="text-2xl font-bold text-gray-900 mt-1">Secretary Firms & Licencing Directory</h1>
-            <p className="text-sm text-gray-500 mt-0.5">
+            <h1 className="text-xl sm:text-2xl font-bold text-gray-900 mt-0.5 sm:mt-1">Secretary Firms & Licencing Directory</h1>
+            <p className="text-xs sm:text-sm text-gray-500 mt-0.5">
               Verify practising certificates, onboard firms, manage administrators, configure company limits, and monitor regulatory standing.
             </p>
           </div>
 
-          <div className="flex items-center gap-3 shrink-0">
-            <div className="text-xs bg-gray-50 border border-gray-200 rounded-lg p-2.5 px-4 shadow-xs whitespace-nowrap shrink-0">
+          <div className="flex items-center gap-3 shrink-0 self-start md:self-auto">
+            <div className="text-xs bg-gray-50 border border-gray-200 rounded-lg p-2 sm:p-2.5 px-3 sm:px-4 shadow-xs whitespace-nowrap shrink-0">
               <span className="text-gray-500">Total Network Firms:</span>{' '}
               <strong className="text-gray-900 text-sm">{firms.length}</strong>
               <span className="mx-2 text-gray-300">|</span>
@@ -101,7 +101,7 @@ const SecretaryFirms = ({
       </div>
 
       {/* Scrollable Content Area */}
-      <div className="flex-1 overflow-y-auto p-8">
+      <div className="flex-1 overflow-y-auto p-4 sm:p-8">
         {/* Main Layout: List on Left, Detail Panel on Right */}
         <div className="grid grid-cols-1 xl:grid-cols-12 gap-6">
         

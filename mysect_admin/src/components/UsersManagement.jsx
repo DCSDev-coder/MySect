@@ -145,26 +145,26 @@ const UsersManagement = ({
   };
 
   return (
-    <div className="flex-1 flex flex-col h-screen overflow-hidden bg-[#F8F9FA]">
+    <div className="flex-1 flex flex-col h-full overflow-hidden bg-[#F8F9FA]">
       {/* Pinned Top Navigation Bar */}
-      <div className="bg-white border-b border-gray-200 px-8 py-5 shrink-0">
-        <div className="flex items-center justify-between">
+      <div className="bg-white border-b border-gray-200 px-4 sm:px-8 py-3.5 sm:py-5 shrink-0">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="text-2xl font-bold text-gray-900">Users & Access Control</h1>
-              <span className="px-2.5 py-0.5 text-xs font-semibold bg-blue-50 text-[#062AAE] border border-blue-200 rounded-full">
+              <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Users & Access Control</h1>
+              <span className="px-2 py-0.5 text-[10.5px] font-semibold bg-blue-50 text-[#062AAE] border border-blue-200 rounded-full shrink-0">
                 Blueprint §5.4
               </span>
             </div>
-            <p className="text-sm text-gray-500 mt-0.5">
+            <p className="text-xs sm:text-sm text-gray-500 mt-0.5">
               Enforce strict role-based access across Platform Admins, Secretary Firm staff, and Corporate Client portals.
             </p>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 self-start sm:self-auto shrink-0">
             <button
               onClick={handleOpenInvite}
-              className="px-4 py-2 bg-[#062AAE] hover:bg-[#05228D] text-white rounded-xl text-sm font-semibold transition-colors shadow-xs flex items-center gap-2 cursor-pointer"
+              className="px-3.5 py-2 bg-[#062AAE] hover:bg-[#05228D] text-white rounded-xl text-xs sm:text-sm font-semibold transition-colors shadow-xs flex items-center gap-2 cursor-pointer"
             >
               <Plus className="w-4 h-4" />
               <span>Invite New User</span>
@@ -182,7 +182,7 @@ const UsersManagement = ({
       )}
 
       {/* Scrollable Content Area */}
-      <div className="flex-1 overflow-y-auto p-8 space-y-6">
+      <div className="flex-1 overflow-y-auto p-4 sm:p-8 space-y-6">
         {/* Top 4 KPI Metrics */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           <div className="bg-white p-5 rounded-2xl border border-gray-200 shadow-xs">
@@ -742,3 +742,4 @@ const UsersManagement = ({
 };
 
 export default UsersManagement;
+

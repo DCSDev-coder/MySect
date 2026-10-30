@@ -21,12 +21,12 @@ const SettingsView = ({
   const [activeTab, setActiveTab] = useState('plans');
 
   return (
-    <div className="flex-1 flex flex-col h-screen overflow-hidden bg-[#F8F9FA]">
+    <div className="flex-1 flex flex-col h-full overflow-hidden bg-[#F8F9FA]">
       {/* Clean Top Navigation Bar for Settings */}
-      <div className="bg-white border-b border-gray-200 px-8 pt-6 pb-0 shrink-0">
+      <div className="bg-white border-b border-gray-200 px-4 sm:px-8 pt-4 sm:pt-6 pb-0 shrink-0">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Plans, Policies & Audit</h1>
-          <p className="text-sm text-gray-500 mt-0.5">
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Plans, Policies & Audit</h1>
+          <p className="text-xs sm:text-sm text-gray-500 mt-0.5">
             Configure subscription tiers, company limits, platform fees, e-KYC policies, and view statutory audit records.
           </p>
         </div>
