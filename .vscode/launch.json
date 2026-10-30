@@ -1,15 +1,24 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "MySect App (Client Mobile)",
+            "cwd": "mysect_app",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "MySect Secretary (Secretary Portal)",
+            "cwd": "mysect_secretary",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "MySect Admin (Web Portal)",
             "type": "chrome",
             "request": "launch",
-            "name": "Launch Chrome against localhost",
-            "url": "http://localhost:8080",
-            "webRoot": "${workspaceFolder}"
+            "url": "http://localhost:5173",
+            "webRoot": "${workspaceFolder}/mysect_admin"
         }
     ]
 }

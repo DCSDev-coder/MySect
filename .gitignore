@@ -1,0 +1,19 @@
+# Operating System
+.DS_Store
+Thumbs.db
+
+# Dart & Flutter
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+build/
+
+# Node
+node_modules/
+dist/
+
+# Legacy empty folder placeholders
+mobile_app/
+secretary_app/
+admin_website/
