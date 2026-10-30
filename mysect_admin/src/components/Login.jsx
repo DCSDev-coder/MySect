@@ -196,35 +196,18 @@ const Login = ({ onLogin }) => {
       <div className="absolute -top-32 -left-32 w-96 h-96 bg-blue-600/5 rounded-full blur-2xl pointer-events-none" />
       <div className="absolute -bottom-32 -right-32 w-96 h-96 bg-indigo-600/5 rounded-full blur-2xl pointer-events-none" />
 
-      {/* Top Bar with Status */}
-      <header className="relative z-10 w-full max-w-6xl mx-auto px-6 pt-6 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-          <span className="text-xs font-semibold text-gray-600 tracking-wide">
-            SSM Platform Gateway: <strong className="text-gray-900">Online</strong>
-          </span>
-        </div>
-        <div className="flex items-center gap-2 text-xs font-medium text-gray-500">
-          <Server className="w-3.5 h-3.5 text-[#062AAE]" />
-          <span>TM Cloud Hosting (Malaysia)</span>
-        </div>
-      </header>
-
       {/* Main Container */}
-      <main className="relative z-10 w-full flex-1 flex items-center justify-center p-6 my-4">
+      <main className="relative z-10 w-full flex-1 flex items-center justify-center p-6 my-auto">
         <div className="w-full max-w-md bg-white rounded-2xl shadow-xl border border-gray-100 p-8 sm:p-10 transition-all">
           
           {/* Logo and Header */}
           <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center mb-3">
+            <div className="flex items-center justify-center mb-5">
               <img 
                 src={mysectLogo} 
                 alt="MySect - Your Secretary Company" 
-                className="h-10 w-auto object-contain" 
+                className="h-12 w-auto object-contain" 
               />
-            </div>
-            <div className="inline-block px-2.5 py-0.5 rounded-md bg-blue-50 text-[#062AAE] text-[11px] font-bold uppercase tracking-wider mb-2">
-              Super-Admin Platform Portal
             </div>
             <h1 className="text-xl font-bold text-gray-900">
               {authStep === 'credentials' ? 'Sign in to Operator Console' : 'Security Verification'}
