@@ -394,167 +394,200 @@ class _SecretaryVerificationPageState extends State<SecretaryVerificationPage> {
 
   @override
   Widget build(BuildContext context) {
+    final isKeyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
+    final bottomInset = MediaQuery.of(context).padding.bottom;
+
     return Scaffold(
       backgroundColor: const Color(0xFFF1F5FD),
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       body: SafeArea(
         top: false,
-        child: Center(
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              final isDesktop = constraints.maxWidth >= 650;
-              return ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 480),
-                child: Container(
-                  margin: isDesktop
-                      ? const EdgeInsets.symmetric(horizontal: 24, vertical: 16)
-                      : EdgeInsets.zero,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(isDesktop ? 20 : 0),
-                    boxShadow: isDesktop
-                        ? [
-                            BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.06),
-                              blurRadius: 28,
-                              offset: const Offset(0, 6),
+        bottom: false,
+        child: GestureDetector(
+          onTap: () => FocusScope.of(context).unfocus(),
+          behavior: HitTestBehavior.opaque,
+          child: Center(
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final isDesktop = constraints.maxWidth >= 650;
+                return ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 480),
+                  child: Container(
+                    margin: isDesktop
+                        ? const EdgeInsets.symmetric(horizontal: 24, vertical: 16)
+                        : EdgeInsets.zero,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(isDesktop ? 20 : 0),
+                      boxShadow: isDesktop
+                          ? [
+                              BoxShadow(
+                                color: Colors.black.withValues(alpha: 0.06),
+                                blurRadius: 28,
+                                offset: const Offset(0, 6),
+                              ),
+                            ]
+                          : null,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        const AppTopHeader(showNotificationBell: false),
+                        Expanded(
+                          child: SingleChildScrollView(
+                            physics: const ClampingScrollPhysics(),
+                            keyboardDismissBehavior:
+                                ScrollViewKeyboardDismissBehavior.onDrag,
+                            padding: EdgeInsets.fromLTRB(
+                              isDesktop ? 24.0 : 20.0,
+                              isKeyboardOpen ? 4.0 : (isDesktop ? 16.0 : 20.0),
+                              isDesktop ? 24.0 : 20.0,
+                              (isDesktop ? 24.0 : 20.0) +
+                                  (isKeyboardOpen ? 12 : bottomInset),
                             ),
-                          ]
-                        : null,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      const AppTopHeader(showNotificationBell: false),
-                      Expanded(
-                        child: Padding(
-                          padding: EdgeInsets.all(isDesktop ? 20.0 : 24.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              const Spacer(flex: 1),
-                              Center(
-                                child: Image.asset(
-                                  'assets/verify_code.png',
-                                  height: isDesktop ? 120 : 180,
-                                  fit: BoxFit.contain,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                SizedBox(height: isKeyboardOpen ? 4 : 12),
+                                AnimatedContainer(
+                                  duration: const Duration(milliseconds: 200),
+                                  curve: Curves.easeOut,
+                                  height: isKeyboardOpen
+                                      ? 0
+                                      : (isDesktop ? 120 : 160),
+                                  child: OverflowBox(
+                                    minHeight: 0,
+                                    maxHeight: isDesktop ? 120 : 160,
+                                    alignment: Alignment.center,
+                                    child: Image.asset(
+                                      'assets/verify_code.png',
+                                      height: isDesktop ? 120 : 160,
+                                      fit: BoxFit.contain,
+                                    ),
+                                  ),
                                 ),
-                              ),
-                              SizedBox(height: isDesktop ? 16 : 24),
-                              Text(
-                                'Enter verification code',
-                                textAlign: TextAlign.center,
-                                style: GoogleFonts.poppins(
-                                  fontSize: isDesktop ? 20 : 24,
-                                  fontWeight: FontWeight.w700,
-                                  color: Colors.black,
+                                SizedBox(
+                                    height: isKeyboardOpen ? 8 : (isDesktop ? 16 : 24)),
+                                Text(
+                                  'Enter verification code',
+                                  textAlign: TextAlign.center,
+                                  style: GoogleFonts.poppins(
+                                    fontSize: isDesktop ? 20 : (isKeyboardOpen ? 20 : 24),
+                                    fontWeight: FontWeight.w700,
+                                    color: Colors.black,
+                                  ),
                                 ),
-                              ),
-                              SizedBox(height: isDesktop ? 8 : 16),
-                              Text(
-                                widget.isLoginVerification
-                                    ? 'Enter the 6-digit code we sent to\nyour email to verify your account.\n${widget.email}'
-                                    : 'Enter the 6-digit code we sent to\nyour email to reset your password.\n${widget.email}',
-                                textAlign: TextAlign.center,
-                                style: GoogleFonts.poppins(
-                                  fontSize: isDesktop ? 12 : 14,
-                                  color: Colors.grey[700],
-                                  height: 1.45,
+                                SizedBox(
+                                    height: isKeyboardOpen ? 4 : (isDesktop ? 8 : 14)),
+                                Text(
+                                  widget.isLoginVerification
+                                      ? 'Enter the 6-digit code we sent to\nyour email to verify your account.\n${widget.email}'
+                                      : 'Enter the 6-digit code we sent to\nyour email to reset your password.\n${widget.email}',
+                                  textAlign: TextAlign.center,
+                                  style: GoogleFonts.poppins(
+                                    fontSize: isDesktop ? 12 : 13,
+                                    color: Colors.grey[700],
+                                    height: 1.45,
+                                  ),
                                 ),
-                              ),
-                              SizedBox(height: isDesktop ? 20 : 40),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: List.generate(
-                                  6,
-                                  (index) => _buildOtpBox(index, isCompact: isDesktop),
+                                SizedBox(
+                                    height: isKeyboardOpen ? 14 : (isDesktop ? 20 : 32)),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: List.generate(
+                                    6,
+                                    (index) =>
+                                        _buildOtpBox(index, isCompact: isDesktop || isKeyboardOpen),
+                                  ),
                                 ),
-                              ),
-                              SizedBox(height: isDesktop ? 20 : 40),
-                              Center(
-                                child: GestureDetector(
-                                  onTap: _secondsRemaining == 0
-                                      ? () {
-                                          _startTimer();
-                                          ScaffoldMessenger.of(context).showSnackBar(
-                                            SnackBar(
-                                              content: Text(
-                                                'A new 6-digit verification code has been sent to ${widget.email}.',
-                                                style: GoogleFonts.poppins(fontSize: 12),
+                                SizedBox(
+                                    height: isKeyboardOpen ? 14 : (isDesktop ? 20 : 32)),
+                                Center(
+                                  child: GestureDetector(
+                                    onTap: _secondsRemaining == 0
+                                        ? () {
+                                            _startTimer();
+                                            ScaffoldMessenger.of(context).showSnackBar(
+                                              SnackBar(
+                                                content: Text(
+                                                  'A new 6-digit verification code has been sent to ${widget.email}.',
+                                                  style: GoogleFonts.poppins(fontSize: 12),
+                                                ),
+                                                backgroundColor: const Color(0xFF062AAE),
+                                                duration: const Duration(seconds: 2),
                                               ),
-                                              backgroundColor: const Color(0xFF062AAE),
-                                              duration: const Duration(seconds: 2),
+                                            );
+                                          }
+                                        : null,
+                                    child: RichText(
+                                      text: TextSpan(
+                                        text: "Didn't receive the code? ",
+                                        style: GoogleFonts.poppins(
+                                          fontSize: isDesktop ? 12 : 13,
+                                          color: Colors.grey[600],
+                                        ),
+                                        children: [
+                                          TextSpan(
+                                            text: _secondsRemaining > 0
+                                                ? 'Resend code in ${_secondsRemaining}s'
+                                                : 'Resend code',
+                                            style: GoogleFonts.poppins(
+                                              fontSize: isDesktop ? 12 : 13,
+                                              fontWeight: FontWeight.w700,
+                                              color: _secondsRemaining > 0
+                                                  ? Colors.grey[500]
+                                                  : const Color(0xFF062AAE),
                                             ),
-                                          );
-                                        }
-                                      : null,
-                                  child: RichText(
-                                    text: TextSpan(
-                                      text: "Didn't receive the code? ",
-                                      style: GoogleFonts.poppins(
-                                        fontSize: isDesktop ? 12 : 14,
-                                        color: Colors.grey[600],
+                                          ),
+                                        ],
                                       ),
-                                      children: [
-                                        TextSpan(
-                                          text: _secondsRemaining > 0
-                                              ? 'Resend code in ${_secondsRemaining}s'
-                                              : 'Resend code',
-                                          style: GoogleFonts.poppins(
-                                            fontSize: isDesktop ? 12 : 14,
-                                            fontWeight: FontWeight.w700,
-                                            color: _secondsRemaining > 0
-                                                ? Colors.grey[500]
-                                                : const Color(0xFF062AAE),
-                                          ),
-                                        ),
-                                      ],
                                     ),
                                   ),
                                 ),
-                              ),
-                              SizedBox(height: isDesktop ? 16 : 24),
-                              SizedBox(
-                                height: isDesktop ? 44 : 52,
-                                child: ElevatedButton(
-                                  onPressed: _isVerifying ? null : _handleVerify,
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: const Color(0xFF062AAE),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10),
+                                SizedBox(
+                                    height: isKeyboardOpen ? 14 : (isDesktop ? 16 : 24)),
+                                SizedBox(
+                                  height: isDesktop ? 44 : 50,
+                                  child: ElevatedButton(
+                                    onPressed: _isVerifying ? null : _handleVerify,
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: const Color(0xFF062AAE),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      elevation: 0,
                                     ),
-                                    elevation: 0,
+                                    child: _isVerifying
+                                        ? const SizedBox(
+                                            width: 22,
+                                            height: 22,
+                                            child: CircularProgressIndicator(
+                                              strokeWidth: 2.2,
+                                              valueColor:
+                                                  AlwaysStoppedAnimation<Color>(Colors.white),
+                                            ),
+                                          )
+                                        : Text(
+                                            'Verify and continue',
+                                            style: GoogleFonts.poppins(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.white,
+                                            ),
+                                          ),
                                   ),
-                                  child: _isVerifying
-                                      ? const SizedBox(
-                                          width: 22,
-                                          height: 22,
-                                          child: CircularProgressIndicator(
-                                            strokeWidth: 2.2,
-                                            valueColor:
-                                                AlwaysStoppedAnimation<Color>(Colors.white),
-                                          ),
-                                        )
-                                      : Text(
-                                          'Verify and continue',
-                                          style: GoogleFonts.poppins(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.white,
-                                          ),
-                                        ),
                                 ),
-                              ),
-                              const Spacer(flex: 3),
-                            ],
+                                const SizedBox(height: 16),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              );
-            },
+                );
+              },
+            ),
           ),
         ),
       ),
