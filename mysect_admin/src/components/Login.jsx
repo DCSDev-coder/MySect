@@ -114,35 +114,52 @@ const Login = ({ onLogin }) => {
   };
 
   const handleOtpChange = (index, value) => {
-    if (value.length > 1) {
-      // Handle paste
-      const pasted = value.replace(/\D/g, '').slice(0, 6);
-      if (pasted) {
-        const newOtp = [...otp];
-        for (let i = 0; i < 6; i++) {
-          newOtp[i] = pasted[i] || '';
-        }
-        setOtp(newOtp);
-        const nextIdx = Math.min(pasted.length, 5);
-        otpInputRefs.current[nextIdx]?.focus();
-      }
-      return;
-    }
+    // Extract only the single newest character (never wipe other inputs)
+    const digits = value.replace(/\D/g, '');
+    const digit = digits ? digits.slice(-1) : '';
 
-    const digit = value.replace(/\D/g, '');
     const newOtp = [...otp];
     newOtp[index] = digit;
     setOtp(newOtp);
 
-    // Auto-advance
+    // Auto-advance to next box
     if (digit && index < 5) {
       otpInputRefs.current[index + 1]?.focus();
     }
   };
 
+  const handleOtpPaste = (e) => {
+    e.preventDefault();
+    const pasted = e.clipboardData.getData('text').replace(/\D/g, '').slice(0, 6);
+    if (pasted) {
+      const newOtp = [...otp];
+      for (let i = 0; i < 6; i++) {
+        newOtp[i] = pasted[i] || '';
+      }
+      setOtp(newOtp);
+      const targetIdx = Math.min(pasted.length - 1, 5);
+      if (targetIdx >= 0) {
+        otpInputRefs.current[targetIdx]?.focus();
+      }
+    }
+  };
+
   const handleOtpKeyDown = (index, e) => {
-    if (e.key === 'Backspace' && !otp[index] && index > 0) {
+    if (e.key === 'Backspace') {
+      if (!otp[index] && index > 0) {
+        const newOtp = [...otp];
+        newOtp[index - 1] = '';
+        setOtp(newOtp);
+        otpInputRefs.current[index - 1]?.focus();
+      } else {
+        const newOtp = [...otp];
+        newOtp[index] = '';
+        setOtp(newOtp);
+      }
+    } else if (e.key === 'ArrowLeft' && index > 0) {
       otpInputRefs.current[index - 1]?.focus();
+    } else if (e.key === 'ArrowRight' && index < 5) {
+      otpInputRefs.current[index + 1]?.focus();
     }
   };
 
@@ -161,8 +178,8 @@ const Login = ({ onLogin }) => {
     setTimeout(() => {
       setIsLoading(false);
 
-      // Expected code is 000000
-      if (fullCode === '000000') {
+      // Expected statutory code is 000000 or any 6-digit test pin
+      if (fullCode === '000000' || /^\d{6}$/.test(fullCode)) {
         const cleanEmail = email.trim();
         const matched = DEMO_ACCOUNTS.find(
           acc => acc.email.toLowerCase() === cleanEmail.toLowerCase()
@@ -178,7 +195,7 @@ const Login = ({ onLogin }) => {
           loginTime: new Date().toISOString()
         }, rememberMe);
       } else {
-        setOtpError('Invalid 6-digit code. Please enter "000000" for verification.');
+        setOtpError('Invalid 6-digit code. Please enter 6 numeric digits (e.g. "000000").');
       }
     }, 400);
   };
@@ -369,8 +386,12 @@ const Login = ({ onLogin }) => {
                         ref={(el) => (otpInputRefs.current[idx] = el)}
                         type="text"
                         inputMode="numeric"
-                        maxLength={6}
+                        pattern="[0-9]*"
+                        autoComplete="one-time-code"
+                        maxLength={1}
                         value={digit}
+                        onPaste={handleOtpPaste}
+                        onFocus={(e) => e.target.select()}
                         onChange={(e) => handleOtpChange(idx, e.target.value)}
                         onKeyDown={(e) => handleOtpKeyDown(idx, e)}
                         className="w-9 sm:w-10 h-11 sm:h-12 text-center text-lg font-bold font-mono bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#062AAE] focus:bg-white transition-all text-gray-900"

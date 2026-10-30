@@ -73,7 +73,8 @@ class _SecretaryVerificationPageState extends State<SecretaryVerificationPage> {
         for (int i = 0; i < 6; i++) {
           _controllers[i].text = digits[i];
         }
-        _focusNodes[5].requestFocus();
+        _focusNodes[5].unfocus();
+        _handleVerify();
         return;
       }
     }
@@ -83,6 +84,10 @@ class _SecretaryVerificationPageState extends State<SecretaryVerificationPage> {
         _focusNodes[index + 1].requestFocus();
       } else {
         _focusNodes[index].unfocus();
+        final code = _controllers.map((c) => c.text).join();
+        if (code.length == 6) {
+          _handleVerify();
+        }
       }
     } else {
       if (index > 0) {

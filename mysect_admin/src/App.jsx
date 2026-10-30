@@ -356,9 +356,14 @@ function App() {
             className="h-7 w-auto object-contain" 
           />
 
-          <div className="w-7 h-7 rounded-full bg-[#062AAE] text-white flex items-center justify-center font-bold text-xs shadow-2xs">
-            {currentUser?.name ? currentUser.name.substring(0, 2).toUpperCase() : 'AF'}
-          </div>
+          <button
+            onClick={() => setIsMobileMenuOpen(true)}
+            className="w-8 h-8 rounded-full bg-[#062AAE] text-white flex items-center justify-center font-bold text-xs shadow-2xs cursor-pointer hover:opacity-90 active:scale-95 transition-transform"
+            title="Open menu & profile"
+            aria-label="Open profile menu"
+          >
+            {currentUser?.avatar || (currentUser?.name ? currentUser.name.substring(0, 2).toUpperCase() : 'AF')}
+          </button>
         </div>
 
         {/* Dynamic Page Component */}
