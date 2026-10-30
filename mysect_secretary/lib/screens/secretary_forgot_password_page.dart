@@ -57,42 +57,42 @@ class _SecretaryForgotPasswordPageState extends State<SecretaryForgotPasswordPag
     return TextField(
       controller: _emailController,
       style: GoogleFonts.poppins(
-        fontSize: 13,
+        fontSize: 12,
         color: Colors.black87,
       ),
       decoration: InputDecoration(
         hintText: 'name@sectpro.com.my',
         hintStyle: GoogleFonts.poppins(
           color: Colors.grey.shade400,
-          fontSize: 13,
+          fontSize: 12,
         ),
         prefixIcon: const Icon(
           Icons.email_outlined,
-          size: 20,
+          size: 18,
           color: Color(0xFF062AAE),
         ),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(10),
           borderSide: BorderSide(
             color: Colors.grey.shade300,
           ),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(10),
           borderSide: BorderSide(
             color: Colors.grey.shade300,
           ),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(10),
           borderSide: const BorderSide(
             color: Color(0xFF062AAE),
             width: 1.5,
           ),
         ),
         contentPadding: const EdgeInsets.symmetric(
-          horizontal: 14,
-          vertical: 15,
+          horizontal: 12,
+          vertical: 12,
         ),
       ),
     );
@@ -101,20 +101,20 @@ class _SecretaryForgotPasswordPageState extends State<SecretaryForgotPasswordPag
   Widget _buildSubmitButton() {
     return SizedBox(
       width: double.infinity,
-      height: 52,
+      height: 44,
       child: ElevatedButton(
         onPressed: _handleSendCode,
         style: ElevatedButton.styleFrom(
           backgroundColor: const Color(0xFF062AAE),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(10),
           ),
           elevation: 0,
         ),
         child: Text(
           'Send 6-Digit Code',
           style: GoogleFonts.poppins(
-            fontSize: 15,
+            fontSize: 14,
             fontWeight: FontWeight.bold,
             color: Colors.white,
           ),
@@ -131,14 +131,14 @@ class _SecretaryForgotPasswordPageState extends State<SecretaryForgotPasswordPag
           text: TextSpan(
             text: 'Remembered your password? ',
             style: GoogleFonts.poppins(
-              fontSize: 13,
+              fontSize: 12,
               color: Colors.grey[700],
             ),
             children: [
               TextSpan(
                 text: 'Back to Login',
                 style: GoogleFonts.poppins(
-                  fontSize: 13,
+                  fontSize: 12,
                   fontWeight: FontWeight.w700,
                   color: const Color(0xFF062AAE),
                 ),
@@ -156,18 +156,18 @@ class _SecretaryForgotPasswordPageState extends State<SecretaryForgotPasswordPag
       backgroundColor: const Color(0xFFF1F5FD),
       body: Center(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(32),
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
           child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 1060),
+            constraints: const BoxConstraints(maxWidth: 880),
             child: Container(
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(24),
+                borderRadius: BorderRadius.circular(20),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withValues(alpha: 0.06),
-                    blurRadius: 32,
-                    offset: const Offset(0, 8),
+                    blurRadius: 28,
+                    offset: const Offset(0, 6),
                   ),
                 ],
               ),
@@ -181,40 +181,42 @@ class _SecretaryForgotPasswordPageState extends State<SecretaryForgotPasswordPag
                       flex: 5,
                       child: Container(
                         color: const Color(0xFFF8FAFC),
-                        padding: const EdgeInsets.symmetric(horizontal: 44, vertical: 48),
+                        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 32),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Image.asset(
                               'assets/mysect_logo.png',
-                              width: 145,
+                              width: 130,
                               fit: BoxFit.contain,
                             ),
-                            const SizedBox(height: 32),
+                            const SizedBox(height: 20),
                             Image.asset(
                               'assets/forgot_password.png',
-                              height: 220,
+                              height: 145,
                               fit: BoxFit.contain,
                             ),
-                            const SizedBox(height: 28),
+                            const SizedBox(height: 18),
                             Text(
                               'Account Recovery',
                               style: GoogleFonts.poppins(
-                                fontSize: 20,
+                                fontSize: 18,
                                 fontWeight: FontWeight.bold,
                                 color: const Color(0xFF0F172A),
                               ),
                               textAlign: TextAlign.center,
                             ),
-                            const SizedBox(height: 8),
+                            const SizedBox(height: 6),
                             Text(
                               'Verify your registered email to reset your secretarial console access password.',
                               style: GoogleFonts.poppins(
-                                fontSize: 12,
+                                fontSize: 11,
                                 color: Colors.grey.shade600,
-                                height: 1.5,
+                                height: 1.45,
                               ),
                               textAlign: TextAlign.center,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ],
                         ),
@@ -232,10 +234,10 @@ class _SecretaryForgotPasswordPageState extends State<SecretaryForgotPasswordPag
                       flex: 6,
                       child: Container(
                         color: Colors.white,
-                        padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 48),
+                        padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 32),
                         child: Center(
                           child: ConstrainedBox(
-                            constraints: const BoxConstraints(maxWidth: 400),
+                            constraints: const BoxConstraints(maxWidth: 360),
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -243,41 +245,41 @@ class _SecretaryForgotPasswordPageState extends State<SecretaryForgotPasswordPag
                                 Text(
                                   'Forgot Password?',
                                   style: GoogleFonts.poppins(
-                                    fontSize: 22,
+                                    fontSize: 20,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.black87,
                                   ),
                                 ),
-                                const SizedBox(height: 6),
+                                const SizedBox(height: 4),
                                 Text(
                                   'Enter your registered email address to receive a 6-digit verification code.',
                                   style: GoogleFonts.poppins(
-                                    fontSize: 13,
+                                    fontSize: 12,
                                     color: Colors.grey.shade500,
                                     height: 1.4,
                                   ),
                                 ),
-                                const SizedBox(height: 28),
+                                const SizedBox(height: 20),
 
                                 // Email Field
                                 Text(
                                   'EMAIL ADDRESS',
                                   style: GoogleFonts.poppins(
-                                    fontSize: 11,
+                                    fontSize: 10,
                                     fontWeight: FontWeight.w600,
                                     color: Colors.grey.shade700,
                                     letterSpacing: 0.5,
                                   ),
                                 ),
-                                const SizedBox(height: 8),
+                                const SizedBox(height: 6),
                                 _buildEmailField(),
 
-                                const SizedBox(height: 28),
+                                const SizedBox(height: 20),
 
                                 // Submit Button
                                 _buildSubmitButton(),
 
-                                const SizedBox(height: 24),
+                                const SizedBox(height: 18),
 
                                 // Back to Login
                                 _buildBackToLoginLink(),

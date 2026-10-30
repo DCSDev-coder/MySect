@@ -74,38 +74,38 @@ class _SecretaryLoginPageState extends State<SecretaryLoginPage> {
     return TextField(
       controller: _emailController,
       style: GoogleFonts.poppins(
-        fontSize: 13,
+        fontSize: 12,
         color: Colors.black87,
       ),
       decoration: InputDecoration(
         hintText: 'name@sectpro.com.my',
         hintStyle: GoogleFonts.poppins(
           color: Colors.grey.shade400,
-          fontSize: 13,
+          fontSize: 12,
         ),
         prefixIcon: const Icon(
           Icons.email_outlined,
-          size: 20,
+          size: 18,
           color: Color(0xFF062AAE),
         ),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(10),
           borderSide: BorderSide(color: Colors.grey.shade300),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(10),
           borderSide: BorderSide(color: Colors.grey.shade300),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(10),
           borderSide: const BorderSide(
             color: Color(0xFF062AAE),
             width: 1.5,
           ),
         ),
         contentPadding: const EdgeInsets.symmetric(
-          horizontal: 14,
-          vertical: 15,
+          horizontal: 12,
+          vertical: 12,
         ),
       ),
     );
@@ -116,18 +116,18 @@ class _SecretaryLoginPageState extends State<SecretaryLoginPage> {
       controller: _passwordController,
       obscureText: _obscurePassword,
       style: GoogleFonts.poppins(
-        fontSize: 13,
+        fontSize: 12,
         color: Colors.black87,
       ),
       decoration: InputDecoration(
         hintText: 'Enter your password',
         hintStyle: GoogleFonts.poppins(
           color: Colors.grey.shade400,
-          fontSize: 13,
+          fontSize: 12,
         ),
         prefixIcon: const Icon(
           Icons.lock_outline,
-          size: 20,
+          size: 18,
           color: Color(0xFF062AAE),
         ),
         suffixIcon: IconButton(
@@ -135,7 +135,7 @@ class _SecretaryLoginPageState extends State<SecretaryLoginPage> {
             _obscurePassword
                 ? Icons.visibility_off_outlined
                 : Icons.visibility_outlined,
-            size: 20,
+            size: 18,
             color: Colors.grey.shade600,
           ),
           onPressed: () {
@@ -145,23 +145,23 @@ class _SecretaryLoginPageState extends State<SecretaryLoginPage> {
           },
         ),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(10),
           borderSide: BorderSide(color: Colors.grey.shade300),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(10),
           borderSide: BorderSide(color: Colors.grey.shade300),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(10),
           borderSide: const BorderSide(
             color: Color(0xFF062AAE),
             width: 1.5,
           ),
         ),
         contentPadding: const EdgeInsets.symmetric(
-          horizontal: 14,
-          vertical: 15,
+          horizontal: 12,
+          vertical: 12,
         ),
       ),
     );
@@ -189,7 +189,7 @@ class _SecretaryLoginPageState extends State<SecretaryLoginPage> {
       child: Text(
         'Forgot Password?',
         style: GoogleFonts.poppins(
-          fontSize: 12,
+          fontSize: 11,
           fontWeight: FontWeight.w600,
           color: const Color(0xFF062AAE),
         ),
@@ -200,29 +200,29 @@ class _SecretaryLoginPageState extends State<SecretaryLoginPage> {
   Widget _buildLoginButton() {
     return SizedBox(
       width: double.infinity,
-      height: 52,
+      height: 44,
       child: ElevatedButton(
         onPressed: _isLoading ? null : _handleLogin,
         style: ElevatedButton.styleFrom(
           backgroundColor: const Color(0xFF062AAE),
           elevation: 0,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(10),
           ),
         ),
         child: _isLoading
             ? const SizedBox(
-                width: 22,
-                height: 22,
+                width: 20,
+                height: 20,
                 child: CircularProgressIndicator(
                   color: Colors.white,
-                  strokeWidth: 2.5,
+                  strokeWidth: 2.2,
                 ),
               )
             : Text(
                 'Login',
                 style: GoogleFonts.poppins(
-                  fontSize: 15,
+                  fontSize: 14,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
                 ),
@@ -237,18 +237,18 @@ class _SecretaryLoginPageState extends State<SecretaryLoginPage> {
       backgroundColor: const Color(0xFFF1F5FD),
       body: Center(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(32),
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
           child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 1060),
+            constraints: const BoxConstraints(maxWidth: 880),
             child: Container(
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(24),
+                borderRadius: BorderRadius.circular(20),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withValues(alpha: 0.06),
-                    blurRadius: 32,
-                    offset: const Offset(0, 8),
+                    blurRadius: 28,
+                    offset: const Offset(0, 6),
                   ),
                 ],
               ),
@@ -262,40 +262,42 @@ class _SecretaryLoginPageState extends State<SecretaryLoginPage> {
                       flex: 5,
                       child: Container(
                         color: const Color(0xFFF8FAFC),
-                        padding: const EdgeInsets.symmetric(horizontal: 44, vertical: 48),
+                        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 32),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Image.asset(
                               'assets/mysect_logo.png',
-                              width: 145,
+                              width: 130,
                               fit: BoxFit.contain,
                             ),
-                            const SizedBox(height: 32),
+                            const SizedBox(height: 20),
                             Image.asset(
                               'assets/login.png',
-                              height: 220,
+                              height: 145,
                               fit: BoxFit.contain,
                             ),
-                            const SizedBox(height: 28),
+                            const SizedBox(height: 18),
                             Text(
                               'MySect Secretary Portal',
                               style: GoogleFonts.poppins(
-                                fontSize: 20,
+                                fontSize: 18,
                                 fontWeight: FontWeight.bold,
                                 color: const Color(0xFF0F172A),
                               ),
                               textAlign: TextAlign.center,
                             ),
-                            const SizedBox(height: 8),
+                            const SizedBox(height: 6),
                             Text(
                               'Authorized secretarial compliance workspace for licensed practitioners and firm teams.',
                               style: GoogleFonts.poppins(
-                                fontSize: 12,
+                                fontSize: 11,
                                 color: Colors.grey.shade600,
-                                height: 1.5,
+                                height: 1.45,
                               ),
                               textAlign: TextAlign.center,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ],
                         ),
@@ -313,10 +315,10 @@ class _SecretaryLoginPageState extends State<SecretaryLoginPage> {
                       flex: 6,
                       child: Container(
                         color: Colors.white,
-                        padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 48),
+                        padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 32),
                         child: Center(
                           child: ConstrainedBox(
-                            constraints: const BoxConstraints(maxWidth: 400),
+                            constraints: const BoxConstraints(maxWidth: 360),
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -324,50 +326,50 @@ class _SecretaryLoginPageState extends State<SecretaryLoginPage> {
                                 Text(
                                   'Sign In to Console',
                                   style: GoogleFonts.poppins(
-                                    fontSize: 22,
+                                    fontSize: 20,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.black87,
                                   ),
                                 ),
-                                const SizedBox(height: 4),
+                                const SizedBox(height: 2),
                                 Text(
                                   'Enter your secretary credentials to continue.',
                                   style: GoogleFonts.poppins(
-                                    fontSize: 13,
+                                    fontSize: 12,
                                     color: Colors.grey.shade500,
                                   ),
                                 ),
-                                const SizedBox(height: 28),
+                                const SizedBox(height: 20),
 
                                 // Email Field
                                 Text(
                                   'EMAIL ADDRESS',
                                   style: GoogleFonts.poppins(
-                                    fontSize: 11,
+                                    fontSize: 10,
                                     fontWeight: FontWeight.w600,
                                     color: Colors.grey.shade700,
                                     letterSpacing: 0.5,
                                   ),
                                 ),
-                                const SizedBox(height: 8),
+                                const SizedBox(height: 6),
                                 _buildEmailField(),
 
-                                const SizedBox(height: 18),
+                                const SizedBox(height: 14),
 
                                 // Password Field
                                 Text(
                                   'PASSWORD',
                                   style: GoogleFonts.poppins(
-                                    fontSize: 11,
+                                    fontSize: 10,
                                     fontWeight: FontWeight.w600,
                                     color: Colors.grey.shade700,
                                     letterSpacing: 0.5,
                                   ),
                                 ),
-                                const SizedBox(height: 8),
+                                const SizedBox(height: 6),
                                 _buildPasswordField(),
 
-                                const SizedBox(height: 14),
+                                const SizedBox(height: 10),
 
                                 // Forgot Password Link
                                 Align(
@@ -375,18 +377,18 @@ class _SecretaryLoginPageState extends State<SecretaryLoginPage> {
                                   child: _buildForgotPasswordButton(),
                                 ),
 
-                                const SizedBox(height: 24),
+                                const SizedBox(height: 18),
 
                                 // Login Primary Button
                                 _buildLoginButton(),
 
-                                const SizedBox(height: 20),
+                                const SizedBox(height: 14),
 
                                 Center(
                                   child: Text(
                                     '256-Bit SSL Encrypted • Statutory Portal',
                                     style: GoogleFonts.poppins(
-                                      fontSize: 11,
+                                      fontSize: 10,
                                       color: Colors.grey.shade400,
                                     ),
                                   ),

@@ -197,22 +197,22 @@ const Login = ({ onLogin }) => {
       <div className="absolute -bottom-32 -right-32 w-96 h-96 bg-indigo-600/5 rounded-full blur-2xl pointer-events-none" />
 
       {/* Main Container */}
-      <main className="relative z-10 w-full flex-1 flex items-center justify-center p-6 my-auto">
-        <div className="w-full max-w-md bg-white rounded-2xl shadow-xl border border-gray-100 p-8 sm:p-10 transition-all">
+      <main className="relative z-10 w-full flex-1 flex items-center justify-center p-4 sm:p-6 my-auto">
+        <div className="w-full max-w-sm sm:max-w-md bg-white rounded-2xl shadow-xl border border-gray-100 p-6 sm:p-7 transition-all">
           
           {/* Logo and Header */}
-          <div className="text-center mb-8">
-            <div className="flex items-center justify-center mb-5">
+          <div className="text-center mb-5">
+            <div className="flex items-center justify-center mb-3">
               <img 
                 src={mysectLogo} 
                 alt="MySect - Your Secretary Company" 
-                className="h-12 w-auto object-contain" 
+                className="h-9 sm:h-10 w-auto object-contain" 
               />
             </div>
-            <h1 className="text-xl font-bold text-gray-900">
+            <h1 className="text-lg sm:text-xl font-bold text-gray-900">
               {authStep === 'credentials' ? 'Sign in to Operator Console' : 'Security Verification'}
             </h1>
-            <p className="text-xs text-gray-500 mt-1">
+            <p className="text-[11px] text-gray-500 mt-1 max-w-xs mx-auto">
               {authStep === 'credentials'
                 ? 'Authorized personnel only. Sessions are audited per statutory governance policies.'
                 : `Enter the 6-digit security code dispatched to ${email}`}
@@ -224,16 +224,16 @@ const Login = ({ onLogin }) => {
             <>
               {/* Error Banner */}
               {error && (
-                <div className="mb-6 p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs flex items-start gap-2.5">
+                <div className="mb-4 p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs flex items-start gap-2.5">
                   <AlertCircle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
                   <span>{error}</span>
                 </div>
               )}
 
               {/* Form */}
-              <form onSubmit={handleCredentialSubmit} className="space-y-4">
+              <form onSubmit={handleCredentialSubmit} className="space-y-3">
                 <div>
-                  <label className="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-1.5">
+                  <label className="block text-[10px] font-semibold text-gray-700 uppercase tracking-wider mb-1">
                     Work Email Address
                   </label>
                   <div className="relative">
@@ -245,14 +245,14 @@ const Login = ({ onLogin }) => {
                       placeholder="test@gmail.com"
                       required
                       autoFocus
-                      className="w-full pl-10 pr-4 py-2.5 bg-gray-50/50 border border-gray-200 rounded-xl text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#062AAE] focus:bg-white transition-all"
+                      className="w-full pl-9 pr-4 py-2 bg-gray-50/50 border border-gray-200 rounded-xl text-xs sm:text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#062AAE] focus:bg-white transition-all"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <div className="flex items-center justify-between mb-1.5">
-                    <label className="block text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="block text-[10px] font-semibold text-gray-700 uppercase tracking-wider">
                       Password
                     </label>
                     <button
@@ -276,7 +276,7 @@ const Login = ({ onLogin }) => {
                       onChange={(e) => setPassword(e.target.value)}
                       placeholder="••••••••••••"
                       required
-                      className="w-full pl-10 pr-10 py-2.5 bg-gray-50/50 border border-gray-200 rounded-xl text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#062AAE] focus:bg-white transition-all"
+                      className="w-full pl-9 pr-10 py-2 bg-gray-50/50 border border-gray-200 rounded-xl text-xs sm:text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#062AAE] focus:bg-white transition-all"
                     />
                     <button
                       type="button"
@@ -288,17 +288,17 @@ const Login = ({ onLogin }) => {
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between pt-1">
+                <div className="flex items-center justify-between pt-0.5">
                   <label className="flex items-center gap-2 cursor-pointer">
                     <input
                       type="checkbox"
                       checked={rememberMe}
                       onChange={(e) => setRememberMe(e.target.checked)}
-                      className="w-4 h-4 text-[#062AAE] rounded border-gray-300 focus:ring-[#062AAE]"
+                      className="w-3.5 h-3.5 text-[#062AAE] rounded border-gray-300 focus:ring-[#062AAE]"
                     />
-                    <span className="text-xs text-gray-600">Keep me signed in</span>
+                    <span className="text-[11px] text-gray-600">Keep me signed in</span>
                   </label>
-                  <div className="flex items-center gap-1 text-[11px] text-gray-500">
+                  <div className="flex items-center gap-1 text-[10px] text-gray-500">
                     <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
                     <span>2FA Enforced</span>
                   </div>
@@ -307,34 +307,34 @@ const Login = ({ onLogin }) => {
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full mt-2 py-3 px-4 bg-[#062AAE] hover:bg-[#05228D] text-white rounded-xl text-sm font-semibold flex items-center justify-center gap-2 transition-all shadow-md hover:shadow-lg disabled:opacity-70 disabled:cursor-not-allowed cursor-pointer"
+                  className="w-full mt-1.5 py-2.5 px-4 bg-[#062AAE] hover:bg-[#05228D] text-white rounded-xl text-xs sm:text-sm font-semibold flex items-center justify-center gap-2 transition-all shadow-md hover:shadow-lg disabled:opacity-70 disabled:cursor-not-allowed cursor-pointer"
                 >
                   {isLoading ? (
                     <>
-                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      <div className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                       <span>Verifying Credentials...</span>
                     </>
                   ) : (
                     <>
                       <span>Continue to Security Code</span>
-                      <ArrowRight className="w-4 h-4" />
+                      <ArrowRight className="w-3.5 h-3.5" />
                     </>
                   )}
                 </button>
               </form>
 
               {/* Quick Demo Login Preset Buttons */}
-              <div className="mt-7 pt-5 border-t border-gray-100">
-                <p className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider mb-2.5 text-center">
+              <div className="mt-4 pt-3.5 border-t border-gray-100">
+                <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-1.5 text-center">
                   Authorized Access Credentials
                 </p>
-                <div className="grid grid-cols-1 gap-2">
-                  <div className="bg-blue-50/70 border border-blue-200/80 rounded-xl p-3 text-xs text-[#062AAE]">
+                <div className="grid grid-cols-1 gap-1.5">
+                  <div className="bg-blue-50/70 border border-blue-200/80 rounded-xl p-2.5 text-[11px] text-[#062AAE]">
                     <div className="font-semibold flex items-center justify-between">
                       <span>Primary Login Account:</span>
-                      <span className="font-mono text-[11px] bg-white px-2 py-0.5 rounded border border-blue-200">2FA: 000000</span>
+                      <span className="font-mono text-[10px] bg-white px-1.5 py-0.5 rounded border border-blue-200">2FA: 000000</span>
                     </div>
-                    <div className="mt-1.5 flex items-center justify-between text-[11px] text-gray-700">
+                    <div className="mt-1 flex items-center justify-between text-[11px] text-gray-700">
                       <span>Email: <strong className="font-mono text-gray-900">test@gmail.com</strong></span>
                       <span>Password: <strong className="font-mono text-gray-900">Dtct+1234</strong></span>
                     </div>
@@ -349,20 +349,20 @@ const Login = ({ onLogin }) => {
             <div className="animate-in fade-in duration-200">
               {/* Error Banner */}
               {otpError && (
-                <div className="mb-5 p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs flex items-start gap-2.5">
+                <div className="mb-4 p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs flex items-start gap-2.5">
                   <AlertCircle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
                   <span>{otpError}</span>
                 </div>
               )}
 
-              <form onSubmit={handleVerify2fa} className="space-y-5">
+              <form onSubmit={handleVerify2fa} className="space-y-4">
                 <div>
-                  <label className="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-2 text-center">
+                  <label className="block text-[10px] font-semibold text-gray-700 uppercase tracking-wider mb-2 text-center">
                     Enter 6-Digit Password Code
                   </label>
                   
                   {/* 6 Digit Inputs */}
-                  <div className="flex items-center justify-center gap-2 sm:gap-3">
+                  <div className="flex items-center justify-center gap-1.5 sm:gap-2.5">
                     {otp.map((digit, idx) => (
                       <input
                         key={idx}
@@ -373,12 +373,12 @@ const Login = ({ onLogin }) => {
                         value={digit}
                         onChange={(e) => handleOtpChange(idx, e.target.value)}
                         onKeyDown={(e) => handleOtpKeyDown(idx, e)}
-                        className="w-11 h-13 text-center text-xl font-bold font-mono bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#062AAE] focus:bg-white transition-all text-gray-900"
+                        className="w-9 sm:w-10 h-11 sm:h-12 text-center text-lg font-bold font-mono bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#062AAE] focus:bg-white transition-all text-gray-900"
                       />
                     ))}
                   </div>
 
-                  <p className="text-[11px] text-gray-500 text-center mt-3">
+                  <p className="text-[11px] text-gray-500 text-center mt-2.5">
                     Statutory code for testing: <strong className="font-mono text-[#062AAE]">000000</strong>
                   </p>
                 </div>
@@ -386,11 +386,11 @@ const Login = ({ onLogin }) => {
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full py-3 px-4 bg-[#062AAE] hover:bg-[#05228D] text-white rounded-xl text-sm font-semibold flex items-center justify-center gap-2 transition-all shadow-md hover:shadow-lg disabled:opacity-70 disabled:cursor-not-allowed cursor-pointer"
+                  className="w-full py-2.5 px-4 bg-[#062AAE] hover:bg-[#05228D] text-white rounded-xl text-xs sm:text-sm font-semibold flex items-center justify-center gap-2 transition-all shadow-md hover:shadow-lg disabled:opacity-70 disabled:cursor-not-allowed cursor-pointer"
                 >
                   {isLoading ? (
                     <>
-                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      <div className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                       <span>Verifying Code...</span>
                     </>
                   ) : (
@@ -401,7 +401,7 @@ const Login = ({ onLogin }) => {
                   )}
                 </button>
 
-                <div className="flex items-center justify-between pt-2 border-t border-gray-100">
+                <div className="flex items-center justify-between pt-1.5 border-t border-gray-100">
                   <button
                     type="button"
                     onClick={() => {
@@ -434,12 +434,12 @@ const Login = ({ onLogin }) => {
       </main>
 
       {/* Footer Compliance Badge */}
-      <footer className="relative z-10 w-full max-w-6xl mx-auto px-6 py-6 text-center text-xs text-gray-500 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-gray-200/60">
-        <div className="flex items-center gap-2 text-gray-600">
-          <ShieldCheck className="w-4 h-4 text-[#062AAE]" />
+      <footer className="relative z-10 w-full max-w-6xl mx-auto px-6 py-3 text-center text-xs text-gray-500 flex flex-col sm:flex-row items-center justify-between gap-2 border-t border-gray-200/60">
+        <div className="flex items-center gap-2 text-gray-600 text-[11px]">
+          <ShieldCheck className="w-3.5 h-3.5 text-[#062AAE]" />
           <span>MySect Corporate Secretarial Platform • SSM Companies Act 2016 Compliant</span>
         </div>
-        <div className="flex items-center gap-4 text-[11px] text-gray-400">
+        <div className="flex items-center gap-3 text-[10px] text-gray-400">
           <span>PDPA 2010 Registered</span>
           <span>•</span>
           <span>AES-256 Encryption</span>

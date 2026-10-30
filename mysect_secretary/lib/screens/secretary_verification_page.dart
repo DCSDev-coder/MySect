@@ -91,10 +91,10 @@ class _SecretaryVerificationPageState extends State<SecretaryVerificationPage> {
     }
   }
 
-  Widget _buildOtpBox(int index) {
+  Widget _buildOtpBox(int index, {bool isCompact = false}) {
     return Expanded(
       child: Container(
-        height: 54,
+        height: isCompact ? 46 : 54,
         margin: const EdgeInsets.symmetric(horizontal: 3),
         child: KeyboardListener(
           focusNode: FocusNode(),
@@ -114,7 +114,7 @@ class _SecretaryVerificationPageState extends State<SecretaryVerificationPage> {
             textAlign: TextAlign.center,
             maxLength: 1,
             style: GoogleFonts.poppins(
-              fontSize: 22,
+              fontSize: isCompact ? 18 : 22,
               fontWeight: FontWeight.bold,
               color: Colors.black,
             ),
@@ -399,18 +399,20 @@ class _SecretaryVerificationPageState extends State<SecretaryVerificationPage> {
             builder: (context, constraints) {
               final isDesktop = constraints.maxWidth >= 650;
               return ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 540),
+                constraints: const BoxConstraints(maxWidth: 480),
                 child: Container(
-                  margin: isDesktop ? const EdgeInsets.all(24) : EdgeInsets.zero,
+                  margin: isDesktop
+                      ? const EdgeInsets.symmetric(horizontal: 24, vertical: 16)
+                      : EdgeInsets.zero,
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(isDesktop ? 24 : 0),
+                    borderRadius: BorderRadius.circular(isDesktop ? 20 : 0),
                     boxShadow: isDesktop
                         ? [
                             BoxShadow(
                               color: Colors.black.withValues(alpha: 0.06),
-                              blurRadius: 30,
-                              offset: const Offset(0, 10),
+                              blurRadius: 28,
+                              offset: const Offset(0, 6),
                             ),
                           ]
                         : null,
@@ -421,7 +423,7 @@ class _SecretaryVerificationPageState extends State<SecretaryVerificationPage> {
                       const AppTopHeader(showNotificationBell: false),
                       Expanded(
                         child: Padding(
-                          padding: const EdgeInsets.all(24.0),
+                          padding: EdgeInsets.all(isDesktop ? 20.0 : 24.0),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
@@ -429,41 +431,41 @@ class _SecretaryVerificationPageState extends State<SecretaryVerificationPage> {
                               Center(
                                 child: Image.asset(
                                   'assets/verify_code.png',
-                                  height: 180,
+                                  height: isDesktop ? 120 : 180,
                                   fit: BoxFit.contain,
                                 ),
                               ),
-                              const SizedBox(height: 24),
+                              SizedBox(height: isDesktop ? 16 : 24),
                               Text(
                                 'Enter verification code',
                                 textAlign: TextAlign.center,
                                 style: GoogleFonts.poppins(
-                                  fontSize: 24,
+                                  fontSize: isDesktop ? 20 : 24,
                                   fontWeight: FontWeight.w700,
                                   color: Colors.black,
                                 ),
                               ),
-                              const SizedBox(height: 16),
+                              SizedBox(height: isDesktop ? 8 : 16),
                               Text(
                                 widget.isLoginVerification
                                     ? 'Enter the 6-digit code we sent to\nyour email to verify your account.\n${widget.email}'
                                     : 'Enter the 6-digit code we sent to\nyour email to reset your password.\n${widget.email}',
                                 textAlign: TextAlign.center,
                                 style: GoogleFonts.poppins(
-                                  fontSize: 14,
+                                  fontSize: isDesktop ? 12 : 14,
                                   color: Colors.grey[700],
-                                  height: 1.5,
+                                  height: 1.45,
                                 ),
                               ),
-                              const SizedBox(height: 40),
+                              SizedBox(height: isDesktop ? 20 : 40),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: List.generate(
                                   6,
-                                  (index) => _buildOtpBox(index),
+                                  (index) => _buildOtpBox(index, isCompact: isDesktop),
                                 ),
                               ),
-                              const SizedBox(height: 40),
+                              SizedBox(height: isDesktop ? 20 : 40),
                               Center(
                                 child: GestureDetector(
                                   onTap: _secondsRemaining == 0
@@ -485,7 +487,7 @@ class _SecretaryVerificationPageState extends State<SecretaryVerificationPage> {
                                     text: TextSpan(
                                       text: "Didn't receive the code? ",
                                       style: GoogleFonts.poppins(
-                                        fontSize: 14,
+                                        fontSize: isDesktop ? 12 : 14,
                                         color: Colors.grey[600],
                                       ),
                                       children: [
@@ -494,7 +496,7 @@ class _SecretaryVerificationPageState extends State<SecretaryVerificationPage> {
                                               ? 'Resend code in ${_secondsRemaining}s'
                                               : 'Resend code',
                                           style: GoogleFonts.poppins(
-                                            fontSize: 14,
+                                            fontSize: isDesktop ? 12 : 14,
                                             fontWeight: FontWeight.w700,
                                             color: _secondsRemaining > 0
                                                 ? Colors.grey[500]
@@ -506,15 +508,15 @@ class _SecretaryVerificationPageState extends State<SecretaryVerificationPage> {
                                   ),
                                 ),
                               ),
-                              const SizedBox(height: 24),
+                              SizedBox(height: isDesktop ? 16 : 24),
                               SizedBox(
-                                height: 52,
+                                height: isDesktop ? 44 : 52,
                                 child: ElevatedButton(
                                   onPressed: _isVerifying ? null : _handleVerify,
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: const Color(0xFF062AAE),
                                     shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12),
+                                      borderRadius: BorderRadius.circular(10),
                                     ),
                                     elevation: 0,
                                   ),
