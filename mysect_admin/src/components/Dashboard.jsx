@@ -17,29 +17,33 @@ const Dashboard = ({
   const totalCompanies = firms.reduce((acc, f) => acc + (f.companiesCount || 0), 0) + companies.length;
 
   return (
-    <div className="flex-1 overflow-y-auto bg-[#F8F9FA] p-8">
-      {/* Header */}
-      <div className="flex items-center justify-between pb-6 border-b border-gray-200">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Platform Overview</h1>
-          <p className="text-sm text-gray-500 mt-0.5">
-            Key metrics and actions requiring attention across the MySect network.
-          </p>
-        </div>
+    <div className="flex-1 flex flex-col h-screen overflow-hidden bg-[#F8F9FA]">
+      {/* Pinned Top Navigation Bar */}
+      <div className="bg-white border-b border-gray-200 px-8 py-5 shrink-0">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900">Platform Overview</h1>
+            <p className="text-sm text-gray-500 mt-0.5">
+              Key metrics and actions requiring attention across the MySect network.
+            </p>
+          </div>
 
-        {pendingFirms.length > 0 && (
-          <button 
-            onClick={() => setActivePage('Firms')}
-            className="px-4 py-2 bg-[#062AAE] hover:bg-[#05228D] text-white rounded-xl text-sm font-semibold transition-colors shadow-xs flex items-center gap-2"
-          >
-            Review {pendingFirms.length} Pending Firm{pendingFirms.length > 1 ? 's' : ''}
-            <ArrowRight className="w-4 h-4" />
-          </button>
-        )}
+          {pendingFirms.length > 0 && (
+            <button 
+              onClick={() => setActivePage('Firms')}
+              className="px-4 py-2 bg-[#062AAE] hover:bg-[#05228D] text-white rounded-xl text-sm font-semibold transition-colors shadow-xs flex items-center gap-2 cursor-pointer"
+            >
+              Review {pendingFirms.length} Pending Firm{pendingFirms.length > 1 ? 's' : ''}
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          )}
+        </div>
       </div>
 
-      {/* 4 Clean Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mt-6">
+      {/* Scrollable Content Area */}
+      <div className="flex-1 overflow-y-auto p-8">
+        {/* 4 Clean Stats */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         <div 
           onClick={() => setActivePage('Firms')}
           className="bg-white p-5 rounded-2xl border border-gray-200 shadow-xs hover:border-gray-300 transition-all cursor-pointer"
@@ -238,6 +242,7 @@ const Dashboard = ({
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 };

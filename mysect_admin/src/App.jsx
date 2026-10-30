@@ -26,20 +26,13 @@ function App() {
   const [currentUser, setCurrentUser] = useState(() => {
     try {
       const saved = localStorage.getItem('mysect_admin_user');
-      if (saved === 'LOGGED_OUT') return null;
-      if (saved) return JSON.parse(saved);
+      if (saved && saved !== 'LOGGED_OUT') {
+        return JSON.parse(saved);
+      }
     } catch (e) {
       console.error('Failed to parse cached user:', e);
     }
-    return {
-      name: 'Ahmad Faizal',
-      email: 'admin@mysect.com.my',
-      role: 'Super Admin',
-      department: 'HQ Platform Operations',
-      avatar: 'AF',
-      token: 'tok_active_operator_session',
-      loginTime: new Date().toISOString()
-    };
+    return null;
   });
 
   const [activePage, setActivePage] = useState('Overview');

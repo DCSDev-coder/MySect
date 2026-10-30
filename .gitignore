@@ -13,6 +13,9 @@ build/
 node_modules/
 dist/
 
+*.zip
+admin_cpanel.zip
+
 # Legacy empty folder placeholders
 mobile_app/
 secretary_app/
