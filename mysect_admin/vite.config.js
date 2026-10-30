@@ -4,6 +4,6 @@ import { apiServerPlugin } from './apiServerPlugin.js'
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: './',
   plugins: [react(), apiServerPlugin()],
 })
-
