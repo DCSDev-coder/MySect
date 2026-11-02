@@ -217,51 +217,37 @@ class SecretarySidebar extends StatelessWidget {
             children: [
               // Top Brand Header
               Container(
-                padding: const EdgeInsets.fromLTRB(18, 18, 14, 16),
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
                 decoration: const BoxDecoration(
                   border: Border(
                     bottom: BorderSide(color: Color(0xFFF1F5F9), width: 1),
                   ),
                 ),
-                child: Row(
+                child: Stack(
+                  alignment: Alignment.center,
                   children: [
-                    Image.asset(
-                      'assets/mysect_logo.png',
-                      height: 34,
-                      fit: BoxFit.contain,
-                    ),
-                    const SizedBox(width: 8),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 6,
-                        vertical: 2,
-                      ),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFEFF6FF),
-                        borderRadius: BorderRadius.circular(6),
-                        border: Border.all(color: const Color(0xFFBFDBFE)),
-                      ),
-                      child: Text(
-                        'Secretary',
-                        style: GoogleFonts.poppins(
-                          fontSize: 10,
-                          fontWeight: FontWeight.w600,
-                          color: const Color(0xFF062AAE),
-                        ),
+                    Center(
+                      child: Image.asset(
+                        'assets/mysect_logo.png',
+                        height: 42,
+                        fit: BoxFit.contain,
                       ),
                     ),
-                    const Spacer(),
                     if (isDrawer)
-                      IconButton(
-                        onPressed: onCloseDrawer,
-                        icon: const Icon(
-                          Icons.close_rounded,
-                          size: 20,
-                          color: Color(0xFF64748B),
+                      Positioned(
+                        right: 0,
+                        child: IconButton(
+                          onPressed: onCloseDrawer,
+                          icon: const Icon(
+                            Icons.close_rounded,
+                            size: 20,
+                            color: Color(0xFF64748B),
+                          ),
+                          splashRadius: 18,
+                          padding: EdgeInsets.zero,
+                          constraints: const BoxConstraints(),
                         ),
-                        splashRadius: 18,
-                        padding: EdgeInsets.zero,
-                        constraints: const BoxConstraints(),
                       ),
                   ],
                 ),
