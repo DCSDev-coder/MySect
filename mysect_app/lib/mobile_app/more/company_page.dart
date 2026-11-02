@@ -369,17 +369,8 @@ class _CompanyPageState extends State<CompanyPage> {
                             _buildQuickLinkItem(
                               icon: Icons.verified_user_outlined,
                               title: 'Secretarial Retainer & Plan',
-                              subtitle: '${company.subscriptionPlan} • Expires ${company.subscriptionExpiresAt}',
-                              onTap: () {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(
-                                      'Plan: ${company.subscriptionPlan} (${company.subscriptionStatus}) • Valid until ${company.subscriptionExpiresAt}',
-                                    ),
-                                    backgroundColor: const Color(0xFF062AAE),
-                                  ),
-                                );
-                              },
+                              subtitle: '${company.subscriptionPlan} • Expires ${company.formattedSubscriptionExpiry}' + (company.isSubscriptionExpired ? ' (EXPIRED)' : ''),
+                              onTap: () => _showRetainerDetailsModal(context, company),
                             ),
                           ],
                         ),
@@ -547,6 +538,175 @@ class _CompanyPageState extends State<CompanyPage> {
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
       ),
+    );
+  }
+
+
+  void _showRetainerDetailsModal(BuildContext context, Company comp) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (ctx) {
+        final isExpired = comp.isSubscriptionExpired;
+        final isExpiringSoon = comp.isSubscriptionExpiringSoon;
+
+        return Padding(
+          padding: const EdgeInsets.fromLTRB(20, 16, 20, 32),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: Container(
+                  width: 40,
+                  height: 4,
+                  decoration: BoxDecoration(color: Colors.grey.shade300, borderRadius: BorderRadius.circular(2)),
+                ),
+              ),
+              const SizedBox(height: 16),
+              Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: isExpired ? const Color(0xFFFEF2F2) : const Color(0xFFEFF6FF),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Icon(
+                      isExpired ? Icons.cancel_schedule_send_rounded : Icons.verified_user_rounded,
+                      color: isExpired ? const Color(0xFFDC2626) : const Color(0xFF062AAE),
+                      size: 24,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Secretarial Retainer & Billing',
+                          style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.bold, color: const Color(0xFF0F172A)),
+                        ),
+                        Text(
+                          comp.subscriptionPlan,
+                          style: GoogleFonts.poppins(fontSize: 12, color: Colors.grey.shade600),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              Container(
+                padding: const EdgeInsets.all(14),
+                decoration: BoxDecoration(
+                  color: isExpired ? const Color(0xFFFEF2F2) : const Color(0xFFF8FAFC),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: isExpired ? const Color(0xFFFECACA) : const Color(0xFFE2E8F0)),
+                ),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Monthly Expiry Date:', style: GoogleFonts.poppins(fontSize: 12, color: Colors.grey.shade600)),
+                        Text(
+                          comp.formattedSubscriptionExpiry,
+                          style: GoogleFonts.poppins(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                            color: isExpired ? const Color(0xFFDC2626) : const Color(0xFF0F172A),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Coverage Status:', style: GoogleFonts.poppins(fontSize: 12, color: Colors.grey.shade600)),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                          decoration: BoxDecoration(
+                            color: isExpired ? const Color(0xFFFEE2E2) : const Color(0xFFECFDF5),
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: Text(
+                            isExpired ? 'EXPIRED' : (isExpiringSoon ? 'DUE SOON' : 'ACTIVE'),
+                            style: GoogleFonts.poppins(
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                              color: isExpired ? const Color(0xFFDC2626) : const Color(0xFF047857),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Appointed Secretary:', style: GoogleFonts.poppins(fontSize: 12, color: Colors.grey.shade600)),
+                        Text(comp.assignedSecretary, style: GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.w600, color: const Color(0xFF334155))),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 14),
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFFFFBEB),
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: const Color(0xFFFDE68A)),
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Icon(Icons.info_outline_rounded, size: 16, color: Color(0xFFD97706)),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        'Important Notice: Appointed secretaries only handle statutory filings, annual returns, and document reviews for companies with an active monthly retainer. Once expired, services are suspended.',
+                        style: GoogleFonts.poppins(fontSize: 11, color: const Color(0xFF92400E), height: 1.35),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 20),
+              SizedBox(
+                width: double.infinity,
+                height: 48,
+                child: ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF062AAE),
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                  ),
+                  onPressed: () {
+                    Navigator.pop(ctx);
+                    CompanyService.instance.renewSubscription(comp.id, additionalMonths: 1);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Monthly retainer renewed for ${comp.name}!'),
+                        backgroundColor: const Color(0xFF059669),
+                      ),
+                    );
+                  },
+                  icon: const Icon(Icons.payment_rounded, size: 18),
+                  label: Text('Pay Monthly Retainer (RM 100.00)', style: GoogleFonts.poppins(fontSize: 13, fontWeight: FontWeight.bold)),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 

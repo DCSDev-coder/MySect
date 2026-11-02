@@ -388,6 +388,441 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+
+  Widget _buildSecretarialRetainerCard(Company? comp) {
+    if (comp == null) return const SizedBox.shrink();
+
+    final isExpired = comp.isSubscriptionExpired;
+    final isExpiringSoon = comp.isSubscriptionExpiringSoon;
+    final days = comp.daysUntilSubscriptionExpiry;
+
+    Color bgColor;
+    Color borderColor;
+    Color badgeBg;
+    Color badgeText;
+    String badgeTitle;
+    IconData icon;
+    Color iconColor;
+
+    if (isExpired) {
+      bgColor = const Color(0xFFFEF2F2);
+      borderColor = const Color(0xFFFCA5A5);
+      badgeBg = const Color(0xFFFEE2E2);
+      badgeText = const Color(0xFFB91C1C);
+      badgeTitle = 'EXPIRED • HANDLING SUSPENDED';
+      icon = Icons.cancel_schedule_send_rounded;
+      iconColor = const Color(0xFFDC2626);
+    } else if (isExpiringSoon) {
+      bgColor = const Color(0xFFFFFBEB);
+      borderColor = const Color(0xFFFDE68A);
+      badgeBg = const Color(0xFFFEF3C7);
+      badgeText = const Color(0xFFB45309);
+      badgeTitle = 'RENEWAL DUE IN ${days}D';
+      icon = Icons.access_time_filled_rounded;
+      iconColor = const Color(0xFFD97706);
+    } else {
+      bgColor = Colors.white;
+      borderColor = const Color(0xFFE2E8F0);
+      badgeBg = const Color(0xFFECFDF5);
+      badgeText = const Color(0xFF047857);
+      badgeTitle = 'RETAINER ACTIVE';
+      icon = Icons.verified_user_rounded;
+      iconColor = const Color(0xFF059669);
+    }
+
+    return Container(
+      decoration: BoxDecoration(
+        color: bgColor,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: borderColor, width: isExpired ? 1.5 : 1),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.03),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(14),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: isExpired
+                            ? const Color(0xFFFEE2E2)
+                            : (isExpiringSoon ? const Color(0xFFFEF3C7) : const Color(0xFFEFF6FF)),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Icon(icon, color: iconColor, size: 20),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Text(
+                                'Monthly Secretarial Retainer',
+                                style: GoogleFonts.poppins(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.bold,
+                                  color: const Color(0xFF0F172A),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Text(
+                            'Expiry Date: ${comp.formattedSubscriptionExpiry}',
+                            style: GoogleFonts.poppins(
+                              fontSize: 11.5,
+                              fontWeight: FontWeight.w600,
+                              color: isExpired
+                                  ? const Color(0xFFDC2626)
+                                  : (isExpiringSoon ? const Color(0xFFD97706) : const Color(0xFF64748B)),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                      decoration: BoxDecoration(
+                        color: badgeBg,
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: Text(
+                        badgeTitle,
+                        style: GoogleFonts.poppins(
+                          fontSize: 9.5,
+                          fontWeight: FontWeight.bold,
+                          color: badgeText,
+                          letterSpacing: 0.3,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                if (isExpired) ...[
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(color: const Color(0xFFFECACA)),
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Icon(Icons.warning_amber_rounded, size: 16, color: Color(0xFFDC2626)),
+                        const SizedBox(width: 6),
+                        Expanded(
+                          child: Text(
+                            'SECRETARIAL SERVICES SUSPENDED: Your monthly retainer expired on ${comp.formattedSubscriptionExpiry}. Secretary Lim Mei Ling cannot handle filings, review documents, or lodge statutory returns for ${comp.name} until renewed.',
+                            style: GoogleFonts.poppins(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w500,
+                              color: const Color(0xFF991B1B),
+                              height: 1.35,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 42,
+                    child: ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFFDC2626),
+                        foregroundColor: Colors.white,
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                      ),
+                      onPressed: () => _showRetainerRenewalSheet(context, comp),
+                      icon: const Icon(Icons.payment_rounded, size: 16),
+                      label: Text(
+                        'Pay Monthly Retainer (RM 100) — Resume Service',
+                        style: GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                ] else if (isExpiringSoon) ...[
+                  Text(
+                    'Retainer expires in ${days} days. Please settle payment to prevent interruption of statutory secretarial coverage.',
+                    style: GoogleFonts.poppins(fontSize: 11, color: const Color(0xFF92400E)),
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFFD97706),
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                          elevation: 0,
+                        ),
+                        onPressed: () => _showRetainerRenewalSheet(context, comp),
+                        child: Text(
+                          'Renew Now (RM 100/mo)',
+                          style: GoogleFonts.poppins(fontSize: 11, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ],
+                  ),
+                ] else ...[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          'Secretarial compliance & statutory reviews actively covered.',
+                          style: GoogleFonts.poppins(fontSize: 11, color: const Color(0xFF475569)),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () => _showRetainerRenewalSheet(context, comp),
+                        style: TextButton.styleFrom(padding: EdgeInsets.zero, minimumSize: Size.zero),
+                        child: Text(
+                          'Extend Retainer →',
+                          style: GoogleFonts.poppins(fontSize: 11, fontWeight: FontWeight.bold, color: const Color(0xFF062AAE)),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showRetainerRenewalSheet(BuildContext context, Company comp) {
+    int selectedMonths = 1;
+    double monthlyFee = 100.0;
+    String paymentMethod = 'FPX Online Banking';
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (sheetCtx) {
+        return StatefulBuilder(
+          builder: (ctx, setModalState) {
+            final total = selectedMonths == 12 ? 1000.0 : (selectedMonths * monthlyFee);
+
+            return Padding(
+              padding: EdgeInsets.only(
+                left: 20,
+                right: 20,
+                top: 16,
+                bottom: MediaQuery.of(sheetCtx).viewInsets.bottom + 24,
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: Container(
+                      width: 40,
+                      height: 4,
+                      decoration: BoxDecoration(color: Colors.grey.shade300, borderRadius: BorderRadius.circular(2)),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFEFF6FF),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: const Icon(Icons.verified_user_rounded, color: Color(0xFF062AAE), size: 24),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Monthly Retainer Payment',
+                              style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.bold, color: const Color(0xFF0F172A)),
+                            ),
+                            Text(
+                              comp.name,
+                              style: GoogleFonts.poppins(fontSize: 11, color: Colors.grey.shade600),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 14),
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFF8FAFC),
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: const Color(0xFFE2E8F0)),
+                    ),
+                    child: Text(
+                      'Appointed secretary: ${comp.assignedSecretary} (${comp.assignedFirmName}). In compliance with professional guidelines, secretarial service is maintained only while retainer is active.',
+                      style: GoogleFonts.poppins(fontSize: 11, color: const Color(0xFF475569), height: 1.35),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Text('Select Extension Period:', style: GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.w600)),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: InkWell(
+                          onTap: () => setModalState(() => selectedMonths = 1),
+                          child: Container(
+                            padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              color: selectedMonths == 1 ? const Color(0xFFEFF6FF) : Colors.white,
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(
+                                color: selectedMonths == 1 ? const Color(0xFF062AAE) : const Color(0xFFE2E8F0),
+                                width: selectedMonths == 1 ? 1.5 : 1,
+                              ),
+                            ),
+                            child: Column(
+                              children: [
+                                Text('1 Month', style: GoogleFonts.poppins(fontSize: 13, fontWeight: FontWeight.bold)),
+                                const SizedBox(height: 2),
+                                Text('RM 100.00', style: GoogleFonts.poppins(fontSize: 12, color: const Color(0xFF062AAE), fontWeight: FontWeight.w600)),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: InkWell(
+                          onTap: () => setModalState(() => selectedMonths = 12),
+                          child: Container(
+                            padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              color: selectedMonths == 12 ? const Color(0xFFEFF6FF) : Colors.white,
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(
+                                color: selectedMonths == 12 ? const Color(0xFF062AAE) : const Color(0xFFE2E8F0),
+                                width: selectedMonths == 12 ? 1.5 : 1,
+                              ),
+                            ),
+                            child: Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text('1 Year', style: GoogleFonts.poppins(fontSize: 13, fontWeight: FontWeight.bold)),
+                                    const SizedBox(width: 4),
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
+                                      decoration: BoxDecoration(color: const Color(0xFF10B981), borderRadius: BorderRadius.circular(4)),
+                                      child: Text('SAVE RM200', style: GoogleFonts.poppins(fontSize: 8.5, color: Colors.white, fontWeight: FontWeight.bold)),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 2),
+                                Text('RM 1,000.00', style: GoogleFonts.poppins(fontSize: 12, color: const Color(0xFF062AAE), fontWeight: FontWeight.w600)),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  Text('Payment Method:', style: GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.w600)),
+                  const SizedBox(height: 8),
+                  DropdownButtonFormField<String>(
+                    value: paymentMethod,
+                    isExpanded: true,
+                    decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                      filled: true,
+                      fillColor: const Color(0xFFF8FAFC),
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: const BorderSide(color: Color(0xFFE2E8F0))),
+                    ),
+                    items: const [
+                      DropdownMenuItem(value: 'FPX Online Banking', child: Text('FPX Online Banking (Maybank, CIMB, Public Bank)')),
+                      DropdownMenuItem(value: 'Corporate Credit/Debit Card', child: Text('Corporate Credit/Debit Card')),
+                    ],
+                    onChanged: (val) {
+                      if (val != null) setModalState(() => paymentMethod = val);
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 48,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF062AAE),
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                      ),
+                      onPressed: () {
+                        Navigator.pop(sheetCtx);
+                        CompanyService.instance.renewSubscription(comp.id, additionalMonths: selectedMonths);
+                        setState(() {});
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Row(
+                              children: [
+                                const Icon(Icons.check_circle_rounded, color: Colors.white, size: 18),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Text(
+                                    'Monthly retainer renewed! Secretarial services active for ${comp.name}.',
+                                    style: GoogleFonts.poppins(fontSize: 12),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            backgroundColor: const Color(0xFF059669),
+                            duration: const Duration(seconds: 4),
+                          ),
+                        );
+                      },
+                      child: Text(
+                        'Pay RM ${total.toStringAsFixed(2)} & Renew Retainer',
+                        style: GoogleFonts.poppins(fontSize: 13, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
   Widget _buildHomeView() {
     return SafeArea(
       top: false,
@@ -618,6 +1053,11 @@ class _HomePageState extends State<HomePage> {
                       const SizedBox(height: 12),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: _buildSecretarialRetainerCard(_companyService.selectedCompany),
+                      ),
+                      const SizedBox(height: 16),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
                         child: Text(
                           'UPCOMING DATELINE',
                           style: GoogleFonts.poppins(
@@ -795,6 +1235,25 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                       const SizedBox(height: 8),
+                      _buildTaskCard(
+                        number: 'RM',
+                        color: const Color(0xFF7C3AED),
+                        title: 'Request LHDN Document Stamping',
+                        subtitle: 'Official stamp duty adjudication & certificate',
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const SubmitSsmFilingPage(
+                                initialFilingType: 'LHDN Document Stamping',
+                                initialTitle: 'Official LHDN Document Stamping Service',
+                                initialDescription: 'Commercial agreement or share transfer instrument for LHDN digital stamp certificate.',
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+
                       _buildTaskCard(
                         number: '1',
                         color: const Color(0xFF062AAE),

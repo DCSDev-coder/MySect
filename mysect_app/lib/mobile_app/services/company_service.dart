@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import '../models/company_model.dart';
 
 class CompanyService extends ChangeNotifier {
@@ -50,8 +51,8 @@ class CompanyService extends ChangeNotifier {
         assignedFirmEmail: 'azman@sectpro.com.my',
         annualReturnDeadline: '2026-11-14',
         financialStatementsDeadline: '2026-12-31',
-        subscriptionExpiresAt: '2027-06-14',
-        subscriptionPlan: 'Growth Plan',
+        subscriptionExpiresAt: '2026-11-14',
+        subscriptionPlan: 'Growth Retainer (RM 100/mo)',
         subscriptionStatus: 'Active',
         clientContact: 'Adam Bin Hamzah (Director)',
         clientEmail: 'adam@dcs.com.my',
@@ -92,9 +93,9 @@ class CompanyService extends ChangeNotifier {
         assignedFirmEmail: 'azman@sectpro.com.my',
         annualReturnDeadline: '2026-10-25',
         financialStatementsDeadline: '2026-11-30',
-        subscriptionExpiresAt: '2027-04-20',
-        subscriptionPlan: 'Growth Plan',
-        subscriptionStatus: 'Active',
+        subscriptionExpiresAt: '2026-10-25',
+        subscriptionPlan: 'Standard Retainer (RM 60/mo)',
+        subscriptionStatus: 'Expired',
         clientContact: 'Adam Bin Hamzah (Director)',
         clientEmail: 'adam@c2coffee.com.my',
         mobileAppConnected: true,
@@ -192,6 +193,32 @@ class CompanyService extends ChangeNotifier {
       selectCompany(comp);
     } catch (_) {
       // If not found, keep current
+    }
+  }
+
+  void renewSubscription(String companyId, {int additionalMonths = 1}) {
+    final index = _companies.indexWhere((c) => c.id == companyId || c.name == companyId);
+    if (index != -1) {
+      final comp = _companies[index];
+      DateTime baseDate = comp.subscriptionExpiryDateTime ?? DateTime.now();
+      if (comp.isSubscriptionExpired) {
+        baseDate = DateTime.now();
+      }
+      final newExp = DateTime(
+        baseDate.year,
+        baseDate.month + additionalMonths,
+        baseDate.day,
+      );
+      final newExpStr = DateFormat('yyyy-MM-dd').format(newExp);
+      final updated = comp.copyWith(
+        subscriptionExpiresAt: newExpStr,
+        subscriptionStatus: 'Active',
+      );
+      _companies[index] = updated;
+      if (_selectedCompany?.id == comp.id || _selectedCompany?.name == comp.name) {
+        _selectedCompany = updated;
+      }
+      notifyListeners();
     }
   }
 

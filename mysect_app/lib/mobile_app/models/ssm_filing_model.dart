@@ -178,6 +178,13 @@ class SsmFiling {
   final List<String> attachedFiles;
   final List<SsmMessage> messages;
   List<SsmTimelineStep> timeline;
+  final bool hasStamping;
+  final String? stampingCategory;
+  final double stampingFee;
+  String? stampingStatus;
+  final String? stampingPaymentStatus;
+  String? stampingCertNo;
+  final double totalPaymentAmount;
 
   SsmFiling({
     required this.id,
@@ -196,6 +203,13 @@ class SsmFiling {
     required this.attachedFiles,
     required this.messages,
     required this.timeline,
+    this.hasStamping = false,
+    this.stampingCategory,
+    this.stampingFee = 0.0,
+    this.stampingStatus,
+    this.stampingPaymentStatus,
+    this.stampingCertNo,
+    this.totalPaymentAmount = 0.0,
   });
 
   factory SsmFiling.fromJson(Map<String, dynamic> json) {
@@ -233,6 +247,13 @@ class SsmFiling {
       attachedFiles: (json['attachedFiles'] as List<dynamic>?)?.map((e) => e.toString()).toList() ?? [],
       messages: rawMessages.map((e) => SsmMessage.fromJson(e as Map<String, dynamic>)).toList(),
       timeline: rawTimeline.map((e) => SsmTimelineStep.fromJson(e as Map<String, dynamic>)).toList(),
+      hasStamping: json['hasStamping'] == true,
+      stampingCategory: json['stampingCategory']?.toString(),
+      stampingFee: (json['stampingFee'] as num?)?.toDouble() ?? 0.0,
+      stampingStatus: json['stampingStatus']?.toString(),
+      stampingPaymentStatus: json['stampingPaymentStatus']?.toString(),
+      stampingCertNo: json['stampingCertNo']?.toString(),
+      totalPaymentAmount: (json['totalPaymentAmount'] as num?)?.toDouble() ?? 0.0,
     );
   }
 
@@ -253,5 +274,12 @@ class SsmFiling {
         'attachedFiles': attachedFiles,
         'messages': messages.map((e) => e.toJson()).toList(),
         'timeline': timeline.map((e) => e.toJson()).toList(),
+        'hasStamping': hasStamping,
+        'stampingCategory': stampingCategory,
+        'stampingFee': stampingFee,
+        'stampingStatus': stampingStatus,
+        'stampingPaymentStatus': stampingPaymentStatus,
+        'stampingCertNo': stampingCertNo,
+        'totalPaymentAmount': totalPaymentAmount,
       };
 }

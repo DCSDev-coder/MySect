@@ -39,7 +39,43 @@ class _SubmitSsmFilingPageState extends State<SubmitSsmFilingPage> {
   final List<String> _attachedFiles = [];
   bool _isSubmitting = false;
 
+  // Stamping Add-on State
+  bool _addStamping = false;
+  String _selectedStampingCategory = 'Share Transfer Instrument (Section 105)';
+  double _stampingFee = 100.0;
+  String _selectedPaymentMethod = 'FPX Online Banking';
+  final TextEditingController _considerationController = TextEditingController(text: 'RM 10,000.00');
+
+  final List<Map<String, dynamic>> _stampingOptions = [
+    {
+      'title': 'Share Transfer Instrument (Section 105)',
+      'fee': 100.00,
+      'desc': 'LHDN stamp duty adjudication for share transfers, Form 32A, and share certificates.',
+    },
+    {
+      'title': 'Tenancy / Commercial Lease Agreement',
+      'fee': 150.00,
+      'desc': 'Official digital stamping for company premises tenancy agreements via LHDN e-Duti.',
+    },
+    {
+      'title': 'Board Resolution / Statutory Declaration',
+      'fee': 50.00,
+      'desc': 'Statutory declaration and corporate resolution stamping for banks and regulators.',
+    },
+    {
+      'title': 'Commercial Contract / Service Agreement',
+      'fee': 100.00,
+      'desc': 'General commercial instrument stamping for legal admissibility in Malaysian courts.',
+    },
+  ];
+
   final List<Map<String, dynamic>> _filingTypes = [
+    {
+      'type': 'LHDN Document Stamping',
+      'title': 'Official LHDN Document Stamping Service',
+      'desc': 'Digital stamping adjudication and certificate issuance through LHDN e-Duti portal for legal enforcement.',
+      'requiredDocs': ['Unstamped Agreement / Instrument (PDF)', 'Transaction / Consideration Value Details'],
+    },
     {
       'type': 'Section 68 Annual Return',
       'title': 'Section 68 Annual Return 2026',
@@ -87,6 +123,9 @@ class _SubmitSsmFilingPageState extends State<SubmitSsmFilingPage> {
 
     if (widget.initialFilingType != null) {
       _selectedFilingType = widget.initialFilingType!;
+      if (_selectedFilingType.contains('Stamping')) {
+        _addStamping = true;
+      }
     } else {
       _selectedFilingType = _filingTypes.first['type'] as String;
     }
@@ -115,6 +154,7 @@ class _SubmitSsmFilingPageState extends State<SubmitSsmFilingPage> {
     _titleController.dispose();
     _descController.dispose();
     _noteController.dispose();
+    _considerationController.dispose();
     super.dispose();
   }
 
@@ -122,6 +162,9 @@ class _SubmitSsmFilingPageState extends State<SubmitSsmFilingPage> {
     if (newType == null) return;
     setState(() {
       _selectedFilingType = newType;
+      if (newType.contains('Stamping')) {
+        _addStamping = true;
+      }
       final matched = _filingTypes.firstWhere(
         (item) => item['type'] == newType,
         orElse: () => _filingTypes.first,
@@ -223,6 +266,12 @@ class _SubmitSsmFilingPageState extends State<SubmitSsmFilingPage> {
       deadline: DateFormat('yyyy-MM-dd').format(_deadlineDate),
       files: List.from(_attachedFiles),
       initialNote: _noteController.text.trim(),
+      hasStamping: _addStamping,
+      stampingCategory: _addStamping ? _selectedStampingCategory : null,
+      stampingFee: _addStamping ? _stampingFee : 0.0,
+      stampingPaymentStatus: _addStamping ? 'Paid ($_selectedPaymentMethod)' : null,
+      stampingCertNo: _addStamping ? 'LHDN/STAMP/2026/${DateTime.now().millisecondsSinceEpoch % 10000}' : null,
+      totalPaymentAmount: _addStamping ? _stampingFee : 0.0,
     );
 
     // Register each attached file into Secretary Document review queue
@@ -424,6 +473,229 @@ class _SubmitSsmFilingPageState extends State<SubmitSsmFilingPage> {
           ),
         ),
       ),
+    );
+  }
+
+
+  void _showRetainerRenewalSheet(BuildContext context, Company comp) {
+    int selectedMonths = 1;
+    double monthlyFee = 100.0;
+    String paymentMethod = 'FPX Online Banking';
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (sheetCtx) {
+        return StatefulBuilder(
+          builder: (ctx, setModalState) {
+            final total = selectedMonths == 12 ? 1000.0 : (selectedMonths * monthlyFee);
+
+            return Padding(
+              padding: EdgeInsets.only(
+                left: 20,
+                right: 20,
+                top: 16,
+                bottom: MediaQuery.of(sheetCtx).viewInsets.bottom + 24,
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: Container(
+                      width: 40,
+                      height: 4,
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade300,
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFEFF6FF),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: const Icon(Icons.verified_user_rounded, color: Color(0xFF062AAE), size: 24),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Renew Secretarial Retainer',
+                              style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.bold, color: const Color(0xFF0F172A)),
+                            ),
+                            Text(
+                              comp.name,
+                              style: GoogleFonts.poppins(fontSize: 11, color: Colors.grey.shade600),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 14),
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFFEF2F2),
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: const Color(0xFFFECACA)),
+                    ),
+                    child: Row(
+                      children: [
+                        const Icon(Icons.info_outline, color: Color(0xFFDC2626), size: 18),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            'Licensed secretary (${comp.assignedSecretary}) cannot handle company filings while retainer is expired.',
+                            style: GoogleFonts.poppins(fontSize: 11, color: const Color(0xFF991B1B), height: 1.3),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Text('Select Extension Period:', style: GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.w600)),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: InkWell(
+                          onTap: () => setModalState(() => selectedMonths = 1),
+                          child: Container(
+                            padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              color: selectedMonths == 1 ? const Color(0xFFEFF6FF) : Colors.white,
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(
+                                color: selectedMonths == 1 ? const Color(0xFF062AAE) : const Color(0xFFE2E8F0),
+                                width: selectedMonths == 1 ? 1.5 : 1,
+                              ),
+                            ),
+                            child: Column(
+                              children: [
+                                Text('1 Month', style: GoogleFonts.poppins(fontSize: 13, fontWeight: FontWeight.bold)),
+                                const SizedBox(height: 2),
+                                Text('RM 100.00', style: GoogleFonts.poppins(fontSize: 12, color: const Color(0xFF062AAE), fontWeight: FontWeight.w600)),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: InkWell(
+                          onTap: () => setModalState(() => selectedMonths = 12),
+                          child: Container(
+                            padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              color: selectedMonths == 12 ? const Color(0xFFEFF6FF) : Colors.white,
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(
+                                color: selectedMonths == 12 ? const Color(0xFF062AAE) : const Color(0xFFE2E8F0),
+                                width: selectedMonths == 12 ? 1.5 : 1,
+                              ),
+                            ),
+                            child: Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text('1 Year', style: GoogleFonts.poppins(fontSize: 13, fontWeight: FontWeight.bold)),
+                                    const SizedBox(width: 4),
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
+                                      decoration: BoxDecoration(color: const Color(0xFF10B981), borderRadius: BorderRadius.circular(4)),
+                                      child: Text('SAVE RM200', style: GoogleFonts.poppins(fontSize: 8.5, color: Colors.white, fontWeight: FontWeight.bold)),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 2),
+                                Text('RM 1,000.00', style: GoogleFonts.poppins(fontSize: 12, color: const Color(0xFF062AAE), fontWeight: FontWeight.w600)),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  Text('Payment Method:', style: GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.w600)),
+                  const SizedBox(height: 8),
+                  DropdownButtonFormField<String>(
+                    value: paymentMethod,
+                    isExpanded: true,
+                    decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                      filled: true,
+                      fillColor: const Color(0xFFF8FAFC),
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: const BorderSide(color: Color(0xFFE2E8F0))),
+                    ),
+                    items: const [
+                      DropdownMenuItem(value: 'FPX Online Banking', child: Text('FPX Online Banking (Maybank, CIMB, Public Bank)')),
+                      DropdownMenuItem(value: 'Corporate Credit/Debit Card', child: Text('Corporate Credit/Debit Card')),
+                    ],
+                    onChanged: (val) {
+                      if (val != null) setModalState(() => paymentMethod = val);
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 48,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF062AAE),
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                      ),
+                      onPressed: () {
+                        Navigator.pop(sheetCtx);
+                        CompanyService.instance.renewSubscription(comp.id, additionalMonths: selectedMonths);
+                        setState(() {});
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Row(
+                              children: [
+                                const Icon(Icons.check_circle_rounded, color: Colors.white, size: 18),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Text(
+                                    'Monthly retainer renewed! Secretarial handling resumed for ${comp.name}.',
+                                    style: GoogleFonts.poppins(fontSize: 12),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            backgroundColor: const Color(0xFF059669),
+                            duration: const Duration(seconds: 4),
+                          ),
+                        );
+                      },
+                      child: Text(
+                        'Pay RM ${total.toStringAsFixed(2)} & Resume Service',
+                        style: GoogleFonts.poppins(fontSize: 13, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
     );
   }
 
@@ -968,6 +1240,239 @@ class _SubmitSsmFilingPageState extends State<SubmitSsmFilingPage> {
                 ),
                 const SizedBox(height: 24),
 
+                // Step 5: Official LHDN Document Stamping (Add-on Feature)
+                Text(
+                  '5. OFFICIAL LHDN STAMPING & ADDITIONAL PAYMENT (OPTIONAL)',
+                  style: GoogleFonts.poppins(
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 0.8,
+                    color: Colors.black54,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: _addStamping ? const Color(0xFF7C3AED) : const Color(0xFFE2E8F0),
+                      width: _addStamping ? 1.5 : 1,
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: _addStamping ? const Color(0xFF7C3AED).withValues(alpha: 0.08) : Colors.black.withValues(alpha: 0.02),
+                        blurRadius: 8,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: _addStamping ? const Color(0xFFF5F3FF) : const Color(0xFFF1F5F9),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Icon(
+                              Icons.approval_rounded,
+                              color: _addStamping ? const Color(0xFF7C3AED) : Colors.grey.shade600,
+                              size: 22,
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Add Official LHDN Stamping',
+                                  style: GoogleFonts.poppins(fontSize: 13.5, fontWeight: FontWeight.bold, color: const Color(0xFF0F172A)),
+                                ),
+                                Text(
+                                  'Digital stamp duty endorsement via LHDN e-Duti',
+                                  style: GoogleFonts.poppins(fontSize: 11, color: Colors.grey.shade600),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Switch(
+                            value: _addStamping,
+                            activeColor: const Color(0xFF7C3AED),
+                            onChanged: (val) {
+                              setState(() {
+                                _addStamping = val;
+                              });
+                            },
+                          ),
+                        ],
+                      ),
+                      if (_addStamping) ...[
+                        const SizedBox(height: 14),
+                        Divider(color: Colors.grey.shade200, height: 1),
+                        const SizedBox(height: 14),
+
+                        Text(
+                          'Select Document Stamping Category:',
+                          style: GoogleFonts.poppins(fontSize: 11.5, fontWeight: FontWeight.w600, color: const Color(0xFF334155)),
+                        ),
+                        const SizedBox(height: 8),
+
+                        ..._stampingOptions.map((opt) {
+                          final isSelected = _selectedStampingCategory == opt['title'];
+                          return InkWell(
+                            onTap: () {
+                              setState(() {
+                                _selectedStampingCategory = opt['title'] as String;
+                                _stampingFee = opt['fee'] as double;
+                              });
+                            },
+                            borderRadius: BorderRadius.circular(8),
+                            child: Container(
+                              margin: const EdgeInsets.only(bottom: 8),
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                color: isSelected ? const Color(0xFFFAF5FF) : const Color(0xFFF8FAFC),
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(
+                                  color: isSelected ? const Color(0xFF7C3AED) : const Color(0xFFE2E8F0),
+                                  width: isSelected ? 1.5 : 1,
+                                ),
+                              ),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    isSelected ? Icons.radio_button_checked : Icons.radio_button_off,
+                                    size: 18,
+                                    color: isSelected ? const Color(0xFF7C3AED) : Colors.grey,
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          opt['title'] as String,
+                                          style: GoogleFonts.poppins(
+                                            fontSize: 11.5,
+                                            fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+                                            color: const Color(0xFF0F172A),
+                                          ),
+                                        ),
+                                        Text(
+                                          opt['desc'] as String,
+                                          style: GoogleFonts.poppins(fontSize: 10, color: Colors.grey.shade600),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  const SizedBox(width: 6),
+                                  Text(
+                                    'RM ${(opt['fee'] as double).toStringAsFixed(2)}',
+                                    style: GoogleFonts.poppins(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                      color: const Color(0xFF7C3AED),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        }),
+
+                        const SizedBox(height: 12),
+                        Text(
+                          'Declared Consideration / Value (MYR):',
+                          style: GoogleFonts.poppins(fontSize: 11.5, fontWeight: FontWeight.w600, color: const Color(0xFF334155)),
+                        ),
+                        const SizedBox(height: 6),
+                        TextFormField(
+                          controller: _considerationController,
+                          style: GoogleFonts.poppins(fontSize: 12),
+                          decoration: InputDecoration(
+                            hintText: 'e.g. RM 10,000.00 (or Nominal)',
+                            filled: true,
+                            fillColor: const Color(0xFFF8FAFC),
+                            contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: const BorderSide(color: Color(0xFFE2E8F0))),
+                          ),
+                        ),
+
+                        const SizedBox(height: 14),
+                        Text(
+                          'Payment Method for Stamping Fee:',
+                          style: GoogleFonts.poppins(fontSize: 11.5, fontWeight: FontWeight.w600, color: const Color(0xFF334155)),
+                        ),
+                        const SizedBox(height: 6),
+                        DropdownButtonFormField<String>(
+                          value: _selectedPaymentMethod,
+                          isExpanded: true,
+                          decoration: InputDecoration(
+                            filled: true,
+                            fillColor: const Color(0xFFF8FAFC),
+                            contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: const BorderSide(color: Color(0xFFE2E8F0))),
+                          ),
+                          items: const [
+                            DropdownMenuItem(value: 'FPX Online Banking', child: Text('FPX Online Banking (Instant Checkout)')),
+                            DropdownMenuItem(value: 'Corporate Credit/Debit Card', child: Text('Corporate Credit/Debit Card')),
+                            DropdownMenuItem(value: 'Direct Bank Transfer', child: Text('Direct Bank Transfer (Attach Proof)')),
+                          ],
+                          onChanged: (val) {
+                            if (val != null) setState(() => _selectedPaymentMethod = val);
+                          },
+                        ),
+
+                        const SizedBox(height: 14),
+                        // Price breakdown summary
+                        Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFF8FAFC),
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(color: const Color(0xFFE2E8F0)),
+                          ),
+                          child: Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text('Secretary Filing Lodgement', style: GoogleFonts.poppins(fontSize: 11, color: Colors.grey.shade600)),
+                                  Text('RM 0.00 (Covered by Retainer)', style: GoogleFonts.poppins(fontSize: 11, color: const Color(0xFF059669), fontWeight: FontWeight.w600)),
+                                ],
+                              ),
+                              const SizedBox(height: 4),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text('LHDN Stamping & Adjudication', style: GoogleFonts.poppins(fontSize: 11, color: Colors.grey.shade600)),
+                                  Text('RM ${_stampingFee.toStringAsFixed(2)}', style: GoogleFonts.poppins(fontSize: 11, fontWeight: FontWeight.bold, color: const Color(0xFF7C3AED))),
+                                ],
+                              ),
+                              const SizedBox(height: 8),
+                              Divider(color: Colors.grey.shade300, height: 1),
+                              const SizedBox(height: 8),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text('Total Additional Payment Due', style: GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.bold, color: const Color(0xFF0F172A))),
+                                  Text('RM ${_stampingFee.toStringAsFixed(2)}', style: GoogleFonts.poppins(fontSize: 13, fontWeight: FontWeight.bold, color: const Color(0xFF7C3AED))),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 24),
                 // Submit Button
                 SizedBox(
                   width: double.infinity,
@@ -991,10 +1496,12 @@ class _SubmitSsmFilingPageState extends State<SubmitSsmFilingPage> {
                         : Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              const Icon(Icons.send_rounded, size: 20),
+                              Icon(_addStamping ? Icons.payment_rounded : Icons.send_rounded, size: 20),
                               const SizedBox(width: 8),
                               Text(
-                                'Submit to Secretary for Review',
+                                _addStamping
+                                    ? 'Pay RM ${_stampingFee.toStringAsFixed(2)} & Submit to Secretary'
+                                    : 'Submit to Secretary for Review',
                                 style: GoogleFonts.poppins(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w600,

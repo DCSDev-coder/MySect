@@ -97,6 +97,13 @@ class SsmFilingService extends ChangeNotifier {
       ),
       SsmFiling(
         id: 'SSM-02',
+        hasStamping: true,
+        stampingCategory: 'Share Transfer Instrument (Section 105)',
+        stampingFee: 100.0,
+        stampingStatus: 'Pending LHDN Endorsement',
+        stampingPaymentStatus: 'Paid (FPX Online Banking)',
+        stampingCertNo: 'LHDN/STAMP/2026/08912',
+        totalPaymentAmount: 100.0,
         referenceNo: 'SSM/S58/2026/01192',
         companyId: 'comp-01',
         companyName: 'Data Center Specialists Sdn Bhd (M)',
@@ -290,6 +297,12 @@ class SsmFilingService extends ChangeNotifier {
     required String deadline,
     required List<String> files,
     String? initialNote,
+    bool hasStamping = false,
+    String? stampingCategory,
+    double stampingFee = 0.0,
+    String? stampingPaymentStatus,
+    String? stampingCertNo,
+    double totalPaymentAmount = 0.0,
   }) {
     final newId = 'SSM-${(_filings.length + 1).toString().padLeft(2, '0')}';
     final ref = 'SSM/${filingType.split(' ').take(2).join('/')}/2026/${DateTime.now().millisecondsSinceEpoch % 10000}';
@@ -327,8 +340,10 @@ class SsmFilingService extends ChangeNotifier {
       messages: initialMessages,
       timeline: [
         SsmTimelineStep(
-          title: 'SSM File Submitted by Client',
-          description: 'Uploaded initial documents for $filingType.',
+          title: hasStamping ? 'SSM File & Stamping Submitted by Client' : 'SSM File Submitted by Client',
+          description: hasStamping
+              ? 'Uploaded documents with official LHDN Stamping ($stampingCategory) • Paid RM ${stampingFee.toStringAsFixed(2)}.'
+              : 'Uploaded initial documents for $filingType.',
           timestamp: 'Just now',
           isCompleted: true,
         ),
@@ -352,11 +367,80 @@ class SsmFilingService extends ChangeNotifier {
           isCompleted: false,
         ),
       ],
+      hasStamping: hasStamping,
+      stampingCategory: stampingCategory,
+      stampingFee: stampingFee,
+      stampingStatus: hasStamping ? 'Pending LHDN Stamping' : null,
+      stampingPaymentStatus: stampingPaymentStatus,
+      stampingCertNo: stampingCertNo,
+      totalPaymentAmount: totalPaymentAmount,
     );
 
     _filings.insert(0, newFiling);
     notifyListeners();
     return newFiling;
+  }
+
+  // Add official LHDN stamping to an already submitted filing
+  void addStampingToExistingFiling(
+    String filingId, {
+    required String category,
+    required double fee,
+    required String paymentMethod,
+    String? considerationValue,
+  }) {
+    final index = _filings.indexWhere((f) => f.id == filingId);
+    if (index != -1) {
+      final f = _filings[index];
+      final certNo = 'LHDN/STAMP/2026/${DateTime.now().millisecondsSinceEpoch % 10000}';
+      
+      final updated = SsmFiling(
+        id: f.id,
+        referenceNo: f.referenceNo,
+        companyId: f.companyId,
+        companyName: f.companyName,
+        companySsmNo: f.companySsmNo,
+        assignedSecretary: f.assignedSecretary,
+        assignedFirmName: f.assignedFirmName,
+        filingType: f.filingType,
+        title: f.title,
+        description: f.description,
+        submittedDate: f.submittedDate,
+        deadline: f.deadline,
+        status: f.status,
+        attachedFiles: f.attachedFiles,
+        messages: [
+          ...f.messages,
+          SsmMessage(
+            id: 'm-${DateTime.now().millisecondsSinceEpoch}',
+            senderName: 'Client Director',
+            senderRole: 'Authorised Representative',
+            text: 'I have added Official LHDN Document Stamping ($category) to this filing. Additional payment of RM ${fee.toStringAsFixed(2)} was successfully processed via $paymentMethod.',
+            time: 'Just now',
+            isFromSecretary: false,
+          ),
+        ],
+        timeline: [
+          SsmTimelineStep(
+            title: 'LHDN Stamping Service Added',
+            description: 'Paid additional RM ${fee.toStringAsFixed(2)} via $paymentMethod for $category.',
+            timestamp: 'Just now',
+            isCompleted: true,
+          ),
+          ...f.timeline,
+        ],
+        hasStamping: true,
+        stampingCategory: category,
+        stampingFee: fee,
+        stampingStatus: 'Pending LHDN Endorsement',
+        stampingPaymentStatus: 'Paid ($paymentMethod)',
+        stampingCertNo: certNo,
+        totalPaymentAmount: f.totalPaymentAmount + fee,
+      );
+
+      _filings[index] = updated;
+      notifyListeners();
+    }
   }
 
   // Client replies to a filing thread

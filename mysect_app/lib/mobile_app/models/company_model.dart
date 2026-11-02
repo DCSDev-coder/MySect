@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 class Company {
   final String id;
   final String name;
@@ -104,6 +106,106 @@ class Company {
               ?.map((e) => Map<String, dynamic>.from(e as Map))
               .toList() ??
           const [],
+    );
+  }
+
+  DateTime? get subscriptionExpiryDateTime => DateTime.tryParse(subscriptionExpiresAt);
+
+  bool get isSubscriptionExpired {
+    final exp = subscriptionExpiryDateTime;
+    if (exp == null) return false;
+    final now = DateTime.now();
+    final todayStart = DateTime(now.year, now.month, now.day);
+    return exp.isBefore(todayStart);
+  }
+
+  int get daysUntilSubscriptionExpiry {
+    final exp = subscriptionExpiryDateTime;
+    if (exp == null) return 999;
+    final now = DateTime.now();
+    final todayStart = DateTime(now.year, now.month, now.day);
+    return exp.difference(todayStart).inDays;
+  }
+
+  bool get isSubscriptionExpiringSoon {
+    if (isSubscriptionExpired) return false;
+    final days = daysUntilSubscriptionExpiry;
+    return days >= 0 && days <= 30;
+  }
+
+  String get formattedSubscriptionExpiry {
+    final exp = subscriptionExpiryDateTime;
+    if (exp == null) return subscriptionExpiresAt;
+    try {
+      return DateFormat('dd MMM yyyy').format(exp);
+    } catch (_) {
+      return subscriptionExpiresAt;
+    }
+  }
+
+  Company copyWith({
+    String? id,
+    String? name,
+    String? ssmNo,
+    String? type,
+    String? incorporationDate,
+    String? paidUpCapital,
+    String? registeredAddress,
+    String? businessAddress,
+    String? officialEmail,
+    String? status,
+    String? assignedFirmId,
+    String? assignedFirmName,
+    String? assignedSecretary,
+    String? assignedSecretaryLicense,
+    String? assignedFirmContact,
+    String? assignedFirmEmail,
+    String? annualReturnDeadline,
+    String? financialStatementsDeadline,
+    String? subscriptionExpiresAt,
+    String? subscriptionPlan,
+    String? subscriptionStatus,
+    String? billingCycle,
+    String? clientContact,
+    String? clientEmail,
+    bool? mobileAppConnected,
+    String? lastMobileSync,
+    bool? isLocked,
+    List<Map<String, dynamic>>? directors,
+    List<Map<String, dynamic>>? shareholders,
+    List<Map<String, dynamic>>? statutoryDocuments,
+  }) {
+    return Company(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      ssmNo: ssmNo ?? this.ssmNo,
+      type: type ?? this.type,
+      incorporationDate: incorporationDate ?? this.incorporationDate,
+      paidUpCapital: paidUpCapital ?? this.paidUpCapital,
+      registeredAddress: registeredAddress ?? this.registeredAddress,
+      businessAddress: businessAddress ?? this.businessAddress,
+      officialEmail: officialEmail ?? this.officialEmail,
+      status: status ?? this.status,
+      assignedFirmId: assignedFirmId ?? this.assignedFirmId,
+      assignedFirmName: assignedFirmName ?? this.assignedFirmName,
+      assignedSecretary: assignedSecretary ?? this.assignedSecretary,
+      assignedSecretaryLicense: assignedSecretaryLicense ?? this.assignedSecretaryLicense,
+      assignedFirmContact: assignedFirmContact ?? this.assignedFirmContact,
+      assignedFirmEmail: assignedFirmEmail ?? this.assignedFirmEmail,
+      annualReturnDeadline: annualReturnDeadline ?? this.annualReturnDeadline,
+      financialStatementsDeadline: financialStatementsDeadline ?? this.financialStatementsDeadline,
+      subscriptionExpiresAt: subscriptionExpiresAt ?? this.subscriptionExpiresAt,
+      subscriptionPlan: subscriptionPlan ?? this.subscriptionPlan,
+      subscriptionStatus: subscriptionStatus ?? this.subscriptionStatus,
+      billingCycle: billingCycle ?? this.billingCycle,
+      clientContact: clientContact ?? this.clientContact,
+      clientEmail: clientEmail ?? this.clientEmail,
+      mobileAppConnected: mobileAppConnected ?? this.mobileAppConnected,
+      lastMobileSync: lastMobileSync ?? this.lastMobileSync,
+      isLocked: isLocked ?? this.isLocked,
+      directors: directors ?? this.directors,
+      shareholders: shareholders ?? this.shareholders,
+      statutoryDocuments: statutoryDocuments ?? this.statutoryDocuments,
     );
   }
 

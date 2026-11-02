@@ -132,6 +132,10 @@ class _SsmFilingDetailPageState extends State<SsmFilingDetailPage> {
                     _buildStatusHeroCard(filing),
                     const SizedBox(height: 16),
 
+                    // LHDN Document Stamping Card
+                    _buildStampingCard(filing),
+                    const SizedBox(height: 16),
+
                     if (filing.status == SsmFilingStatus.waitingClientApproval) ...[
                       _buildDirectorApprovalBanner(filing),
                       const SizedBox(height: 16),
@@ -160,6 +164,398 @@ class _SsmFilingDetailPageState extends State<SsmFilingDetailPage> {
   }
 
 
+
+
+  Widget _buildStampingCard(SsmFiling filing) {
+    if (filing.hasStamping) {
+      return Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: const Color(0xFFDDD6FE)),
+          boxShadow: [
+            BoxShadow(
+              color: const Color(0xFF7C3AED).withValues(alpha: 0.05),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFF5F3FF),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: const Icon(Icons.approval_rounded, color: Color(0xFF7C3AED), size: 20),
+                    ),
+                    const SizedBox(width: 10),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'OFFICIAL LHDN STAMPING',
+                          style: GoogleFonts.poppins(
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 0.8,
+                            color: const Color(0xFF7C3AED),
+                          ),
+                        ),
+                        Text(
+                          filing.stampingCategory ?? 'Document Stamping',
+                          style: GoogleFonts.poppins(
+                            fontSize: 13,
+                            fontWeight: FontWeight.bold,
+                            color: const Color(0xFF0F172A),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFECFDF5),
+                    borderRadius: BorderRadius.circular(6),
+                    border: Border.all(color: const Color(0xFFA7F3D0)),
+                  ),
+                  child: Text(
+                    'PAID RM ${filing.stampingFee.toStringAsFixed(2)}',
+                    style: GoogleFonts.poppins(
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                      color: const Color(0xFF047857),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: const Color(0xFFF8FAFC),
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: const Color(0xFFE2E8F0)),
+              ),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('LHDN Cert Reference:', style: GoogleFonts.poppins(fontSize: 11, color: Colors.grey.shade600)),
+                      Text(
+                        filing.stampingCertNo ?? 'Pending Issuance',
+                        style: GoogleFonts.poppins(fontSize: 11, fontWeight: FontWeight.bold, color: const Color(0xFF7C3AED)),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('Stamping Status:', style: GoogleFonts.poppins(fontSize: 11, color: Colors.grey.shade600)),
+                      Text(
+                        filing.stampingStatus ?? 'Pending LHDN Stamping',
+                        style: GoogleFonts.poppins(fontSize: 11, fontWeight: FontWeight.w600, color: const Color(0xFF059669)),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('Payment Status:', style: GoogleFonts.poppins(fontSize: 11, color: Colors.grey.shade600)),
+                      Text(
+                        filing.stampingPaymentStatus ?? 'Paid',
+                        style: GoogleFonts.poppins(fontSize: 11, color: const Color(0xFF334155)),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 10),
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton.icon(
+                style: OutlinedButton.styleFrom(
+                  side: const BorderSide(color: Color(0xFF7C3AED)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                ),
+                onPressed: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Row(
+                        children: [
+                          const Icon(Icons.download_done_rounded, color: Colors.white, size: 16),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              'Downloading LHDN Digital Stamping Certificate (${filing.stampingCertNo})...',
+                              style: GoogleFonts.poppins(fontSize: 12),
+                            ),
+                          ),
+                        ],
+                      ),
+                      backgroundColor: const Color(0xFF7C3AED),
+                    ),
+                  );
+                },
+                icon: const Icon(Icons.download_rounded, size: 16, color: Color(0xFF7C3AED)),
+                label: Text(
+                  'Download Official LHDN Stamp Certificate',
+                  style: GoogleFonts.poppins(fontSize: 11.5, fontWeight: FontWeight.bold, color: const Color(0xFF7C3AED)),
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    // If filing does not yet have stamping, offer the Add Stamping option
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: const Color(0xFFE2E8F0)),
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: const Color(0xFFF5F3FF),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: const Icon(Icons.approval_rounded, color: Color(0xFF7C3AED), size: 20),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Need Document Stamping?',
+                  style: GoogleFonts.poppins(fontSize: 12.5, fontWeight: FontWeight.bold, color: const Color(0xFF0F172A)),
+                ),
+                Text(
+                  'Add LHDN stamp duty adjudication with additional payment.',
+                  style: GoogleFonts.poppins(fontSize: 11, color: Colors.grey.shade600),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 8),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFF7C3AED),
+              foregroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+            ),
+            onPressed: () => _showAddStampingDialog(filing),
+            child: Text(
+              '+ Add (RM 100)',
+              style: GoogleFonts.poppins(fontSize: 11, fontWeight: FontWeight.bold),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showAddStampingDialog(SsmFiling filing) {
+    String selectedCategory = 'Share Transfer Instrument (Section 105)';
+    double fee = 100.0;
+    String paymentMethod = 'FPX Online Banking';
+
+    final options = [
+      {'title': 'Share Transfer Instrument (Section 105)', 'fee': 100.0},
+      {'title': 'Tenancy / Commercial Lease Agreement', 'fee': 150.0},
+      {'title': 'Board Resolution / Statutory Declaration', 'fee': 50.0},
+      {'title': 'Commercial Contract / General Instrument', 'fee': 100.0},
+    ];
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (modalCtx) {
+        return StatefulBuilder(
+          builder: (ctx, setModalState) {
+            return Padding(
+              padding: EdgeInsets.only(
+                left: 20,
+                right: 20,
+                top: 16,
+                bottom: MediaQuery.of(modalCtx).viewInsets.bottom + 24,
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: Container(
+                      width: 40,
+                      height: 4,
+                      decoration: BoxDecoration(color: Colors.grey.shade300, borderRadius: BorderRadius.circular(2)),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(color: const Color(0xFFF5F3FF), borderRadius: BorderRadius.circular(12)),
+                        child: const Icon(Icons.approval_rounded, color: Color(0xFF7C3AED), size: 22),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Add LHDN Document Stamping',
+                              style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.bold, color: const Color(0xFF0F172A)),
+                            ),
+                            Text(
+                              filing.title,
+                              style: GoogleFonts.poppins(fontSize: 11, color: Colors.grey.shade600),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  Text('Select Stamping Category:', style: GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.w600)),
+                  const SizedBox(height: 8),
+                  ...options.map((opt) {
+                    final isSelected = selectedCategory == opt['title'];
+                    return InkWell(
+                      onTap: () {
+                        setModalState(() {
+                          selectedCategory = opt['title'] as String;
+                          fee = opt['fee'] as double;
+                        });
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.only(bottom: 6),
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: isSelected ? const Color(0xFFFAF5FF) : const Color(0xFFF8FAFC),
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(
+                            color: isSelected ? const Color(0xFF7C3AED) : const Color(0xFFE2E8F0),
+                            width: isSelected ? 1.5 : 1,
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              opt['title'] as String,
+                              style: GoogleFonts.poppins(fontSize: 11.5, fontWeight: isSelected ? FontWeight.bold : FontWeight.w500),
+                            ),
+                            Text(
+                              'RM ${(opt['fee'] as double).toStringAsFixed(2)}',
+                              style: GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.bold, color: const Color(0xFF7C3AED)),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  }),
+                  const SizedBox(height: 14),
+                  Text('Payment Method:', style: GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.w600)),
+                  const SizedBox(height: 6),
+                  DropdownButtonFormField<String>(
+                    value: paymentMethod,
+                    isExpanded: true,
+                    decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                      filled: true,
+                      fillColor: const Color(0xFFF8FAFC),
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: const BorderSide(color: Color(0xFFE2E8F0))),
+                    ),
+                    items: const [
+                      DropdownMenuItem(value: 'FPX Online Banking', child: Text('FPX Online Banking (Maybank, CIMB, Public Bank)')),
+                      DropdownMenuItem(value: 'Corporate Credit/Debit Card', child: Text('Corporate Credit/Debit Card')),
+                    ],
+                    onChanged: (val) {
+                      if (val != null) setModalState(() => paymentMethod = val);
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 48,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF7C3AED),
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                      ),
+                      onPressed: () {
+                        Navigator.pop(modalCtx);
+                        SsmFilingService.instance.addStampingToExistingFiling(
+                          filing.id,
+                          category: selectedCategory,
+                          fee: fee,
+                          paymentMethod: paymentMethod,
+                        );
+                        setState(() {});
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Row(
+                              children: [
+                                const Icon(Icons.check_circle_rounded, color: Colors.white, size: 18),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Text(
+                                    'LHDN Stamping added! RM ${fee.toStringAsFixed(2)} processed via $paymentMethod.',
+                                    style: GoogleFonts.poppins(fontSize: 12),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            backgroundColor: const Color(0xFF059669),
+                          ),
+                        );
+                      },
+                      child: Text(
+                        'Pay RM ${fee.toStringAsFixed(2)} & Attach Stamping',
+                        style: GoogleFonts.poppins(fontSize: 13, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
 
   Widget _buildDirectorApprovalBanner(SsmFiling filing) {
     return Container(
