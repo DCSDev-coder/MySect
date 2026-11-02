@@ -303,50 +303,76 @@ class AttentionPage extends StatelessWidget {
           Row(
             children: [
               Expanded(
-                child: OutlinedButton.icon(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => DocumentViewerPage(fileName: doc.title),
+                child: SizedBox(
+                  height: 40,
+                  child: OutlinedButton.icon(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DocumentViewerPage(fileName: doc.title),
+                        ),
+                      );
+                    },
+                    icon: const Icon(Icons.visibility_outlined, size: 15),
+                    label: Text(
+                      'View File',
+                      style: GoogleFonts.poppins(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
                       ),
-                    );
-                  },
-                  icon: const Icon(Icons.visibility_outlined, size: 16),
-                  label: const Text('View File'),
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: const Color(0xFF062AAE),
-                    side: const BorderSide(color: Color(0xFF062AAE)),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: const Color(0xFF062AAE),
+                      side: const BorderSide(color: Color(0xFF062AAE), width: 1.2),
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                    ),
                   ),
                 ),
               ),
               const SizedBox(width: 10),
               Expanded(
-                child: ElevatedButton.icon(
-                  onPressed: () async {
-                    final result = await FilePicker.pickFile();
-                    if (result != null) {
-                      await SecretaryDocumentService.instance.reuploadDocument(
-                        doc.id,
-                        result.name,
-                        '1.6 MB',
-                      );
-                      if (!context.mounted) return;
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('Uploaded ${result.name} - sent to Secretary for re-review',
-                              style: GoogleFonts.poppins()),
-                          backgroundColor: const Color(0xFF062AAE),
-                        ),
-                      );
-                    }
-                  },
-                  icon: const Icon(Icons.upload_file, size: 16, color: Colors.white),
-                  label: const Text('Re-upload', style: TextStyle(color: Colors.white)),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF062AAE),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                child: SizedBox(
+                  height: 40,
+                  child: ElevatedButton.icon(
+                    onPressed: () async {
+                      final result = await FilePicker.pickFile();
+                      if (result != null) {
+                        await SecretaryDocumentService.instance.reuploadDocument(
+                          doc.id,
+                          result.name,
+                          '1.6 MB',
+                        );
+                        if (!context.mounted) return;
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Uploaded ${result.name} - sent to Secretary for re-review',
+                                style: GoogleFonts.poppins()),
+                            backgroundColor: const Color(0xFF062AAE),
+                          ),
+                        );
+                      }
+                    },
+                    icon: const Icon(Icons.upload_file_rounded, size: 15, color: Colors.white),
+                    label: Text(
+                      'Re-upload',
+                      style: GoogleFonts.poppins(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF062AAE),
+                      elevation: 0,
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                    ),
                   ),
                 ),
               ),
