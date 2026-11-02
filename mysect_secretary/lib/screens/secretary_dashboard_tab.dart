@@ -122,7 +122,7 @@ class SecretaryDashboardTab extends StatelessWidget {
                   // HERO FOCUS: Total Assigned Companies & Quota Capacity Card
                   Container(
                     width: double.infinity,
-                    padding: const EdgeInsets.all(22),
+                    padding: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
                       gradient: const LinearGradient(
                         colors: [Color(0xFF062AAE), Color(0xFF031666)],
@@ -141,71 +141,27 @@ class SecretaryDashboardTab extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        // Top row with Portfolio tag and View Companies action
                         Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Container(
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 8,
-                                          vertical: 3,
-                                        ),
-                                        decoration: BoxDecoration(
-                                          color: Colors.white.withValues(alpha: 0.16),
-                                          borderRadius: BorderRadius.circular(6),
-                                        ),
-                                        child: Text(
-                                          'MANAGED CLIENT PORTFOLIO',
-                                          style: GoogleFonts.poppins(
-                                            fontSize: 10,
-                                            fontWeight: FontWeight.bold,
-                                            color: const Color(0xFF93C5FD),
-                                            letterSpacing: 0.5,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 10),
-                                  Row(
-                                    crossAxisAlignment: CrossAxisAlignment.baseline,
-                                    textBaseline: TextBaseline.alphabetic,
-                                    children: [
-                                      Text(
-                                        '${companies.length}',
-                                        style: GoogleFonts.poppins(
-                                          fontSize: 38,
-                                          fontWeight: FontWeight.w800,
-                                          color: Colors.white,
-                                          height: 1,
-                                        ),
-                                      ),
-                                      const SizedBox(width: 8),
-                                      Text(
-                                        'Companies Under Management',
-                                        style: GoogleFonts.poppins(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.w600,
-                                          color: Colors.white.withValues(alpha: 0.92),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    'Active corporate secretarial clients formally appointed to your practice.',
-                                    style: GoogleFonts.poppins(
-                                      fontSize: 11.5,
-                                      color: Colors.white.withValues(alpha: 0.78),
-                                    ),
-                                  ),
-                                ],
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 9,
+                                vertical: 4,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.white.withValues(alpha: 0.16),
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              child: Text(
+                                'MANAGED CLIENT PORTFOLIO',
+                                style: GoogleFonts.poppins(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.bold,
+                                  color: const Color(0xFF93C5FD),
+                                  letterSpacing: 0.5,
+                                ),
                               ),
                             ),
                             if (onNavigateToCompanies != null)
@@ -213,13 +169,13 @@ class SecretaryDashboardTab extends StatelessWidget {
                                 onPressed: onNavigateToCompanies,
                                 icon: const Icon(
                                   Icons.business_rounded,
-                                  size: 15,
+                                  size: 13,
                                   color: Color(0xFF062AAE),
                                 ),
                                 label: Text(
                                   'View Companies',
                                   style: GoogleFonts.poppins(
-                                    fontSize: 12,
+                                    fontSize: 11,
                                     fontWeight: FontWeight.bold,
                                     color: const Color(0xFF062AAE),
                                   ),
@@ -228,22 +184,60 @@ class SecretaryDashboardTab extends StatelessWidget {
                                   backgroundColor: Colors.white,
                                   elevation: 0,
                                   padding: const EdgeInsets.symmetric(
-                                    horizontal: 14,
-                                    vertical: 9,
+                                    horizontal: 10,
+                                    vertical: 6,
                                   ),
                                   shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10),
+                                    borderRadius: BorderRadius.circular(8),
                                   ),
                                 ),
                               ),
                           ],
                         ),
 
-                        const SizedBox(height: 20),
+                        const SizedBox(height: 14),
+
+                        // Large Company Counter and Title
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.baseline,
+                          textBaseline: TextBaseline.alphabetic,
+                          children: [
+                            Text(
+                              '${companies.length}',
+                              style: GoogleFonts.poppins(
+                                fontSize: 36,
+                                fontWeight: FontWeight.w800,
+                                color: Colors.white,
+                                height: 1,
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                'Companies Under Management',
+                                style: GoogleFonts.poppins(
+                                  fontSize: 14.5,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.white.withValues(alpha: 0.95),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          'Active corporate secretarial clients formally appointed to your practice.',
+                          style: GoogleFonts.poppins(
+                            fontSize: 11.5,
+                            color: Colors.white.withValues(alpha: 0.78),
+                          ),
+                        ),
+
+                        const SizedBox(height: 18),
 
                         // Quota Progress Bar
                         Container(
-                          padding: const EdgeInsets.all(14),
+                          padding: const EdgeInsets.all(13),
                           decoration: BoxDecoration(
                             color: Colors.white.withValues(alpha: 0.10),
                             borderRadius: BorderRadius.circular(12),
@@ -258,28 +252,34 @@ class SecretaryDashboardTab extends StatelessWidget {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Row(
-                                    children: [
-                                      const Icon(
-                                        Icons.pie_chart_outline_rounded,
-                                        size: 14,
-                                        color: Color(0xFF93C5FD),
-                                      ),
-                                      const SizedBox(width: 6),
-                                      Text(
-                                        'Company Slot Quota (${service.currentPlan.name})',
-                                        style: GoogleFonts.poppins(
-                                          fontSize: 11.5,
-                                          fontWeight: FontWeight.w600,
-                                          color: Colors.white,
+                                  Expanded(
+                                    child: Row(
+                                      children: [
+                                        const Icon(
+                                          Icons.pie_chart_outline_rounded,
+                                          size: 14,
+                                          color: Color(0xFF93C5FD),
                                         ),
-                                      ),
-                                    ],
+                                        const SizedBox(width: 6),
+                                        Flexible(
+                                          child: Text(
+                                            'Company Slot Quota (${service.currentPlan.name})',
+                                            style: GoogleFonts.poppins(
+                                              fontSize: 11.5,
+                                              fontWeight: FontWeight.w600,
+                                              color: Colors.white,
+                                            ),
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
+                                  const SizedBox(width: 8),
                                   Text(
-                                    '${companies.length} of $companyLimit slots used',
+                                    '${companies.length} of $companyLimit slots',
                                     style: GoogleFonts.poppins(
-                                      fontSize: 12,
+                                      fontSize: 11.5,
                                       fontWeight: FontWeight.bold,
                                       color: const Color(0xFF34D399),
                                     ),
@@ -305,14 +305,19 @@ class SecretaryDashboardTab extends StatelessWidget {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(
-                                    '$availableSlots slots available to onboard new client companies.',
-                                    style: GoogleFonts.poppins(
-                                      fontSize: 10.5,
-                                      color: Colors.white.withValues(alpha: 0.75),
+                                  Expanded(
+                                    child: Text(
+                                      '$availableSlots slots available to onboard new client companies.',
+                                      style: GoogleFonts.poppins(
+                                        fontSize: 10.5,
+                                        color: Colors.white.withValues(alpha: 0.75),
+                                      ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
                                     ),
                                   ),
-                                  if (onNavigateToSubscription != null)
+                                  if (onNavigateToSubscription != null) ...[
+                                    const SizedBox(width: 8),
                                     InkWell(
                                       onTap: onNavigateToSubscription,
                                       child: Text(
@@ -324,6 +329,7 @@ class SecretaryDashboardTab extends StatelessWidget {
                                         ),
                                       ),
                                     ),
+                                  ],
                                 ],
                               ),
                             ],
@@ -333,12 +339,12 @@ class SecretaryDashboardTab extends StatelessWidget {
                     ),
                   ),
 
-                  const SizedBox(height: 22),
+                  const SizedBox(height: 20),
 
-                  // 4 Summary Metrics (Company & Filings Focus)
-                  Row(
-                    children: [
-                      _buildMetricTile(
+                  // 4 Summary Metrics (Responsive 2x2 on mobile, 4-column on desktop)
+                  LayoutBuilder(
+                    builder: (context, constraints) {
+                      final tile1 = _buildMetricTile(
                         title: 'Companies',
                         value: '${companies.length}',
                         subtitle: 'Portfolios',
@@ -346,9 +352,8 @@ class SecretaryDashboardTab extends StatelessWidget {
                         color: const Color(0xFF062AAE),
                         bgColor: const Color(0xFFEFF6FF),
                         onTap: onNavigateToCompanies ?? () {},
-                      ),
-                      const SizedBox(width: 10),
-                      _buildMetricTile(
+                      );
+                      final tile2 = _buildMetricTile(
                         title: 'Pending Review',
                         value: '${service.pendingCount}',
                         subtitle: 'Filings in Queue',
@@ -356,9 +361,8 @@ class SecretaryDashboardTab extends StatelessWidget {
                         color: const Color(0xFFD97706),
                         bgColor: const Color(0xFFFEF3C7),
                         onTap: onNavigateToQueue,
-                      ),
-                      const SizedBox(width: 10),
-                      _buildMetricTile(
+                      );
+                      final tile3 = _buildMetricTile(
                         title: 'Clarifications',
                         value: '${service.moreDetailsCount}',
                         subtitle: 'Client Queries',
@@ -366,65 +370,108 @@ class SecretaryDashboardTab extends StatelessWidget {
                         color: const Color(0xFF2563EB),
                         bgColor: const Color(0xFFDBEAFE),
                         onTap: onNavigateToQueue,
-                      ),
-                      const SizedBox(width: 10),
-                      _buildMetricTile(
+                      );
+                      final tile4 = _buildMetricTile(
                         title: 'Deadlines',
-                        value:
-                            '${SecretaryComplianceService.instance.tasks.length}',
+                        value: '${SecretaryComplianceService.instance.tasks.length}',
                         subtitle: 'Statutory Dates',
                         icon: Icons.event_available_rounded,
                         color: const Color(0xFF059669),
                         bgColor: const Color(0xFFECFDF5),
                         onTap: onNavigateToCompanies ?? () {},
-                      ),
-                    ],
+                      );
+
+                      if (constraints.maxWidth < 500) {
+                        return Column(
+                          children: [
+                            Row(
+                              children: [
+                                tile1,
+                                const SizedBox(width: 10),
+                                tile2,
+                              ],
+                            ),
+                            const SizedBox(height: 10),
+                            Row(
+                              children: [
+                                tile3,
+                                const SizedBox(width: 10),
+                                tile4,
+                              ],
+                            ),
+                          ],
+                        );
+                      }
+
+                      return Row(
+                        children: [
+                          tile1,
+                          const SizedBox(width: 10),
+                          tile2,
+                          const SizedBox(width: 10),
+                          tile3,
+                          const SizedBox(width: 10),
+                          tile4,
+                        ],
+                      );
+                    },
                   ),
 
-                  const SizedBox(height: 26),
+                  const SizedBox(height: 24),
 
                   // SECTION: Assigned Company Portfolios List
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Row(
-                        children: [
-                          Text(
-                            'Your Client Companies',
-                            style: GoogleFonts.poppins(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: const Color(0xFF0F172A),
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 8,
-                              vertical: 2,
-                            ),
-                            decoration: BoxDecoration(
-                              color: const Color(0xFF062AAE).withValues(alpha: 0.08),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Text(
-                              '${companies.length} ACTIVE',
-                              style: GoogleFonts.poppins(
-                                fontSize: 10,
-                                fontWeight: FontWeight.bold,
-                                color: const Color(0xFF062AAE),
+                      Expanded(
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Flexible(
+                              child: Text(
+                                'Your Client Companies',
+                                style: GoogleFonts.poppins(
+                                  fontSize: 15.5,
+                                  fontWeight: FontWeight.bold,
+                                  color: const Color(0xFF0F172A),
+                                ),
+                                overflow: TextOverflow.ellipsis,
                               ),
                             ),
-                          ),
-                        ],
+                            const SizedBox(width: 6),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 6,
+                                vertical: 2,
+                              ),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFF062AAE).withValues(alpha: 0.08),
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              child: Text(
+                                '${companies.length} ACTIVE',
+                                style: GoogleFonts.poppins(
+                                  fontSize: 9.5,
+                                  fontWeight: FontWeight.bold,
+                                  color: const Color(0xFF062AAE),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                       if (onNavigateToCompanies != null)
                         TextButton(
                           onPressed: onNavigateToCompanies,
+                          style: TextButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(horizontal: 6),
+                            minimumSize: Size.zero,
+                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                          ),
                           child: Text(
-                            'Manage Portfolios →',
+                            'Manage →',
                             style: GoogleFonts.poppins(
-                              fontSize: 12,
+                              fontSize: 11.5,
                               fontWeight: FontWeight.bold,
                               color: const Color(0xFF062AAE),
                             ),
@@ -501,64 +548,63 @@ class SecretaryDashboardTab extends StatelessWidget {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Row(
-                                      children: [
-                                        Expanded(
-                                          child: Text(
-                                            compName,
-                                            style: GoogleFonts.poppins(
-                                              fontSize: 13.5,
-                                              fontWeight: FontWeight.bold,
-                                              color: const Color(0xFF0F172A),
-                                            ),
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
+                                    Text(
+                                        compName,
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 13.5,
+                                          fontWeight: FontWeight.bold,
+                                          color: const Color(0xFF0F172A),
                                         ),
-                                        const SizedBox(width: 8),
-                                        Container(
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 7,
-                                            vertical: 2,
-                                          ),
-                                          decoration: BoxDecoration(
-                                            color: const Color(0xFFECFDF5),
-                                            borderRadius:
-                                                BorderRadius.circular(6),
-                                          ),
-                                          child: Text(
-                                            'Good Standing',
-                                            style: GoogleFonts.poppins(
-                                              fontSize: 9.5,
-                                              fontWeight: FontWeight.bold,
-                                              color: const Color(0xFF047857),
-                                            ),
-                                          ),
-                                        ),
-                                        if (compPending > 0) ...[
-                                          const SizedBox(width: 6),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      const SizedBox(height: 4),
+                                      Row(
+                                        children: [
                                           Container(
                                             padding: const EdgeInsets.symmetric(
-                                              horizontal: 7,
+                                              horizontal: 6,
                                               vertical: 2,
                                             ),
                                             decoration: BoxDecoration(
-                                              color: const Color(0xFFFEF2F2),
-                                              borderRadius: BorderRadius.circular(6),
-                                              border: Border.all(color: const Color(0xFFFECACA)),
+                                              color: const Color(0xFFECFDF5),
+                                              borderRadius:
+                                                  BorderRadius.circular(6),
                                             ),
                                             child: Text(
-                                              '$compPending to Review',
+                                              'Good Standing',
                                               style: GoogleFonts.poppins(
                                                 fontSize: 9.5,
                                                 fontWeight: FontWeight.bold,
-                                                color: const Color(0xFFDC2626),
+                                                color: const Color(0xFF047857),
                                               ),
                                             ),
                                           ),
+                                          if (compPending > 0) ...[
+                                            const SizedBox(width: 6),
+                                            Container(
+                                              padding: const EdgeInsets.symmetric(
+                                                horizontal: 6,
+                                                vertical: 2,
+                                              ),
+                                              decoration: BoxDecoration(
+                                                color: const Color(0xFFFEF2F2),
+                                                borderRadius: BorderRadius.circular(6),
+                                                border: Border.all(color: const Color(0xFFFECACA)),
+                                              ),
+                                              child: Text(
+                                                '$compPending to Review',
+                                                style: GoogleFonts.poppins(
+                                                  fontSize: 9.5,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: const Color(0xFFDC2626),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
                                         ],
-                                      ],
-                                    ),
-                                    const SizedBox(height: 3),
+                                      ),
+                                      const SizedBox(height: 4),
                                     Text(
                                       compSsmNo,
                                       style: GoogleFonts.poppins(

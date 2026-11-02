@@ -409,7 +409,7 @@ class _MainNavigationShellState extends State<MainNavigationShell> {
             return Scaffold(
               backgroundColor: Colors.white,
               body: SafeArea(
-                top: false,
+                top: true,
                 bottom: false,
                 child: Center(
                   child: ConstrainedBox(

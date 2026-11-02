@@ -20,9 +20,7 @@ class AppTopHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final topPadding = MediaQuery.of(context).padding.top;
-    final elevatedTop = topPadding > 0
-        ? (topPadding - 24.0).clamp(6.0, 26.0)
-        : 6.0;
+    final elevatedTop = topPadding > 0 ? (topPadding + 6.0) : 14.0;
 
     final isTransparent = backgroundColor == null || backgroundColor == Colors.transparent;
 
@@ -31,7 +29,7 @@ class AppTopHeader extends StatelessWidget {
         left: 16.0,
         top: elevatedTop,
         right: 16.0,
-        bottom: isTransparent ? 2.0 : 4.0,
+        bottom: isTransparent ? 6.0 : 10.0,
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
