@@ -16,6 +16,8 @@ class ClientCompaniesTab extends StatefulWidget {
 class _ClientCompaniesTabState extends State<ClientCompaniesTab> {
   final SecretaryDocumentService _docService = SecretaryDocumentService.instance;
   final SecretaryComplianceService _compService = SecretaryComplianceService.instance;
+  String _searchQuery = '';
+  String _selectedFilter = 'All';
 
   void _showSetDatelineBottomSheet(BuildContext context, String companyName) {
     final titleController = TextEditingController();
@@ -375,7 +377,32 @@ class _ClientCompaniesTabState extends State<ClientCompaniesTab> {
     return AnimatedBuilder(
       animation: Listenable.merge([_docService, _compService]),
       builder: (context, _) {
-        final companies = _docService.clientCompanies;
+        final allCompanies = _docService.clientCompanies;
+
+        final filteredCompanies = allCompanies.where((comp) {
+          final compDocs = _docService.documents.where((d) => d.companyName == comp).toList();
+          final ssmNo = compDocs.isNotEmpty ? compDocs.first.companySsmNo : '';
+          final pendingCount = compDocs.where((d) => d.status == DocumentReviewStatus.pendingReview).length;
+
+          if (_searchQuery.isNotEmpty) {
+            final q = _searchQuery.toLowerCase();
+            final matchesName = comp.toLowerCase().contains(q);
+            final matchesSsm = ssmNo.toLowerCase().contains(q);
+            if (!matchesName && !matchesSsm) return false;
+          }
+
+          if (_selectedFilter == 'Action Needed') {
+            return pendingCount > 0;
+          } else if (_selectedFilter == 'Up to Date') {
+            return pendingCount == 0;
+          }
+          return true;
+        }).toList();
+
+        final pendingCompaniesCount = allCompanies.where((comp) {
+          final compDocs = _docService.documents.where((d) => d.companyName == comp).toList();
+          return compDocs.any((d) => d.status == DocumentReviewStatus.pendingReview);
+        }).length;
 
         return Scaffold(
           backgroundColor: Colors.white,
@@ -383,48 +410,149 @@ class _ClientCompaniesTabState extends State<ClientCompaniesTab> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.fromLTRB(16, 14, 16, 6),
-                child: Row(
+                padding: const EdgeInsets.fromLTRB(16, 12, 16, 6),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Flexible(
-                      child: FittedBox(
-                        fit: BoxFit.scaleDown,
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          'Assigned Companies',
-                          style: GoogleFonts.poppins(
-                            fontSize: 24,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.black,
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            'Company Documents & Vaults',
+                            style: GoogleFonts.poppins(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w700,
+                              color: const Color(0xFF0F172A),
+                            ),
                           ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFEFF6FF),
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(color: const Color(0xFFBFDBFE)),
+                          ),
+                          child: Text(
+                            '${allCompanies.length} PORTFOLIOS',
+                            style: GoogleFonts.poppins(
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                              color: const Color(0xFF062AAE),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      'Dedicated statutory document vaults for each client company',
+                      style: GoogleFonts.poppins(
+                        fontSize: 11.5,
+                        color: const Color(0xFF64748B),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+
+                    // Scalable Search Bar for 20+ companies
+                    Container(
+                      height: 42,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFF8FAFC),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: const Color(0xFFE2E8F0)),
+                      ),
+                      child: TextField(
+                        onChanged: (val) => setState(() => _searchQuery = val.trim()),
+                        style: GoogleFonts.poppins(fontSize: 12.5),
+                        decoration: InputDecoration(
+                          isDense: true,
+                          hintText: 'Search companies (e.g. Data Center, C2 Coffee, 1429581)...',
+                          hintStyle: GoogleFonts.poppins(fontSize: 12, color: const Color(0xFF94A3B8)),
+                          prefixIcon: const Icon(Icons.search_rounded, size: 18, color: Color(0xFF64748B)),
+                          suffixIcon: _searchQuery.isNotEmpty
+                              ? IconButton(
+                                  icon: const Icon(Icons.clear_rounded, size: 16),
+                                  onPressed: () => setState(() => _searchQuery = ''),
+                                )
+                              : null,
+                          border: InputBorder.none,
+                          contentPadding: const EdgeInsets.symmetric(vertical: 11),
                         ),
                       ),
                     ),
-                    const SizedBox(width: 8),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF062AAE).withValues(alpha: 0.08),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Text(
-                        '${companies.length} PORTFOLIO',
-                        style: GoogleFonts.poppins(
-                          fontSize: 10,
-                          fontWeight: FontWeight.bold,
-                          color: const Color(0xFF062AAE),
-                        ),
+                    const SizedBox(height: 10),
+
+                    // Filter chips: All, Action Needed, Up to Date
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          _buildFilterChip('All', '${allCompanies.length}'),
+                          const SizedBox(width: 8),
+                          _buildFilterChip('Action Needed', '$pendingCompaniesCount', isWarning: pendingCompaniesCount > 0),
+                          const SizedBox(width: 8),
+                          _buildFilterChip('Up to Date', '${allCompanies.length - pendingCompaniesCount}'),
+                        ],
                       ),
                     ),
                   ],
                 ),
               ),
               Expanded(
-                child: ListView.builder(
-                  padding: const EdgeInsets.all(16),
-                  itemCount: companies.length,
-                  itemBuilder: (context, index) {
-                    final compName = companies[index];
+                child: filteredCompanies.isEmpty
+                    ? Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(24),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Container(
+                                width: 52,
+                                height: 52,
+                                decoration: const BoxDecoration(
+                                  color: Color(0xFFF1F5F9),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: const Center(
+                                  child: Icon(Icons.search_off_rounded, color: Color(0xFF94A3B8), size: 26),
+                                ),
+                              ),
+                              const SizedBox(height: 12),
+                              Text(
+                                'No companies found',
+                                style: GoogleFonts.poppins(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: const Color(0xFF0F172A),
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                'No client companies match "$_searchQuery"',
+                                style: GoogleFonts.poppins(fontSize: 12, color: const Color(0xFF64748B)),
+                                textAlign: TextAlign.center,
+                              ),
+                              const SizedBox(height: 14),
+                              TextButton(
+                                onPressed: () => setState(() {
+                                  _searchQuery = '';
+                                  _selectedFilter = 'All';
+                                }),
+                                child: Text(
+                                  'Clear Search & Filter',
+                                  style: GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.bold, color: const Color(0xFF062AAE)),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
+                    : ListView.builder(
+                        padding: const EdgeInsets.fromLTRB(16, 6, 16, 20),
+                        itemCount: filteredCompanies.length,
+                        itemBuilder: (context, index) {
+                          final compName = filteredCompanies[index];
                     final compDocs = _docService.documents.where((d) => d.companyName == compName).toList();
                     final pendingCount = compDocs.where((d) => d.status == DocumentReviewStatus.pendingReview).length;
                     final ssmNo = compDocs.isNotEmpty ? compDocs.first.companySsmNo : 'Sdn Bhd';
@@ -636,6 +764,59 @@ class _ClientCompaniesTabState extends State<ClientCompaniesTab> {
           ),
         );
       },
+    );
+  }
+  Widget _buildFilterChip(String label, String count, {bool isWarning = false}) {
+    final isSelected = _selectedFilter == label;
+    return InkWell(
+      onTap: () => setState(() => _selectedFilter = label),
+      borderRadius: BorderRadius.circular(8),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 150),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        decoration: BoxDecoration(
+          color: isSelected ? const Color(0xFF062AAE) : const Color(0xFFF1F5F9),
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: isSelected
+                ? const Color(0xFF062AAE)
+                : (isWarning ? const Color(0xFFFECACA) : const Color(0xFFE2E8F0)),
+          ),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              label,
+              style: GoogleFonts.poppins(
+                fontSize: 11,
+                fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+                color: isSelected ? Colors.white : const Color(0xFF334155),
+              ),
+            ),
+            const SizedBox(width: 5),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+              decoration: BoxDecoration(
+                color: isSelected
+                    ? Colors.white.withValues(alpha: 0.25)
+                    : (isWarning ? const Color(0xFFFEF2F2) : Colors.white),
+                borderRadius: BorderRadius.circular(5),
+              ),
+              child: Text(
+                count,
+                style: GoogleFonts.poppins(
+                  fontSize: 9.5,
+                  fontWeight: FontWeight.bold,
+                  color: isSelected
+                      ? Colors.white
+                      : (isWarning ? const Color(0xFFDC2626) : const Color(0xFF64748B)),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

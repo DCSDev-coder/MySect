@@ -172,9 +172,9 @@ class SecretarySidebar extends StatelessWidget {
           ),
           const SecretarySidebarItem(
             index: 2,
-            label: 'Client Companies',
-            icon: Icons.business_outlined,
-            activeIcon: Icons.business_rounded,
+            label: 'Company Documents',
+            icon: Icons.folder_shared_outlined,
+            activeIcon: Icons.folder_shared_rounded,
           ),
           const SecretarySidebarItem(
             index: 3,

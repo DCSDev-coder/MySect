@@ -455,7 +455,7 @@ class SecretaryDashboardTab extends StatelessWidget {
                   const SizedBox(height: 10),
 
                   // Company Cards
-                  ...companies.map((compName) {
+                  ...companies.take(3).map((compName) {
                     final compDocs = service.documents
                         .where((d) => d.companyName == compName)
                         .toList();
@@ -646,6 +646,36 @@ class SecretaryDashboardTab extends StatelessWidget {
                       ),
                     );
                   }),
+                  if (onNavigateToCompanies != null) ...[
+                    const SizedBox(height: 6),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 44,
+                      child: OutlinedButton.icon(
+                        onPressed: onNavigateToCompanies,
+                        icon: const Icon(
+                          Icons.folder_shared_rounded,
+                          size: 16,
+                          color: Color(0xFF062AAE),
+                        ),
+                        label: Text(
+                          'View All ${companies.length} Company Document Vaults →',
+                          style: GoogleFonts.poppins(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                            color: const Color(0xFF062AAE),
+                          ),
+                        ),
+                        style: OutlinedButton.styleFrom(
+                          side: const BorderSide(color: Color(0xFFBFDBFE)),
+                          backgroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
 
                   const SizedBox(height: 24),
 

@@ -131,9 +131,9 @@ class CustomBottomNavBar extends StatelessWidget {
                   ),
                   _buildNavItem(
                     2,
-                    Icons.business_outlined,
-                    Icons.business_rounded,
-                    'Companies',
+                    Icons.folder_shared_outlined,
+                    Icons.folder_shared_rounded,
+                    'Company Vaults',
                   ),
                   _buildNavItem(
                     3,

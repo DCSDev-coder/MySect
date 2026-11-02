@@ -513,11 +513,16 @@ class _CompanyDocumentsFolderPageState
                         color: const Color(0xFF0F172A),
                       ),
                     ),
-                    Text(
-                      'Storage: TM Cloud Secure Vault',
-                      style: GoogleFonts.poppins(
-                        fontSize: 11,
-                        color: const Color(0xFF64748B),
+                    const SizedBox(width: 8),
+                    Flexible(
+                      child: Text(
+                        'TM Cloud Secure Vault',
+                        style: GoogleFonts.poppins(
+                          fontSize: 10.5,
+                          color: const Color(0xFF64748B),
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                   ],

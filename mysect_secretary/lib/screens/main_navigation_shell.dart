@@ -76,7 +76,7 @@ class _MainNavigationShellState extends State<MainNavigationShell> {
       case 1:
         return 'Document Review Queue';
       case 2:
-        return 'Client Companies & Portfolios';
+        return 'Company Documents & Vaults';
       case 3:
         return 'Secretary Profile & Credentials';
       case 4:
