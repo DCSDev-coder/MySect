@@ -208,157 +208,168 @@ class _CompanyDocumentsFolderPageState
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Hero Company Folder Header Card
+                // Corporate Company Dossier Header Card
                 Container(
                   width: double.infinity,
-                  padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [Color(0xFF062AAE), Color(0xFF021B79)],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                    borderRadius: BorderRadius.circular(20),
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: const Color(0xFFE2E8F0)),
                     boxShadow: [
                       BoxShadow(
-                        color: const Color(0xFF062AAE).withValues(alpha: 0.25),
-                        blurRadius: 14,
-                        offset: const Offset(0, 5),
+                        color: Colors.black.withValues(alpha: 0.025),
+                        blurRadius: 8,
+                        offset: const Offset(0, 2),
                       ),
                     ],
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            width: 52,
-                            height: 52,
-                            decoration: BoxDecoration(
-                              color: Colors.white.withValues(alpha: 0.15),
-                              borderRadius: BorderRadius.circular(14),
-                              border: Border.all(
-                                color: Colors.white.withValues(alpha: 0.25),
-                              ),
-                            ),
-                            child: const Center(
-                              child: Icon(
-                                Icons.folder_shared_rounded,
-                                color: Colors.white,
-                                size: 28,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 14),
-                          Expanded(
-                            child: Column(
+                      Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Row(
-                                  children: [
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 7,
-                                        vertical: 2,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color: const Color(0xFF34D399),
-                                        borderRadius: BorderRadius.circular(6),
-                                      ),
-                                      child: Text(
-                                        'ACTIVE VAULT',
-                                        style: GoogleFonts.poppins(
-                                          fontSize: 9.5,
-                                          fontWeight: FontWeight.bold,
-                                          color: const Color(0xFF064E3B),
-                                          letterSpacing: 0.4,
-                                        ),
-                                      ),
+                                Container(
+                                  width: 46,
+                                  height: 46,
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFFF8FAFC),
+                                    borderRadius: BorderRadius.circular(12),
+                                    border: Border.all(color: const Color(0xFFE2E8F0)),
+                                  ),
+                                  child: const Center(
+                                    child: Icon(
+                                      Icons.account_balance_rounded,
+                                      color: Color(0xFF062AAE),
+                                      size: 22,
                                     ),
-                                    const SizedBox(width: 8),
-                                    Text(
-                                      'TM Cloud Encrypted',
-                                      style: GoogleFonts.poppins(
-                                        fontSize: 10.5,
-                                        color: Colors.white.withValues(alpha: 0.8),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  widget.companyName,
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 17,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
                                   ),
                                 ),
-                                Text(
-                                  ssmNo,
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 11.5,
-                                    color: Colors.white.withValues(alpha: 0.75),
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        widget.companyName,
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w700,
+                                          color: const Color(0xFF0F172A),
+                                        ),
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      const SizedBox(height: 2),
+                                      Text(
+                                        'Co. Reg: $ssmNo',
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 11.5,
+                                          fontWeight: FontWeight.w500,
+                                          color: const Color(0xFF64748B),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ],
                             ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 18),
-                      // Folder Metrics Row
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 14,
-                          vertical: 10,
+                            const SizedBox(height: 12),
+                            Wrap(
+                              spacing: 8,
+                              runSpacing: 6,
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFFECFDF5),
+                                    borderRadius: BorderRadius.circular(6),
+                                    border: Border.all(color: const Color(0xFFA7F3D0)),
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      const Icon(Icons.verified_rounded, size: 12, color: Color(0xFF059669)),
+                                      const SizedBox(width: 4),
+                                      Text(
+                                        'SSM ACTIVE REGISTRY',
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 9.5,
+                                          fontWeight: FontWeight.bold,
+                                          color: const Color(0xFF047857),
+                                          letterSpacing: 0.3,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFFF8FAFC),
+                                    borderRadius: BorderRadius.circular(6),
+                                    border: Border.all(color: const Color(0xFFE2E8F0)),
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      const Icon(Icons.cloud_done_rounded, size: 12, color: Color(0xFF64748B)),
+                                      const SizedBox(width: 4),
+                                      Text(
+                                        'TM Cloud Encrypted Repository',
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 9.5,
+                                          fontWeight: FontWeight.w500,
+                                          color: const Color(0xFF475569),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.10),
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                            color: Colors.white.withValues(alpha: 0.16),
+                      ),
+                      Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+                        decoration: const BoxDecoration(
+                          color: Color(0xFFF8FAFC),
+                          borderRadius: BorderRadius.vertical(bottom: Radius.circular(16)),
+                          border: Border(
+                            top: BorderSide(color: Color(0xFFE2E8F0), width: 1),
                           ),
                         ),
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            _buildVaultStat(
-                              'Total Files',
-                              '${allCompanyDocs.length}',
-                              Colors.white,
+                            _buildCorporateMetric(
+                              label: 'Total Files',
+                              value: '${allCompanyDocs.length}',
+                              valueColor: const Color(0xFF0F172A),
                             ),
-                            Container(
-                              width: 1,
-                              height: 24,
-                              color: Colors.white.withValues(alpha: 0.2),
+                            Container(width: 1, height: 26, color: const Color(0xFFE2E8F0)),
+                            _buildCorporateMetric(
+                              label: 'Pending',
+                              value: '$pendingCount',
+                              valueColor: pendingCount > 0 ? const Color(0xFFD97706) : const Color(0xFF64748B),
                             ),
-                            _buildVaultStat(
-                              'Pending',
-                              '$pendingCount',
-                              const Color(0xFFFDE68A),
+                            Container(width: 1, height: 26, color: const Color(0xFFE2E8F0)),
+                            _buildCorporateMetric(
+                              label: 'Approved',
+                              value: '$approvedCount',
+                              valueColor: const Color(0xFF059669),
                             ),
-                            Container(
-                              width: 1,
-                              height: 24,
-                              color: Colors.white.withValues(alpha: 0.2),
-                            ),
-                            _buildVaultStat(
-                              'Approved',
-                              '$approvedCount',
-                              const Color(0xFF6EE7B7),
-                            ),
-                            Container(
-                              width: 1,
-                              height: 24,
-                              color: Colors.white.withValues(alpha: 0.2),
-                            ),
-                            _buildVaultStat(
-                              'Queries',
-                              '$queryCount',
-                              const Color(0xFF93C5FD),
+                            Container(width: 1, height: 26, color: const Color(0xFFE2E8F0)),
+                            _buildCorporateMetric(
+                              label: 'Queries',
+                              value: '$queryCount',
+                              valueColor: queryCount > 0 ? const Color(0xFF2563EB) : const Color(0xFF64748B),
                             ),
                           ],
                         ),
@@ -622,28 +633,38 @@ class _CompanyDocumentsFolderPageState
     );
   }
 
-  Widget _buildVaultStat(String label, String value, Color color) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(
-          value,
-          style: GoogleFonts.poppins(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-            color: color,
-            height: 1,
+  Widget _buildCorporateMetric({
+    required String label,
+    required String value,
+    required Color valueColor,
+  }) {
+    return Expanded(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            value,
+            style: GoogleFonts.poppins(
+              fontSize: 17,
+              fontWeight: FontWeight.bold,
+              color: valueColor,
+              height: 1,
+            ),
           ),
-        ),
-        const SizedBox(height: 3),
-        Text(
-          label,
-          style: GoogleFonts.poppins(
-            fontSize: 10,
-            color: Colors.white.withValues(alpha: 0.8),
+          const SizedBox(height: 3),
+          Text(
+            label,
+            style: GoogleFonts.poppins(
+              fontSize: 10,
+              fontWeight: FontWeight.w500,
+              color: const Color(0xFF64748B),
+            ),
+            textAlign: TextAlign.center,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
