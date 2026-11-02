@@ -4,7 +4,6 @@ import 'package:intl/intl.dart';
 import '../services/secretary_document_service.dart';
 import '../services/secretary_compliance_service.dart';
 import '../models/client_document_model.dart';
-import 'document_review_detail_page.dart';
 import 'company_documents_folder_page.dart';
 
 class ClientCompaniesTab extends StatefulWidget {
@@ -628,8 +627,9 @@ class _ClientCompaniesTabState extends State<ClientCompaniesTab> {
                         ),
                       ),
                     ),
-                    );
-                  },
+                  ),
+                );
+              },
                 ),
               ),
             ],

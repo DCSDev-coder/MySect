@@ -534,6 +534,28 @@ class SecretaryDashboardTab extends StatelessWidget {
                                             ),
                                           ),
                                         ),
+                                        if (compPending > 0) ...[
+                                          const SizedBox(width: 6),
+                                          Container(
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 7,
+                                              vertical: 2,
+                                            ),
+                                            decoration: BoxDecoration(
+                                              color: const Color(0xFFFEF2F2),
+                                              borderRadius: BorderRadius.circular(6),
+                                              border: Border.all(color: const Color(0xFFFECACA)),
+                                            ),
+                                            child: Text(
+                                              '$compPending to Review',
+                                              style: GoogleFonts.poppins(
+                                                fontSize: 9.5,
+                                                fontWeight: FontWeight.bold,
+                                                color: const Color(0xFFDC2626),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ],
                                     ),
                                     const SizedBox(height: 3),
