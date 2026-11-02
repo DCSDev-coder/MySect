@@ -3,6 +3,8 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../services/secretary_document_service.dart';
 import '../services/secretary_notification_service.dart';
+import '../widgets/app_top_header.dart';
+import '../widgets/custom_bottom_nav_bar.dart';
 import '../widgets/mysect_stroke_logo_loader.dart';
 import '../widgets/secretary_sidebar.dart';
 import 'client_companies_tab.dart';
@@ -314,35 +316,60 @@ class _MainNavigationShellState extends State<MainNavigationShell> {
     return AnimatedBuilder(
       animation: service,
       builder: (context, _) {
-        final profile = service.profile;
-        final initials = profile.name
-            .split(' ')
-            .where((e) => e.isNotEmpty)
-            .take(2)
-            .map((e) => e[0].toUpperCase())
-            .join();
-
-        final tabs = [
-          SecretaryDashboardTab(
-            onNavigateToQueue: () => _onTabSelected(1),
-            onNavigateToCompanies: () => _onTabSelected(2),
-            onNavigateToSubscription: () => _onTabSelected(5),
-          ),
-          const DocumentIntakeQueueTab(),
-          const ClientCompaniesTab(),
-          SecretaryProfileTab(
-            onNavigateToTab: _onTabSelected,
-          ),
-          const SecretarySettingsPage(isEmbedded: true),
-          const SecretarySubscriptionPage(isEmbedded: true),
-        ];
-
         return LayoutBuilder(
           builder: (context, constraints) {
             final isDesktop = constraints.maxWidth >= 800;
 
+            final tabs = [
+              SecretaryDashboardTab(
+                onNavigateToQueue: () => _onTabSelected(1),
+                onNavigateToCompanies: () => _onTabSelected(2),
+                onNavigateToSubscription: () {
+                  if (isDesktop) {
+                    _onTabSelected(5);
+                  } else {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const SecretarySubscriptionPage(),
+                      ),
+                    );
+                  }
+                },
+              ),
+              const DocumentIntakeQueueTab(),
+              const ClientCompaniesTab(),
+              SecretaryProfileTab(
+                onNavigateToTab: (idx) {
+                  if (isDesktop) {
+                    _onTabSelected(idx);
+                  } else {
+                    if (idx == 4) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const SecretarySettingsPage(),
+                        ),
+                      );
+                    } else if (idx == 5) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const SecretarySubscriptionPage(),
+                        ),
+                      );
+                    } else {
+                      _onTabSelected(idx);
+                    }
+                  }
+                },
+              ),
+              const SecretarySettingsPage(isEmbedded: true),
+              const SecretarySubscriptionPage(isEmbedded: true),
+            ];
+
             if (isDesktop) {
-              // Desktop & Tablet Side-by-Side Left Navigation Layout
+              // Desktop & Tablet: Left Sidebar Navigation (Matching Admin)
               return Scaffold(
                 backgroundColor: const Color(0xFFF8FAFC),
                 body: SafeArea(
@@ -378,95 +405,47 @@ class _MainNavigationShellState extends State<MainNavigationShell> {
               );
             }
 
-            // Mobile Layout with Left Navigation Drawer (No bottom bar)
+            // Mobile Layout: Kept as before (AppTopHeader + CustomBottomNavBar)
             return Scaffold(
               backgroundColor: Colors.white,
-              drawer: Drawer(
-                width: 260,
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.zero,
-                ),
-                child: SafeArea(
-                  child: SecretarySidebar(
-                    isDrawer: true,
-                    currentIndex: _currentIndex,
-                    onSelectTab: (idx) {
-                      Navigator.pop(context);
-                      _onTabSelected(idx);
-                    },
-                    onCloseDrawer: () => Navigator.pop(context),
-                  ),
-                ),
-              ),
-              appBar: AppBar(
-                backgroundColor: Colors.white,
-                elevation: 0,
-                surfaceTintColor: Colors.transparent,
-                bottom: PreferredSize(
-                  preferredSize: const Size.fromHeight(1),
-                  child: Container(
-                    color: const Color(0xFFE2E8F0),
-                    height: 1,
-                  ),
-                ),
-                leading: Builder(
-                  builder: (ctx) => IconButton(
-                    icon: const Icon(
-                      Icons.menu_rounded,
-                      color: Color(0xFF1E293B),
-                      size: 24,
-                    ),
-                    tooltip: 'Open Menu',
-                    onPressed: () => Scaffold.of(ctx).openDrawer(),
-                  ),
-                ),
-                centerTitle: true,
-                title: Image.asset(
-                  'assets/mysect_logo.png',
-                  height: 28,
-                  fit: BoxFit.contain,
-                ),
-                actions: [
-                  _buildNotificationBell(context),
-                  const SizedBox(width: 4),
-                  Builder(
-                    builder: (ctx) => InkWell(
-                      onTap: () => Scaffold.of(ctx).openDrawer(),
-                      borderRadius: BorderRadius.circular(16),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                        child: Container(
-                          width: 30,
-                          height: 30,
-                          decoration: const BoxDecoration(
-                            color: Color(0xFF062AAE),
-                            shape: BoxShape.circle,
-                          ),
-                          child: Center(
-                            child: Text(
-                              initials.isNotEmpty ? initials : 'ML',
-                              style: GoogleFonts.poppins(
-                                fontSize: 11,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
+              body: SafeArea(
+                top: false,
+                bottom: false,
+                child: Center(
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 1024),
+                    child: Column(
+                      children: [
+                        const AppTopHeader(),
+                        Expanded(
+                          child: MediaQuery.removePadding(
+                            context: context,
+                            removeTop: true,
+                            child: Stack(
+                              children: [
+                                IndexedStack(
+                                  index: _currentIndex >= 4 ? 3 : _currentIndex,
+                                  children: tabs,
+                                ),
+                                if (_isSwitchingTab) _buildLoadingOverlay(),
+                              ],
                             ),
                           ),
                         ),
-                      ),
+                      ],
                     ),
                   ),
-                  const SizedBox(width: 8),
-                ],
+                ),
               ),
-              body: Stack(
-                children: [
-                  IndexedStack(
-                    index: _currentIndex,
-                    children: tabs,
+              bottomNavigationBar: Center(
+                heightFactor: 1.0,
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 1024),
+                  child: CustomBottomNavBar(
+                    currentIndex: _currentIndex >= 4 ? 3 : _currentIndex,
+                    onTap: _onTabSelected,
                   ),
-                  if (_isSwitchingTab) _buildLoadingOverlay(),
-                ],
+                ),
               ),
             );
           },
