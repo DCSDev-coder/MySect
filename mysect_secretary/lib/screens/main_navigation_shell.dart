@@ -325,6 +325,8 @@ class _MainNavigationShellState extends State<MainNavigationShell> {
         final tabs = [
           SecretaryDashboardTab(
             onNavigateToQueue: () => _onTabSelected(1),
+            onNavigateToCompanies: () => _onTabSelected(2),
+            onNavigateToSubscription: () => _onTabSelected(5),
           ),
           const DocumentIntakeQueueTab(),
           const ClientCompaniesTab(),
