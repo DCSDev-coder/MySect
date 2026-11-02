@@ -1,37 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../widgets/app_top_header.dart';
-import '../widgets/custom_bottom_nav_bar.dart';
-import 'main_navigation_shell.dart';
 import 'secretary_login_page.dart';
 import 'secretary_two_factor_auth_page.dart';
 
 class SecretarySettingsPage extends StatefulWidget {
-  const SecretarySettingsPage({super.key});
+  final bool isEmbedded;
+
+  const SecretarySettingsPage({super.key, this.isEmbedded = false});
 
   @override
   State<SecretarySettingsPage> createState() => _SecretarySettingsPageState();
 }
 
 class _SecretarySettingsPageState extends State<SecretarySettingsPage> {
-  final int _selectedIndex = 3;
-
   bool _whatsappEnabled = true;
   bool _emailEnabled = true;
   bool _passcodeEnabled = true;
-
-  void _onItemTapped(int index) {
-    if (index == _selectedIndex) {
-      Navigator.pop(context);
-      return;
-    }
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(
-        builder: (context) => MainNavigationShell(initialIndex: index),
-      ),
-      (route) => false,
-    );
-  }
 
   void _showChangePasswordSheet() {
     showModalBottomSheet(
@@ -272,24 +256,28 @@ class _SecretarySettingsPageState extends State<SecretarySettingsPage> {
         top: false,
         child: Column(
           children: [
-            const AppTopHeader(backgroundColor: Colors.transparent),
-            const SizedBox(height: 16),
+            if (!widget.isEmbedded) ...[
+              const AppTopHeader(backgroundColor: Colors.transparent),
+              const SizedBox(height: 16),
+            ],
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
               child: Row(
                 children: [
-                  IconButton(
-                    icon: const Icon(
-                      Icons.arrow_back,
-                      color: Colors.black,
+                  if (!widget.isEmbedded) ...[
+                    IconButton(
+                      icon: const Icon(
+                        Icons.arrow_back,
+                        color: Colors.black,
+                      ),
+                      onPressed: () => Navigator.pop(context),
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints(),
                     ),
-                    onPressed: () => Navigator.pop(context),
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
-                  ),
-                  const SizedBox(width: 16),
+                    const SizedBox(width: 16),
+                  ],
                   Text(
-                    'Settings',
+                    'Settings & Security',
                     style: GoogleFonts.poppins(
                       color: Colors.black,
                       fontSize: 24,
@@ -299,14 +287,14 @@ class _SecretarySettingsPageState extends State<SecretarySettingsPage> {
                 ],
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 8),
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 12),
                     Text(
                       'NOTIFICATIONS',
                       style: GoogleFonts.poppins(
@@ -445,10 +433,6 @@ class _SecretarySettingsPageState extends State<SecretarySettingsPage> {
             ),
           ],
         ),
-      ),
-      bottomNavigationBar: CustomBottomNavBar(
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
       ),
     );
   }

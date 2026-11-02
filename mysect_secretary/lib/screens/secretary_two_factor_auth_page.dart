@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../widgets/app_top_header.dart';
-import '../widgets/custom_bottom_nav_bar.dart';
-import 'main_navigation_shell.dart';
 import 'secretary_two_factor_verification_page.dart';
 
 class SecretaryTwoFactorAuthPage extends StatefulWidget {
@@ -16,19 +14,6 @@ class SecretaryTwoFactorAuthPage extends StatefulWidget {
 class _SecretaryTwoFactorAuthPageState
     extends State<SecretaryTwoFactorAuthPage> {
   bool _emailEnabled = true;
-
-  void _onItemTapped(int index) {
-    if (index == 3) {
-      Navigator.pop(context);
-      return;
-    }
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(
-        builder: (context) => MainNavigationShell(initialIndex: index),
-      ),
-      (route) => false,
-    );
-  }
 
   void _sendCode() {
     showDialog(
@@ -191,10 +176,6 @@ class _SecretaryTwoFactorAuthPageState
             ),
           ],
         ),
-      ),
-      bottomNavigationBar: CustomBottomNavBar(
-        currentIndex: 3,
-        onTap: _onItemTapped,
       ),
     );
   }

@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'main_navigation_shell.dart';
-import '../widgets/custom_bottom_nav_bar.dart';
 
 class SecretaryTwoFactorVerificationPage extends StatefulWidget {
   const SecretaryTwoFactorVerificationPage({super.key});
@@ -14,19 +12,6 @@ class SecretaryTwoFactorVerificationPage extends StatefulWidget {
 
 class _SecretaryTwoFactorVerificationPageState
     extends State<SecretaryTwoFactorVerificationPage> {
-  void _onItemTapped(int index) {
-    if (index == 3) {
-      Navigator.pop(context);
-      return;
-    }
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(
-        builder: (context) => MainNavigationShell(initialIndex: index),
-      ),
-      (route) => false,
-    );
-  }
-
   final List<FocusNode> _focusNodes = List.generate(6, (index) => FocusNode());
   final List<TextEditingController> _controllers = List.generate(
     6,
@@ -285,10 +270,6 @@ class _SecretaryTwoFactorVerificationPageState
             ),
           ],
         ),
-      ),
-      bottomNavigationBar: CustomBottomNavBar(
-        currentIndex: 3,
-        onTap: _onItemTapped,
       ),
     );
   }

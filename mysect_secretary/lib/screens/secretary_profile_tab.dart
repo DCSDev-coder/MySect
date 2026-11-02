@@ -6,7 +6,9 @@ import 'secretary_settings_page.dart';
 import 'secretary_subscription_page.dart';
 
 class SecretaryProfileTab extends StatelessWidget {
-  const SecretaryProfileTab({super.key});
+  final ValueChanged<int>? onNavigateToTab;
+
+  const SecretaryProfileTab({super.key, this.onNavigateToTab});
 
   @override
   Widget build(BuildContext context) {
@@ -328,12 +330,16 @@ class SecretaryProfileTab extends StatelessWidget {
                         height: 40,
                         child: ElevatedButton.icon(
                           onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const SecretarySubscriptionPage(),
-                              ),
-                            );
+                            if (onNavigateToTab != null) {
+                              onNavigateToTab!(5);
+                            } else {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const SecretarySubscriptionPage(),
+                                ),
+                              );
+                            }
                           },
                           icon: const Icon(Icons.add_business_rounded, size: 16, color: Colors.white),
                           label: Text(
@@ -417,12 +423,16 @@ class SecretaryProfileTab extends StatelessWidget {
                         subtitle: 'Notifications, security, practice defaults',
                         trailing: const Icon(Icons.chevron_right, color: Colors.black54, size: 20),
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const SecretarySettingsPage(),
-                            ),
-                          );
+                          if (onNavigateToTab != null) {
+                            onNavigateToTab!(4);
+                          } else {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const SecretarySettingsPage(),
+                              ),
+                            );
+                          }
                         },
                       ),
                       _buildDivider(),
