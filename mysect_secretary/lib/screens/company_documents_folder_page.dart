@@ -1,3 +1,4 @@
+import '../widgets/app_top_header.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -114,74 +115,96 @@ class _CompanyDocumentsFolderPageState
 
         return Scaffold(
           backgroundColor: const Color(0xFFF8FAFC),
-          appBar: AppBar(
-            backgroundColor: Colors.white,
-            elevation: 0,
-            surfaceTintColor: Colors.transparent,
-            bottom: PreferredSize(
-              preferredSize: const Size.fromHeight(1),
-              child: Container(color: const Color(0xFFE2E8F0), height: 1),
-            ),
-            leading: IconButton(
-              icon: const Icon(
-                Icons.arrow_back_ios_new_rounded,
-                size: 18,
-                color: Color(0xFF0F172A),
-              ),
-              onPressed: () => Navigator.pop(context),
-            ),
-            title: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+          body: SafeArea(
+            top: true,
+            bottom: false,
+            child: Column(
               children: [
-                Text(
-                  widget.companyName,
-                  style: GoogleFonts.poppins(
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                    color: const Color(0xFF0F172A),
+                // Standard Brand Logo & Notification Bell Header matching other pages
+                const AppTopHeader(backgroundColor: Colors.white),
+
+                // Subpage navigation bar with back button, company info, and sync action
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    border: Border(
+                      bottom: BorderSide(color: Color(0xFFE2E8F0), width: 1),
+                    ),
                   ),
-                  overflow: TextOverflow.ellipsis,
-                ),
-                Text(
-                  'Company Document Folder • $ssmNo',
-                  style: GoogleFonts.poppins(
-                    fontSize: 11,
-                    fontWeight: FontWeight.w500,
-                    color: const Color(0xFF64748B),
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ],
-            ),
-            actions: [
-              IconButton(
-                icon: const Icon(
-                  Icons.sync_rounded,
-                  size: 20,
-                  color: Color(0xFF062AAE),
-                ),
-                tooltip: 'Sync Company Vault',
-                onPressed: () async {
-                  await _docService.syncFromBackend();
-                  if (context.mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(
-                          'Synced files for ${widget.companyName}',
-                          style: GoogleFonts.poppins(fontSize: 12),
+                  child: Row(
+                    children: [
+                      IconButton(
+                        icon: const Icon(
+                          Icons.arrow_back_ios_new_rounded,
+                          size: 18,
+                          color: Color(0xFF0F172A),
                         ),
-                        backgroundColor: const Color(0xFF062AAE),
-                        duration: const Duration(seconds: 2),
+                        onPressed: () => Navigator.pop(context),
+                        padding: EdgeInsets.zero,
+                        constraints: const BoxConstraints(),
                       ),
-                    );
-                  }
-                },
-              ),
-              const SizedBox(width: 8),
-            ],
-          ),
-          body: SingleChildScrollView(
-            padding: const EdgeInsets.all(20),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              widget.companyName,
+                              style: GoogleFonts.poppins(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                                color: const Color(0xFF0F172A),
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            Text(
+                              'Company Document Folder • $ssmNo',
+                              style: GoogleFonts.poppins(
+                                fontSize: 11,
+                                fontWeight: FontWeight.w500,
+                                color: const Color(0xFF64748B),
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      IconButton(
+                        icon: const Icon(
+                          Icons.sync_rounded,
+                          size: 20,
+                          color: Color(0xFF062AAE),
+                        ),
+                        tooltip: 'Sync Company Vault',
+                        onPressed: () async {
+                          await _docService.syncFromBackend();
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  'Synced files for ${widget.companyName}',
+                                  style: GoogleFonts.poppins(fontSize: 12),
+                                ),
+                                backgroundColor: const Color(0xFF062AAE),
+                                duration: const Duration(seconds: 2),
+                              ),
+                            );
+                          }
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+
+                // Scrollable Document Content
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -590,7 +613,11 @@ class _CompanyDocumentsFolderPageState
               ],
             ),
           ),
-        );
+        ),
+      ],
+    ),
+  ),
+);
       },
     );
   }
