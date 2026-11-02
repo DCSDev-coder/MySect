@@ -489,7 +489,7 @@ class _SsmFilingDetailPageState extends State<SsmFilingDetailPage> {
                   Text('Payment Method:', style: GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.w600)),
                   const SizedBox(height: 6),
                   DropdownButtonFormField<String>(
-                    value: paymentMethod,
+                    initialValue: paymentMethod,
                     isExpanded: true,
                     decoration: InputDecoration(
                       contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),

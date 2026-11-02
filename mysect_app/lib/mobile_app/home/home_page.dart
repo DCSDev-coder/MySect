@@ -12,6 +12,7 @@ import '../widgets/custom_bottom_nav_bar.dart';
 import '../tasks/document_needed_page.dart';
 import '../tasks/replies_needed_page.dart';
 import '../services/company_service.dart';
+import '../models/company_model.dart';
 import '../services/ssm_filing_service.dart';
 import '../services/compliance_service.dart';
 import '../widgets/app_top_header.dart';
@@ -560,7 +561,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ] else if (isExpiringSoon) ...[
                   Text(
-                    'Retainer expires in ${days} days. Please settle payment to prevent interruption of statutory secretarial coverage.',
+                    'Retainer expires in $days days. Please settle payment to prevent interruption of statutory secretarial coverage.',
                     style: GoogleFonts.poppins(fontSize: 11, color: const Color(0xFF92400E)),
                   ),
                   const SizedBox(height: 8),
@@ -759,7 +760,7 @@ class _HomePageState extends State<HomePage> {
                   Text('Payment Method:', style: GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.w600)),
                   const SizedBox(height: 8),
                   DropdownButtonFormField<String>(
-                    value: paymentMethod,
+                    initialValue: paymentMethod,
                     isExpanded: true,
                     decoration: InputDecoration(
                       contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),

@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../home/home_page.dart';
 import '../widgets/custom_bottom_nav_bar.dart';
 import '../services/company_service.dart';
+import '../models/company_model.dart';
 import 'calendar_page.dart';
 import 'company_shares_page.dart';
 import 'company_documents_page.dart';
@@ -369,7 +370,7 @@ class _CompanyPageState extends State<CompanyPage> {
                             _buildQuickLinkItem(
                               icon: Icons.verified_user_outlined,
                               title: 'Secretarial Retainer & Plan',
-                              subtitle: '${company.subscriptionPlan} • Expires ${company.formattedSubscriptionExpiry}' + (company.isSubscriptionExpired ? ' (EXPIRED)' : ''),
+                              subtitle: '${company.subscriptionPlan} • Expires ${company.formattedSubscriptionExpiry}${company.isSubscriptionExpired ? ' (EXPIRED)' : ''}',
                               onTap: () => _showRetainerDetailsModal(context, company),
                             ),
                           ],

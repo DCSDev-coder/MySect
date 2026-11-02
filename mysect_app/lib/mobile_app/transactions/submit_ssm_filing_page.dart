@@ -5,6 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import '../services/ssm_filing_service.dart';
 import '../services/company_service.dart';
+import '../models/company_model.dart';
 import '../services/secretary_document_service.dart';
 import 'ssm_filing_detail_page.dart';
 import '../widgets/app_top_header.dart';
@@ -635,7 +636,7 @@ class _SubmitSsmFilingPageState extends State<SubmitSsmFilingPage> {
                   Text('Payment Method:', style: GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.w600)),
                   const SizedBox(height: 8),
                   DropdownButtonFormField<String>(
-                    value: paymentMethod,
+                    initialValue: paymentMethod,
                     isExpanded: true,
                     decoration: InputDecoration(
                       contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
@@ -1303,7 +1304,7 @@ class _SubmitSsmFilingPageState extends State<SubmitSsmFilingPage> {
                           ),
                           Switch(
                             value: _addStamping,
-                            activeColor: const Color(0xFF7C3AED),
+                            activeThumbColor: const Color(0xFF7C3AED),
                             onChanged: (val) {
                               setState(() {
                                 _addStamping = val;
@@ -1411,7 +1412,7 @@ class _SubmitSsmFilingPageState extends State<SubmitSsmFilingPage> {
                         ),
                         const SizedBox(height: 6),
                         DropdownButtonFormField<String>(
-                          value: _selectedPaymentMethod,
+                          initialValue: _selectedPaymentMethod,
                           isExpanded: true,
                           decoration: InputDecoration(
                             filled: true,
