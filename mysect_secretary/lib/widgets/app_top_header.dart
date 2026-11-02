@@ -20,7 +20,8 @@ class AppTopHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final topPadding = MediaQuery.of(context).padding.top;
-    final elevatedTop = topPadding > 0 ? (topPadding + 6.0) : 14.0;
+    // Leave clear space for top speaker, camera notch/island, and status bar
+    final elevatedTop = topPadding > 20 ? (topPadding + 10.0) : 38.0;
 
     final isTransparent = backgroundColor == null || backgroundColor == Colors.transparent;
 
@@ -29,7 +30,7 @@ class AppTopHeader extends StatelessWidget {
         left: 16.0,
         top: elevatedTop,
         right: 16.0,
-        bottom: isTransparent ? 6.0 : 10.0,
+        bottom: isTransparent ? 6.0 : 12.0,
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

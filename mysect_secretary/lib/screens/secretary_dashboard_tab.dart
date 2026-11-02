@@ -145,50 +145,61 @@ class SecretaryDashboardTab extends StatelessWidget {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 9,
-                                vertical: 4,
-                              ),
-                              decoration: BoxDecoration(
-                                color: Colors.white.withValues(alpha: 0.16),
-                                borderRadius: BorderRadius.circular(6),
-                              ),
-                              child: Text(
-                                'MANAGED CLIENT PORTFOLIO',
-                                style: GoogleFonts.poppins(
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.bold,
-                                  color: const Color(0xFF93C5FD),
-                                  letterSpacing: 0.5,
+                            Flexible(
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                  vertical: 3.5,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Colors.white.withValues(alpha: 0.16),
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                                child: Text(
+                                  'CLIENT PORTFOLIO',
+                                  style: GoogleFonts.poppins(
+                                    fontSize: 9.5,
+                                    fontWeight: FontWeight.bold,
+                                    color: const Color(0xFF93C5FD),
+                                    letterSpacing: 0.4,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ),
                             ),
+                            const SizedBox(width: 8),
                             if (onNavigateToCompanies != null)
-                              ElevatedButton.icon(
-                                onPressed: onNavigateToCompanies,
-                                icon: const Icon(
-                                  Icons.business_rounded,
-                                  size: 13,
-                                  color: Color(0xFF062AAE),
-                                ),
-                                label: Text(
-                                  'View Companies',
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 11,
-                                    fontWeight: FontWeight.bold,
-                                    color: const Color(0xFF062AAE),
-                                  ),
-                                ),
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.white,
-                                  elevation: 0,
+                              InkWell(
+                                onTap: onNavigateToCompanies,
+                                borderRadius: BorderRadius.circular(8),
+                                child: Container(
                                   padding: const EdgeInsets.symmetric(
-                                    horizontal: 10,
-                                    vertical: 6,
+                                    horizontal: 9,
+                                    vertical: 5,
                                   ),
-                                  shape: RoundedRectangleBorder(
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
                                     borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      const Icon(
+                                        Icons.business_rounded,
+                                        size: 13,
+                                        color: Color(0xFF062AAE),
+                                      ),
+                                      const SizedBox(width: 4),
+                                      Text(
+                                        'Companies',
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 11,
+                                          fontWeight: FontWeight.bold,
+                                          color: const Color(0xFF062AAE),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ),

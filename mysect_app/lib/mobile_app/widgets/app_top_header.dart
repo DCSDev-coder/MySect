@@ -20,14 +20,15 @@ class AppTopHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final topPadding = MediaQuery.of(context).padding.top;
     // Elevates the logo and notification bell higher up closer to the status bar text/pill
-    final elevatedTop = topPadding > 0 ? (topPadding - 24.0).clamp(6.0, 26.0) : 6.0;
+    // Leave clear space for top speaker, camera notch/island, and status bar
+    final elevatedTop = topPadding > 20 ? (topPadding + 10.0) : 38.0;
 
     return Padding(
       padding: EdgeInsets.only(
         left: 16.0,
         top: elevatedTop,
         right: 16.0,
-        bottom: 2.0,
+        bottom: 12.0,
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
