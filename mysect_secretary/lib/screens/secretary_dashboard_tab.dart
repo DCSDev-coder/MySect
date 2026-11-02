@@ -570,7 +570,10 @@ class SecretaryDashboardTab extends StatelessWidget {
                                         overflow: TextOverflow.ellipsis,
                                       ),
                                       const SizedBox(height: 4),
-                                      Row(
+                                      Wrap(
+                                        spacing: 5,
+                                        runSpacing: 4,
+                                        crossAxisAlignment: WrapCrossAlignment.center,
                                         children: [
                                           Container(
                                             padding: const EdgeInsets.symmetric(
@@ -585,14 +588,13 @@ class SecretaryDashboardTab extends StatelessWidget {
                                             child: Text(
                                               'Good Standing',
                                               style: GoogleFonts.poppins(
-                                                fontSize: 9.5,
+                                                fontSize: 9,
                                                 fontWeight: FontWeight.bold,
                                                 color: const Color(0xFF047857),
                                               ),
                                             ),
                                           ),
-                                          if (compPending > 0) ...[
-                                            const SizedBox(width: 6),
+                                          if (compPending > 0)
                                             Container(
                                               padding: const EdgeInsets.symmetric(
                                                 horizontal: 6,
@@ -606,13 +608,12 @@ class SecretaryDashboardTab extends StatelessWidget {
                                               child: Text(
                                                 '$compPending to Review',
                                                 style: GoogleFonts.poppins(
-                                                  fontSize: 9.5,
+                                                  fontSize: 9,
                                                   fontWeight: FontWeight.bold,
                                                   color: const Color(0xFFDC2626),
                                                 ),
                                               ),
                                             ),
-                                          ],
                                         ],
                                       ),
                                       const SizedBox(height: 4),
@@ -690,18 +691,27 @@ class SecretaryDashboardTab extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        'Urgent Filings to Review (${pendingDocs.length})',
-                        style: GoogleFonts.poppins(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                          color: const Color(0xFF0F172A),
+                      Expanded(
+                        child: Text(
+                          'Urgent Filings to Review (${pendingDocs.length})',
+                          style: GoogleFonts.poppins(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                            color: const Color(0xFF0F172A),
+                          ),
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
+                      const SizedBox(width: 8),
                       TextButton(
                         onPressed: onNavigateToQueue,
+                        style: TextButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(horizontal: 4),
+                          minimumSize: Size.zero,
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        ),
                         child: Text(
-                          'View Full Queue →',
+                          'View Queue →',
                           style: GoogleFonts.poppins(
                             fontSize: 12,
                             fontWeight: FontWeight.bold,
