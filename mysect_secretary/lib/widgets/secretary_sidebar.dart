@@ -218,7 +218,7 @@ class SecretarySidebar extends StatelessWidget {
               // Top Brand Header
               Container(
                 width: double.infinity,
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                 decoration: const BoxDecoration(
                   border: Border(
                     bottom: BorderSide(color: Color(0xFFF1F5F9), width: 1),
@@ -230,7 +230,8 @@ class SecretarySidebar extends StatelessWidget {
                     Center(
                       child: Image.asset(
                         'assets/mysect_logo.png',
-                        height: 42,
+                        height: 52,
+                        width: 175,
                         fit: BoxFit.contain,
                       ),
                     ),
