@@ -6,6 +6,7 @@ import '../models/client_document_model.dart';
 import '../services/secretary_compliance_service.dart';
 import '../services/secretary_document_service.dart';
 import 'document_review_detail_page.dart';
+import 'company_documents_folder_page.dart';
 
 class SecretaryDashboardTab extends StatelessWidget {
   final VoidCallback onNavigateToQueue;
@@ -463,7 +464,14 @@ class SecretaryDashboardTab extends StatelessWidget {
                         ],
                       ),
                       child: InkWell(
-                        onTap: onNavigateToCompanies,
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => CompanyDocumentsFolderPage(companyName: compName),
+                            ),
+                          );
+                        },
                         borderRadius: BorderRadius.circular(16),
                         child: Padding(
                           padding: const EdgeInsets.all(16),
@@ -565,34 +573,31 @@ class SecretaryDashboardTab extends StatelessWidget {
                                 ),
                               ),
                               const SizedBox(width: 12),
-                              if (compPending > 0)
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 8,
-                                    vertical: 4,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xFFFEF3C7),
+                              ElevatedButton.icon(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => CompanyDocumentsFolderPage(companyName: compName),
+                                    ),
+                                  );
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0xFFEFF6FF),
+                                  foregroundColor: const Color(0xFF062AAE),
+                                  elevation: 0,
+                                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+                                  shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(8),
-                                    border: Border.all(
-                                      color: const Color(0xFFFDE68A),
-                                    ),
+                                    side: const BorderSide(color: Color(0xFFBFDBFE)),
                                   ),
-                                  child: Text(
-                                    '$compPending Pending',
-                                    style: GoogleFonts.poppins(
-                                      fontSize: 10.5,
-                                      fontWeight: FontWeight.bold,
-                                      color: const Color(0xFFB45309),
-                                    ),
-                                  ),
-                                )
-                              else
-                                const Icon(
-                                  Icons.chevron_right_rounded,
-                                  color: Color(0xFF94A3B8),
-                                  size: 20,
                                 ),
+                                icon: const Icon(Icons.folder_open_rounded, size: 14),
+                                label: Text(
+                                  compDocs.isNotEmpty ? '${compDocs.length} Files' : 'Open Vault',
+                                  style: GoogleFonts.poppins(fontSize: 11, fontWeight: FontWeight.bold),
+                                ),
+                              ),
                             ],
                           ),
                         ),

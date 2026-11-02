@@ -5,6 +5,7 @@ import '../services/secretary_document_service.dart';
 import '../services/secretary_compliance_service.dart';
 import '../models/client_document_model.dart';
 import 'document_review_detail_page.dart';
+import 'company_documents_folder_page.dart';
 
 class ClientCompaniesTab extends StatefulWidget {
   const ClientCompaniesTab({super.key});
@@ -444,8 +445,20 @@ class _ClientCompaniesTabState extends State<ClientCompaniesTab> {
                           ),
                         ],
                       ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
+                      child: Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => CompanyDocumentsFolderPage(companyName: compName),
+                              ),
+                            );
+                          },
+                          borderRadius: BorderRadius.circular(16),
+                          child: Padding(
+                            padding: const EdgeInsets.all(16),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -584,38 +597,37 @@ class _ClientCompaniesTabState extends State<ClientCompaniesTab> {
                                     ),
                                   ),
                                 ),
-                                if (compDocs.isNotEmpty) ...[
-                                  const SizedBox(width: 8),
-                                  Expanded(
-                                    child: ElevatedButton.icon(
-                                      onPressed: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => DocumentReviewDetailPage(document: compDocs.first),
-                                          ),
-                                        );
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: const Color(0xFF062AAE),
-                                        foregroundColor: Colors.white,
-                                        elevation: 0,
-                                        padding: const EdgeInsets.symmetric(vertical: 9),
-                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                                      ),
-                                      icon: const Icon(Icons.folder_open_rounded, size: 15),
-                                      label: Text(
-                                        '${compDocs.length} Files',
-                                        style: GoogleFonts.poppins(fontSize: 11, fontWeight: FontWeight.w600),
-                                      ),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: ElevatedButton.icon(
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => CompanyDocumentsFolderPage(companyName: compName),
+                                        ),
+                                      );
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: const Color(0xFF062AAE),
+                                      foregroundColor: Colors.white,
+                                      elevation: 0,
+                                      padding: const EdgeInsets.symmetric(vertical: 9),
+                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                                    ),
+                                    icon: const Icon(Icons.folder_open_rounded, size: 15),
+                                    label: Text(
+                                      compDocs.isNotEmpty ? '${compDocs.length} Documents' : 'Open Vault',
+                                      style: GoogleFonts.poppins(fontSize: 11, fontWeight: FontWeight.w600),
                                     ),
                                   ),
-                                ],
+                                ),
                               ],
                             ),
                           ],
                         ),
                       ),
+                    ),
                     );
                   },
                 ),
