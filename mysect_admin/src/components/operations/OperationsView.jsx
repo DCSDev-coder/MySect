@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { AlertTriangle, HelpCircle, Bell } from 'lucide-react';
 import EscalationsMonitor from './EscalationsMonitor';
 import SupportDisputes from './SupportDisputes';
-import GlobalNotifications from './GlobalNotifications';
+import GlobalNotifications from '../notifications/GlobalNotifications';
 
 const OperationsView = ({
   escalations = [],

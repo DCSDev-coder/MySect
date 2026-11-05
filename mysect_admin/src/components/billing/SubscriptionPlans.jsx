@@ -112,9 +112,9 @@ const SubscriptionPlans = ({
             <CreditCard className="w-4 h-4" />
             <span>Commercial Monetization & Plan Engine</span>
           </div>
-          <h1 className="text-2xl font-bold text-gray-900 mt-1">Subscription Plans & Company Limits</h1>
+          <h1 className="text-2xl font-bold text-gray-900 mt-1">Company Billing & SSM Portfolio (Flat RM 50 / Co)</h1>
           <p className="text-sm text-gray-500">
-            Define secretary firm subscription tiers, enforce company capacity limits, allocate TM Cloud storage quotas, and manage recurring software pricing.
+            Flat rate pricing architecture: RM 50 / month per active SSM company. Zero artificial tiers, unlimited TM Cloud vault & full MBRS filing tracking.
           </p>
         </div>
 

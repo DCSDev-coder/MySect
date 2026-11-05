@@ -49,8 +49,8 @@ void main() {
 
     expect(find.byType(RepeatingStrokeLogoLoader), findsNothing);
 
-    // Tap Transactions tab (index 1) in bottom nav
-    final transactionsTab = find.text('SSM Filings');
+    // Tap Transactions / Submissions tab (index 1) in bottom nav
+    final transactionsTab = find.text('Submissions');
     expect(transactionsTab, findsOneWidget);
     await tester.tap(transactionsTab);
     await tester.pump();
@@ -69,4 +69,3 @@ void main() {
     expect(find.byType(RepeatingStrokeLogoLoader), findsNothing);
   });
 }
-

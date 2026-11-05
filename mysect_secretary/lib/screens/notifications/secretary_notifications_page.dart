@@ -1,9 +1,12 @@
+import '../../widgets/secretary_sidebar.dart';
+import '../../widgets/secretary_desktop_top_bar.dart';
+import '../shell/main_navigation_shell.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../services/secretary_notification_service.dart';
-import '../services/secretary_document_service.dart';
-import '../widgets/app_top_header.dart';
-import 'document_review_detail_page.dart';
+import '../../services/secretary_notification_service.dart';
+import '../../services/secretary_document_service.dart';
+import '../../widgets/app_top_header.dart';
+import '../review_queue/document_review_detail_page.dart';
 
 class SecretaryNotificationsPage extends StatelessWidget {
   const SecretaryNotificationsPage({super.key});
@@ -17,93 +20,167 @@ class SecretaryNotificationsPage extends StatelessWidget {
       builder: (context, _) {
         final notifications = service.notifications;
 
-        return Scaffold(
-          backgroundColor: Colors.white,
-          body: SafeArea(
-            top: false,
-            bottom: false,
-            child: Column(
+        return LayoutBuilder(
+          builder: (context, constraints) {
+            final isDesktop = constraints.maxWidth >= 800;
+
+            final mainContent = Column(
               children: [
-                const AppTopHeader(showNotificationBell: false),
-                Container(
-                  color: Colors.white,
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  child: Row(
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.arrow_back_ios_new, size: 18, color: Colors.black87),
-                        onPressed: () => Navigator.pop(context),
-                        padding: EdgeInsets.zero,
-                        constraints: const BoxConstraints(),
+                if (isDesktop)
+                  SecretaryDesktopTopBar(
+                    leading: IconButton(
+                      icon: const Icon(
+                        Icons.arrow_back_ios_new_rounded,
+                        size: 16,
+                        color: Color(0xFF0F172A),
                       ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: FittedBox(
-                          fit: BoxFit.scaleDown,
-                          alignment: Alignment.centerLeft,
+                      tooltip: 'Back to Workspace',
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                    title: 'Notifications & Statutory Alerts',
+                    badgeText: 'SSM LICENSED',
+                  )
+                else ...[
+                  const AppTopHeader(showNotificationBell: false),
+                  Container(
+                    color: Colors.white,
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    child: Row(
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.arrow_back_ios_new, size: 18, color: Colors.black87),
+                          onPressed: () => Navigator.pop(context),
+                          padding: EdgeInsets.zero,
+                          constraints: const BoxConstraints(),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
                           child: Text(
                             'Notifications',
                             style: GoogleFonts.poppins(
-                              fontSize: 24,
+                              fontSize: 18,
                               fontWeight: FontWeight.bold,
                               color: Colors.black,
                             ),
                           ),
                         ),
-                      ),
-                      if (service.unreadCount > 0)
+                        if (service.unreadCount > 0)
+                          TextButton.icon(
+                            onPressed: () => service.markAllAsRead(),
+                            icon: const Icon(Icons.done_all_rounded, size: 16, color: Color(0xFF062AAE)),
+                            label: Text(
+                              'Mark all read',
+                              style: GoogleFonts.poppins(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600,
+                                color: const Color(0xFF062AAE),
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                  Divider(height: 1, color: Colors.grey.shade200),
+                ],
+                if (isDesktop && service.unreadCount > 0)
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    color: const Color(0xFFF8FAFC),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          '${service.unreadCount} unread statutory notifications',
+                          style: GoogleFonts.poppins(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                            color: const Color(0xFF64748B),
+                          ),
+                        ),
                         TextButton.icon(
                           onPressed: () => service.markAllAsRead(),
                           icon: const Icon(Icons.done_all_rounded, size: 16, color: Color(0xFF062AAE)),
                           label: Text(
-                            'Mark all read',
+                            'Mark all as read',
                             style: GoogleFonts.poppins(
                               fontSize: 12,
-                              fontWeight: FontWeight.w600,
+                              fontWeight: FontWeight.bold,
                               color: const Color(0xFF062AAE),
                             ),
                           ),
                         ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                Divider(height: 1, color: Colors.grey.shade200),
                 Expanded(
                   child: notifications.isEmpty
-              ? Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.notifications_off_outlined, size: 54, color: Colors.grey.shade400),
-                      const SizedBox(height: 12),
-                      Text(
-                        'No notifications yet',
-                        style: GoogleFonts.poppins(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black87,
+                      ? Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.notifications_off_outlined, size: 54, color: Colors.grey.shade400),
+                              const SizedBox(height: 12),
+                              Text(
+                                'No notifications yet',
+                                style: GoogleFonts.poppins(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black87,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                'You are all caught up on statutory updates',
+                                style: GoogleFonts.poppins(fontSize: 12, color: Colors.grey.shade600),
+                              ),
+                            ],
+                          ),
+                        )
+                      : ListView.builder(
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                          itemCount: notifications.length,
+                          itemBuilder: (context, index) {
+                            final notif = notifications[index];
+                            return _buildNotificationCard(context, notif);
+                          },
                         ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        'You are all caught up on statutory updates',
-                        style: GoogleFonts.poppins(fontSize: 12, color: Colors.grey.shade600),
-                      ),
-                    ],
-                  ),
-                )
-              : ListView.builder(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                  itemCount: notifications.length,
-                  itemBuilder: (context, index) {
-                    final notif = notifications[index];
-                    return _buildNotificationCard(context, notif);
-                  },
-                ),
                 ),
               ],
-            ),
-          ),
+            );
+
+            if (isDesktop) {
+              return Scaffold(
+                backgroundColor: const Color(0xFFF8FAFC),
+                body: Row(
+                  children: [
+                    SecretarySidebar(
+                      currentIndex: 0,
+                      onSelectTab: (idx) {
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => MainNavigationShell(initialIndex: idx),
+                          ),
+                          (route) => false,
+                        );
+                      },
+                    ),
+                    const VerticalDivider(width: 1, thickness: 1, color: Color(0xFFE2E8F0)),
+                    Expanded(child: mainContent),
+                  ],
+                ),
+              );
+            }
+
+            return Scaffold(
+              backgroundColor: Colors.white,
+              body: SafeArea(
+                top: false,
+                bottom: false,
+                child: mainContent,
+              ),
+            );
+          },
         );
       },
     );

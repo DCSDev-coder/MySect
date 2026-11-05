@@ -1,19 +1,18 @@
+import '../../widgets/secretary_desktop_top_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../services/secretary_document_service.dart';
-import '../services/secretary_notification_service.dart';
-import '../widgets/app_top_header.dart';
-import '../widgets/custom_bottom_nav_bar.dart';
-import '../widgets/mysect_stroke_logo_loader.dart';
-import '../widgets/secretary_sidebar.dart';
-import 'client_companies_tab.dart';
-import 'document_intake_queue_tab.dart';
-import 'secretary_dashboard_tab.dart';
-import 'secretary_notifications_page.dart';
-import 'secretary_profile_tab.dart';
-import 'secretary_settings_page.dart';
-import 'secretary_subscription_page.dart';
+import '../../services/secretary_document_service.dart';
+import '../../widgets/app_top_header.dart';
+import '../../widgets/custom_bottom_nav_bar.dart';
+import '../../widgets/mysect_stroke_logo_loader.dart';
+import '../../widgets/secretary_sidebar.dart';
+import '../companies/client_companies_tab.dart';
+import '../review_queue/document_intake_queue_tab.dart';
+import '../dashboard/secretary_dashboard_tab.dart';
+import '../profile/secretary_profile_tab.dart';
+import '../settings/secretary_settings_page.dart';
+import '../settings/secretary_subscription_page.dart';
 
 class MainNavigationShell extends StatefulWidget {
   final int initialIndex;
@@ -82,54 +81,10 @@ class _MainNavigationShellState extends State<MainNavigationShell> {
       case 4:
         return 'Firm Settings & Security';
       case 5:
-        return 'Plans & Company Quota';
+        return 'Company Billing & SSM Portfolio';
       default:
         return 'Secretary Workspace';
     }
-  }
-
-  Widget _buildNotificationBell(BuildContext context) {
-    return AnimatedBuilder(
-      animation: SecretaryNotificationService.instance,
-      builder: (context, _) {
-        final unreadCount = SecretaryNotificationService.instance.unreadCount;
-        return IconButton(
-          icon: Stack(
-            clipBehavior: Clip.none,
-            children: [
-              const Icon(
-                Icons.notifications_none_rounded,
-                color: Color(0xFF1E293B),
-                size: 22,
-              ),
-              if (unreadCount > 0)
-                Positioned(
-                  right: -1,
-                  top: -1,
-                  child: Container(
-                    width: 8,
-                    height: 8,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFDC2626),
-                      shape: BoxShape.circle,
-                      border: Border.all(color: Colors.white, width: 1.5),
-                    ),
-                  ),
-                ),
-            ],
-          ),
-          tooltip: 'Notifications',
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const SecretaryNotificationsPage(),
-              ),
-            );
-          },
-        );
-      },
-    );
   }
 
   Widget _buildLoadingOverlay() {
@@ -166,146 +121,12 @@ class _MainNavigationShellState extends State<MainNavigationShell> {
     BuildContext context,
     SecretaryDocumentService service,
   ) {
-    final profile = service.profile;
-    final initials = profile.name
-        .split(' ')
-        .where((e) => e.isNotEmpty)
-        .take(2)
-        .map((e) => e[0].toUpperCase())
-        .join();
-
-    return Container(
-      height: 60,
-      padding: const EdgeInsets.symmetric(horizontal: 24),
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        border: Border(
-          bottom: BorderSide(color: Color(0xFFE2E8F0), width: 1),
-        ),
-      ),
-      child: Row(
-        children: [
-          Text(
-            _getPageTitle(_currentIndex),
-            style: GoogleFonts.poppins(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: const Color(0xFF0F172A),
-            ),
-          ),
-          const SizedBox(width: 12),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-            decoration: BoxDecoration(
-              color: const Color(0xFFECFDF5),
-              borderRadius: BorderRadius.circular(6),
-              border: Border.all(color: const Color(0xFFA7F3D0)),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Icon(
-                  Icons.verified_rounded,
-                  color: Color(0xFF059669),
-                  size: 13,
-                ),
-                const SizedBox(width: 4),
-                Text(
-                  'SSM LICENSED',
-                  style: GoogleFonts.poppins(
-                    fontSize: 10,
-                    fontWeight: FontWeight.bold,
-                    color: const Color(0xFF047857),
-                    letterSpacing: 0.3,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const Spacer(),
-          // Sync Action
-          OutlinedButton.icon(
-            onPressed: _isSyncing ? null : _handleSync,
-            style: OutlinedButton.styleFrom(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-              side: const BorderSide(color: Color(0xFFCBD5E1)),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
-            icon: _isSyncing
-                ? const SizedBox(
-                    width: 14,
-                    height: 14,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      color: Color(0xFF062AAE),
-                    ),
-                  )
-                : const Icon(
-                    Icons.sync_rounded,
-                    size: 16,
-                    color: Color(0xFF062AAE),
-                  ),
-            label: Text(
-              _isSyncing ? 'Syncing...' : 'Sync',
-              style: GoogleFonts.poppins(
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
-                color: const Color(0xFF334155),
-              ),
-            ),
-          ),
-          const SizedBox(width: 12),
-          // Notifications
-          _buildNotificationBell(context),
-          const SizedBox(width: 12),
-          // Profile Chip
-          InkWell(
-            onTap: () => _onTabSelected(3),
-            borderRadius: BorderRadius.circular(20),
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-              decoration: BoxDecoration(
-                color: const Color(0xFFF8FAFC),
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: const Color(0xFFE2E8F0)),
-              ),
-              child: Row(
-                children: [
-                  Container(
-                    width: 26,
-                    height: 26,
-                    decoration: const BoxDecoration(
-                      color: Color(0xFF062AAE),
-                      shape: BoxShape.circle,
-                    ),
-                    child: Center(
-                      child: Text(
-                        initials.isNotEmpty ? initials : 'ML',
-                        style: GoogleFonts.poppins(
-                          fontSize: 10,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Text(
-                    profile.name,
-                    style: GoogleFonts.poppins(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                      color: const Color(0xFF1E293B),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
+    return SecretaryDesktopTopBar(
+      title: _getPageTitle(_currentIndex),
+      badgeText: 'SSM LICENSED',
+      isSyncing: _isSyncing,
+      onSync: _handleSync,
+      onProfileTap: () => _onTabSelected(3),
     );
   }
 
@@ -383,6 +204,7 @@ class _MainNavigationShellState extends State<MainNavigationShell> {
                       // Main Content Area
                       Expanded(
                         child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             _buildDesktopTopBar(context, service),
                             Expanded(

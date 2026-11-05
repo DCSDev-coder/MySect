@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { 
-  Users, ArrowRightLeft, Search, 
+  Users, AlertCircle, Bell, ArrowRightLeft, Search, 
   CheckCircle2, ShieldCheck, Smartphone, Plus,
   Building2, Calendar, FileText, ExternalLink,
   Check, RefreshCw, X, CreditCard
@@ -25,11 +25,13 @@ const CompanyManagement = ({
   companies = [], 
   firms = [], 
   onTransferCompany,
-  onCreateCompany 
+  onCreateCompany,
+  onTogglePayment
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterFirm, setFilterFirm] = useState('All');
   const [filterStatus, setFilterStatus] = useState('All');
+  const [filterPayment, setFilterPayment] = useState('All');
   const [showTransferModal, setShowTransferModal] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showDetailModal, setShowDetailModal] = useState(false);
@@ -53,7 +55,7 @@ const CompanyManagement = ({
   const [newOfficialEmail, setNewOfficialEmail] = useState('');
   const [newRegisteredAddress, setNewRegisteredAddress] = useState('');
   const [newSubscriptionExpiresAt, setNewSubscriptionExpiresAt] = useState('2027-10-22');
-  const [newSubscriptionPlan, setNewSubscriptionPlan] = useState('Growth Plan');
+  const [newSubscriptionPlan, setNewSubscriptionPlan] = useState('RM 50 / SSM Company');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [syncMessage, setSyncMessage] = useState(null);
 
@@ -68,7 +70,12 @@ const CompanyManagement = ({
       : filterStatus === 'Expiring Soon'
         ? getSubscriptionExpiryStatus(c.subscriptionExpiresAt).isExpiring
         : c.status === filterStatus;
-    return matchesSearch && matchesFirm && matchesStatus;
+    const matchesPayment = filterPayment === 'All'
+      ? true
+      : filterPayment === 'Paid'
+        ? (c.isPaidForMonth || c.monthlyPaymentStatus === 'Paid')
+        : (!c.isPaidForMonth && c.monthlyPaymentStatus !== 'Paid');
+    return matchesSearch && matchesFirm && matchesStatus && matchesPayment;
   });
 
   const handleOpenTransfer = (company, e) => {
@@ -129,7 +136,7 @@ const CompanyManagement = ({
       assignedFirmEmail: firmObj?.email || 'azman@sectpro.com.my',
       status: 'Active',
       subscriptionExpiresAt: newSubscriptionExpiresAt || '2027-10-22',
-      subscriptionPlan: newSubscriptionPlan || 'Growth Plan',
+      subscriptionPlan: newSubscriptionPlan || 'RM 50 / SSM Company',
       subscriptionStatus: 'Active',
       billingCycle: 'Annual Prepaid',
       directorsCount: 1,
@@ -180,7 +187,7 @@ const CompanyManagement = ({
     setNewOfficialEmail('');
     setNewRegisteredAddress('');
     setNewSubscriptionExpiresAt('2027-10-22');
-    setNewSubscriptionPlan('Growth Plan');
+    setNewSubscriptionPlan('RM 50 / SSM Company');
   };
 
   const handlePingMobileSync = async (company) => {
@@ -222,15 +229,19 @@ const CompanyManagement = ({
 
           <div className="flex flex-wrap items-center gap-3 self-start md:self-auto shrink-0">
             <div className="text-xs bg-gray-50 border border-gray-200 rounded-lg p-2 sm:p-2.5 px-3 sm:px-4 shadow-xs flex items-center gap-2 overflow-x-auto no-scrollbar">
-              <span className="text-gray-500 whitespace-nowrap">Total Companies:</span>{' '}
+              <span className="text-gray-500 whitespace-nowrap">Total Portfolio:</span>{' '}
               <strong className="text-gray-900 text-sm whitespace-nowrap">{companies.length}</strong>
               <span className="mx-1 text-gray-300">|</span>
-              <span className="text-emerald-600 font-medium whitespace-nowrap">
-                {companies.filter(c => c.mobileAppConnected).length} mobile connected
+              <span className="text-emerald-700 font-semibold whitespace-nowrap bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                ✓ {companies.filter(c => c.isPaidForMonth || c.monthlyPaymentStatus === 'Paid').length} Paid (MYR {(companies.filter(c => c.isPaidForMonth || c.monthlyPaymentStatus === 'Paid').length * 50).toFixed(2)})
               </span>
               <span className="mx-1 text-gray-300">|</span>
-              <span className="text-amber-600 font-medium whitespace-nowrap">
-                {companies.filter(c => getSubscriptionExpiryStatus(c.subscriptionExpiresAt).isExpiring).length} renewal due
+              <span className="text-rose-700 font-semibold whitespace-nowrap bg-rose-50 px-2 py-0.5 rounded border border-rose-200">
+                ⚠️ {companies.filter(c => !c.isPaidForMonth && c.monthlyPaymentStatus !== 'Paid').length} Unpaid (MYR {(companies.filter(c => !c.isPaidForMonth && c.monthlyPaymentStatus !== 'Paid').length * 50).toFixed(2)})
+              </span>
+              <span className="mx-1 text-gray-300">|</span>
+              <span className="text-blue-600 font-medium whitespace-nowrap">
+                {companies.filter(c => c.mobileAppConnected).length} mobile connected
               </span>
             </div>
 
@@ -288,6 +299,19 @@ const CompanyManagement = ({
               <option value="Expiring Soon">Renewal Due (Expiring Soon)</option>
             </select>
           </div>
+
+          <div className="flex items-center gap-2 text-xs text-gray-500">
+            <span>May 2026 Retainer:</span>
+            <select
+              value={filterPayment}
+              onChange={(e) => setFilterPayment(e.target.value)}
+              className="py-1.5 px-3 bg-gray-50 border border-gray-200 rounded-lg text-xs font-medium text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#062AAE]"
+            >
+              <option value="All">All Retainer Statuses</option>
+              <option value="Paid">✓ Paid This Month (May 2026)</option>
+              <option value="Unpaid">⚠️ Unpaid / Due (RM 50)</option>
+            </select>
+          </div>
         </div>
       </div>
 
@@ -301,6 +325,7 @@ const CompanyManagement = ({
                 <th className="px-5 py-3.5 text-left font-semibold text-gray-600">Assigned Secretary Firm</th>
                 <th className="px-5 py-3.5 text-left font-semibold text-gray-600">Mobile Client Status</th>
                 <th className="px-5 py-3.5 text-left font-semibold text-gray-600">Client Contact</th>
+                <th className="px-5 py-3.5 text-left font-semibold text-gray-600 whitespace-nowrap">May 2026 Retainer (RM50)</th>
                 <th className="px-5 py-3.5 text-left font-semibold text-gray-600 whitespace-nowrap">Subscription Expiry</th>
                 <th className="px-5 py-3.5 text-left font-semibold text-gray-600 whitespace-nowrap">Next SSM Deadline</th>
                 <th className="px-5 py-3.5 text-left font-semibold text-gray-600 whitespace-nowrap">Status</th>
@@ -369,13 +394,37 @@ const CompanyManagement = ({
                     </td>
 
                     <td className="px-5 py-4 whitespace-nowrap">
+                      {(company.isPaidForMonth || company.monthlyPaymentStatus === 'Paid') ? (
+                        <div>
+                          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                            <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                            Paid (May 2026)
+                          </span>
+                          <div className="text-[10px] text-gray-500 mt-1">
+                            RM 50.00 • {company.lastPaymentDate || '02 May'} • {company.paymentMethod || 'FPX'}
+                          </div>
+                        </div>
+                      ) : (
+                        <div>
+                          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-rose-50 text-rose-700 border border-rose-200">
+                            <AlertCircle className="w-3 h-3 text-rose-600" />
+                            Unpaid (Due 07 May)
+                          </span>
+                          <div className="text-[10px] text-rose-600 font-medium mt-1">
+                            RM 50.00 Outstanding
+                          </div>
+                        </div>
+                      )}
+                    </td>
+
+                    <td className="px-5 py-4 whitespace-nowrap">
                       <div className="flex items-center gap-1.5 font-semibold text-gray-900 whitespace-nowrap">
                         <Calendar className="w-3.5 h-3.5 text-[#062AAE] shrink-0" />
                         <span className="whitespace-nowrap">{company.subscriptionExpiresAt || '2027-06-14'}</span>
                       </div>
                       <div className="flex items-center gap-1.5 mt-0.5 whitespace-nowrap">
                         <span className="text-[11px] text-gray-500 whitespace-nowrap">
-                          {company.subscriptionPlan || 'Growth Plan'}
+                          {company.subscriptionPlan || 'RM 50 / SSM Company'}
                         </span>
                         {(() => {
                           const sub = getSubscriptionExpiryStatus(company.subscriptionExpiresAt);
@@ -573,10 +622,7 @@ const CompanyManagement = ({
                     onChange={(e) => setNewSubscriptionPlan(e.target.value)}
                     className="w-full p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-[#062AAE]"
                   >
-                    <option value="Starter Plan">Starter Plan (RM 249/mo)</option>
-                    <option value="Growth Plan">Growth Plan (RM 599/mo)</option>
-                    <option value="Professional Plan">Professional Plan (RM 1,299/mo)</option>
-                    <option value="Enterprise Plan">Enterprise Plan (RM 2,899/mo)</option>
+                    <option value="RM 50 / SSM Company">RM 50 / SSM Company (Flat Retainer)</option>
                   </select>
                 </div>
                 <div>
@@ -743,19 +789,70 @@ const CompanyManagement = ({
 
               <div className="grid grid-cols-3 gap-3 mt-3 text-xs">
                 <div className="p-2.5 bg-gray-50 rounded-lg">
-                  <span className="text-gray-500 block text-[11px]">Subscription Plan</span>
-                  <strong className="text-gray-900 mt-0.5 block">{selectedCompany.subscriptionPlan || 'Growth Plan'}</strong>
-                  <span className="text-[10px] text-gray-400">CoSec SLA included</span>
+                  <span className="text-gray-500 block text-[11px]">Subscription Model</span>
+                  <strong className="text-gray-900 mt-0.5 block">Flat RM 50 / Co</strong>
+                  <span className="text-[10px] text-gray-400">Unlimited MBRS & Vault</span>
                 </div>
                 <div className="p-2.5 bg-gray-50 rounded-lg">
-                  <span className="text-gray-500 block text-[11px]">Subscription Expiry Date</span>
-                  <strong className="text-gray-900 mt-0.5 block whitespace-nowrap">{selectedCompany.subscriptionExpiresAt || '2027-06-14'}</strong>
-                  <span className="text-[10px] text-gray-400">Next renewal billing</span>
+                  <span className="text-gray-500 block text-[11px]">Current Cycle (May 2026)</span>
+                  <strong className={`mt-0.5 block ${(selectedCompany.isPaidForMonth || selectedCompany.monthlyPaymentStatus === 'Paid') ? 'text-emerald-700' : 'text-rose-700'}`}>
+                    {(selectedCompany.isPaidForMonth || selectedCompany.monthlyPaymentStatus === 'Paid') ? '✓ Paid (RM 50.00)' : '⚠️ Unpaid (RM 50.00)'}
+                  </strong>
+                  <span className="text-[10px] text-gray-400">{selectedCompany.lastPaymentDate ? `Paid ${selectedCompany.lastPaymentDate}` : 'Due 07 May 2026'}</span>
                 </div>
                 <div className="p-2.5 bg-gray-50 rounded-lg">
-                  <span className="text-gray-500 block text-[11px]">Billing Cycle</span>
-                  <strong className="text-gray-900 mt-0.5 block">{selectedCompany.billingCycle || 'Annual Prepaid'}</strong>
-                  <span className="text-[10px] text-emerald-600 font-medium">Auto-invoice active</span>
+                  <span className="text-gray-500 block text-[11px]">Invoice Reference</span>
+                  <strong className="text-gray-900 mt-0.5 block font-mono">{selectedCompany.invoiceNo || 'INV-2026-05-01'}</strong>
+                  <span className="text-[10px] text-emerald-600 font-medium">{selectedCompany.paymentMethod || 'FPX Online'}</span>
+                </div>
+              </div>
+
+              {/* Retainer Action Buttons for Admin */}
+              <div className="mt-3 pt-3 border-t border-gray-100 flex items-center justify-between">
+                <span className="text-[11px] text-gray-500">
+                  Secretarial Retainer Action for <strong>May 2026</strong>:
+                </span>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (onTogglePayment) {
+                        onTogglePayment(selectedCompany.id);
+                        setSelectedCompany(prev => ({
+                          ...prev,
+                          isPaidForMonth: !prev.isPaidForMonth,
+                          monthlyPaymentStatus: !prev.isPaidForMonth ? 'Paid' : 'Unpaid',
+                          lastPaymentDate: !prev.isPaidForMonth ? '2026-05-04' : null,
+                          paymentMethod: !prev.isPaidForMonth ? 'Admin Verification (RM 50.00)' : null
+                        }));
+                        setSyncMessage(`Updated payment status for ${selectedCompany.name}`);
+                        setTimeout(() => setSyncMessage(null), 3500);
+                      }
+                    }}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 cursor-pointer shadow-2xs ${
+                      (selectedCompany.isPaidForMonth || selectedCompany.monthlyPaymentStatus === 'Paid')
+                        ? 'bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100'
+                        : 'bg-emerald-600 text-white hover:bg-emerald-700'
+                    }`}
+                  >
+                    <CheckCircle2 className="w-3.5 h-3.5" />
+                    <span>
+                      {(selectedCompany.isPaidForMonth || selectedCompany.monthlyPaymentStatus === 'Paid')
+                        ? 'Mark as Unpaid'
+                        : 'Mark as Paid (Receive RM 50)'}
+                    </span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSyncMessage(`Payment reminder sent to ${selectedCompany.clientContact} (${selectedCompany.clientEmail})`);
+                      setTimeout(() => setSyncMessage(null), 3500);
+                    }}
+                    className="px-3 py-1.5 bg-gray-50 hover:bg-gray-100 text-gray-700 border border-gray-200 rounded-lg text-xs font-medium flex items-center gap-1.5 cursor-pointer"
+                  >
+                    <Bell className="w-3.5 h-3.5 text-gray-500" />
+                    <span>Send Reminder</span>
+                  </button>
                 </div>
               </div>
             </div>

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../services/secretary_notification_service.dart';
-import '../screens/secretary_notifications_page.dart';
+import '../screens/notifications/secretary_notifications_page.dart';
 
 class AppTopHeader extends StatelessWidget {
   final bool showNotificationBell;

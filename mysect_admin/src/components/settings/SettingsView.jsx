@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { CreditCard, DollarSign, Sliders, FileSearch, BarChart3 } from 'lucide-react';
-import SubscriptionPlans from './SubscriptionPlans';
-import FeesCommissions from './FeesCommissions';
+import SubscriptionPlans from '../billing/SubscriptionPlans';
+import FeesCommissions from '../billing/FeesCommissions';
 import PlatformSettings from './PlatformSettings';
-import AuditLogs from './AuditLogs';
+import AuditLogs from '../audit/AuditLogs';
 import PlatformReports from './PlatformReports';
 
 const SettingsView = ({

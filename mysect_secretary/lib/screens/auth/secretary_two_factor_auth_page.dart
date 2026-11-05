@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../widgets/app_top_header.dart';
+import '../../widgets/app_top_header.dart';
 import 'secretary_two_factor_verification_page.dart';
 
 class SecretaryTwoFactorAuthPage extends StatefulWidget {

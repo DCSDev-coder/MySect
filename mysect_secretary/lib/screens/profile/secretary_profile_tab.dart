@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../services/secretary_document_service.dart';
-import 'secretary_login_page.dart';
-import 'secretary_settings_page.dart';
-import 'secretary_subscription_page.dart';
+import '../../services/secretary_document_service.dart';
+import '../auth/secretary_login_page.dart';
+import '../settings/secretary_settings_page.dart';
+import '../settings/secretary_subscription_page.dart';
 
 class SecretaryProfileTab extends StatelessWidget {
   final ValueChanged<int>? onNavigateToTab;
@@ -34,26 +34,13 @@ class SecretaryProfileTab extends StatelessWidget {
               // Screen Header
               Padding(
                 padding: const EdgeInsets.only(bottom: 14),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Secretary Profile',
-                      style: GoogleFonts.poppins(
-                        fontSize: 22,
-                        fontWeight: FontWeight.w700,
-                        color: const Color(0xFF0F172A),
-                      ),
-                    ),
-                    const SizedBox(height: 2),
-                    Text(
-                      'Practitioner credentials, regulatory status & firm administration',
-                      style: GoogleFonts.poppins(
-                        fontSize: 12,
-                        color: const Color(0xFF64748B),
-                      ),
-                    ),
-                  ],
+                child: Text(
+                  'Practitioner credentials, professional body status & firm administration',
+                  style: GoogleFonts.poppins(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                    color: const Color(0xFF64748B),
+                  ),
                 ),
               ),
 
@@ -290,7 +277,7 @@ class SecretaryProfileTab extends StatelessWidget {
               const SizedBox(height: 20),
 
               // 4. PLAN & COMPANY QUOTA SHORTCUT (Clean, Non-Duplicative)
-              _buildSectionHeader('PRACTICE PLAN & CAPACITY'),
+              _buildSectionHeader('COMPANY BILLING & PORTFOLIO'),
               const SizedBox(height: 8),
               Container(
                 width: double.infinity,
@@ -309,7 +296,7 @@ class SecretaryProfileTab extends StatelessWidget {
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: const Icon(
-                        Icons.workspace_premium_rounded,
+                        Icons.receipt_long_rounded,
                         color: Color(0xFF062AAE),
                         size: 20,
                       ),
@@ -352,7 +339,7 @@ class SecretaryProfileTab extends StatelessWidget {
                           ),
                           const SizedBox(height: 2),
                           Text(
-                            '${service.managedCompaniesCount} / ${service.companyLimit} Client Companies Used',
+                            '${service.managedCompaniesCount} Active SSM Entities • RM ${(service.managedCompaniesCount * 50).toStringAsFixed(2)} / mo',
                             style: GoogleFonts.poppins(
                               fontSize: 11,
                               color: const Color(0xFF64748B),
@@ -383,7 +370,7 @@ class SecretaryProfileTab extends StatelessWidget {
                         ),
                       ),
                       child: Text(
-                        'Plans →',
+                        'Billing →',
                         style: GoogleFonts.poppins(
                           fontSize: 11,
                           fontWeight: FontWeight.bold,
@@ -605,16 +592,18 @@ class SecretaryProfileTab extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(24),
           ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 28),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  width: 64,
-                  height: 64,
-                  decoration: const BoxDecoration(
-                    color: Color(0xFFFEE2E2),
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 420),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 28),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: 64,
+                    height: 64,
+                    decoration: const BoxDecoration(
+                      color: Color(0xFFFEE2E2),
                     shape: BoxShape.circle,
                   ),
                   child: const Center(
@@ -702,6 +691,7 @@ class SecretaryProfileTab extends StatelessWidget {
               ],
             ),
           ),
+        ),
         );
       },
     );
@@ -716,16 +706,18 @@ class SecretaryProfileTab extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(24),
           ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 28),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  width: 64,
-                  height: 64,
-                  decoration: const BoxDecoration(
-                    color: Color(0xFFEFF6FF),
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 420),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 28),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: 64,
+                    height: 64,
+                    decoration: const BoxDecoration(
+                      color: Color(0xFFEFF6FF),
                     shape: BoxShape.circle,
                   ),
                   child: const Center(
@@ -825,6 +817,7 @@ class SecretaryProfileTab extends StatelessWidget {
               ],
             ),
           ),
+        ),
         );
       },
     );

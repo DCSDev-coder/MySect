@@ -13,6 +13,8 @@ class SecretaryDocumentService extends ChangeNotifier {
   static SecretaryDocumentService get instance => _instance;
 
   SecretaryDocumentService._internal() {
+    _billingCompanies = SsmBillingCompany.defaultCompanies();
+    _billingInvoices = SsmBillingInvoice.defaultInvoices();
     _initDefaultDocuments();
     syncFromBackend();
   }
@@ -22,22 +24,85 @@ class SecretaryDocumentService extends ChangeNotifier {
   bool _isConnectedToBackend = false;
   SecretaryProfile _profile = SecretaryProfile.defaultProfile();
 
-  String _currentPlanId = 'growth';
-  bool _isAnnualBilling = true;
+  String _currentPlanId = 'flat_ssm';
+  bool _isAnnualBilling = false;
+  static const double ssmRatePerCompany = 50.00;
+  List<SsmBillingCompany>? _billingCompanies;
+  List<SsmBillingInvoice>? _billingInvoices;
 
   List<ClientDocument> get documents => List.unmodifiable(_documents);
   bool get isSyncing => _isSyncing;
   bool get isConnectedToBackend => _isConnectedToBackend;
   SecretaryProfile get profile => _profile;
 
+  List<SsmBillingCompany> get billingCompanies {
+    final list = _billingCompanies ?? SsmBillingCompany.defaultCompanies();
+    _billingCompanies = list;
+    return List.unmodifiable(list);
+  }
+
+  List<SsmBillingInvoice> get billingInvoices {
+    final list = _billingInvoices ?? SsmBillingInvoice.defaultInvoices();
+    _billingInvoices = list;
+    return List.unmodifiable(list);
+  }
+
+  double get monthlyBillingTotal => billingCompanies.length * ssmRatePerCompany;
+  int get paidCompaniesCount => billingCompanies.where((c) => c.isPaidForMonth).length;
+  int get unpaidCompaniesCount => billingCompanies.where((c) => !c.isPaidForMonth).length;
+  double get collectedMonthlyTotal => paidCompaniesCount * ssmRatePerCompany;
+  double get outstandingMonthlyTotal => unpaidCompaniesCount * ssmRatePerCompany;
+
+  void toggleCompanyPaymentStatus(String companyId) {
+    final list = List<SsmBillingCompany>.from(billingCompanies);
+    final idx = list.indexWhere((c) => c.id == companyId);
+    if (idx != -1) {
+      final old = list[idx];
+      final newPaid = !old.isPaidForMonth;
+      list[idx] = old.copyWith(
+        isPaidForMonth: newPaid,
+        paymentDate: newPaid ? 'Today (04 May 2026)' : null,
+        paymentMethod: newPaid ? 'Manual CoSec Receipt' : null,
+      );
+      _billingCompanies = list;
+      notifyListeners();
+    }
+  }
+
   List<SubscriptionTier> get subscriptionTiers => SubscriptionTier.defaultTiers();
   SubscriptionTier get currentPlan => SubscriptionTier.defaultTiers().firstWhere(
         (t) => t.id == _currentPlanId,
-        orElse: () => SubscriptionTier.defaultTiers()[1],
+        orElse: () => SubscriptionTier.defaultTiers()[0],
       );
   int get companyLimit => currentPlan.companyLimit;
-  int get managedCompaniesCount => clientCompanies.length;
+  int get managedCompaniesCount => billingCompanies.length;
   bool get isAnnualBilling => _isAnnualBilling;
+
+  void onboardCompany({
+    required String name,
+    required String regNo,
+    String entityType = 'Sdn. Bhd.',
+  }) {
+    final current = List<SsmBillingCompany>.from(billingCompanies);
+    final newId = 'CO-0';
+    final newCo = SsmBillingCompany(
+      id: newId,
+      name: name,
+      registrationNo: regNo,
+      entityType: entityType,
+      monthlyFee: 50.00,
+      onboardedDate: 'Today',
+      nextFilingDate: '31 Dec 2026',
+      status: 'Active',
+      vaultFilesCount: 0,
+      isPaidForMonth: false,
+      currentMonth: 'May 2026',
+      dueDate: '07 May 2026',
+    );
+    current.add(newCo);
+    _billingCompanies = current;
+    notifyListeners();
+  }
 
   void upgradePlan(String planId) {
     if (_currentPlanId != planId) {

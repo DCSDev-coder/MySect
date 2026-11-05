@@ -175,7 +175,7 @@ class SsmFilingService extends ChangeNotifier {
         companyId: 'comp-02',
         companyName: 'C2 Coffee + Candle',
         companySsmNo: '202001019482 (1382941-T)',
-        assignedSecretary: 'Azman bin Ibrahim (MAICSA)',
+        assignedSecretary: 'Lim Mei Ling (MIA)',
         assignedFirmName: 'SectPro Corporate Services Sdn Bhd',
         filingType: 'Section 46 Change of Registered Address',
         title: 'Section 46 Change of Registered Office Address',
@@ -191,7 +191,7 @@ class SsmFilingService extends ChangeNotifier {
         messages: [
           const SsmMessage(
             id: 'm-05',
-            senderName: 'Azman bin Ibrahim (MAICSA)',
+            senderName: 'Lim Mei Ling (MIA)',
             senderRole: 'Principal Secretary',
             text:
                 'Good day! Section 46 documents verified and signed. Successfully submitted to SSM (Ref: MBRS-2026-99381). Awaiting SSM Certificate generation.',
@@ -233,8 +233,8 @@ class SsmFilingService extends ChangeNotifier {
         companyId: 'comp-03',
         companyName: '5Luxe Scents Co.',
         companySsmNo: '202201082918 (1482910-P)',
-        assignedSecretary: 'Sarah binti Ahmad (MAICSA)',
-        assignedFirmName: 'Apex Corporate Secretarial Partners',
+        assignedSecretary: 'Lim Mei Ling (MIA)',
+        assignedFirmName: 'SectPro Corporate Services Sdn Bhd',
         filingType: 'Section 78 Return of Allotment of Shares',
         title: 'Section 78 Return of Share Allotment (Capital Increase)',
         description: 'Increase of paid-up capital from RM 20,000 to RM 50,000.',
@@ -249,7 +249,7 @@ class SsmFilingService extends ChangeNotifier {
         messages: [
           const SsmMessage(
             id: 'm-06',
-            senderName: 'Sarah binti Ahmad (MAICSA)',
+            senderName: 'Lim Mei Ling (MIA)',
             senderRole: 'Licensed Secretary',
             text:
                 'Congratulations! The Section 78 Return of Share Allotment has been approved and endorsed by SSM. Updated corporate profile with new capital is now available in your Files tab.',

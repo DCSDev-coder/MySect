@@ -36,9 +36,9 @@ class SecretaryProfile {
       licenseNo: 'MIA CA 48192 / LS 0009214',
       firmName: 'SectPro Corporate Services Sdn Bhd',
       firmRegistrationNo: 'SSM/COSEC/2020/00481',
-      email: 'meiling.lim@sectpro.com.my',
-      phone: '+60 3-2240 8899',
-      officeAddress: 'Level 18, Menara TM, Jalan Pantai Baharu, 50672 Kuala Lumpur',
+      email: 'Dcs2026@gmail.com',
+      phone: '+60 3-2148 9920',
+      officeAddress: 'Level 18, Menara Binjai, No. 2 Jalan Binjai, 50450 Kuala Lumpur',
       totalAssignedCompanies: 14,
       avatarUrl: '',
     );

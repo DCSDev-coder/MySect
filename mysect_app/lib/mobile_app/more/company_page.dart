@@ -701,7 +701,7 @@ class _CompanyPageState extends State<CompanyPage> {
                     );
                   },
                   icon: const Icon(Icons.payment_rounded, size: 18),
-                  label: Text('Pay Monthly Retainer (RM 100.00)', style: GoogleFonts.poppins(fontSize: 13, fontWeight: FontWeight.bold)),
+                  label: Text('Pay Monthly Retainer (RM 50.00)', style: GoogleFonts.poppins(fontSize: 13, fontWeight: FontWeight.bold)),
                 ),
               ),
             ],

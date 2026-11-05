@@ -238,6 +238,12 @@ class _SubmitSsmFilingPageState extends State<SubmitSsmFilingPage> {
   }
 
   Future<void> _submitFiling() async {
+    final activeComp = CompanyService.instance.selectedCompany;
+    if (activeComp != null && activeComp.isSubscriptionExpired) {
+      _showRetainerRenewalSheet(context, activeComp);
+      return;
+    }
+
     if (!_formKey.currentState!.validate()) return;
     if (_attachedFiles.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -276,7 +282,6 @@ class _SubmitSsmFilingPageState extends State<SubmitSsmFilingPage> {
     );
 
     // Register each attached file into Secretary Document review queue
-    final activeComp = CompanyService.instance.selectedCompany;
     for (final file in _attachedFiles) {
       final cleanName = file.split(' (').first;
       SecretaryDocumentService.instance.addClientDocument(
@@ -480,7 +485,7 @@ class _SubmitSsmFilingPageState extends State<SubmitSsmFilingPage> {
 
   void _showRetainerRenewalSheet(BuildContext context, Company comp) {
     int selectedMonths = 1;
-    double monthlyFee = 100.0;
+    double monthlyFee = 50.0;
     String paymentMethod = 'FPX Online Banking';
 
     showModalBottomSheet(
@@ -493,7 +498,7 @@ class _SubmitSsmFilingPageState extends State<SubmitSsmFilingPage> {
       builder: (sheetCtx) {
         return StatefulBuilder(
           builder: (ctx, setModalState) {
-            final total = selectedMonths == 12 ? 1000.0 : (selectedMonths * monthlyFee);
+            final total = selectedMonths == 12 ? 500.0 : (selectedMonths * monthlyFee);
 
             return Padding(
               padding: EdgeInsets.only(
@@ -589,7 +594,7 @@ class _SubmitSsmFilingPageState extends State<SubmitSsmFilingPage> {
                               children: [
                                 Text('1 Month', style: GoogleFonts.poppins(fontSize: 13, fontWeight: FontWeight.bold)),
                                 const SizedBox(height: 2),
-                                Text('RM 100.00', style: GoogleFonts.poppins(fontSize: 12, color: const Color(0xFF062AAE), fontWeight: FontWeight.w600)),
+                                Text('RM 50.00', style: GoogleFonts.poppins(fontSize: 12, color: const Color(0xFF062AAE), fontWeight: FontWeight.w600)),
                               ],
                             ),
                           ),
@@ -619,12 +624,12 @@ class _SubmitSsmFilingPageState extends State<SubmitSsmFilingPage> {
                                     Container(
                                       padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
                                       decoration: BoxDecoration(color: const Color(0xFF10B981), borderRadius: BorderRadius.circular(4)),
-                                      child: Text('SAVE RM200', style: GoogleFonts.poppins(fontSize: 8.5, color: Colors.white, fontWeight: FontWeight.bold)),
+                                      child: Text('SAVE RM100', style: GoogleFonts.poppins(fontSize: 8.5, color: Colors.white, fontWeight: FontWeight.bold)),
                                     ),
                                   ],
                                 ),
                                 const SizedBox(height: 2),
-                                Text('RM 1,000.00', style: GoogleFonts.poppins(fontSize: 12, color: const Color(0xFF062AAE), fontWeight: FontWeight.w600)),
+                                Text('RM 500.00', style: GoogleFonts.poppins(fontSize: 12, color: const Color(0xFF062AAE), fontWeight: FontWeight.w600)),
                               ],
                             ),
                           ),
@@ -1442,28 +1447,71 @@ class _SubmitSsmFilingPageState extends State<SubmitSsmFilingPage> {
                           child: Column(
                             children: [
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text('Secretary Filing Lodgement', style: GoogleFonts.poppins(fontSize: 11, color: Colors.grey.shade600)),
-                                  Text('RM 0.00 (Covered by Retainer)', style: GoogleFonts.poppins(fontSize: 11, color: const Color(0xFF059669), fontWeight: FontWeight.w600)),
+                                  Expanded(
+                                    child: Text(
+                                      'Secretary Filing Lodgement',
+                                      style: GoogleFonts.poppins(fontSize: 11, color: Colors.grey.shade600),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    'RM 0.00 (Retainer)',
+                                    style: GoogleFonts.poppins(
+                                      fontSize: 11,
+                                      color: const Color(0xFF059669),
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
                                 ],
                               ),
-                              const SizedBox(height: 4),
+                              const SizedBox(height: 5),
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text('LHDN Stamping & Adjudication', style: GoogleFonts.poppins(fontSize: 11, color: Colors.grey.shade600)),
-                                  Text('RM ${_stampingFee.toStringAsFixed(2)}', style: GoogleFonts.poppins(fontSize: 11, fontWeight: FontWeight.bold, color: const Color(0xFF7C3AED))),
+                                  Expanded(
+                                    child: Text(
+                                      'LHDN Stamping & Adjudication',
+                                      style: GoogleFonts.poppins(fontSize: 11, color: Colors.grey.shade600),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    'RM ${_stampingFee.toStringAsFixed(2)}',
+                                    style: GoogleFonts.poppins(
+                                      fontSize: 11,
+                                      fontWeight: FontWeight.bold,
+                                      color: const Color(0xFF7C3AED),
+                                    ),
+                                  ),
                                 ],
                               ),
                               const SizedBox(height: 8),
                               Divider(color: Colors.grey.shade300, height: 1),
                               const SizedBox(height: 8),
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  Text('Total Additional Payment Due', style: GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.bold, color: const Color(0xFF0F172A))),
-                                  Text('RM ${_stampingFee.toStringAsFixed(2)}', style: GoogleFonts.poppins(fontSize: 13, fontWeight: FontWeight.bold, color: const Color(0xFF7C3AED))),
+                                  Expanded(
+                                    child: Text(
+                                      'Total Additional Payment Due',
+                                      style: GoogleFonts.poppins(
+                                        fontSize: 11.5,
+                                        fontWeight: FontWeight.bold,
+                                        color: const Color(0xFF0F172A),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    'RM ${_stampingFee.toStringAsFixed(2)}',
+                                    style: GoogleFonts.poppins(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.bold,
+                                      color: const Color(0xFF7C3AED),
+                                    ),
+                                  ),
                                 ],
                               ),
                             ],
@@ -1496,16 +1544,21 @@ class _SubmitSsmFilingPageState extends State<SubmitSsmFilingPage> {
                           )
                         : Row(
                             mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.min,
                             children: [
-                              Icon(_addStamping ? Icons.payment_rounded : Icons.send_rounded, size: 20),
+                              Icon(_addStamping ? Icons.payment_rounded : Icons.send_rounded, size: 18),
                               const SizedBox(width: 8),
-                              Text(
-                                _addStamping
-                                    ? 'Pay RM ${_stampingFee.toStringAsFixed(2)} & Submit to Secretary'
-                                    : 'Submit to Secretary for Review',
-                                style: GoogleFonts.poppins(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
+                              Flexible(
+                                child: Text(
+                                  _addStamping
+                                      ? 'Pay RM ${_stampingFee.toStringAsFixed(2)} & Submit'
+                                      : 'Submit to Secretary for Review',
+                                  style: GoogleFonts.poppins(
+                                    fontSize: 13.5,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ),
                             ],

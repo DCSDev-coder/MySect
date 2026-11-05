@@ -3,7 +3,7 @@ import {
   LayoutDashboard, Building2, Briefcase, AlertCircle,
   Settings, LogOut, UserCheck, X
 } from 'lucide-react';
-import mysectLogo from '../assets/mysect_logo.png';
+import mysectLogo from '../../assets/mysect_logo.png';
 
 const Sidebar = ({
   activePage,
@@ -71,15 +71,17 @@ const Sidebar = ({
         lg:static lg:translate-x-0 lg:z-auto lg:h-screen lg:max-h-screen
       `}>
         {/* Brand Header */}
-        <div className="px-5 py-4 border-b border-gray-100 flex items-center justify-between shrink-0">
-          <img 
-            src={mysectLogo} 
-            alt="MySect - Your Secretary Company" 
-            className="h-9 sm:h-11 w-auto max-w-[160px] sm:max-w-[180px] object-contain mx-auto lg:mx-0" 
-          />
+        <div className="relative w-full px-4 py-4 border-b border-gray-100 flex items-center justify-center shrink-0">
+          <div className="flex-1 flex items-center justify-center">
+            <img 
+              src={mysectLogo} 
+              alt="MySect - Your Secretary Company" 
+              className="h-10 sm:h-11 w-auto max-w-[170px] object-contain mx-auto block" 
+            />
+          </div>
           <button
             onClick={onClose}
-            className="lg:hidden p-1.5 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100 cursor-pointer"
+            className="absolute right-3 top-1/2 -translate-y-1/2 lg:hidden p-1.5 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100 cursor-pointer"
             aria-label="Close Sidebar"
           >
             <X className="w-5 h-5" />

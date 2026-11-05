@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'secretary_login_page.dart';
+import '../auth/secretary_login_page.dart';
 
 /// 1. [assets/y.png] pops in first with its own scale and fade animation.
 /// 2. [assets/sect.png] slides in next from the right with its own slide animation.

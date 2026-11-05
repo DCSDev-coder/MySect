@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../models/client_document_model.dart';
-import '../services/secretary_document_service.dart';
-import '../models/ssm_filing_model.dart';
-import '../services/secretary_filing_service.dart';
-import '../widgets/app_top_header.dart';
+import '../../models/client_document_model.dart';
+import '../../services/secretary_document_service.dart';
+import '../../models/ssm_filing_model.dart';
+import '../../services/secretary_filing_service.dart';
+import '../../widgets/app_top_header.dart';
+import '../../widgets/secretary_sidebar.dart';
+import '../../widgets/secretary_desktop_top_bar.dart';
+import '../shell/main_navigation_shell.dart';
 
 class DocumentReviewDetailPage extends StatefulWidget {
   final ClientDocument document;
@@ -1266,66 +1269,90 @@ class _DocumentReviewDetailPageState extends State<DocumentReviewDetailPage> {
     final statusColor = _getStatusColor(_doc.status);
     final statusBg = _getStatusBg(_doc.status);
 
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        top: false,
-        bottom: false,
-        child: Column(
-          children: [
-            const AppTopHeader(),
-            Container(
-              color: Colors.white,
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.arrow_back_ios_new, size: 18, color: Colors.black87),
-                    onPressed: () => Navigator.pop(context),
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
-                  ),
-                  const SizedBox(width: 14),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isDesktop = constraints.maxWidth >= 800;
+
+        final scaffold = Scaffold(
+          backgroundColor: Colors.white,
+          body: SafeArea(
+            top: false,
+            bottom: false,
+            child: Column(
+              children: [
+                if (isDesktop)
+                  SecretaryDesktopTopBar(
+                    leading: IconButton(
+                      icon: const Icon(
+                        Icons.arrow_back_ios_new_rounded,
+                        size: 16,
+                        color: Color(0xFF0F172A),
+                      ),
+                      tooltip: 'Back to Review Queue',
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                    title: 'Statutory Document Review',
+                    badgeText: 'SSM LICENSED',
+                    isSyncing: _service.isSyncing,
+                    onSync: () => _service.syncFromBackend(),
+                  )
+                else ...[
+                  const AppTopHeader(),
+                  Container(
+                    color: Colors.white,
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                          decoration: BoxDecoration(
-                            color: statusBg,
-                            borderRadius: BorderRadius.circular(6),
-                            border: Border.all(color: statusColor.withValues(alpha: 0.3)),
-                          ),
-                          child: Text(
-                            _doc.status.label,
-                            style: GoogleFonts.poppins(
-                              fontSize: 10,
-                              fontWeight: FontWeight.bold,
-                              color: statusColor,
-                            ),
-                          ),
+                        IconButton(
+                          icon: const Icon(Icons.arrow_back_ios_new, size: 18, color: Colors.black87),
+                          onPressed: () => Navigator.pop(context),
+                          padding: EdgeInsets.zero,
+                          constraints: const BoxConstraints(),
                         ),
-                        const SizedBox(height: 3),
-                        Text(
-                          'Document Review',
-                          style: GoogleFonts.poppins(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
+                        const SizedBox(width: 14),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                                decoration: BoxDecoration(
+                                  color: statusBg,
+                                  borderRadius: BorderRadius.circular(6),
+                                  border: Border.all(color: statusColor.withValues(alpha: 0.3)),
+                                ),
+                                child: Text(
+                                  _doc.status.label,
+                                  style: GoogleFonts.poppins(
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.bold,
+                                    color: statusColor,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 3),
+                              Text(
+                                _doc.title,
+                                style: GoogleFonts.poppins(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ],
                           ),
                         ),
                       ],
                     ),
                   ),
+                  Divider(height: 1, color: Colors.grey.shade200),
                 ],
-              ),
-            ),
-            Divider(height: 1, color: Colors.grey.shade200),
-            Expanded(
-              child: SingleChildScrollView(
+                Expanded(
+                  child: SingleChildScrollView(
                 padding: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -1759,9 +1786,35 @@ class _DocumentReviewDetailPageState extends State<DocumentReviewDetailPage> {
         ),
       ),
     );
+
+        if (isDesktop) {
+          return Scaffold(
+            backgroundColor: Colors.white,
+            body: Row(
+              children: [
+                SecretarySidebar(
+                  currentIndex: 1,
+                  onSelectTab: (idx) {
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => MainNavigationShell(initialIndex: idx),
+                      ),
+                      (route) => false,
+                    );
+                  },
+                ),
+                const VerticalDivider(width: 1, thickness: 1, color: Color(0xFFE2E8F0)),
+                Expanded(child: scaffold),
+              ],
+            ),
+          );
+        }
+
+        return scaffold;
+      },
+    );
   }
-
-
 
   String _cleanStorageLocation(String loc) {
     if (loc.contains('TM One Cloud Alpha') || loc.contains('Cyberjaya') || loc.contains('DC1')) {

@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { Menu } from 'lucide-react';
-import Sidebar from './components/Sidebar';
-import Dashboard from './components/Dashboard';
-import UsersManagement from './components/UsersManagement';
-import SecretaryFirms from './components/SecretaryFirms';
-import CompanyManagement from './components/CompanyManagement';
-import OperationsView from './components/OperationsView';
-import SettingsView from './components/SettingsView';
-import Login from './components/Login';
+import Sidebar from './components/layout/Sidebar';
+import Dashboard from './components/dashboard/Dashboard';
+import UsersManagement from './components/users/UsersManagement';
+import SecretaryFirms from './components/firms/SecretaryFirms';
+import CompanyManagement from './components/companies/CompanyManagement';
+import OperationsView from './components/operations/OperationsView';
+import SettingsView from './components/settings/SettingsView';
+import Login from './components/authentication/Login';
 import mysectLogo from './assets/mysect_logo.png';
 
 import {
@@ -178,6 +178,25 @@ function App() {
     logAudit('COMPANY_ONBOARDED', `${newCompany.name} (${newCompany.ssmNo})`, `New client company onboarded and assigned to ${newCompany.assignedFirmName}.`);
   };
 
+  const handleTogglePaymentStatus = (companyId) => {
+    setCompanies(prev => prev.map(c => {
+      if (c.id === companyId) {
+        const nextPaid = !c.isPaidForMonth;
+        return {
+          ...c,
+          isPaidForMonth: nextPaid,
+          monthlyPaymentStatus: nextPaid ? 'Paid' : 'Unpaid',
+          lastPaymentDate: nextPaid ? '2026-05-04' : null,
+          paymentMethod: nextPaid ? 'Admin Manual Receipt (RM 50.00)' : null,
+        };
+      }
+      return c;
+    }));
+    const comp = companies.find(c => c.id === companyId);
+    const newStatus = comp?.isPaidForMonth ? 'Unpaid' : 'Paid';
+    logAudit('PAYMENT_STATUS_UPDATE', `${comp?.name}`, `Monthly retainer (RM 50) status updated to ${newStatus}.`);
+  };
+
   // 3. Plan management
   const handleCreatePlan = (newPlan) => {
     setPlans(prev => [...prev, newPlan]);
@@ -261,6 +280,7 @@ function App() {
             firms={firms}
             onTransferCompany={handleTransferCompany}
             onCreateCompany={handleCreateCompany}
+            onTogglePayment={handleTogglePaymentStatus}
           />
         );
       case 'Users':

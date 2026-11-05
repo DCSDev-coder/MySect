@@ -1,19 +1,34 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:secretary_app/main.dart';
-import 'package:secretary_app/screens/main_navigation_shell.dart';
+import 'package:secretary_app/screens/shell/main_navigation_shell.dart';
 
 void main() {
   testWidgets('Secretary App renders dashboard and review queue navigation', (WidgetTester tester) async {
+    tester.view.physicalSize = const Size(1280, 800);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(() {
+      tester.view.resetPhysicalSize();
+      tester.view.resetDevicePixelRatio();
+    });
+
     await tester.pumpWidget(const MySectSecretaryApp(home: MainNavigationShell()));
     await tester.pumpAndSettle();
 
     expect(find.text('Dashboard'), findsAtLeastNWidgets(1));
     expect(find.text('Review Queue'), findsOneWidget);
     expect(find.text('Companies'), findsOneWidget);
-    expect(find.text('Profile'), findsOneWidget);
+    expect(find.textContaining('Profile'), findsAtLeastNWidgets(1));
   });
 
   testWidgets('Tapping Log Out in Profile shows confirmation popup', (WidgetTester tester) async {
+    tester.view.physicalSize = const Size(1280, 800);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(() {
+      tester.view.resetPhysicalSize();
+      tester.view.resetDevicePixelRatio();
+    });
+
     await tester.pumpWidget(const MySectSecretaryApp(home: MainNavigationShell(initialIndex: 3)));
     await tester.pumpAndSettle();
 

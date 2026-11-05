@@ -136,7 +136,7 @@ export function apiServerPlugin() {
               const token = 'tok_adm_' + Math.random().toString(36).substring(2);
               const user = {
                 id: 'usr-admin-01',
-                email: email || 'admin@mysect.com.my',
+                email: email || 'Dcs2026@gmail.com',
                 name: email.includes('admin') ? 'Ahmad Faizal' : (email.split('@')[0] || 'Operator'),
                 role: 'Super Admin',
                 department: 'HQ Platform Operations',

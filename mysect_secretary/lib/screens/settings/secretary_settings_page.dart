@@ -1,8 +1,10 @@
+import '../../widgets/secretary_sidebar.dart';
+import '../../widgets/secretary_desktop_top_bar.dart';
+import '../shell/main_navigation_shell.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../widgets/app_top_header.dart';
-import 'secretary_login_page.dart';
-import 'secretary_two_factor_auth_page.dart';
+import '../auth/secretary_login_page.dart';
+import '../auth/secretary_two_factor_auth_page.dart';
 
 class SecretarySettingsPage extends StatefulWidget {
   final bool isEmbedded;
@@ -251,50 +253,37 @@ class _SecretarySettingsPageState extends State<SecretarySettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFFAFAFA),
-      body: SafeArea(
-        top: false,
-        child: Column(
-          children: [
-            if (!widget.isEmbedded) ...[
-              const AppTopHeader(backgroundColor: Colors.transparent),
-              const SizedBox(height: 16),
-            ],
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-              child: Row(
-                children: [
-                  if (!widget.isEmbedded) ...[
-                    IconButton(
-                      icon: const Icon(
-                        Icons.arrow_back,
-                        color: Colors.black,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isDesktop = constraints.maxWidth >= 800;
+
+        final bodyScroll = SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (!widget.isEmbedded && !isDesktop) ...[
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 12),
+                  child: Row(
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 18),
+                        onPressed: () => Navigator.pop(context),
                       ),
-                      onPressed: () => Navigator.pop(context),
-                      padding: EdgeInsets.zero,
-                      constraints: const BoxConstraints(),
-                    ),
-                    const SizedBox(width: 16),
-                  ],
-                  Text(
-                    'Settings & Security',
-                    style: GoogleFonts.poppins(
-                      color: Colors.black,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
+                      const SizedBox(width: 8),
+                      Text(
+                        'Firm Settings & Security',
+                        style: GoogleFonts.poppins(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: const Color(0xFF0F172A),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 8),
-            Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                ),
+              ],
                     const SizedBox(height: 12),
                     Text(
                       'NOTIFICATIONS',
@@ -430,11 +419,67 @@ class _SecretarySettingsPageState extends State<SecretarySettingsPage> {
                     const SizedBox(height: 40),
                   ],
                 ),
-              ),
+              );
+
+        if (widget.isEmbedded) {
+          return Scaffold(
+            backgroundColor: const Color(0xFFF8FAFC),
+            body: bodyScroll,
+          );
+        }
+
+        if (isDesktop) {
+          return Scaffold(
+            backgroundColor: const Color(0xFFF8FAFC),
+            body: Row(
+              children: [
+                SecretarySidebar(
+                  currentIndex: 4,
+                  onSelectTab: (idx) {
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => MainNavigationShell(initialIndex: idx),
+                      ),
+                      (route) => false,
+                    );
+                  },
+                ),
+                const VerticalDivider(width: 1, thickness: 1, color: Color(0xFFE2E8F0)),
+                Expanded(
+                  child: Column(
+                    children: [
+                      SecretaryDesktopTopBar(
+                        leading: IconButton(
+                          icon: const Icon(
+                            Icons.arrow_back_ios_new_rounded,
+                            size: 16,
+                            color: Color(0xFF0F172A),
+                          ),
+                          tooltip: 'Back to Workspace',
+                          onPressed: () => Navigator.pop(context),
+                        ),
+                        title: 'Firm Settings & Security',
+                        badgeText: 'SSM LICENSED',
+                      ),
+                      Expanded(child: bodyScroll),
+                    ],
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
+          );
+        }
+
+        return Scaffold(
+          backgroundColor: const Color(0xFFFAFAFA),
+          body: SafeArea(
+            top: true,
+            bottom: false,
+            child: bodyScroll,
+          ),
+        );
+      },
     );
   }
 

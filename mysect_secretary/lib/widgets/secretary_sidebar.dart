@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../screens/secretary_login_page.dart';
+import '../screens/auth/secretary_login_page.dart';
 import '../services/secretary_document_service.dart';
 
 class SecretarySidebarItem {
@@ -43,8 +43,10 @@ class SecretarySidebar extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 26),
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 420),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 26),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -141,6 +143,7 @@ class SecretarySidebar extends StatelessWidget {
               ],
             ),
           ),
+        ),
         );
       },
     );
@@ -190,9 +193,9 @@ class SecretarySidebar extends StatelessWidget {
           ),
           const SecretarySidebarItem(
             index: 5,
-            label: 'Plans & Quota',
-            icon: Icons.workspace_premium_outlined,
-            activeIcon: Icons.workspace_premium_rounded,
+            label: 'Company Billing',
+            icon: Icons.receipt_long_outlined,
+            activeIcon: Icons.receipt_long_rounded,
           ),
         ];
 

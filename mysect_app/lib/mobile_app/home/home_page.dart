@@ -453,6 +453,7 @@ class _HomePageState extends State<HomePage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
                       padding: const EdgeInsets.all(8),
@@ -469,22 +470,22 @@ class _HomePageState extends State<HomePage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
-                            children: [
-                              Text(
-                                'Monthly Secretarial Retainer',
-                                style: GoogleFonts.poppins(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.bold,
-                                  color: const Color(0xFF0F172A),
-                                ),
-                              ),
-                            ],
+                          Text(
+                            'Monthly Secretarial Retainer',
+                            style: GoogleFonts.poppins(
+                              fontSize: 12.5,
+                              fontWeight: FontWeight.bold,
+                              color: const Color(0xFF0F172A),
+                              height: 1.25,
+                            ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
                           ),
+                          const SizedBox(height: 3),
                           Text(
                             'Expiry Date: ${comp.formattedSubscriptionExpiry}',
                             style: GoogleFonts.poppins(
-                              fontSize: 11.5,
+                              fontSize: 11,
                               fontWeight: FontWeight.w600,
                               color: isExpired
                                   ? const Color(0xFFDC2626)
@@ -494,8 +495,9 @@ class _HomePageState extends State<HomePage> {
                         ],
                       ),
                     ),
+                    const SizedBox(width: 8),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
                         color: badgeBg,
                         borderRadius: BorderRadius.circular(6),
@@ -554,7 +556,7 @@ class _HomePageState extends State<HomePage> {
                       onPressed: () => _showRetainerRenewalSheet(context, comp),
                       icon: const Icon(Icons.payment_rounded, size: 16),
                       label: Text(
-                        'Pay Monthly Retainer (RM 100) — Resume Service',
+                        'Pay Monthly Retainer (RM 50) — Resume Service',
                         style: GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.bold),
                       ),
                     ),
@@ -578,7 +580,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                         onPressed: () => _showRetainerRenewalSheet(context, comp),
                         child: Text(
-                          'Renew Now (RM 100/mo)',
+                          'Renew Now (RM 50/mo)',
                           style: GoogleFonts.poppins(fontSize: 11, fontWeight: FontWeight.bold),
                         ),
                       ),
@@ -615,7 +617,7 @@ class _HomePageState extends State<HomePage> {
 
   void _showRetainerRenewalSheet(BuildContext context, Company comp) {
     int selectedMonths = 1;
-    double monthlyFee = 100.0;
+    double monthlyFee = 50.0;
     String paymentMethod = 'FPX Online Banking';
 
     showModalBottomSheet(
@@ -628,7 +630,7 @@ class _HomePageState extends State<HomePage> {
       builder: (sheetCtx) {
         return StatefulBuilder(
           builder: (ctx, setModalState) {
-            final total = selectedMonths == 12 ? 1000.0 : (selectedMonths * monthlyFee);
+            final total = selectedMonths == 12 ? 500.0 : (selectedMonths * monthlyFee);
 
             return Padding(
               padding: EdgeInsets.only(
@@ -713,7 +715,7 @@ class _HomePageState extends State<HomePage> {
                               children: [
                                 Text('1 Month', style: GoogleFonts.poppins(fontSize: 13, fontWeight: FontWeight.bold)),
                                 const SizedBox(height: 2),
-                                Text('RM 100.00', style: GoogleFonts.poppins(fontSize: 12, color: const Color(0xFF062AAE), fontWeight: FontWeight.w600)),
+                                Text('RM 50.00', style: GoogleFonts.poppins(fontSize: 12, color: const Color(0xFF062AAE), fontWeight: FontWeight.w600)),
                               ],
                             ),
                           ),
@@ -743,12 +745,12 @@ class _HomePageState extends State<HomePage> {
                                     Container(
                                       padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
                                       decoration: BoxDecoration(color: const Color(0xFF10B981), borderRadius: BorderRadius.circular(4)),
-                                      child: Text('SAVE RM200', style: GoogleFonts.poppins(fontSize: 8.5, color: Colors.white, fontWeight: FontWeight.bold)),
+                                      child: Text('SAVE RM100', style: GoogleFonts.poppins(fontSize: 8.5, color: Colors.white, fontWeight: FontWeight.bold)),
                                     ),
                                   ],
                                 ),
                                 const SizedBox(height: 2),
-                                Text('RM 1,000.00', style: GoogleFonts.poppins(fontSize: 12, color: const Color(0xFF062AAE), fontWeight: FontWeight.w600)),
+                                Text('RM 500.00', style: GoogleFonts.poppins(fontSize: 12, color: const Color(0xFF062AAE), fontWeight: FontWeight.w600)),
                               ],
                             ),
                           ),
