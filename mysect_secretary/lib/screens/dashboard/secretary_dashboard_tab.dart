@@ -5,7 +5,7 @@ import '../../services/secretary_compliance_service.dart';
 import '../../services/secretary_document_service.dart';
 import '../companies/company_documents_folder_page.dart';
 
-class SecretaryDashboardTab extends StatelessWidget {
+class SecretaryDashboardTab extends StatefulWidget {
   final VoidCallback onNavigateToQueue;
   final VoidCallback? onNavigateToCompanies;
   final VoidCallback? onNavigateToSubscription;
@@ -18,8 +18,18 @@ class SecretaryDashboardTab extends StatelessWidget {
   });
 
   @override
+  State<SecretaryDashboardTab> createState() => _SecretaryDashboardTabState();
+}
+
+class _SecretaryDashboardTabState extends State<SecretaryDashboardTab> {
+  int _selectedMilestoneTab = 0; // 0: Upcoming Deadlines, 1: My Tasks
+
+  @override
   Widget build(BuildContext context) {
     final service = SecretaryDocumentService.instance;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isMobile = screenWidth < 650;
+    final isDesktop = screenWidth >= 850;
 
     return AnimatedBuilder(
       animation: Listenable.merge([
@@ -36,13 +46,16 @@ class SecretaryDashboardTab extends StatelessWidget {
             color: const Color(0xFF062AAE),
             child: SingleChildScrollView(
               physics: const AlwaysScrollableScrollPhysics(),
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+              padding: EdgeInsets.symmetric(
+                horizontal: isMobile ? 16 : 24,
+                vertical: isMobile ? 12 : 20,
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Page Header
+                  // Page Greeting
                   Padding(
-                    padding: const EdgeInsets.only(bottom: 16),
+                    padding: const EdgeInsets.only(bottom: 14),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -54,16 +67,16 @@ class SecretaryDashboardTab extends StatelessWidget {
                               Text(
                                 'Welcome back, ${service.profile.name}',
                                 style: GoogleFonts.poppins(
-                                  fontSize: 20,
+                                  fontSize: isMobile ? 18 : 20,
                                   fontWeight: FontWeight.w700,
                                   color: const Color(0xFF0F172A),
                                 ),
                               ),
-                              const SizedBox(height: 2),
+                              const SizedBox(height: 1),
                               Text(
                                 service.profile.firmName,
                                 style: GoogleFonts.poppins(
-                                  fontSize: 12,
+                                  fontSize: 11.5,
                                   color: const Color(0xFF64748B),
                                   fontWeight: FontWeight.w500,
                                 ),
@@ -72,14 +85,15 @@ class SecretaryDashboardTab extends StatelessWidget {
                             ],
                           ),
                         ),
-                        if (onNavigateToSubscription != null)
+                        if (widget.onNavigateToSubscription != null) ...[
+                          const SizedBox(width: 8),
                           InkWell(
-                            onTap: onNavigateToSubscription,
+                            onTap: widget.onNavigateToSubscription,
                             borderRadius: BorderRadius.circular(10),
                             child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 12,
-                                vertical: 7,
+                              padding: EdgeInsets.symmetric(
+                                horizontal: isMobile ? 10 : 12,
+                                vertical: isMobile ? 6 : 7,
                               ),
                               decoration: BoxDecoration(
                                 color: const Color(0xFF062AAE),
@@ -98,14 +112,14 @@ class SecretaryDashboardTab extends StatelessWidget {
                                 children: [
                                   const Icon(
                                     Icons.bolt_rounded,
-                                    size: 15,
+                                    size: 14,
                                     color: Colors.white,
                                   ),
-                                  const SizedBox(width: 5),
+                                  const SizedBox(width: 4),
                                   Text(
                                     'RM 50 / SSM Co.',
                                     style: GoogleFonts.poppins(
-                                      fontSize: 11.5,
+                                      fontSize: isMobile ? 10.5 : 11.5,
                                       fontWeight: FontWeight.bold,
                                       color: Colors.white,
                                     ),
@@ -114,6 +128,7 @@ class SecretaryDashboardTab extends StatelessWidget {
                               ),
                             ),
                           ),
+                        ],
                       ],
                     ),
                   ),
@@ -121,9 +136,9 @@ class SecretaryDashboardTab extends StatelessWidget {
                   // SSM Portfolio Billing Hero Strip
                   Container(
                     width: double.infinity,
-                    margin: const EdgeInsets.only(bottom: 20),
+                    margin: const EdgeInsets.only(bottom: 16),
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 18,
+                      horizontal: 16,
                       vertical: 14,
                     ),
                     decoration: BoxDecoration(
@@ -159,10 +174,10 @@ class SecretaryDashboardTab extends StatelessWidget {
                                   const SizedBox(width: 6),
                                   Flexible(
                                     child: Text(
-                                      'SSM Portfolio Billing (Flat RM 50 / Co)',
+                                      'SSM Portfolio Billing',
                                       overflow: TextOverflow.ellipsis,
                                       style: GoogleFonts.poppins(
-                                        fontSize: 12,
+                                        fontSize: 12.5,
                                         fontWeight: FontWeight.w600,
                                         color: Colors.white,
                                       ),
@@ -180,9 +195,9 @@ class SecretaryDashboardTab extends StatelessWidget {
                                 border: Border.all(color: const Color(0xFF34D399).withValues(alpha: 0.4)),
                               ),
                               child: Text(
-                                '${companies.length} Active SSM Entities',
+                                '${companies.length} Active Entities',
                                 style: GoogleFonts.poppins(
-                                  fontSize: 11,
+                                  fontSize: 10.5,
                                   fontWeight: FontWeight.bold,
                                   color: const Color(0xFF34D399),
                                 ),
@@ -190,7 +205,7 @@ class SecretaryDashboardTab extends StatelessWidget {
                             ),
                           ],
                         ),
-                        const SizedBox(height: 10),
+                        const SizedBox(height: 8),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.baseline,
                           textBaseline: TextBaseline.alphabetic,
@@ -207,7 +222,7 @@ class SecretaryDashboardTab extends StatelessWidget {
                             Text(
                               '/ month',
                               style: GoogleFonts.poppins(
-                                fontSize: 12,
+                                fontSize: 11.5,
                                 color: const Color(0xFF93C5FD),
                               ),
                             ),
@@ -219,7 +234,7 @@ class SecretaryDashboardTab extends StatelessWidget {
                           children: [
                             Flexible(
                               child: Text(
-                                'Full access included: Unlimited TM Cloud Vault & Statutory MBRS Engine.',
+                                'Unlimited Cloud Vault & MBRS Filing',
                                 overflow: TextOverflow.ellipsis,
                                 style: GoogleFonts.poppins(
                                   fontSize: 10.5,
@@ -227,11 +242,12 @@ class SecretaryDashboardTab extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            if (onNavigateToSubscription != null)
+                            if (widget.onNavigateToSubscription != null) ...[
+                              const SizedBox(width: 6),
                               InkWell(
-                                onTap: onNavigateToSubscription,
+                                onTap: widget.onNavigateToSubscription,
                                 child: Text(
-                                  'Company Billing →',
+                                  'Billing →',
                                   style: GoogleFonts.poppins(
                                     fontSize: 10.5,
                                     fontWeight: FontWeight.bold,
@@ -239,13 +255,14 @@ class SecretaryDashboardTab extends StatelessWidget {
                                   ),
                                 ),
                               ),
+                            ],
                           ],
                         ),
                       ],
                     ),
                   ),
 
-                  // TOP 4 KPI STAT CARDS (Matching user screenshot)
+                  // TOP 4 KPI STAT CARDS
                   LayoutBuilder(
                     builder: (context, constraints) {
                       final card1 = _buildKpiCard(
@@ -255,7 +272,7 @@ class SecretaryDashboardTab extends StatelessWidget {
                         trendIcon: Icons.trending_up_rounded,
                         trendColor: const Color(0xFF10B981),
                         valueColor: const Color(0xFF0F172A),
-                        onTap: onNavigateToCompanies ?? () {},
+                        onTap: widget.onNavigateToCompanies ?? () {},
                       );
                       final card2 = _buildKpiCard(
                         icon: Icons.checklist_rounded,
@@ -264,7 +281,7 @@ class SecretaryDashboardTab extends StatelessWidget {
                         trendIcon: Icons.trending_up_rounded,
                         trendColor: const Color(0xFF10B981),
                         valueColor: const Color(0xFF0F172A),
-                        onTap: onNavigateToQueue,
+                        onTap: widget.onNavigateToQueue,
                       );
                       final card3 = _buildKpiCard(
                         icon: Icons.warning_amber_rounded,
@@ -272,8 +289,8 @@ class SecretaryDashboardTab extends StatelessWidget {
                         label: 'Overdue Items',
                         trendIcon: Icons.warning_amber_rounded,
                         trendColor: const Color(0xFFDC2626),
-                        valueColor: const Color(0xFFDC2626), // Highlight in Red
-                        onTap: onNavigateToQueue,
+                        valueColor: const Color(0xFFDC2626),
+                        onTap: widget.onNavigateToQueue,
                       );
                       final card4 = _buildKpiCard(
                         icon: Icons.calendar_today_rounded,
@@ -282,15 +299,15 @@ class SecretaryDashboardTab extends StatelessWidget {
                         trendIcon: Icons.trending_up_rounded,
                         trendColor: const Color(0xFF10B981),
                         valueColor: const Color(0xFF0F172A),
-                        onTap: onNavigateToCompanies ?? () {},
+                        onTap: widget.onNavigateToCompanies ?? () {},
                       );
 
                       if (constraints.maxWidth < 620) {
                         return Column(
                           children: [
-                            Row(children: [card1, const SizedBox(width: 12), card2]),
-                            const SizedBox(height: 12),
-                            Row(children: [card3, const SizedBox(width: 12), card4]),
+                            Row(children: [card1, const SizedBox(width: 10), card2]),
+                            const SizedBox(height: 10),
+                            Row(children: [card3, const SizedBox(width: 10), card4]),
                           ],
                         );
                       }
@@ -309,269 +326,42 @@ class SecretaryDashboardTab extends StatelessWidget {
                     },
                   ),
 
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 16),
 
-                  // MIDDLE SECTION: Company Health & Recent Activity (Side-by-side on desktop)
-                  LayoutBuilder(
-                    builder: (context, constraints) {
-                      final isDesktop = constraints.maxWidth >= 850;
+                  // SECTIONS (Desktop: 2x2 grid, Mobile: Clean, prioritized list with distinct card formats)
+                  if (isDesktop) ...[
+                    // Row 1 on Desktop: Company Health & Recent Activity
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(child: _buildCompanyHealthCard(context)),
+                        const SizedBox(width: 16),
+                        Expanded(child: _buildRecentActivityCard(showAll: true)),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    // Row 2 on Desktop: Upcoming Deadlines & My Tasks
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(child: _buildUpcomingDeadlinesCard()),
+                        const SizedBox(width: 16),
+                        Expanded(child: _buildMyTasksCard()),
+                      ],
+                    ),
+                  ] else ...[
+                    // Distinct Mobile Flow:
+                    // 1. Company Health (Portfolio Status with navigation chevrons)
+                    _buildCompanyHealthCard(context),
+                    const SizedBox(height: 14),
 
-                      final companyHealthCard = _buildSectionCard(
-                        title: 'Company Health',
-                        actionText: 'View all ↗',
-                        onAction: onNavigateToCompanies,
-                        content: Column(
-                          children: [
-                            _buildCompanyHealthItem(
-                              context: context,
-                              companyName: 'Data Center Specialists Sdn Bhd (M)',
-                              ssmNo: '202101039281 (1429581-X)',
-                              statusBadge: '2 Pending Review',
-                              statusBadgeColor: const Color(0xFFD97706),
-                              statusBadgeBg: const Color(0xFFFEF3C7),
-                              iconColor: const Color(0xFFD97706),
-                              iconBg: const Color(0xFFFEF3C7),
-                            ),
-                            const SizedBox(height: 10),
-                            _buildCompanyHealthItem(
-                              context: context,
-                              companyName: 'C2 Coffee + Candle',
-                              ssmNo: '202001019482 (1382941-T)',
-                              statusBadge: 'Good (Compliant)',
-                              statusBadgeColor: const Color(0xFF059669),
-                              statusBadgeBg: const Color(0xFFECFDF5),
-                              iconColor: const Color(0xFF059669),
-                              iconBg: const Color(0xFFECFDF5),
-                            ),
-                            const SizedBox(height: 10),
-                            _buildCompanyHealthItem(
-                              context: context,
-                              companyName: '5Luxe Scents Co.',
-                              ssmNo: '202201082918 (1482910-P)',
-                              overdueCount: 1,
-                              statusBadge: 'Action Needed',
-                              statusBadgeColor: const Color(0xFFDC2626),
-                              statusBadgeBg: const Color(0xFFFEE2E2),
-                              iconColor: const Color(0xFFE11D48),
-                              iconBg: const Color(0xFFFEE2E2),
-                            ),
-                            const SizedBox(height: 10),
-                            _buildCompanyHealthItem(
-                              context: context,
-                              companyName: 'Test Enterprise',
-                              ssmNo: '202401999999 (999999-T)',
-                              overdueCount: 1,
-                              statusBadge: 'Retainer Due',
-                              statusBadgeColor: const Color(0xFFDC2626),
-                              statusBadgeBg: const Color(0xFFFEE2E2),
-                              iconColor: const Color(0xFFE11D48),
-                              iconBg: const Color(0xFFFEE2E2),
-                            ),
-                          ],
-                        ),
-                      );
+                    // 2. Tabbed Statutory Milestones & Tasks (Distinct: Calendar Date Tiles vs Action Checklist)
+                    _buildMilestonesAndTasksCard(),
+                    const SizedBox(height: 14),
 
-                      final recentActivityCard = _buildSectionCard(
-                        title: 'Recent Activity',
-                        content: Column(
-                          children: [
-                            _buildActivityItem(
-                              icon: Icons.error_outline_rounded,
-                              iconColor: const Color(0xFFF59E0B),
-                              iconBg: const Color(0xFFFEF3C7),
-                              title: 'Share Transfer marked as completed',
-                              subtitle: 'Sarah Ahmad • 25 Apr 2026, 5:30 PM',
-                            ),
-                            const SizedBox(height: 12),
-                            _buildActivityItem(
-                              icon: Icons.person_add_alt_1_rounded,
-                              iconColor: const Color(0xFF2563EB),
-                              iconBg: const Color(0xFFEFF6FF),
-                              title: 'New director added for Data Center Specialists',
-                              subtitle: 'Lim Mei Ling • 24 Apr 2026, 10:15 PM',
-                            ),
-                            const SizedBox(height: 12),
-                            _buildActivityItem(
-                              icon: Icons.show_chart_rounded,
-                              iconColor: const Color(0xFF64748B),
-                              iconBg: const Color(0xFFF1F5F9),
-                              title: 'Board Resolution uploaded — C2 Coffee + Candle',
-                              subtitle: 'Azman bin Ibrahim • 23 Apr 2026, 7:00 PM',
-                            ),
-                            const SizedBox(height: 12),
-                            _buildActivityItem(
-                              icon: Icons.error_outline_rounded,
-                              iconColor: const Color(0xFFF59E0B),
-                              iconBg: const Color(0xFFFEF3C7),
-                              title: 'AGM Preparation started for 5Luxe Scents Co.',
-                              subtitle: 'David Wong • 23 Apr 2026, 12:45 AM',
-                            ),
-                            const SizedBox(height: 12),
-                            _buildActivityItem(
-                              icon: Icons.error_outline_rounded,
-                              iconColor: const Color(0xFFF59E0B),
-                              iconBg: const Color(0xFFFEF3C7),
-                              title: 'Statutory compliance lock audit — Test Enterprise',
-                              subtitle: 'Lim Mei Ling • 21 Apr 2026, 6:20 PM',
-                            ),
-                          ],
-                        ),
-                      );
-
-                      if (isDesktop) {
-                        return Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Expanded(child: companyHealthCard),
-                            const SizedBox(width: 16),
-                            Expanded(child: recentActivityCard),
-                          ],
-                        );
-                      }
-
-                      return Column(
-                        children: [
-                          companyHealthCard,
-                          const SizedBox(height: 16),
-                          recentActivityCard,
-                        ],
-                      );
-                    },
-                  ),
-
-                  const SizedBox(height: 20),
-
-                  // BOTTOM SECTION: Upcoming Deadlines & My Tasks (Side-by-side on desktop)
-                  LayoutBuilder(
-                    builder: (context, constraints) {
-                      final isDesktop = constraints.maxWidth >= 850;
-
-                      final upcomingDeadlinesCard = _buildSectionCard(
-                        title: 'Upcoming Deadlines',
-                        actionText: 'View all ↗',
-                        onAction: onNavigateToCompanies,
-                        content: Column(
-                          children: [
-                            _buildDeadlineItem(
-                              icon: Icons.error_outline_rounded,
-                              iconColor: const Color(0xFFDC2626),
-                              iconBg: const Color(0xFFFEE2E2),
-                              title: 'Section 68 Annual Return — Data Center Specialists',
-                              subtitle: 'Data Center Specialists Sdn Bhd (M) • Due 14 May',
-                              urgencyBadge: 'high',
-                              urgencyColor: const Color(0xFFD97706),
-                              urgencyBg: const Color(0xFFFEF3C7),
-                            ),
-                            const SizedBox(height: 12),
-                            _buildDeadlineItem(
-                              icon: Icons.calendar_today_rounded,
-                              iconColor: const Color(0xFFD97706),
-                              iconBg: const Color(0xFFFEF3C7),
-                              title: 'Section 46 Notice of Office Address — C2 Coffee',
-                              subtitle: 'C2 Coffee + Candle • Due 10 Jun',
-                              urgencyBadge: 'medium',
-                              urgencyColor: const Color(0xFF2563EB),
-                              urgencyBg: const Color(0xFFEFF6FF),
-                            ),
-                            const SizedBox(height: 12),
-                            _buildDeadlineItem(
-                              icon: Icons.check_circle_outline_rounded,
-                              iconColor: const Color(0xFF059669),
-                              iconBg: const Color(0xFFECFDF5),
-                              title: 'Tax Return (CP204) Revision — Data Center Specialists',
-                              subtitle: 'Data Center Specialists Sdn Bhd (M) • Due 30 Jun',
-                              urgencyBadge: 'normal',
-                              urgencyColor: const Color(0xFF059669),
-                              urgencyBg: const Color(0xFFECFDF5),
-                            ),
-                            const SizedBox(height: 12),
-                            _buildDeadlineItem(
-                              icon: Icons.schedule_rounded,
-                              iconColor: const Color(0xFFD97706),
-                              iconBg: const Color(0xFFFEF3C7),
-                              title: 'Financial Statements Submission — 5Luxe Scents',
-                              subtitle: '5Luxe Scents Co. • Due 20 Jul',
-                              urgencyBadge: 'medium',
-                              urgencyColor: const Color(0xFF2563EB),
-                              urgencyBg: const Color(0xFFEFF6FF),
-                            ),
-                          ],
-                        ),
-                      );
-
-                      final myTasksCard = _buildSectionCard(
-                        title: 'My Tasks',
-                        actionText: 'View all ↗',
-                        onAction: onNavigateToQueue,
-                        content: Column(
-                          children: [
-                            _buildTaskItem(
-                              icon: Icons.access_time_rounded,
-                              iconColor: const Color(0xFF2563EB),
-                              iconBg: const Color(0xFFEFF6FF),
-                              title: 'Section 68 Annual Return Lodgement — Data Center Specialists',
-                              subtitle: 'Data Center Specialists Sdn Bhd (M) • Due 14 May',
-                              statusPill: 'In Progress',
-                              statusColor: const Color(0xFF1D4ED8),
-                              statusBg: const Color(0xFFDBEAFE),
-                            ),
-                            const SizedBox(height: 12),
-                            _buildTaskItem(
-                              icon: Icons.hourglass_empty_rounded,
-                              iconColor: const Color(0xFFD97706),
-                              iconBg: const Color(0xFFFEF3C7),
-                              title: 'Notice of Registered Office Lodgement — C2 Coffee',
-                              subtitle: 'C2 Coffee + Candle • Lodged to SSM MBRS',
-                              statusPill: 'Completed',
-                              statusColor: const Color(0xFF059669),
-                              statusBg: const Color(0xFFECFDF5),
-                            ),
-                            const SizedBox(height: 12),
-                            _buildTaskItem(
-                              icon: Icons.description_outlined,
-                              iconColor: const Color(0xFF062AAE),
-                              iconBg: const Color(0xFFEFF6FF),
-                              title: 'Review Section 68 CTCs — Data Center Specialists',
-                              subtitle: 'Data Center Specialists • 2 documents pending review',
-                              statusPill: 'Review',
-                              statusColor: const Color(0xFF062AAE),
-                              statusBg: const Color(0xFFEFF6FF),
-                            ),
-                            const SizedBox(height: 12),
-                            _buildTaskItem(
-                              icon: Icons.done_all_rounded,
-                              iconColor: const Color(0xFFDC2626),
-                              iconBg: const Color(0xFFFEE2E2),
-                              title: 'Statutory Compliance Audit — Test Enterprise',
-                              subtitle: 'Test Enterprise • May 2026 Retainer Due (RM 50)',
-                              statusPill: 'Action',
-                              statusColor: const Color(0xFFDC2626),
-                              statusBg: const Color(0xFFFEE2E2),
-                            ),
-                          ],
-                        ),
-                      );
-
-                      if (isDesktop) {
-                        return Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Expanded(child: upcomingDeadlinesCard),
-                            const SizedBox(width: 16),
-                            Expanded(child: myTasksCard),
-                          ],
-                        );
-                      }
-
-                      return Column(
-                        children: [
-                          upcomingDeadlinesCard,
-                          const SizedBox(height: 16),
-                          myTasksCard,
-                        ],
-                      );
-                    },
-                  ),
+                    // 3. Recent Activity (Distinct: Chronological Timeline Feed)
+                    _buildRecentActivityCard(showAll: false),
+                  ],
 
                   const SizedBox(height: 24),
                 ],
@@ -583,7 +373,7 @@ class SecretaryDashboardTab extends StatelessWidget {
     );
   }
 
-  // Top KPI Card Widget (matches screenshot exactly)
+  // Top KPI Card Widget
   Widget _buildKpiCard({
     required IconData icon,
     required String value,
@@ -597,7 +387,7 @@ class SecretaryDashboardTab extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(14),
           border: Border.all(color: const Color(0xFFE2E8F0)),
           boxShadow: [
             BoxShadow(
@@ -611,9 +401,9 @@ class SecretaryDashboardTab extends StatelessWidget {
           color: Colors.transparent,
           child: InkWell(
             onTap: onTap,
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(14),
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -621,36 +411,37 @@ class SecretaryDashboardTab extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
-                        width: 36,
-                        height: 36,
+                        width: 32,
+                        height: 32,
                         decoration: BoxDecoration(
                           color: const Color(0xFF0F172A),
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(8),
                         ),
                         child: Center(
-                          child: Icon(icon, color: Colors.white, size: 18),
+                          child: Icon(icon, color: Colors.white, size: 16),
                         ),
                       ),
-                      Icon(trendIcon, color: trendColor, size: 16),
+                      Icon(trendIcon, color: trendColor, size: 20),
                     ],
                   ),
-                  const SizedBox(height: 14),
+                  const SizedBox(height: 8),
                   Text(
                     value,
                     style: GoogleFonts.poppins(
-                      fontSize: 30,
+                      fontSize: 24,
                       fontWeight: FontWeight.w700,
                       color: valueColor,
                       height: 1,
                     ),
                   ),
-                  const SizedBox(height: 6),
+                  const SizedBox(height: 4),
                   Text(
                     label,
                     style: GoogleFonts.poppins(
-                      fontSize: 12,
+                      fontSize: 10.5,
                       fontWeight: FontWeight.w500,
                       color: const Color(0xFF64748B),
+                      letterSpacing: -0.2,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -673,10 +464,10 @@ class SecretaryDashboardTab extends StatelessWidget {
   }) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(18),
+      padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(14),
         border: Border.all(color: const Color(0xFFE2E8F0)),
         boxShadow: [
           BoxShadow(
@@ -696,7 +487,7 @@ class SecretaryDashboardTab extends StatelessWidget {
                 child: Text(
                   title,
                   style: GoogleFonts.poppins(
-                    fontSize: 15,
+                    fontSize: 14.5,
                     fontWeight: FontWeight.w700,
                     color: const Color(0xFF0F172A),
                   ),
@@ -709,28 +500,675 @@ class SecretaryDashboardTab extends StatelessWidget {
                   onTap: onAction,
                   borderRadius: BorderRadius.circular(6),
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-                    child: Text(
-                      actionText,
-                      style: GoogleFonts.poppins(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                        color: const Color(0xFF64748B),
-                      ),
+                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          actionText,
+                          style: GoogleFonts.poppins(
+                            fontSize: 11.5,
+                            fontWeight: FontWeight.w600,
+                            color: const Color(0xFF64748B),
+                          ),
+                        ),
+                        const SizedBox(width: 4),
+                        const Icon(
+                          Icons.arrow_forward_rounded,
+                          size: 13,
+                          color: Color(0xFF64748B),
+                        ),
+                      ],
                     ),
                   ),
                 ),
               ],
             ],
           ),
-          const SizedBox(height: 14),
+          const SizedBox(height: 12),
           content,
         ],
       ),
     );
   }
 
-  // Company Health Item
+  // Company Health Card (Distinct Portfolio style with navigation arrows)
+  Widget _buildCompanyHealthCard(BuildContext context) {
+    return _buildSectionCard(
+      title: 'Company Health',
+      actionText: 'View all',
+      onAction: widget.onNavigateToCompanies,
+      content: Column(
+        children: [
+          _buildCompanyHealthItem(
+            context: context,
+            companyName: 'Data Center Specialists Sdn Bhd (M)',
+            ssmNo: '202101039281 (1429581-X)',
+            statusBadge: '2 Pending',
+            statusBadgeColor: const Color(0xFFD97706),
+            statusBadgeBg: const Color(0xFFFEF3C7),
+            iconColor: const Color(0xFFD97706),
+            iconBg: const Color(0xFFFEF3C7),
+          ),
+          const SizedBox(height: 8),
+          _buildCompanyHealthItem(
+            context: context,
+            companyName: 'C2 Coffee + Candle',
+            ssmNo: '202001019482 (1382941-T)',
+            statusBadge: 'Good (Compliant)',
+            statusBadgeColor: const Color(0xFF059669),
+            statusBadgeBg: const Color(0xFFECFDF5),
+            iconColor: const Color(0xFF059669),
+            iconBg: const Color(0xFFECFDF5),
+          ),
+          const SizedBox(height: 8),
+          _buildCompanyHealthItem(
+            context: context,
+            companyName: '5Luxe Scents Co.',
+            ssmNo: '202201082918 (1482910-P)',
+            overdueCount: 1,
+            statusBadge: 'Action Needed',
+            statusBadgeColor: const Color(0xFFDC2626),
+            statusBadgeBg: const Color(0xFFFEE2E2),
+            iconColor: const Color(0xFFE11D48),
+            iconBg: const Color(0xFFFEE2E2),
+          ),
+          const SizedBox(height: 8),
+          _buildCompanyHealthItem(
+            context: context,
+            companyName: 'Test Enterprise',
+            ssmNo: '202401999999 (999999-T)',
+            overdueCount: 1,
+            statusBadge: 'Payment Due',
+            statusBadgeColor: const Color(0xFFDC2626),
+            statusBadgeBg: const Color(0xFFFEE2E2),
+            iconColor: const Color(0xFFE11D48),
+            iconBg: const Color(0xFFFEE2E2),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Combined Tabbed Card for Mobile (Deadlines & Tasks)
+  Widget _buildMilestonesAndTasksCard() {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: const Color(0xFFE2E8F0)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.02),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Segmented selector header
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(3),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFF1F5F9),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _buildSegmentButton(
+                      title: 'Deadlines',
+                      count: '4',
+                      icon: Icons.calendar_month_rounded,
+                      isSelected: _selectedMilestoneTab == 0,
+                      onTap: () => setState(() => _selectedMilestoneTab = 0),
+                    ),
+                    const SizedBox(width: 4),
+                    _buildSegmentButton(
+                      title: 'My Tasks',
+                      count: '4',
+                      icon: Icons.check_circle_outline_rounded,
+                      isSelected: _selectedMilestoneTab == 1,
+                      onTap: () => setState(() => _selectedMilestoneTab = 1),
+                    ),
+                  ],
+                ),
+              ),
+              InkWell(
+                onTap: _selectedMilestoneTab == 0
+                    ? widget.onNavigateToCompanies
+                    : widget.onNavigateToQueue,
+                borderRadius: BorderRadius.circular(6),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        'View all',
+                        style: GoogleFonts.poppins(
+                          fontSize: 11.5,
+                          fontWeight: FontWeight.w600,
+                          color: const Color(0xFF64748B),
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                      const Icon(
+                        Icons.arrow_forward_rounded,
+                        size: 13,
+                        color: Color(0xFF64748B),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          // Content based on selected tab: Calendar blocks vs Action checklist
+          if (_selectedMilestoneTab == 0)
+            _buildDeadlineItemsList()
+          else
+            _buildTaskItemsList(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSegmentButton({
+    required String title,
+    required String count,
+    required IconData icon,
+    required bool isSelected,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 150),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        decoration: BoxDecoration(
+          color: isSelected ? const Color(0xFF062AAE) : Colors.transparent,
+          borderRadius: BorderRadius.circular(6),
+          boxShadow: isSelected
+              ? [
+                  BoxShadow(
+                    color: const Color(0xFF062AAE).withValues(alpha: 0.15),
+                    blurRadius: 4,
+                    offset: const Offset(0, 1),
+                  ),
+                ]
+              : null,
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              icon,
+              size: 13,
+              color: isSelected ? Colors.white : const Color(0xFF64748B),
+            ),
+            const SizedBox(width: 5),
+            Text(
+              title,
+              style: GoogleFonts.poppins(
+                fontSize: 11.5,
+                fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                color: isSelected ? Colors.white : const Color(0xFF64748B),
+              ),
+            ),
+            const SizedBox(width: 5),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+              decoration: BoxDecoration(
+                color: isSelected
+                    ? Colors.white.withValues(alpha: 0.25)
+                    : const Color(0xFFE2E8F0),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Text(
+                count,
+                style: GoogleFonts.poppins(
+                  fontSize: 9.5,
+                  fontWeight: FontWeight.bold,
+                  color: isSelected ? Colors.white : const Color(0xFF475569),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // 1. DEADLINES: Distinct Calendar Date Tile format
+  Widget _buildDeadlineItemsList() {
+    return Column(
+      children: [
+        _buildCalendarDeadlineItem(
+          day: '14',
+          month: 'MAY',
+          title: 'Section 68 Annual Return Lodgement',
+          company: 'Data Center Specialists Sdn Bhd',
+          urgency: 'High',
+          urgencyColor: const Color(0xFFDC2626),
+          urgencyBg: const Color(0xFFFEE2E2),
+        ),
+        const SizedBox(height: 8),
+        _buildCalendarDeadlineItem(
+          day: '10',
+          month: 'JUN',
+          title: 'Section 46 Notice of Office Address',
+          company: 'C2 Coffee + Candle',
+          urgency: 'Medium',
+          urgencyColor: const Color(0xFFD97706),
+          urgencyBg: const Color(0xFFFEF3C7),
+        ),
+        const SizedBox(height: 8),
+        _buildCalendarDeadlineItem(
+          day: '30',
+          month: 'JUN',
+          title: 'Tax Return (CP204) Revision',
+          company: 'Data Center Specialists Sdn Bhd',
+          urgency: 'Normal',
+          urgencyColor: const Color(0xFF059669),
+          urgencyBg: const Color(0xFFECFDF5),
+        ),
+        const SizedBox(height: 8),
+        _buildCalendarDeadlineItem(
+          day: '20',
+          month: 'JUL',
+          title: 'Financial Statements Submission',
+          company: '5Luxe Scents Co.',
+          urgency: 'Medium',
+          urgencyColor: const Color(0xFF2563EB),
+          urgencyBg: const Color(0xFFEFF6FF),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildCalendarDeadlineItem({
+    required String day,
+    required String month,
+    required String title,
+    required String company,
+    required String urgency,
+    required Color urgencyColor,
+    required Color urgencyBg,
+  }) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+      decoration: BoxDecoration(
+        color: const Color(0xFFF8FAFC),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: const Color(0xFFF1F5F9)),
+      ),
+      child: Row(
+        children: [
+          // Calendar Date Block
+          Container(
+            width: 42,
+            height: 42,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(color: const Color(0xFFCBD5E1)),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.02),
+                  blurRadius: 4,
+                  offset: const Offset(0, 1),
+                ),
+              ],
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  day,
+                  style: GoogleFonts.poppins(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w800,
+                    color: const Color(0xFF062AAE),
+                    height: 1.0,
+                  ),
+                ),
+                Text(
+                  month,
+                  style: GoogleFonts.poppins(
+                    fontSize: 8.5,
+                    fontWeight: FontWeight.w700,
+                    color: const Color(0xFF64748B),
+                    letterSpacing: 0.5,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: GoogleFonts.poppins(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: const Color(0xFF0F172A),
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                Text(
+                  company,
+                  style: GoogleFonts.poppins(
+                    fontSize: 10.5,
+                    color: const Color(0xFF64748B),
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 6),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2.5),
+            decoration: BoxDecoration(
+              color: urgencyBg,
+              borderRadius: BorderRadius.circular(5),
+            ),
+            child: Text(
+              urgency,
+              style: GoogleFonts.poppins(
+                fontSize: 9.5,
+                fontWeight: FontWeight.bold,
+                color: urgencyColor,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // 2. MY TASKS: Distinct Actionable Task Tiles with Action Buttons
+  Widget _buildTaskItemsList() {
+    return Column(
+      children: [
+        _buildActionTaskItem(
+          icon: Icons.rate_review_rounded,
+          iconColor: const Color(0xFF062AAE),
+          iconBg: const Color(0xFFEFF6FF),
+          title: 'Review Section 68 CTCs',
+          company: 'Data Center Specialists • 2 Pending',
+          actionLabel: 'Review →',
+          actionColor: const Color(0xFF062AAE),
+          onAction: widget.onNavigateToQueue,
+        ),
+        const SizedBox(height: 8),
+        _buildActionTaskItem(
+          icon: Icons.upload_file_rounded,
+          iconColor: const Color(0xFF2563EB),
+          iconBg: const Color(0xFFEFF6FF),
+          title: 'Section 68 Lodgement',
+          company: 'Data Center Specialists • Due 14 May',
+          actionLabel: 'Lodge →',
+          actionColor: const Color(0xFF2563EB),
+          onAction: widget.onNavigateToQueue,
+        ),
+        const SizedBox(height: 8),
+        _buildActionTaskItem(
+          icon: Icons.warning_amber_rounded,
+          iconColor: const Color(0xFFDC2626),
+          iconBg: const Color(0xFFFEE2E2),
+          title: 'Statutory Compliance Audit',
+          company: 'Test Enterprise • May 2026 Plan Due',
+          actionLabel: 'Audit →',
+          actionColor: const Color(0xFFDC2626),
+          onAction: widget.onNavigateToQueue,
+        ),
+        const SizedBox(height: 8),
+        _buildActionTaskItem(
+          icon: Icons.edit_note_rounded,
+          iconColor: const Color(0xFF059669),
+          iconBg: const Color(0xFFECFDF5),
+          title: 'Notice of Registered Office',
+          company: 'C2 Coffee + Candle • Form 46',
+          actionLabel: 'File →',
+          actionColor: const Color(0xFF059669),
+          onAction: widget.onNavigateToQueue,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildActionTaskItem({
+    required IconData icon,
+    required Color iconColor,
+    required Color iconBg,
+    required String title,
+    required String company,
+    required String actionLabel,
+    required Color actionColor,
+    required VoidCallback onAction,
+  }) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+      decoration: BoxDecoration(
+        color: const Color(0xFFF8FAFC),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: const Color(0xFFF1F5F9)),
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 32,
+            height: 32,
+            decoration: BoxDecoration(
+              color: iconBg,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Center(
+              child: Icon(icon, color: iconColor, size: 16),
+            ),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: GoogleFonts.poppins(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: const Color(0xFF0F172A),
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                Text(
+                  company,
+                  style: GoogleFonts.poppins(
+                    fontSize: 10.5,
+                    color: const Color(0xFF64748B),
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 8),
+          ElevatedButton(
+            onPressed: onAction,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: actionColor,
+              foregroundColor: Colors.white,
+              elevation: 0,
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+              minimumSize: Size.zero,
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(6),
+              ),
+            ),
+            child: Text(
+              actionLabel,
+              style: GoogleFonts.poppins(
+                fontSize: 10,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Upcoming Deadlines Card (for Desktop)
+  Widget _buildUpcomingDeadlinesCard() {
+    return _buildSectionCard(
+      title: 'Upcoming Deadlines',
+      actionText: 'View all',
+      onAction: widget.onNavigateToCompanies,
+      content: _buildDeadlineItemsList(),
+    );
+  }
+
+  // My Tasks Card (for Desktop)
+  Widget _buildMyTasksCard() {
+    return _buildSectionCard(
+      title: 'My Tasks',
+      actionText: 'View all',
+      onAction: widget.onNavigateToQueue,
+      content: _buildTaskItemsList(),
+    );
+  }
+
+  // 3. RECENT ACTIVITY: Distinct Chronological Timeline Trail
+  Widget _buildRecentActivityCard({bool showAll = true}) {
+    final activities = [
+      (
+        'Share Transfer marked as completed',
+        'Sarah Ahmad',
+        '25 Apr, 5:30 PM',
+      ),
+      (
+        'New director added for Data Center Specialists',
+        'Lim Mei Ling',
+        '24 Apr, 10:15 PM',
+      ),
+      (
+        'Board Resolution uploaded — C2 Coffee + Candle',
+        'Azman bin Ibrahim',
+        '23 Apr, 7:00 PM',
+      ),
+      if (showAll) ...[
+        (
+          'AGM Preparation started for 5Luxe Scents Co.',
+          'David Wong',
+          '23 Apr, 12:45 AM',
+        ),
+        (
+          'Statutory compliance lock audit — Test Enterprise',
+          'Lim Mei Ling',
+          '21 Apr, 6:20 PM',
+        ),
+      ],
+    ];
+
+    return _buildSectionCard(
+      title: 'Recent Activity',
+      content: Column(
+        children: [
+          for (int i = 0; i < activities.length; i++)
+            _buildTimelineItem(
+              title: activities[i].$1,
+              author: activities[i].$2,
+              time: activities[i].$3,
+              isLast: i == activities.length - 1,
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTimelineItem({
+    required String title,
+    required String author,
+    required String time,
+    required bool isLast,
+  }) {
+    return IntrinsicHeight(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Timeline indicator
+          Column(
+            children: [
+              Container(
+                width: 8,
+                height: 8,
+                margin: const EdgeInsets.only(top: 5),
+                decoration: const BoxDecoration(
+                  color: Color(0xFF062AAE),
+                  shape: BoxShape.circle,
+                ),
+              ),
+              if (!isLast)
+                Expanded(
+                  child: Container(
+                    width: 1.5,
+                    color: const Color(0xFFE2E8F0),
+                    margin: const EdgeInsets.symmetric(vertical: 2),
+                  ),
+                ),
+            ],
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.only(bottom: isLast ? 0 : 12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: GoogleFonts.poppins(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: const Color(0xFF0F172A),
+                    ),
+                  ),
+                  const SizedBox(height: 1),
+                  Text(
+                    '$author • $time',
+                    style: GoogleFonts.poppins(
+                      fontSize: 10.5,
+                      color: const Color(0xFF64748B),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // 4. Company Health Item (Portfolio Card with Navigation Chevron)
   Widget _buildCompanyHealthItem({
     required BuildContext context,
     required String companyName,
@@ -745,7 +1183,7 @@ class SecretaryDashboardTab extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(10),
         border: Border.all(color: const Color(0xFFF1F5F9)),
       ),
       child: InkWell(
@@ -757,23 +1195,23 @@ class SecretaryDashboardTab extends StatelessWidget {
             ),
           );
         },
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(10),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
           child: Row(
             children: [
               Container(
-                width: 36,
-                height: 36,
+                width: 34,
+                height: 34,
                 decoration: BoxDecoration(
                   color: iconBg,
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(8),
                 ),
                 child: Center(
-                  child: Icon(Icons.apartment_rounded, color: iconColor, size: 18),
+                  child: Icon(Icons.apartment_rounded, color: iconColor, size: 17),
                 ),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: 10),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -781,19 +1219,19 @@ class SecretaryDashboardTab extends StatelessWidget {
                     Text(
                       companyName,
                       style: GoogleFonts.poppins(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w700,
+                        fontSize: 12.5,
+                        fontWeight: FontWeight.w600,
                         color: const Color(0xFF0F172A),
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    const SizedBox(height: 2),
+                    const SizedBox(height: 1),
                     if (overdueCount > 0)
                       RichText(
                         text: TextSpan(
                           style: GoogleFonts.poppins(
-                            fontSize: 11,
+                            fontSize: 10.5,
                             color: const Color(0xFF64748B),
                           ),
                           children: [
@@ -812,16 +1250,18 @@ class SecretaryDashboardTab extends StatelessWidget {
                       Text(
                         ssmNo,
                         style: GoogleFonts.poppins(
-                          fontSize: 11,
+                          fontSize: 10.5,
                           color: const Color(0xFF64748B),
                         ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
                   ],
                 ),
               ),
               const SizedBox(width: 8),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3.5),
+                padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2.5),
                 decoration: BoxDecoration(
                   color: statusBadgeBg,
                   borderRadius: BorderRadius.circular(6),
@@ -829,208 +1269,22 @@ class SecretaryDashboardTab extends StatelessWidget {
                 child: Text(
                   statusBadge,
                   style: GoogleFonts.poppins(
-                    fontSize: 10.5,
+                    fontSize: 10,
                     fontWeight: FontWeight.bold,
                     color: statusBadgeColor,
                   ),
                 ),
               ),
+              const SizedBox(width: 4),
+              const Icon(
+                Icons.chevron_right_rounded,
+                size: 16,
+                color: Color(0xFF94A3B8),
+              ),
             ],
           ),
         ),
       ),
-    );
-  }
-
-  // Recent Activity Item
-  Widget _buildActivityItem({
-    required IconData icon,
-    required Color iconColor,
-    required Color iconBg,
-    required String title,
-    required String subtitle,
-  }) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          width: 32,
-          height: 32,
-          decoration: BoxDecoration(
-            color: iconBg,
-            shape: BoxShape.circle,
-          ),
-          child: Center(
-            child: Icon(icon, color: iconColor, size: 16),
-          ),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title,
-                style: GoogleFonts.poppins(
-                  fontSize: 12.5,
-                  fontWeight: FontWeight.w600,
-                  color: const Color(0xFF0F172A),
-                ),
-              ),
-              const SizedBox(height: 1),
-              Text(
-                subtitle,
-                style: GoogleFonts.poppins(
-                  fontSize: 11,
-                  color: const Color(0xFF64748B),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  // Upcoming Deadline Item
-  Widget _buildDeadlineItem({
-    required IconData icon,
-    required Color iconColor,
-    required Color iconBg,
-    required String title,
-    required String subtitle,
-    required String urgencyBadge,
-    required Color urgencyColor,
-    required Color urgencyBg,
-  }) {
-    return Row(
-      children: [
-        Container(
-          width: 32,
-          height: 32,
-          decoration: BoxDecoration(
-            color: iconBg,
-            shape: BoxShape.circle,
-          ),
-          child: Center(
-            child: Icon(icon, color: iconColor, size: 16),
-          ),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title,
-                style: GoogleFonts.poppins(
-                  fontSize: 12.5,
-                  fontWeight: FontWeight.w600,
-                  color: const Color(0xFF0F172A),
-                ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-              Text(
-                subtitle,
-                style: GoogleFonts.poppins(
-                  fontSize: 11,
-                  color: const Color(0xFF64748B),
-                ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(width: 8),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2.5),
-          decoration: BoxDecoration(
-            color: urgencyBg,
-            borderRadius: BorderRadius.circular(6),
-          ),
-          child: Text(
-            urgencyBadge,
-            style: GoogleFonts.poppins(
-              fontSize: 10,
-              fontWeight: FontWeight.bold,
-              color: urgencyColor,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  // My Tasks Item
-  Widget _buildTaskItem({
-    required IconData icon,
-    required Color iconColor,
-    required Color iconBg,
-    required String title,
-    required String subtitle,
-    required String statusPill,
-    required Color statusColor,
-    required Color statusBg,
-  }) {
-    return Row(
-      children: [
-        Container(
-          width: 32,
-          height: 32,
-          decoration: BoxDecoration(
-            color: iconBg,
-            shape: BoxShape.circle,
-          ),
-          child: Center(
-            child: Icon(icon, color: iconColor, size: 16),
-          ),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title,
-                style: GoogleFonts.poppins(
-                  fontSize: 12.5,
-                  fontWeight: FontWeight.w600,
-                  color: const Color(0xFF0F172A),
-                ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-              Text(
-                subtitle,
-                style: GoogleFonts.poppins(
-                  fontSize: 11,
-                  color: const Color(0xFF64748B),
-                ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(width: 8),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3.5),
-          decoration: BoxDecoration(
-            color: statusBg,
-            borderRadius: BorderRadius.circular(6),
-          ),
-          child: Text(
-            statusPill,
-            style: GoogleFonts.poppins(
-              fontSize: 10.5,
-              fontWeight: FontWeight.bold,
-              color: statusColor,
-            ),
-          ),
-        ),
-      ],
     );
   }
 }

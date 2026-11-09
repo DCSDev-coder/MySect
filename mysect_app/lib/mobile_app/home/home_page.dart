@@ -390,7 +390,7 @@ class _HomePageState extends State<HomePage> {
   }
 
 
-  Widget _buildSecretarialRetainerCard(Company? comp) {
+  Widget _buildSecretarialPlanCard(Company? comp) {
     if (comp == null) return const SizedBox.shrink();
 
     final isExpired = comp.isSubscriptionExpired;
@@ -426,7 +426,7 @@ class _HomePageState extends State<HomePage> {
       borderColor = const Color(0xFFE2E8F0);
       badgeBg = const Color(0xFFECFDF5);
       badgeText = const Color(0xFF047857);
-      badgeTitle = 'RETAINER ACTIVE';
+      badgeTitle = 'PLAN ACTIVE';
       icon = Icons.verified_user_rounded;
       iconColor = const Color(0xFF059669);
     }
@@ -471,7 +471,7 @@ class _HomePageState extends State<HomePage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Monthly Secretarial Retainer',
+                            'Monthly Secretarial Plan',
                             style: GoogleFonts.poppins(
                               fontSize: 12.5,
                               fontWeight: FontWeight.bold,
@@ -483,7 +483,7 @@ class _HomePageState extends State<HomePage> {
                           ),
                           const SizedBox(height: 3),
                           Text(
-                            'Expiry Date: ${comp.formattedSubscriptionExpiry}',
+                            'Valid until: ${comp.formattedSubscriptionExpiry}',
                             style: GoogleFonts.poppins(
                               fontSize: 11,
                               fontWeight: FontWeight.w600,
@@ -530,7 +530,7 @@ class _HomePageState extends State<HomePage> {
                         const SizedBox(width: 6),
                         Expanded(
                           child: Text(
-                            'SECRETARIAL SERVICES SUSPENDED: Your monthly retainer expired on ${comp.formattedSubscriptionExpiry}. Secretary Lim Mei Ling cannot handle filings, review documents, or lodge statutory returns for ${comp.name} until renewed.',
+                            'SECRETARIAL SERVICES SUSPENDED: Your monthly plan expired on ${comp.formattedSubscriptionExpiry}. Secretary Lim Mei Ling cannot handle filings, review documents, or lodge statutory returns for ${comp.name} until renewed.',
                             style: GoogleFonts.poppins(
                               fontSize: 11,
                               fontWeight: FontWeight.w500,
@@ -553,17 +553,17 @@ class _HomePageState extends State<HomePage> {
                         elevation: 0,
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                       ),
-                      onPressed: () => _showRetainerRenewalSheet(context, comp),
+                      onPressed: () => _showPlanRenewalSheet(context, comp),
                       icon: const Icon(Icons.payment_rounded, size: 16),
                       label: Text(
-                        'Pay Monthly Retainer (RM 50) — Resume Service',
+                        'Renew Secretarial Plan (RM 50) — Resume Service',
                         style: GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.bold),
                       ),
                     ),
                   ),
                 ] else if (isExpiringSoon) ...[
                   Text(
-                    'Retainer expires in $days days. Please settle payment to prevent interruption of statutory secretarial coverage.',
+                    'Your plan expires in $days days. Please renew to keep company secretarial coverage active.',
                     style: GoogleFonts.poppins(fontSize: 11, color: const Color(0xFF92400E)),
                   ),
                   const SizedBox(height: 8),
@@ -578,7 +578,7 @@ class _HomePageState extends State<HomePage> {
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                           elevation: 0,
                         ),
-                        onPressed: () => _showRetainerRenewalSheet(context, comp),
+                        onPressed: () => _showPlanRenewalSheet(context, comp),
                         child: Text(
                           'Renew Now (RM 50/mo)',
                           style: GoogleFonts.poppins(fontSize: 11, fontWeight: FontWeight.bold),
@@ -597,10 +597,10 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                       TextButton(
-                        onPressed: () => _showRetainerRenewalSheet(context, comp),
+                        onPressed: () => _showPlanRenewalSheet(context, comp),
                         style: TextButton.styleFrom(padding: EdgeInsets.zero, minimumSize: Size.zero),
                         child: Text(
-                          'Extend Retainer →',
+                          'Extend Plan →',
                           style: GoogleFonts.poppins(fontSize: 11, fontWeight: FontWeight.bold, color: const Color(0xFF062AAE)),
                         ),
                       ),
@@ -615,7 +615,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void _showRetainerRenewalSheet(BuildContext context, Company comp) {
+  void _showPlanRenewalSheet(BuildContext context, Company comp) {
     int selectedMonths = 1;
     double monthlyFee = 50.0;
     String paymentMethod = 'FPX Online Banking';
@@ -667,7 +667,7 @@ class _HomePageState extends State<HomePage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Monthly Retainer Payment',
+                              'Monthly Secretarial Plan',
                               style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.bold, color: const Color(0xFF0F172A)),
                             ),
                             Text(
@@ -689,7 +689,7 @@ class _HomePageState extends State<HomePage> {
                       border: Border.all(color: const Color(0xFFE2E8F0)),
                     ),
                     child: Text(
-                      'Appointed secretary: ${comp.assignedSecretary} (${comp.assignedFirmName}). In compliance with professional guidelines, secretarial service is maintained only while retainer is active.',
+                      'Appointed secretary: ${comp.assignedSecretary} (${comp.assignedFirmName}). In compliance with professional guidelines, secretarial service is maintained only while your plan is active.',
                       style: GoogleFonts.poppins(fontSize: 11, color: const Color(0xFF475569), height: 1.35),
                     ),
                   ),
@@ -800,7 +800,7 @@ class _HomePageState extends State<HomePage> {
                                 const SizedBox(width: 8),
                                 Expanded(
                                   child: Text(
-                                    'Monthly retainer renewed! Secretarial services active for ${comp.name}.',
+                                    'Secretarial plan renewed! Services are now active for ${comp.name}.',
                                     style: GoogleFonts.poppins(fontSize: 12),
                                   ),
                                 ),
@@ -812,7 +812,7 @@ class _HomePageState extends State<HomePage> {
                         );
                       },
                       child: Text(
-                        'Pay RM ${total.toStringAsFixed(2)} & Renew Retainer',
+                        'Pay RM ${total.toStringAsFixed(2)} & Renew Plan',
                         style: GoogleFonts.poppins(fontSize: 13, fontWeight: FontWeight.bold),
                       ),
                     ),
@@ -1056,13 +1056,13 @@ class _HomePageState extends State<HomePage> {
                       const SizedBox(height: 12),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                        child: _buildSecretarialRetainerCard(_companyService.selectedCompany),
+                        child: _buildSecretarialPlanCard(_companyService.selectedCompany),
                       ),
                       const SizedBox(height: 16),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16.0),
                         child: Text(
-                          'UPCOMING DATELINE',
+                          'UPCOMING DEADLINES',
                           style: GoogleFonts.poppins(
                             fontSize: 14,
                             fontWeight: FontWeight.bold,

@@ -124,7 +124,7 @@ class _FilesPageState extends State<FilesPage> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      'Powered by TM Cloud',
+                                      'Powered by Secure Cloud Vault',
                                       style: GoogleFonts.poppins(
                                         fontWeight: FontWeight.w700,
                                         fontSize: 14,

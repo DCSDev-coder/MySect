@@ -468,43 +468,10 @@ class _ClientCompaniesTabState extends State<ClientCompaniesTab> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.fromLTRB(16, 12, 16, 6),
+                padding: const EdgeInsets.fromLTRB(16, 8, 16, 6),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: Text(
-                            '${allCompanies.length} client corporate portfolios • Dedicated encrypted TM Cloud vaults',
-                            style: GoogleFonts.poppins(
-                              fontSize: 12.5,
-                              fontWeight: FontWeight.w500,
-                              color: const Color(0xFF64748B),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFEFF6FF),
-                            borderRadius: BorderRadius.circular(8),
-                            border: Border.all(color: const Color(0xFFBFDBFE)),
-                          ),
-                          child: Text(
-                            '${allCompanies.length} PORTFOLIOS',
-                            style: GoogleFonts.poppins(
-                              fontSize: 10,
-                              fontWeight: FontWeight.bold,
-                              color: const Color(0xFF062AAE),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 12),
-
                     // Scalable Search Bar for 20+ companies
                     Container(
                       height: 42,
@@ -625,9 +592,9 @@ class _ClientCompaniesTabState extends State<ClientCompaniesTab> {
                         padding: const EdgeInsets.fromLTRB(16, 6, 16, 24),
                         gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                           maxCrossAxisExtent: 460,
-                          mainAxisSpacing: 14,
-                          crossAxisSpacing: 14,
-                          mainAxisExtent: 200,
+                          mainAxisSpacing: 16,
+                          crossAxisSpacing: 16,
+                          mainAxisExtent: 232,
                         ),
                         itemCount: filteredCompanies.length,
                         itemBuilder: (context, index) {
@@ -760,20 +727,50 @@ class _ClientCompaniesTabState extends State<ClientCompaniesTab> {
 
     final hasActionNeeded = moreDetailsCount > 0 || rejectedCount > 0 || !billingCo.isPaidForMonth;
 
-    return Container(
-      margin: isGrid ? EdgeInsets.zero : const EdgeInsets.only(bottom: 14),
+    String tabText;
+    Color tabBg;
+    Color tabBorderColor;
+    Color tabTextColor;
+    IconData tabIcon;
+
+    if (hasActionNeeded) {
+      tabText = 'ACTION NEEDED';
+      tabIcon = Icons.error_outline_rounded;
+      tabBg = const Color(0xFFFEF2F2);
+      tabBorderColor = const Color(0xFFFECACA);
+      tabTextColor = const Color(0xFFDC2626);
+    } else if (pendingCount > 0) {
+      tabText = pendingCount == 1 ? '1 PENDING' : '$pendingCount PENDING';
+      tabIcon = Icons.schedule_rounded;
+      tabBg = const Color(0xFFFEF3C7);
+      tabBorderColor = const Color(0xFFFDE68A);
+      tabTextColor = const Color(0xFFD97706);
+    } else {
+      tabText = 'UP TO DATE';
+      tabIcon = Icons.check_circle_outline_rounded;
+      tabBg = const Color(0xFFECFDF5);
+      tabBorderColor = const Color(0xFFA7F3D0);
+      tabTextColor = const Color(0xFF059669);
+    }
+
+    Widget folderCard = Container(
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.grey.shade200),
+        borderRadius: const BorderRadius.only(
+          topRight: Radius.circular(14),
+          bottomLeft: Radius.circular(14),
+          bottomRight: Radius.circular(14),
+        ),
+        border: Border.all(color: Colors.grey.shade300, width: 1.2),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
-            blurRadius: 6,
-            offset: const Offset(0, 2),
+            color: Colors.black.withValues(alpha: 0.04),
+            blurRadius: 8,
+            offset: const Offset(0, 3),
           ),
         ],
       ),
+      clipBehavior: Clip.antiAlias,
       child: Material(
         color: Colors.transparent,
         child: InkWell(
@@ -785,29 +782,30 @@ class _ClientCompaniesTabState extends State<ClientCompaniesTab> {
               ),
             );
           },
-          borderRadius: BorderRadius.circular(16),
           child: Padding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: isGrid ? MainAxisAlignment.spaceBetween : MainAxisAlignment.start,
               children: [
+                // Header Row: Folder Emblem, Name & SSM
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Container(
-                      padding: const EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         color: const Color(0xFF062AAE).withValues(alpha: 0.08),
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(color: const Color(0xFF062AAE).withValues(alpha: 0.15)),
                       ),
                       child: const Icon(
-                        Icons.business_rounded,
+                        Icons.folder_shared_rounded,
                         color: Color(0xFF062AAE),
-                        size: 22,
+                        size: 20,
                       ),
                     ),
-                    const SizedBox(width: 12),
+                    const SizedBox(width: 10),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -815,18 +813,18 @@ class _ClientCompaniesTabState extends State<ClientCompaniesTab> {
                           Text(
                             compName,
                             style: GoogleFonts.poppins(
-                              fontSize: 14,
+                              fontSize: 13.5,
                               fontWeight: FontWeight.bold,
                               color: Colors.black87,
                             ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
-                          const SizedBox(height: 2),
+                          const SizedBox(height: 1),
                           Text(
                             ssmNo,
                             style: GoogleFonts.poppins(
-                              fontSize: 11,
+                              fontSize: 10.5,
                               color: Colors.grey.shade600,
                             ),
                             maxLines: 1,
@@ -835,70 +833,18 @@ class _ClientCompaniesTabState extends State<ClientCompaniesTab> {
                         ],
                       ),
                     ),
-                    const SizedBox(width: 8),
-                    if (pendingCount > 0)
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFFEF3C7),
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: const Color(0xFFFDE68A)),
-                        ),
-                        child: Text(
-                          '$pendingCount PENDING',
-                          style: GoogleFonts.poppins(
-                            fontSize: 10,
-                            fontWeight: FontWeight.bold,
-                            color: const Color(0xFFD97706),
-                          ),
-                        ),
-                      )
-                    else if (hasActionNeeded)
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFFEE2E2),
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: const Color(0xFFFECACA)),
-                        ),
-                        child: Text(
-                          'ACTION NEEDED',
-                          style: GoogleFonts.poppins(
-                            fontSize: 10,
-                            fontWeight: FontWeight.bold,
-                            color: const Color(0xFFDC2626),
-                          ),
-                        ),
-                      )
-                    else
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFECFDF5),
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: const Color(0xFFA7F3D0)),
-                        ),
-                        child: Text(
-                          'UP TO DATE',
-                          style: GoogleFonts.poppins(
-                            fontSize: 10,
-                            fontWeight: FontWeight.bold,
-                            color: const Color(0xFF059669),
-                          ),
-                        ),
-                      ),
                   ],
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 8),
                 Row(
                   children: [
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2.5),
                       decoration: BoxDecoration(
                         color: billingCo.isPaidForMonth
                             ? const Color(0xFFECFDF5)
                             : const Color(0xFFFFFBEB),
-                        borderRadius: BorderRadius.circular(6),
+                        borderRadius: BorderRadius.circular(5),
                         border: Border.all(
                           color: billingCo.isPaidForMonth
                               ? const Color(0xFFA7F3D0)
@@ -920,10 +866,10 @@ class _ClientCompaniesTabState extends State<ClientCompaniesTab> {
                           const SizedBox(width: 4),
                           Text(
                             billingCo.isPaidForMonth
-                                ? 'May 2026 Retainer: Paid (RM 50)'
-                                : 'May 2026 Retainer: RM 50 Due',
+                                ? 'May 2026 Plan: Paid (RM 50)'
+                                : 'May 2026 Plan: RM 50 Due',
                             style: GoogleFonts.poppins(
-                              fontSize: 10,
+                              fontSize: 9.5,
                               fontWeight: FontWeight.w600,
                               color: billingCo.isPaidForMonth
                                   ? const Color(0xFF065F46)
@@ -934,48 +880,48 @@ class _ClientCompaniesTabState extends State<ClientCompaniesTab> {
                       ),
                     ),
                     if (billingCo.paymentDate != null) ...[
-                      const SizedBox(width: 8),
+                      const SizedBox(width: 6),
                       Text(
                         'Paid on ${billingCo.paymentDate}',
                         style: GoogleFonts.poppins(
-                          fontSize: 10,
+                          fontSize: 9.5,
                           color: Colors.grey.shade500,
                         ),
                       ),
                     ],
                   ],
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: 8),
 
                 // Next Upcoming Statutory Milestone or Empty Placeholder in Grid
                 if (companyTasks.isNotEmpty) ...[
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
                     decoration: BoxDecoration(
                       color: const Color(0xFFF8FAFC),
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(8),
                       border: Border.all(color: const Color(0xFFE2E8F0)),
                     ),
                     child: Row(
                       children: [
-                        const Icon(Icons.event_available_rounded, size: 14, color: Color(0xFF062AAE)),
-                        const SizedBox(width: 8),
+                        const Icon(Icons.event_available_rounded, size: 13, color: Color(0xFF062AAE)),
+                        const SizedBox(width: 6),
                         Expanded(
                           child: Text(
                             'Next: ${companyTasks.first.title}',
-                            style: GoogleFonts.poppins(fontSize: 11, fontWeight: FontWeight.w600, color: Colors.black87),
+                            style: GoogleFonts.poppins(fontSize: 10.5, fontWeight: FontWeight.w600, color: Colors.black87),
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1.5),
                           decoration: BoxDecoration(
                             color: const Color(0xFFEFF6FF),
-                            borderRadius: BorderRadius.circular(6),
+                            borderRadius: BorderRadius.circular(4),
                           ),
                           child: Text(
                             DateFormat('dd MMM').format(companyTasks.first.dueDate),
-                            style: GoogleFonts.poppins(fontSize: 10, fontWeight: FontWeight.bold, color: const Color(0xFF1E40AF)),
+                            style: GoogleFonts.poppins(fontSize: 9.5, fontWeight: FontWeight.bold, color: const Color(0xFF1E40AF)),
                           ),
                         ),
                       ],
@@ -983,20 +929,20 @@ class _ClientCompaniesTabState extends State<ClientCompaniesTab> {
                   ),
                 ] else if (isGrid) ...[
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
                     decoration: BoxDecoration(
                       color: const Color(0xFFF8FAFC),
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(8),
                       border: Border.all(color: const Color(0xFFE2E8F0)),
                     ),
                     child: Row(
                       children: [
-                        const Icon(Icons.calendar_today_outlined, size: 14, color: Color(0xFF94A3B8)),
-                        const SizedBox(width: 8),
+                        const Icon(Icons.calendar_today_outlined, size: 13, color: Color(0xFF94A3B8)),
+                        const SizedBox(width: 6),
                         Expanded(
                           child: Text(
-                            'No upcoming statutory dateline',
-                            style: GoogleFonts.poppins(fontSize: 11, color: const Color(0xFF64748B)),
+                            'No upcoming statutory deadline',
+                            style: GoogleFonts.poppins(fontSize: 10.5, color: const Color(0xFF64748B)),
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
@@ -1004,7 +950,7 @@ class _ClientCompaniesTabState extends State<ClientCompaniesTab> {
                     ),
                   ),
                 ],
-                const SizedBox(height: 12),
+                const SizedBox(height: 8),
 
                 // Action Buttons
                 Row(
@@ -1014,13 +960,13 @@ class _ClientCompaniesTabState extends State<ClientCompaniesTab> {
                         onPressed: () => _showSetDatelineBottomSheet(context, compName),
                         style: OutlinedButton.styleFrom(
                           side: BorderSide(color: Colors.grey.shade300),
-                          padding: const EdgeInsets.symmetric(vertical: 8),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                          padding: const EdgeInsets.symmetric(vertical: 6),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                         ),
-                        icon: const Icon(Icons.calendar_month_outlined, size: 14, color: Color(0xFF062AAE)),
+                        icon: const Icon(Icons.calendar_month_outlined, size: 13, color: Color(0xFF062AAE)),
                         label: Text(
-                          companyTasks.isNotEmpty ? '${companyTasks.length} Datelines' : 'Set Dateline',
-                          style: GoogleFonts.poppins(fontSize: 11, fontWeight: FontWeight.w600, color: Colors.black87),
+                          companyTasks.isNotEmpty ? '${companyTasks.length} Deadlines' : 'Set Deadline',
+                          style: GoogleFonts.poppins(fontSize: 10.5, fontWeight: FontWeight.w600, color: Colors.black87),
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
@@ -1040,13 +986,13 @@ class _ClientCompaniesTabState extends State<ClientCompaniesTab> {
                           backgroundColor: const Color(0xFF062AAE),
                           foregroundColor: Colors.white,
                           elevation: 0,
-                          padding: const EdgeInsets.symmetric(vertical: 8),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                          padding: const EdgeInsets.symmetric(vertical: 6),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                         ),
-                        icon: const Icon(Icons.folder_open_rounded, size: 14),
+                        icon: const Icon(Icons.folder_open_rounded, size: 13),
                         label: Text(
-                          compDocs.isNotEmpty ? '${compDocs.length} Documents' : 'Open Vault',
-                          style: GoogleFonts.poppins(fontSize: 11, fontWeight: FontWeight.w600),
+                          compDocs.isNotEmpty ? '${compDocs.length} Documents' : 'Open Folder',
+                          style: GoogleFonts.poppins(fontSize: 10.5, fontWeight: FontWeight.w600),
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
@@ -1059,6 +1005,103 @@ class _ClientCompaniesTabState extends State<ClientCompaniesTab> {
         ),
       ),
     );
-  }
 
+    return Container(
+      margin: isGrid ? EdgeInsets.zero : const EdgeInsets.only(bottom: 16),
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              SizedBox(
+                height: 24,
+                child: Row(
+                  children: [
+                    const SizedBox(width: 140),
+                    Expanded(
+                      child: Container(
+                        margin: const EdgeInsets.only(top: 4, right: 6),
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFF1F5F9),
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(6),
+                            topRight: Radius.circular(8),
+                          ),
+                          border: Border(
+                            top: BorderSide(color: Colors.grey.shade300, width: 1),
+                            right: BorderSide(color: Colors.grey.shade300, width: 1),
+                            left: BorderSide(color: Colors.grey.shade300, width: 1),
+                          ),
+                        ),
+                        alignment: Alignment.centerRight,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.article_outlined, size: 11, color: Colors.grey.shade500),
+                            const SizedBox(width: 4),
+                            Text(
+                              compDocs.isNotEmpty ? '${compDocs.length} Documents' : 'Empty Folder',
+                              style: GoogleFonts.poppins(
+                                fontSize: 9,
+                                fontWeight: FontWeight.w600,
+                                color: const Color(0xFF475569),
+                                letterSpacing: 0.3,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              isGrid ? Expanded(child: folderCard) : folderCard,
+            ],
+          ),
+          Positioned(
+            top: 0,
+            left: 0,
+            child: Container(
+              height: 25.5,
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+              decoration: BoxDecoration(
+                color: tabBg,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(9),
+                  topRight: Radius.circular(13),
+                ),
+                border: Border(
+                  top: BorderSide(color: tabBorderColor, width: 1.2),
+                  left: BorderSide(color: tabBorderColor, width: 1.2),
+                  right: BorderSide(color: tabBorderColor, width: 1.2),
+                ),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    tabIcon,
+                    size: 13,
+                    color: tabTextColor,
+                  ),
+                  const SizedBox(width: 6),
+                  Text(
+                    tabText,
+                    style: GoogleFonts.poppins(
+                      fontSize: 9.5,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 0.5,
+                      color: tabTextColor,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }

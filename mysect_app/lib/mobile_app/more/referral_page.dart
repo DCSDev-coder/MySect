@@ -43,17 +43,17 @@ class _ReferralPageState extends State<ReferralPage> {
       _FaqItem(
         question: 'When and how do I receive my RM200 reward?',
         answer:
-            'Once your referred company completes their secretarial onboarding, appoints a licensed company secretary, or finishes incorporation on MySect, your reward is verified. You can choose direct DuitNow bank transfer (processed within 7 business days) or apply it as credit towards your annual secretarial retainers.',
+            'Once your referred company completes their secretarial onboarding, appoints a licensed company secretary, or finishes incorporation on MySect, your reward is verified. You can choose direct DuitNow bank transfer (processed within 7 business days) or apply it as credit towards your annual secretarial plan.',
       ),
       _FaqItem(
         question: 'What benefit does my referred friend receive?',
         answer:
-            'Your referred contact receives an immediate RM100 discount applied automatically towards their new company incorporation package or their first annual corporate secretarial retainer.',
+            'Your referred contact receives an immediate RM100 discount applied automatically towards their new company incorporation package or their first annual corporate secretarial plan.',
       ),
       _FaqItem(
         question: 'Can I refer an existing Sdn Bhd that already has a secretary?',
         answer:
-            'Yes! MySect makes transferring company secretaries seamless under Section 241 of the Companies Act 2016. When an existing company transfers their secretarial retainer to MySect, you earn the same RM200 reward upon transfer completion.',
+            'Yes! MySect makes transferring company secretaries seamless under Section 241 of the Companies Act 2016. When an existing company transfers their company secretarial service to MySect, you earn the same RM200 reward upon transfer completion.',
       ),
       _FaqItem(
         question: 'Is there a limit to how many companies I can refer?',
@@ -266,7 +266,7 @@ class _ReferralPageState extends State<ReferralPage> {
                                     ),
                                   ),
                                   Text(
-                                    'On incorporation or retainer',
+                                    'On incorporation or annual plan',
                                     style: GoogleFonts.poppins(
                                       fontSize: 11,
                                       color: const Color(0xFF1D4ED8),
@@ -488,7 +488,7 @@ class _ReferralPageState extends State<ReferralPage> {
                             stepNumber: '2',
                             title: 'Friend Signs Up & Connects',
                             description:
-                                'Your contact registers on MySect, incorporates their Sdn Bhd or transfers their existing secretarial retainer.',
+                                'Your contact registers on MySect, incorporates their Sdn Bhd or transfers their existing company secretarial service.',
                             icon: Icons.domain_verification_rounded,
                             iconColor: const Color(0xFF7C3AED),
                             bgColor: const Color(0xFFF5F3FF),

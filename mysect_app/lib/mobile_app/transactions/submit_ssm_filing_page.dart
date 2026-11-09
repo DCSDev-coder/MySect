@@ -240,7 +240,7 @@ class _SubmitSsmFilingPageState extends State<SubmitSsmFilingPage> {
   Future<void> _submitFiling() async {
     final activeComp = CompanyService.instance.selectedCompany;
     if (activeComp != null && activeComp.isSubscriptionExpired) {
-      _showRetainerRenewalSheet(context, activeComp);
+      _showPlanRenewalSheet(context, activeComp);
       return;
     }
 
@@ -483,7 +483,7 @@ class _SubmitSsmFilingPageState extends State<SubmitSsmFilingPage> {
   }
 
 
-  void _showRetainerRenewalSheet(BuildContext context, Company comp) {
+  void _showPlanRenewalSheet(BuildContext context, Company comp) {
     int selectedMonths = 1;
     double monthlyFee = 50.0;
     String paymentMethod = 'FPX Online Banking';
@@ -538,7 +538,7 @@ class _SubmitSsmFilingPageState extends State<SubmitSsmFilingPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Renew Secretarial Retainer',
+                              'Renew Secretarial Plan',
                               style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.bold, color: const Color(0xFF0F172A)),
                             ),
                             Text(
@@ -565,7 +565,7 @@ class _SubmitSsmFilingPageState extends State<SubmitSsmFilingPage> {
                         const SizedBox(width: 8),
                         Expanded(
                           child: Text(
-                            'Licensed secretary (${comp.assignedSecretary}) cannot handle company filings while retainer is expired.',
+                            'Licensed secretary (${comp.assignedSecretary}) cannot handle company filings while your plan is expired.',
                             style: GoogleFonts.poppins(fontSize: 11, color: const Color(0xFF991B1B), height: 1.3),
                           ),
                         ),
@@ -679,7 +679,7 @@ class _SubmitSsmFilingPageState extends State<SubmitSsmFilingPage> {
                                 const SizedBox(width: 8),
                                 Expanded(
                                   child: Text(
-                                    'Monthly retainer renewed! Secretarial handling resumed for ${comp.name}.',
+                                    'Secretarial plan renewed! Secretarial handling resumed for ${comp.name}.',
                                     style: GoogleFonts.poppins(fontSize: 12),
                                   ),
                                 ),
@@ -1457,7 +1457,7 @@ class _SubmitSsmFilingPageState extends State<SubmitSsmFilingPage> {
                                   ),
                                   const SizedBox(width: 8),
                                   Text(
-                                    'RM 0.00 (Retainer)',
+                                    'RM 0.00 (Included in Plan)',
                                     style: GoogleFonts.poppins(
                                       fontSize: 11,
                                       color: const Color(0xFF059669),

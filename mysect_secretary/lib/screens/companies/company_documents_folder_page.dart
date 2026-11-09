@@ -336,7 +336,7 @@ class _CompanyDocumentsFolderPageState
                                       const Icon(Icons.cloud_done_rounded, size: 12, color: Color(0xFF64748B)),
                                       const SizedBox(width: 4),
                                       Text(
-                                        'TM Cloud Encrypted Repository',
+                                        'Secure Encrypted Repository',
                                         style: GoogleFonts.poppins(
                                           fontSize: 9.5,
                                           fontWeight: FontWeight.w500,
@@ -375,8 +375,8 @@ class _CompanyDocumentsFolderPageState
                                       const SizedBox(width: 4),
                                       Text(
                                         billingCo.isPaidForMonth
-                                            ? 'May Retainer: Paid (RM 50)'
-                                            : 'May Retainer: RM 50 Due',
+                                            ? 'May Plan: Paid (RM 50)'
+                                            : 'May Plan: RM 50 Due',
                                         style: GoogleFonts.poppins(
                                           fontSize: 9.5,
                                           fontWeight: FontWeight.bold,
@@ -562,6 +562,7 @@ class _CompanyDocumentsFolderPageState
                         return Padding(
                           padding: const EdgeInsets.only(right: 8),
                           child: ChoiceChip(
+                            showCheckmark: false,
                             label: Text(cat),
                             selected: isSelected,
                             onSelected: (selected) {
@@ -611,7 +612,7 @@ class _CompanyDocumentsFolderPageState
                     const SizedBox(width: 8),
                     Flexible(
                       child: Text(
-                        'TM Cloud Secure Vault',
+                        'Secure Document Vault',
                         style: GoogleFonts.poppins(
                           fontSize: 10.5,
                           color: const Color(0xFF64748B),
@@ -679,7 +680,20 @@ class _CompanyDocumentsFolderPageState
                     ),
                   )
                 else
-                  ...filteredDocs.map((doc) => _buildDocumentCard(context, doc)),
+                  GridView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                      maxCrossAxisExtent: 480,
+                      mainAxisExtent: 104,
+                      mainAxisSpacing: 12,
+                      crossAxisSpacing: 12,
+                    ),
+                    itemCount: filteredDocs.length,
+                    itemBuilder: (context, index) {
+                      return _buildDocumentCard(context, filteredDocs[index]);
+                    },
+                  ),
 
                 const SizedBox(height: 24),
               ],
@@ -768,15 +782,14 @@ class _CompanyDocumentsFolderPageState
     final statusText = _getStatusText(doc.status);
 
     return Container(
-      margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(14),
         border: Border.all(color: const Color(0xFFE2E8F0)),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.02),
-            blurRadius: 8,
+            blurRadius: 6,
             offset: const Offset(0, 2),
           ),
         ],
@@ -792,124 +805,89 @@ class _CompanyDocumentsFolderPageState
               ),
             );
           },
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(14),
           child: Padding(
-            padding: const EdgeInsets.all(14),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // PDF Icon
-                    Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFFEF2F2),
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(color: const Color(0xFFFECACA)),
-                      ),
-                      child: const Center(
-                        child: Icon(
-                          Icons.picture_as_pdf_rounded,
-                          color: Color(0xFFDC2626),
-                          size: 20,
-                        ),
-                      ),
+                // PDF Icon
+                Container(
+                  width: 44,
+                  height: 44,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFFEF2F2),
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: const Color(0xFFFECACA)),
+                  ),
+                  child: const Center(
+                    child: Icon(
+                      Icons.picture_as_pdf_rounded,
+                      color: Color(0xFFDC2626),
+                      size: 22,
                     ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                  ),
+                ),
+                const SizedBox(width: 12),
+
+                // Document Metadata (Wider appropriate size for folder name)
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        doc.title,
+                        style: GoogleFonts.poppins(
+                          fontSize: 12.5,
+                          fontWeight: FontWeight.bold,
+                          color: const Color(0xFF0F172A),
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 4),
+                      Row(
                         children: [
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  doc.title,
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.bold,
-                                    color: const Color(0xFF0F172A),
-                                  ),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFEFF6FF),
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                            child: Text(
+                              doc.category,
+                              style: GoogleFonts.poppins(
+                                fontSize: 9.5,
+                                fontWeight: FontWeight.w600,
+                                color: const Color(0xFF1D4ED8),
                               ),
-                              const SizedBox(width: 6),
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 7,
-                                  vertical: 2.5,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: statusBg,
-                                  borderRadius: BorderRadius.circular(6),
-                                ),
-                                child: Text(
-                                  statusText,
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 9.5,
-                                    fontWeight: FontWeight.bold,
-                                    color: statusColor,
-                                  ),
-                                ),
-                              ),
-                            ],
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
-                          const SizedBox(height: 5),
-                          Wrap(
-                            spacing: 6,
-                            runSpacing: 4,
-                            crossAxisAlignment: WrapCrossAlignment.center,
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 6,
-                                  vertical: 2,
+                          if (doc.linkedFilingRef.isNotEmpty) ...[
+                            const SizedBox(width: 6),
+                            Flexible(
+                              child: Text(
+                                doc.linkedFilingRef,
+                                style: GoogleFonts.poppins(
+                                  fontSize: 9.5,
+                                  color: const Color(0xFF64748B),
                                 ),
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFFEFF6FF),
-                                  borderRadius: BorderRadius.circular(6),
-                                ),
-                                child: Text(
-                                  doc.category,
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 9.5,
-                                    fontWeight: FontWeight.w600,
-                                    color: const Color(0xFF1D4ED8),
-                                  ),
-                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                               ),
-                              if (doc.linkedFilingRef.isNotEmpty)
-                                Text(
-                                  doc.linkedFilingRef,
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 10,
-                                    color: const Color(0xFF64748B),
-                                  ),
-                                ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ],
                       ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 10),
-                const Divider(color: Color(0xFFF1F5F9), height: 1),
-                const SizedBox(height: 8),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: Row(
+                      const SizedBox(height: 4),
+                      Row(
                         children: [
                           const Icon(
                             Icons.person_outline_rounded,
-                            size: 13,
+                            size: 11,
                             color: Color(0xFF94A3B8),
                           ),
                           const SizedBox(width: 4),
@@ -917,7 +895,7 @@ class _CompanyDocumentsFolderPageState
                             child: Text(
                               '${doc.uploadedBy} • ${doc.fileSize}',
                               style: GoogleFonts.poppins(
-                                fontSize: 10.5,
+                                fontSize: 9.5,
                                 color: const Color(0xFF64748B),
                               ),
                               maxLines: 1,
@@ -926,22 +904,26 @@ class _CompanyDocumentsFolderPageState
                           ),
                         ],
                       ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 10),
+
+                // Review Status Badge
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: statusBg,
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  child: Text(
+                    statusText,
+                    style: GoogleFonts.poppins(
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                      color: statusColor,
                     ),
-                    const SizedBox(width: 8),
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          'Review →',
-                          style: GoogleFonts.poppins(
-                            fontSize: 11,
-                            fontWeight: FontWeight.bold,
-                            color: const Color(0xFF062AAE),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
+                  ),
                 ),
               ],
             ),

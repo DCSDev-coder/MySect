@@ -227,7 +227,83 @@ class _MainNavigationShellState extends State<MainNavigationShell> {
               );
             }
 
-            // Mobile Layout: Kept as before (AppTopHeader + CustomBottomNavBar)
+            // Mobile Layout: Screen title at the top header with badges
+            Widget? headerBadge;
+            String? headerTitle;
+            String? headerSubtitle;
+
+            if (_currentIndex == 1) {
+              headerTitle = 'Review Queue';
+              headerSubtitle = 'Awaiting licensed endorsement';
+              final pendingCount = service.pendingCount;
+              if (pendingCount > 0) {
+                headerBadge = Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFFFFBEB),
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: const Color(0xFFFDE68A)),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        width: 6,
+                        height: 6,
+                        decoration: const BoxDecoration(
+                          color: Color(0xFFD97706),
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        '$pendingCount Pending',
+                        style: GoogleFonts.poppins(
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                          color: const Color(0xFF92400E),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }
+            } else if (_currentIndex == 2) {
+              headerTitle = 'Client Companies';
+              headerSubtitle = 'Active corporate portfolios';
+              final totalCount = service.clientCompanies.length;
+              headerBadge = Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFEFF6FF),
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: const Color(0xFFBFDBFE)),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(
+                      Icons.shield_outlined,
+                      size: 11,
+                      color: Color(0xFF062AAE),
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      '$totalCount Portfolios',
+                      style: GoogleFonts.poppins(
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                        color: const Color(0xFF062AAE),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            } else if (_currentIndex == 3) {
+              headerTitle = 'Secretary Profile';
+              headerSubtitle = 'Practitioner credentials & firm settings';
+            }
+
             return Scaffold(
               backgroundColor: Colors.white,
               body: SafeArea(
@@ -238,7 +314,11 @@ class _MainNavigationShellState extends State<MainNavigationShell> {
                     constraints: const BoxConstraints(maxWidth: 1024),
                     child: Column(
                       children: [
-                        const AppTopHeader(),
+                        AppTopHeader(
+                          title: headerTitle,
+                          subtitle: headerSubtitle,
+                          badge: headerBadge,
+                        ),
                         Expanded(
                           child: MediaQuery.removePadding(
                             context: context,

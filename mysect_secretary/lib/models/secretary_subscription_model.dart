@@ -210,8 +210,7 @@ class SubscriptionTier {
   final double annualPrice;
   final int companyLimit;
   final int staffSeats;
-  final int tmCloudStorageGB;
-  final String aiIntakeTokenLimit;
+  final int cloudStorageGB;
   final List<String> features;
   final bool isPopular;
 
@@ -224,8 +223,7 @@ class SubscriptionTier {
     required this.annualPrice,
     required this.companyLimit,
     required this.staffSeats,
-    required this.tmCloudStorageGB,
-    required this.aiIntakeTokenLimit,
+    required this.cloudStorageGB,
     required this.features,
     this.isPopular = false,
   });
@@ -241,15 +239,14 @@ class SubscriptionTier {
         annualPrice: 600.00,
         companyLimit: 9999,
         staffSeats: 999,
-        tmCloudStorageGB: 9999,
-        aiIntakeTokenLimit: 'Unlimited',
+        cloudStorageGB: 9999,
         features: [
           'Flat RM 50.00 / month per active SSM company',
           'Zero tiered lock-ins or company quotas',
-          'Unlimited TM Cloud secure encrypted storage',
+          'Unlimited secure encrypted storage',
           'Unlimited staff & licensed secretary user accounts',
           'Full SSM MBRS & Section 68 statutory filing tracking',
-          'AI-first client intake workflow & OCR processing',
+          'Full client document review & statutory processing',
           'Direct client sync via MySect Mobile App',
         ],
         isPopular: true,

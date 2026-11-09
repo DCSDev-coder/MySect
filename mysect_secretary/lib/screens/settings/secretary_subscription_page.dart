@@ -38,7 +38,7 @@ class _SecretarySubscriptionPageState extends State<SecretarySubscriptionPage> {
             const SizedBox(width: 10),
             Expanded(
               child: Text(
-                'Retainer Official Receipt',
+                'Official Billing Receipt',
                 style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.bold, color: const Color(0xFF0F172A)),
               ),
             ),
@@ -79,7 +79,7 @@ class _SecretarySubscriptionPageState extends State<SecretarySubscriptionPage> {
                 const Icon(Icons.verified_user_rounded, color: Color(0xFF059669), size: 14),
                 const SizedBox(width: 4),
                 Text(
-                  'SSM Licensed Secretary Retainer • Verified Settlement',
+                  'SSM Licensed Secretarial Plan • Verified Settlement',
                   style: GoogleFonts.poppins(fontSize: 10.5, color: const Color(0xFF059669), fontWeight: FontWeight.w500),
                 ),
               ],
@@ -597,7 +597,7 @@ class _SecretarySubscriptionPageState extends State<SecretarySubscriptionPage> {
                 children: [
                   Expanded(
                     child: Text(
-                      'Flat RM 50.00 / month per active SSM company • Zero tiers, unlimited TM Cloud vault & statutory MBRS filing tracking.',
+                      'Flat RM 50.00 / month per active SSM company • Zero tiers, unlimited cloud vault & statutory MBRS filing tracking.',
                       style: GoogleFonts.poppins(
                         fontSize: 12.5,
                         fontWeight: FontWeight.w500,
@@ -818,7 +818,7 @@ class _SecretarySubscriptionPageState extends State<SecretarySubscriptionPage> {
                           const SizedBox(width: 8),
                           Expanded(
                             child: Text(
-                              'May 2026 Retainer Collection: RM ${service.collectedMonthlyTotal.toStringAsFixed(2)} / RM ${totalMonthly.toStringAsFixed(2)} (${service.paidCompaniesCount} of ${service.billingCompanies.length} Companies Settled)',
+                              'May 2026 Plan Collection: RM ${service.collectedMonthlyTotal.toStringAsFixed(2)} / RM ${totalMonthly.toStringAsFixed(2)} (${service.paidCompaniesCount} of ${service.billingCompanies.length} Companies Settled)',
                               style: GoogleFonts.poppins(
                                 fontSize: 11.5,
                                 fontWeight: FontWeight.w600,
@@ -870,7 +870,7 @@ class _SecretarySubscriptionPageState extends State<SecretarySubscriptionPage> {
                       icon: Icons.cloud_done_rounded,
                       iconColor: const Color(0xFF2563EB),
                       iconBg: const Color(0xFFEFF6FF),
-                      title: 'Unlimited TM Cloud Vault',
+                      title: 'Unlimited Secure Cloud Vault',
                       desc:
                           'Zero storage tier gates. Every onboarded company receives complete encrypted repository space for all statutory registers & board files.',
                     ),
@@ -886,7 +886,7 @@ class _SecretarySubscriptionPageState extends State<SecretarySubscriptionPage> {
                       icon: Icons.auto_awesome_rounded,
                       iconColor: const Color(0xFF7C3AED),
                       iconBg: const Color(0xFFF5F3FF),
-                      title: 'AI Intake & MBRS Filing Engine',
+                      title: 'Digital Review & MBRS Filing Engine',
                       desc:
                           'Instant OCR categorization, resolution drafts, and automated Section 68 statutory annual return compliance monitoring.',
                     ),
@@ -981,7 +981,7 @@ class _SecretarySubscriptionPageState extends State<SecretarySubscriptionPage> {
                                   ],
                                 ),
                                 Text(
-                                  'Each entity billed at flat RM 50.00 / month • Retainer Total: RM ${totalMonthly.toStringAsFixed(2)} / mo',
+                                  'Each entity billed at flat RM 50.00 / month • Monthly Total: RM ${totalMonthly.toStringAsFixed(2)} / mo',
                                   style: GoogleFonts.poppins(
                                     fontSize: 11.5,
                                     color: const Color(0xFF64748B),
@@ -1035,7 +1035,7 @@ class _SecretarySubscriptionPageState extends State<SecretarySubscriptionPage> {
                       child: Row(
                         children: [
                           Text(
-                            'Filter Retainer:',
+                            'Filter Status:',
                             style: GoogleFonts.poppins(
                               fontSize: 11.5,
                               fontWeight: FontWeight.w600,
@@ -1158,7 +1158,7 @@ class _SecretarySubscriptionPageState extends State<SecretarySubscriptionPage> {
                           Expanded(
                             flex: 3,
                             child: Text(
-                              'MAY 2026 RETAINER STATUS',
+                              'MAY 2026 BILLING STATUS',
                               style: GoogleFonts.poppins(
                                 fontSize: 10.5,
                                 fontWeight: FontWeight.bold,
@@ -1396,7 +1396,7 @@ class _SecretarySubscriptionPageState extends State<SecretarySubscriptionPage> {
                                                   ScaffoldMessenger.of(context).showSnackBar(
                                                     SnackBar(
                                                       content: Text(
-                                                        'Settled May 2026 retainer for ${c.name} (RM 50.00 received)',
+                                                        'Settled May 2026 plan fee for ${c.name} (RM 50.00 received)',
                                                         style: GoogleFonts.poppins(fontSize: 12),
                                                       ),
                                                       backgroundColor: const Color(0xFF059669),
@@ -1810,7 +1810,7 @@ class _SecretarySubscriptionPageState extends State<SecretarySubscriptionPage> {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        _buildPillarChip('Unlimited TM Cloud Vault'),
+        _buildPillarChip('Unlimited Secure Cloud Vault'),
         const SizedBox(width: 6),
         _buildPillarChip('Unlimited Staff Seats'),
         const SizedBox(width: 6),

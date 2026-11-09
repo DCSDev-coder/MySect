@@ -314,7 +314,7 @@ class _AccountingPageState extends State<AccountingPage> {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        '${doc.fileSize} • TM Cloud Storage',
+                        '${doc.fileSize} • Cloud Storage',
                         style: GoogleFonts.poppins(fontSize: 12, color: Colors.grey[600]),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,

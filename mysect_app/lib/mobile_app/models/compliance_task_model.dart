@@ -59,7 +59,7 @@ class ComplianceTask {
       id: json['id'] ?? 'task-${DateTime.now().millisecondsSinceEpoch}',
       companyId: json['companyId'] ?? '',
       companyName: json['companyName'] ?? '',
-      title: json['title'] ?? 'Compliance Dateline',
+      title: json['title'] ?? 'Compliance Deadline',
       subtitle: json['subtitle'] ?? '',
       dueDate: json['dueDate'] != null
           ? DateTime.tryParse(json['dueDate'].toString()) ?? DateTime.now().add(const Duration(days: 14))

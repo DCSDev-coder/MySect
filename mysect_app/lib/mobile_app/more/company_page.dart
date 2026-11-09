@@ -369,9 +369,9 @@ class _CompanyPageState extends State<CompanyPage> {
                             Divider(color: Colors.grey.shade200, height: 1),
                             _buildQuickLinkItem(
                               icon: Icons.verified_user_outlined,
-                              title: 'Secretarial Retainer & Plan',
+                              title: 'Secretarial Plan & Coverage',
                               subtitle: '${company.subscriptionPlan} • Expires ${company.formattedSubscriptionExpiry}${company.isSubscriptionExpired ? ' (EXPIRED)' : ''}',
-                              onTap: () => _showRetainerDetailsModal(context, company),
+                              onTap: () => _showPlanDetailsModal(context, company),
                             ),
                           ],
                         ),
@@ -543,7 +543,7 @@ class _CompanyPageState extends State<CompanyPage> {
   }
 
 
-  void _showRetainerDetailsModal(BuildContext context, Company comp) {
+  void _showPlanDetailsModal(BuildContext context, Company comp) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -589,7 +589,7 @@ class _CompanyPageState extends State<CompanyPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Secretarial Retainer & Billing',
+                          'Secretarial Plan & Coverage',
                           style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.bold, color: const Color(0xFF0F172A)),
                         ),
                         Text(
@@ -673,7 +673,7 @@ class _CompanyPageState extends State<CompanyPage> {
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
-                        'Important Notice: Appointed secretaries only handle statutory filings, annual returns, and document reviews for companies with an active monthly retainer. Once expired, services are suspended.',
+                        'Important Notice: Appointed secretaries only handle statutory filings, annual returns, and document reviews for companies with an active secretarial plan. If expired, services are paused until renewed.',
                         style: GoogleFonts.poppins(fontSize: 11, color: const Color(0xFF92400E), height: 1.35),
                       ),
                     ),
@@ -695,13 +695,13 @@ class _CompanyPageState extends State<CompanyPage> {
                     CompanyService.instance.renewSubscription(comp.id, additionalMonths: 1);
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Text('Monthly retainer renewed for ${comp.name}!'),
+                        content: Text('Secretarial plan renewed for ${comp.name}!'),
                         backgroundColor: const Color(0xFF059669),
                       ),
                     );
                   },
                   icon: const Icon(Icons.payment_rounded, size: 18),
-                  label: Text('Pay Monthly Retainer (RM 50.00)', style: GoogleFonts.poppins(fontSize: 13, fontWeight: FontWeight.bold)),
+                  label: Text('Renew Secretarial Plan (RM 50.00)', style: GoogleFonts.poppins(fontSize: 13, fontWeight: FontWeight.bold)),
                 ),
               ),
             ],
