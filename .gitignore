@@ -20,3 +20,25 @@ admin_cpanel.zip
 mobile_app/
 secretary_app/
 admin_website/
+
+# Internal documentation and infrastructure specifications
+# Keep the readable Markdown documentation in GitHub, but keep private
+# infrastructure sizing, diagrams, and exported office/PDF copies local.
+Documentation/*.pdf
+Documentation/*.xlsx
+Documentation/**/*.pdf
+Documentation/**/*.xlsx
+Documentation/private/
+Documentation/internal/
+
+# Generated delivery folders
+output/
+outputs/
+
+# Local secrets and private credentials
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
