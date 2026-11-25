@@ -3,7 +3,7 @@
 **Document Reference:** SEC-REQ-2026-V2  
 **Classification:** Confidential — Internal & Stakeholder Review  
 **Effective Date:** 9 November 2026  
-**Target Delivery Window:** Approximately 12 weeks, subject to scope and resource approval  
+**Target Delivery Window:** 1 December 2026 to 31 March 2027, approximately four months, subject to scope and resource approval  
 **Stakeholder Audience:** Project Owner, Executive Board, Lead Architect, Frontend Engineering Team, Backend Engineering Team, Legal & Compliance Advisors, and Partner Secretarial Firms  
 
 ---
@@ -23,7 +23,7 @@ This document is a planning draft, not evidence that the described backend or co
 
 - A private storage adapter, potentially backed by self-hosted MinIO, with a replaceable interface for a future provider. The storage product, infrastructure and migration approach have not been approved.
 - A shared backend with company-level access controls, audit records and a replaceable AI integration. AI model, hosting location, provider, hardware and cost are undecided. Cloud AI would be a separate decision from TM Cloud storage.
-- A focused first release covering sign-in, company access, request intake, secretary queue, documents and essential administration. The 12-week schedule is a planning target, not a delivery commitment.
+- A focused first release covering sign-in, company access, request intake, secretary queue, documents and essential administration. The four-month schedule starting 1 December 2026 is a planning target, not a delivery commitment.
 - Manual identity verification initially; commercial e-KYC is optional and subject to business and legal review. The form of any document approval or signature also needs review.
 
 **Needs approval or verification**
@@ -404,29 +404,20 @@ CREATE TABLE platform_audit_logs (
 
 ---
 
-## 8. Twelve-Week Implementation Roadmap (Gantt Schedule)
+## 8. Four-Month Implementation Roadmap
 
-This is an indicative sequence, dependent on approved scope, staffing and technical decisions; the dates and features are not commitments. Signing and named AI providers remain undecided.
+Planned start: **1 December 2026**. Indicative build window: **1 December 2026 to 31 March 2027**. The schedule depends on approved scope, staffing, client feedback and infrastructure readiness; release requires successful testing and approval.
 
-```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                       12-WEEK PRODUCTION MVP SCHEDULE                       │
-├───────────────────────────────────┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┤
-│ Workstream Activity               │W01│W02│W03│W04│W05│W06│W07│W08│W09│W10│W11│W12│
-├───────────────────────────────────┼───┼───┼───┼───┼───┼───┼───┼───┼───┼───┼───┼───┤
-│ Scope Freeze & Stakeholder Signoff│ ■ │ ■ │   │   │   │   │   │   │   │   │   │   │
-│ DB Migration & Core Backend Setup │   │ ■ │ ■ │ ■ │   │   │   │   │   │   │   │   │
-│ Docker / Windows Server Infra     │   │   │ ■ │ ■ │   │   │   │   │   │   │   │   │
-│ Multi-Tenant Auth & RBAC Engine   │   │   │ ■ │ ■ │ ■ │   │   │   │   │   │   │   │
-│ AI Gateway (Ollama/Gemini Adapter)│   │   │   │ ■ │ ■ │ ■ │   │   │   │   │   │   │
-│ Customer App Backend Integration  │   │   │   │   │ ■ │ ■ │ ■ │   │   │   │   │   │
-│ Secretary Workspace Queue & Review│   │   │   │   │   │ ■ │ ■ │ ■ │   │   │   │   │
-│ Document Storage Adapter & Signing│   │   │   │   │   │   │ ■ │ ■ │ ■ │   │   │   │
-│ Admin Portal Real API Integration │   │   │   │   │   │   │   │ ■ │ ■ │ ■ │   │   │
-│ End-to-End Pilot Testing & UAT    │   │   │   │   │   │   │   │   │   │ ■ │ ■ │
-│ Security Hardening & Go-Live Prep │   │   │   │   │   │   │   │   │   │   │ ■ │
-└───────────────────────────────────┴───┴───┴───┴───┴───┴───┴───┴───┴───┴───┴───┴───┘
-```
+| Workstream | Dec 2026 | Jan 2027 | Feb 2027 | Mar 2027 |
+|---|:---:|:---:|:---:|:---:|
+| Client discovery and scope approval | X | X | | |
+| Backend, database and server foundation | X | X | | |
+| Authentication and company permissions | X | X | X | |
+| Customer requests and secretary queue | | X | X | |
+| Private documents and admin integration | | X | X | |
+| AI intake and handover, subject to approval | | X | X | |
+| Integration, security and recovery testing | | | X | X |
+| Client review, pilot testing and release preparation | | | | X |
 
 ---
 
