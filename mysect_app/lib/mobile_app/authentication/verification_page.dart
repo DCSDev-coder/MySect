@@ -169,10 +169,13 @@ class _VerificationPageState extends State<VerificationPage> {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                     content: Text(
-                                      widget.email != null && widget.email!.isNotEmpty
+                                      widget.email != null &&
+                                              widget.email!.isNotEmpty
                                           ? 'A new 6-digit verification code has been sent to ${widget.email}.'
                                           : 'A new 6-digit verification code has been sent to your email.',
-                                      style: GoogleFonts.poppins(color: Colors.white),
+                                      style: GoogleFonts.poppins(
+                                        color: Colors.white,
+                                      ),
                                     ),
                                     backgroundColor: const Color(0xFF062AAE),
                                     duration: const Duration(seconds: 2),
