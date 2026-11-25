@@ -418,7 +418,8 @@ def build_pdf():
     story.append(Paragraph(
         "Storing binary statutory PDFs (e.g. Form 9, Section 14, Board Resolutions, Director NRIC scans) directly in MySQL causes severe database bloat and slow backups. "
         "MySect uses an abstracted <b>Storage Adapter Pattern</b>: MySQL stores only metadata (SHA-256 hash, byte size, MIME type, upload timestamp, and opaque UUID). "
-        "The underlying storage provider is pluggable: Local Private Encrypted Disk for Staging/Pilot, migrating seamlessly to <b>TM Cloud Object Storage / MinIO (S3-compatible)</b> for production. "
+        "The underlying storage provider is a self-hosted S3-compatible object store: <b>Self-Hosted MinIO / Local Encrypted Volumes</b> on DCS's Windows Server. "
+        "This eliminates external vendor lock-in, eliminates recurring cloud bills, and guarantees 100% on-premise Malaysian data sovereignty under the PDPA. "
         "Files are accessed exclusively via <b>5-minute time-limited pre-signed URLs</b>.",
         style_body
     ))
@@ -606,7 +607,7 @@ def build_pdf():
                       "• AI-Guided Statutory Intake Wizard & Triage<br/>"
                       "• Section 68 Annual Return Lodgement Tracking<br/>"
                       "• In-App Document Approvals & Audit Signatures<br/>"
-                      "• Ephemeral Storage Adapter (Local Disk / TM Cloud S3)<br/>"
+                      "• Ephemeral Storage Adapter (Self-Hosted MinIO S3)<br/>"
                       "• Secretary Desktop Queue & Dossier Management<br/>"
                       "• Admin Firm Verification, Plan Assignment & Audit Logs", style_table_cell),
             Paragraph("• Multi-currency Commercial Invoicing & Payouts<br/>"

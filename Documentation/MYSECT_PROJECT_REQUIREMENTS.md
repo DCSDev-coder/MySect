@@ -43,8 +43,8 @@ The ecosystem comprises three dedicated client interfaces powered by a unified, 
     ┌────────────────────┐ ┌────────────────────┐ ┌────────────────────┐
     │  Relational DB     │ │  AI Gateway Engine │ │  Storage Adapter   │
     │ (mysect_database)  │ │ (Local LLM / Cloud)│ │  (mysect_storage)  │
-    │   MySQL 8.4 LTS    │ │ DeepSeek/Gemma/Qwen│ │ S3 / TM Cloud /    │
-    │ Transaction Ledger │ │  Ollama & Gemini   │ │ Local Encrypted    │
+    │   MySQL 8.4 LTS    │ │ DeepSeek/Gemma/Qwen│ │ Self-Hosted MinIO  │
+    │ Transaction Ledger │ │  Ollama & Gemini   │ │ (S3-Compatible)    │
     └────────────────────┘ └────────────────────┘ └────────────────────┘
 ```
 
@@ -76,9 +76,10 @@ All frontends connect strictly to a central versioned API (`/api/v1/*`). Direct 
 ### 1.4 Private Document Storage Adapter (`mysect_storage`)
 Corporate statutory files (Form 9/13, Form 24/49, Section 14, Board Resolutions, Director NRIC/Passport copies) carry severe legal and privacy liabilities under the Malaysian Personal Data Protection Act 2010 (PDPA).
 * **Zero Binary Ingestion in MySQL**: Storing binary large objects (BLOBs) in MySQL degrades query caching, bloats index tables, and increases backup latency. MySQL stores only file metadata: SHA-256 integrity hash, MIME type, payload byte size, uploading user ID, timestamp, and an opaque storage UUID.
-* **Storage Adapter Abstraction Layer**: The backend implements a pluggable `StorageProvider` interface:
-  * **Phase 1 (Staging & Early Pilot)**: Local secure volume storage with server-side AES-256 envelope encryption.
-  * **Phase 2 (Production Scale)**: S3-compatible private object store (e.g., TM Cloud Object Storage or self-hosted MinIO).
+* **100% Self-Hosted S3 Storage Architecture (MinIO)**: Following management review of commercial cloud quotations (which incur heavy 3-year lock-in and consulting markups), MySect deploys a **Self-Hosted, S3-Compatible Object Store (MinIO)** running containerized on DCS's Windows Server environment.
+  * **Zero External Cloud Costs**: Completely eliminates third-party cloud subscriptions, setup fees, and multi-year vendor lock-in.
+  * **Standard S3 REST API**: Operates with standard S3 protocols, allowing pluggable compatibility with external cloud providers in the future if required.
+  * **100% On-Premise Data Residency**: Files remain physically within DCS's secure data center in Malaysia, satisfying the strictest interpretation of PDPA Section 129.
 * **Time-Limited Ephemeral Pre-Signed URLs**: Clients never receive direct file system paths or public S3 URLs. Access is granted exclusively via cryptographically signed tokens with a 5-minute time-to-live (TTL).
 
 ### 1.5 Host & Deployment Architecture (Windows Server + Docker)
