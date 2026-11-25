@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../files/add_file_menu.dart';
 import '../models/ssm_filing_model.dart';
+import '../services/company_service.dart';
+import '../services/secretary_document_service.dart';
 import '../services/ssm_filing_service.dart';
 import '../widgets/app_top_header.dart';
 
@@ -861,11 +864,35 @@ class _SsmFilingDetailPageState extends State<SsmFilingDetailPage> {
     );
   }
 
-  void _attachFile() {
+  void _attachFile(SsmFiling filing) {
+    showAddMenu(
+      context,
+      onFilePicked: (fileName, sourceLabel) =>
+          _recordAttachedSubmissionFile(filing, fileName, sourceLabel),
+    );
+  }
+
+  void _recordAttachedSubmissionFile(SsmFiling filing, String fileName, String sourceLabel) {
+    final entry = '$fileName ($sourceLabel)';
+    SsmFilingService.instance.attachFilesToFiling(filing.id, [entry]);
+    final activeComp = CompanyService.instance.selectedCompany;
+    SecretaryDocumentService.instance.addClientDocument(
+      title: fileName,
+      category: filing.filingType,
+      fileSize: '1.2 MB',
+      companyId: activeComp?.id ?? 'comp-01',
+      companyName: filing.companyName,
+      companySsmNo: filing.companySsmNo,
+      uploadedBy: 'Adam Bin Hamzah',
+      uploadedByRole: 'Managing Director (Client)',
+      linkedFilingRef: filing.referenceNo,
+      notes: 'Attached via $sourceLabel to ${filing.referenceNo}.',
+    );
+    if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
-          'Document upload requested',
+          '$fileName attached to ${filing.referenceNo}',
           style: GoogleFonts.poppins(color: Colors.white),
         ),
         backgroundColor: const Color(0xFF062AAE),
@@ -1131,7 +1158,7 @@ class _SsmFilingDetailPageState extends State<SsmFilingDetailPage> {
                 ),
               ),
               InkWell(
-                onTap: _attachFile,
+                onTap: () => _attachFile(filing),
                 child: Row(
                   children: [
                     const Icon(Icons.add, size: 14, color: Color(0xFF062AAE)),

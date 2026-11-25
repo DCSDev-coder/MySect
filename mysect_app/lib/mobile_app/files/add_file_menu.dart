@@ -11,13 +11,14 @@ void showAddMenu(
   bool showFolderOption = false,
   bool showFileOptions = true,
   String? targetFolder,
+  void Function(String fileName, String sourceLabel)? onFilePicked,
 }) {
   showModalBottomSheet(
     context: context,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
     ),
-    builder: (BuildContext context) {
+    builder: (BuildContext sheetContext) {
       return Container(
         padding: const EdgeInsets.only(top: 12, bottom: 24, left: 24, right: 24),
         decoration: const BoxDecoration(
@@ -41,48 +42,32 @@ void showAddMenu(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _buildUploadOption(
-                  context,
-                  icon: Icons.camera_alt,
-                  label: 'Camera',
-                  onTap: () async {
-                    Navigator.pop(context);
-                    final ImagePicker picker = ImagePicker();
-                    final XFile? image = await picker.pickImage(source: ImageSource.camera);
-                    if (image != null && context.mounted) {
-                      final activeComp = CompanyService.instance.selectedCompany;
-                      final fileName = 'Scanned_Doc_${DateTime.now().millisecondsSinceEpoch % 10000}.jpg';
-                      SecretaryDocumentService.instance.addClientDocument(
-                        title: fileName,
-                        category: targetFolder != null ? '$targetFolder Document' : 'Scanned ID / Form',
-                        fileSize: '1.2 MB',
-                        companyId: activeComp?.id ?? 'comp-01',
-                        companyName: activeComp?.name ?? 'Data Center Specialists Sdn Bhd (M)',
-                        companySsmNo: activeComp?.ssmNo ?? '202101039281 (1429581-X)',
-                        uploadedBy: 'Adam Bin Hamzah',
-                        uploadedByRole: 'Managing Director (Client)',
-                        notes: 'Scanned via camera for secretary review.',
-                        folder: targetFolder,
-                      );
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('$fileName scanned & sent to Secretary for review', style: GoogleFonts.poppins()),
-                          backgroundColor: const Color(0xFF062AAE),
-                        ),
-                      );
-                    }
-                  },
-                ),
-                _buildUploadOption(
-                  context,
+                  sheetContext,
                   icon: Icons.image,
                   label: 'Library',
                   onTap: () async {
-                    Navigator.pop(context);
-                    final ImagePicker picker = ImagePicker();
-                    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
-                    if (image != null && context.mounted) {
+                    Navigator.pop(sheetContext);
+                    String? fileName;
+                    try {
+                      final ImagePicker picker = ImagePicker();
+                      final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+                      if (image != null) {
+                        fileName = image.name.isNotEmpty
+                            ? image.name
+                            : 'Image_${DateTime.now().millisecondsSinceEpoch % 10000}.jpg';
+                      }
+                    } catch (_) {
+                      if (onFilePicked != null) {
+                        fileName = 'Library_Image_${DateTime.now().millisecondsSinceEpoch % 10000}.jpg';
+                      }
+                    }
+                    if (fileName == null) return;
+                    if (onFilePicked != null) {
+                      onFilePicked(fileName, 'Photo Library');
+                      return;
+                    }
+                    if (context.mounted) {
                       final activeComp = CompanyService.instance.selectedCompany;
-                      final fileName = image.name.isNotEmpty ? image.name : 'Image_${DateTime.now().millisecondsSinceEpoch % 10000}.jpg';
                       SecretaryDocumentService.instance.addClientDocument(
                         title: fileName,
                         category: targetFolder != null ? '$targetFolder Document' : 'Supporting Document',
@@ -105,16 +90,31 @@ void showAddMenu(
                   },
                 ),
                 _buildUploadOption(
-                  context,
+                  sheetContext,
                   icon: Icons.insert_drive_file,
                   label: 'File',
                   onTap: () async {
-                    Navigator.pop(context);
-                    PlatformFile? result = await FilePicker.pickFile();
-                    if (result != null && context.mounted) {
+                    Navigator.pop(sheetContext);
+                    String? fileName;
+                    try {
+                      PlatformFile? result = await FilePicker.pickFile();
+                      if (result != null) {
+                        fileName = result.name;
+                      }
+                    } catch (_) {
+                      if (onFilePicked != null) {
+                        fileName = 'Uploaded_Document_${DateTime.now().millisecondsSinceEpoch % 10000}.pdf';
+                      }
+                    }
+                    if (fileName == null) return;
+                    if (onFilePicked != null) {
+                      onFilePicked(fileName, 'Uploaded Document');
+                      return;
+                    }
+                    if (context.mounted) {
                       final activeComp = CompanyService.instance.selectedCompany;
                       SecretaryDocumentService.instance.addClientDocument(
-                        title: result.name,
+                        title: fileName,
                         category: targetFolder != null ? '$targetFolder Document' : 'Corporate Document',
                         fileSize: '1.4 MB',
                         companyId: activeComp?.id ?? 'comp-01',
@@ -127,7 +127,7 @@ void showAddMenu(
                       );
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: Text('Uploaded ${result.name} - sent to Secretary for review', style: GoogleFonts.poppins()),
+                          content: Text('Uploaded $fileName - sent to Secretary for review', style: GoogleFonts.poppins()),
                           backgroundColor: const Color(0xFF062AAE),
                         ),
                       );
@@ -135,11 +135,16 @@ void showAddMenu(
                   },
                 ),
                 _buildUploadOption(
-                  context,
+                  sheetContext,
                   icon: Icons.document_scanner,
                   label: 'Scan',
                   onTap: () {
-                    Navigator.pop(context);
+                    Navigator.pop(sheetContext);
+                    if (onFilePicked != null) {
+                      final scannedName = 'Scanned_Doc_${DateTime.now().millisecondsSinceEpoch % 10000}.pdf';
+                      onFilePicked(scannedName, 'Scanned Document');
+                      return;
+                    }
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text('Opening scanner...', style: GoogleFonts.poppins()),
@@ -149,7 +154,7 @@ void showAddMenu(
                   },
                 ),
                 GestureDetector(
-                  onTap: () => Navigator.pop(context),
+                  onTap: () => Navigator.pop(sheetContext),
                   child: const Padding(
                     padding: EdgeInsets.only(top: 8.0),
                     child: Icon(

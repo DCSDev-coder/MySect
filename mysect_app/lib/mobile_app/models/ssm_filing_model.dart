@@ -27,13 +27,13 @@ extension SsmFilingStatusExtension on SsmFilingStatus {
   String get shortLabel {
     switch (this) {
       case SsmFilingStatus.waitingSecretaryReview:
-        return 'In Review';
+        return 'Pending';
       case SsmFilingStatus.secretaryReplied:
-        return 'Action Needed';
+        return 'Reviewed';
       case SsmFilingStatus.waitingClientApproval:
         return 'Approval';
       case SsmFilingStatus.lodgedToSsm:
-        return 'Submitted to SSM';
+        return 'Submitted';
       case SsmFilingStatus.completed:
         return 'Completed';
     }

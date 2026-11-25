@@ -96,7 +96,6 @@ class MorePage extends StatelessWidget {
                               iconBgColor: Colors.grey.shade200,
                               trailing: comp != null
                                   ? Container(
-                                      constraints: const BoxConstraints(maxWidth: 130),
                                       padding: const EdgeInsets.symmetric(
                                         horizontal: 8,
                                         vertical: 3,
@@ -403,8 +402,8 @@ class MorePage extends StatelessWidget {
               child: Center(child: Icon(iconData, color: iconColor, size: 22)),
             ),
             const SizedBox(width: 16),
-            Expanded(
-              child: Text(
+            if (trailing != null) ...[
+              Text(
                 title,
                 style: GoogleFonts.poppins(
                   fontSize: 16,
@@ -414,12 +413,27 @@ class MorePage extends StatelessWidget {
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
-            ),
-            if (trailing != null) ...[
-              const SizedBox(width: 8),
-              Flexible(child: trailing),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: trailing,
+                ),
+              ),
               const SizedBox(width: 6),
             ] else ...[
+              Expanded(
+                child: Text(
+                  title,
+                  style: GoogleFonts.poppins(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color: isDestructive ? Colors.red : Colors.black87,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
               const SizedBox(width: 6),
             ],
             Icon(

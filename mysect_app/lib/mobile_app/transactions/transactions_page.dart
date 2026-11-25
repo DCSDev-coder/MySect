@@ -146,25 +146,25 @@ class _TransactionsPageState extends State<TransactionsPage> {
                           child: Row(
                             children: [
                               _buildFilterChip(
-                                label: 'All Submissions (${allFilings.length})',
+                                label: 'All (${allFilings.length})',
                                 isSelected: _selectedStatusFilter == null,
                                 onTap: () => setState(() => _selectedStatusFilter = null),
                               ),
                               const SizedBox(width: 8),
                               _buildFilterChip(
-                                label: 'Waiting Secretary ($waitingSecCount)',
+                                label: 'Pending ($waitingSecCount)',
                                 isSelected: _selectedStatusFilter == SsmFilingStatus.waitingSecretaryReview,
                                 onTap: () => setState(() => _selectedStatusFilter = SsmFilingStatus.waitingSecretaryReview),
                               ),
                               const SizedBox(width: 8),
                               _buildFilterChip(
-                                label: 'Action Needed ($secRepliesNeededCount)',
+                                label: 'Reviewed ($secRepliesNeededCount)',
                                 isSelected: _selectedStatusFilter == SsmFilingStatus.secretaryReplied,
                                 onTap: () => setState(() => _selectedStatusFilter = SsmFilingStatus.secretaryReplied),
                               ),
                               const SizedBox(width: 8),
                               _buildFilterChip(
-                                label: 'Submitted to SSM ($lodgedCount)',
+                                label: 'Submitted ($lodgedCount)',
                                 isSelected: _selectedStatusFilter == SsmFilingStatus.lodgedToSsm,
                                 onTap: () => setState(() => _selectedStatusFilter = SsmFilingStatus.lodgedToSsm),
                               ),
@@ -231,13 +231,27 @@ class _TransactionsPageState extends State<TransactionsPage> {
                         else
                           ...filteredFilings.map((filing) => _buildFilingCard(filing)),
 
-                        const SizedBox(height: 24),
+                        const SizedBox(height: 80),
                       ],
                     ),
                   ),
                 ),
               ],
             ),
+          ),
+          floatingActionButton: FloatingActionButton(
+            heroTag: 'submissions_fab',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const SubmitSsmFilingPage(),
+                ),
+              );
+            },
+            backgroundColor: const Color(0xFF062AAE),
+            shape: const CircleBorder(),
+            child: const Icon(Icons.upload_file_rounded, color: Colors.white, size: 28),
           ),
         );
       },

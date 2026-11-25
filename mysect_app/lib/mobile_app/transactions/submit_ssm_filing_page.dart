@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import '../files/add_file_menu.dart';
 import '../services/ssm_filing_service.dart';
 import '../services/company_service.dart';
 import '../models/company_model.dart';
@@ -175,32 +174,16 @@ class _SubmitSsmFilingPageState extends State<SubmitSsmFilingPage> {
     });
   }
 
-  Future<void> _pickFileFromDevice() async {
-    try {
-      final file = await FilePicker.pickFile();
-      if (file != null) {
+  void _openUploadMenu() {
+    showAddMenu(
+      context,
+      onFilePicked: (fileName, sourceLabel) {
+        if (!mounted) return;
         setState(() {
-          _attachedFiles.add('${file.name} (Uploaded Document)');
+          _attachedFiles.add('$fileName ($sourceLabel)');
         });
-      }
-    } catch (e) {
-      // Fallback: add sample document if desktop/web picker fails or permissions denied
-      _addSampleFile('Scanned_Statutory_Declaration.pdf (1.2 MB)');
-    }
-  }
-
-  Future<void> _pickImage(ImageSource source) async {
-    try {
-      final picker = ImagePicker();
-      final photo = await picker.pickImage(source: source);
-      if (photo != null) {
-        setState(() {
-          _attachedFiles.add('${photo.name} (Image Upload)');
-        });
-      }
-    } catch (e) {
-      _addSampleFile('Camera_Scan_NRIC_Document.jpg (850 KB)');
-    }
+      },
+    );
   }
 
   void _addSampleFile(String fileName) {
@@ -1061,48 +1044,25 @@ class _SubmitSsmFilingPageState extends State<SubmitSsmFilingPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        children: [
-                          Expanded(
-                            child: OutlinedButton.icon(
-                              style: OutlinedButton.styleFrom(
-                                side: const BorderSide(color: Color(0xFF062AAE)),
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                                padding: const EdgeInsets.symmetric(vertical: 12),
-                              ),
-                              onPressed: _pickFileFromDevice,
-                              icon: const Icon(Icons.upload_file_rounded, color: Color(0xFF062AAE), size: 18),
-                              label: Text(
-                                'Upload File',
-                                style: GoogleFonts.poppins(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w600,
-                                  color: const Color(0xFF062AAE),
-                                ),
-                              ),
+                      SizedBox(
+                        width: double.infinity,
+                        child: OutlinedButton.icon(
+                          style: OutlinedButton.styleFrom(
+                            side: const BorderSide(color: Color(0xFF062AAE)),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                          ),
+                          onPressed: _openUploadMenu,
+                          icon: const Icon(Icons.upload_file_rounded, color: Color(0xFF062AAE), size: 18),
+                          label: Text(
+                            'Upload File',
+                            style: GoogleFonts.poppins(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              color: const Color(0xFF062AAE),
                             ),
                           ),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: OutlinedButton.icon(
-                              style: OutlinedButton.styleFrom(
-                                side: BorderSide(color: Colors.grey.shade400),
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                                padding: const EdgeInsets.symmetric(vertical: 12),
-                              ),
-                              onPressed: () => _pickImage(ImageSource.camera),
-                              icon: Icon(Icons.camera_alt_outlined, color: Colors.grey.shade700, size: 18),
-                              label: Text(
-                                'Scan / Photo',
-                                style: GoogleFonts.poppins(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.grey.shade800,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
                       const SizedBox(height: 12),
 

@@ -134,7 +134,7 @@ class CustomBottomNavBar extends StatelessWidget {
                     3,
                     Icons.chat_bubble_outline,
                     Icons.chat_bubble,
-                    'Chat',
+                    'Chats',
                   ),
                   _buildNavItem(4, Icons.more_horiz, Icons.more_horiz, 'More'),
                 ],

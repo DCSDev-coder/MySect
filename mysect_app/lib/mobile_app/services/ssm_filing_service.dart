@@ -473,6 +473,26 @@ class SsmFilingService extends ChangeNotifier {
     notifyListeners();
   }
 
+  // Client attaches additional documents to an existing filing
+  void attachFilesToFiling(String filingId, List<String> files) {
+    if (files.isEmpty) return;
+    final filing = _filings.firstWhere((f) => f.id == filingId);
+    for (final file in files) {
+      if (!filing.attachedFiles.contains(file)) {
+        filing.attachedFiles.add(file);
+      }
+    }
+    filing.timeline.add(
+      SsmTimelineStep(
+        title: 'Client Uploaded Document${files.length > 1 ? 's' : ''}',
+        description: files.join(', '),
+        timestamp: 'Just now',
+        isCompleted: true,
+      ),
+    );
+    notifyListeners();
+  }
+
   // Director digitally approves and signs the statutory filing draft
   void approveAndSignOffAsDirector(String filingId, {String? signatureNote}) {
     final filing = _filings.firstWhere((f) => f.id == filingId);

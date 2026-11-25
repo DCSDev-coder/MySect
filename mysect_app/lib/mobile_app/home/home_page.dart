@@ -431,6 +431,15 @@ class _HomePageState extends State<HomePage> {
       iconColor = const Color(0xFF059669);
     }
 
+    final String infoTitle = isExpired
+        ? 'Secretarial Services Suspended'
+        : (isExpiringSoon ? 'Secretarial Plan Expiring Soon' : 'Monthly Secretarial Plan');
+    final String infoMessage = isExpired
+        ? 'Your monthly plan expired on ${comp.formattedSubscriptionExpiry}. Secretary Lim Mei Ling cannot handle filings, review documents, or lodge statutory returns for ${comp.name} until renewed.'
+        : (isExpiringSoon
+            ? 'Your monthly secretarial plan for ${comp.name} expires in $days days (${comp.formattedSubscriptionExpiry}). Please renew to keep statutory filings and secretarial coverage active.'
+            : 'Your monthly secretarial plan for ${comp.name} is active until ${comp.formattedSubscriptionExpiry}. Secretarial compliance and statutory reviews are actively covered.');
+
     return Container(
       decoration: BoxDecoration(
         color: bgColor,
@@ -444,383 +453,197 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(14),
-            child: Column(
+      child: Padding(
+        padding: const EdgeInsets.all(14),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: isExpired
-                            ? const Color(0xFFFEE2E2)
-                            : (isExpiringSoon ? const Color(0xFFFEF3C7) : const Color(0xFFEFF6FF)),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Icon(icon, color: iconColor, size: 20),
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Monthly Secretarial Plan',
-                            style: GoogleFonts.poppins(
-                              fontSize: 12.5,
-                              fontWeight: FontWeight.bold,
-                              color: const Color(0xFF0F172A),
-                              height: 1.25,
-                            ),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          const SizedBox(height: 3),
-                          Text(
-                            'Valid until: ${comp.formattedSubscriptionExpiry}',
-                            style: GoogleFonts.poppins(
-                              fontSize: 11,
-                              fontWeight: FontWeight.w600,
-                              color: isExpired
-                                  ? const Color(0xFFDC2626)
-                                  : (isExpiringSoon ? const Color(0xFFD97706) : const Color(0xFF64748B)),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: badgeBg,
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: Text(
-                        badgeTitle,
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: isExpired
+                        ? const Color(0xFFFEE2E2)
+                        : (isExpiringSoon ? const Color(0xFFFEF3C7) : const Color(0xFFEFF6FF)),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Icon(icon, color: iconColor, size: 20),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Monthly Secretarial Plan',
                         style: GoogleFonts.poppins(
-                          fontSize: 9.5,
+                          fontSize: 13,
                           fontWeight: FontWeight.bold,
-                          color: badgeText,
-                          letterSpacing: 0.3,
+                          color: const Color(0xFF0F172A),
+                          height: 1.25,
+                        ),
+                      ),
+                      const SizedBox(height: 3),
+                      Text(
+                        'Valid until: ${comp.formattedSubscriptionExpiry}',
+                        style: GoogleFonts.poppins(
+                          fontSize: 11.5,
+                          fontWeight: FontWeight.w600,
+                          color: isExpired
+                              ? const Color(0xFFDC2626)
+                              : (isExpiringSoon ? const Color(0xFFD97706) : const Color(0xFF64748B)),
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: badgeBg,
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: Text(
+                          badgeTitle,
+                          style: GoogleFonts.poppins(
+                            fontSize: 9.5,
+                            fontWeight: FontWeight.bold,
+                            color: badgeText,
+                            letterSpacing: 0.3,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 4),
+                Tooltip(
+                  message: infoMessage,
+                  preferBelow: true,
+                  child: InkWell(
+                    onTap: () => _showPlanInfoDialog(context, infoTitle, infoMessage),
+                    borderRadius: BorderRadius.circular(20),
+                    child: Padding(
+                      padding: const EdgeInsets.all(4),
+                      child: Icon(
+                        Icons.info_outline_rounded,
+                        size: 20,
+                        color: isExpired
+                            ? const Color(0xFFB91C1C)
+                            : (isExpiringSoon ? const Color(0xFFB45309) : const Color(0xFF64748B)),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            if (isExpired)
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: const Color(0xFFFECACA)),
+                ),
+                child: Row(
+                  children: [
+                    const Icon(Icons.notifications_active_outlined, size: 16, color: Color(0xFFDC2626)),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        'Payment reminder: Please renew your secretarial plan to resume service.',
+                        style: GoogleFonts.poppins(
+                          fontSize: 11.5,
+                          fontWeight: FontWeight.w500,
+                          color: const Color(0xFF991B1B),
+                          height: 1.35,
                         ),
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 10),
-                if (isExpired) ...[
-                  Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: const Color(0xFFFECACA)),
-                    ),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Icon(Icons.warning_amber_rounded, size: 16, color: Color(0xFFDC2626)),
-                        const SizedBox(width: 6),
-                        Expanded(
-                          child: Text(
-                            'SECRETARIAL SERVICES SUSPENDED: Your monthly plan expired on ${comp.formattedSubscriptionExpiry}. Secretary Lim Mei Ling cannot handle filings, review documents, or lodge statutory returns for ${comp.name} until renewed.',
-                            style: GoogleFonts.poppins(
-                              fontSize: 11,
-                              fontWeight: FontWeight.w500,
-                              color: const Color(0xFF991B1B),
-                              height: 1.35,
-                            ),
-                          ),
+              )
+            else if (isExpiringSoon)
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: const Color(0xFFFDE68A)),
+                ),
+                child: Row(
+                  children: [
+                    const Icon(Icons.notifications_active_outlined, size: 16, color: Color(0xFFD97706)),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        'Payment reminder: Your plan expires in $days days. Please renew to keep coverage active.',
+                        style: GoogleFonts.poppins(
+                          fontSize: 11.5,
+                          fontWeight: FontWeight.w500,
+                          color: const Color(0xFF92400E),
+                          height: 1.35,
                         ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  SizedBox(
-                    width: double.infinity,
-                    height: 42,
-                    child: ElevatedButton.icon(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFFDC2626),
-                        foregroundColor: Colors.white,
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                      ),
-                      onPressed: () => _showPlanRenewalSheet(context, comp),
-                      icon: const Icon(Icons.payment_rounded, size: 16),
-                      label: Text(
-                        'Renew Secretarial Plan (RM 50) — Resume Service',
-                        style: GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.bold),
                       ),
                     ),
-                  ),
-                ] else if (isExpiringSoon) ...[
-                  Text(
-                    'Your plan expires in $days days. Please renew to keep company secretarial coverage active.',
-                    style: GoogleFonts.poppins(fontSize: 11, color: const Color(0xFF92400E)),
-                  ),
-                  const SizedBox(height: 8),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFFD97706),
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                          elevation: 0,
-                        ),
-                        onPressed: () => _showPlanRenewalSheet(context, comp),
-                        child: Text(
-                          'Renew Now (RM 50/mo)',
-                          style: GoogleFonts.poppins(fontSize: 11, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ],
-                  ),
-                ] else ...[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: Text(
-                          'Secretarial compliance & statutory reviews actively covered.',
-                          style: GoogleFonts.poppins(fontSize: 11, color: const Color(0xFF475569)),
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: () => _showPlanRenewalSheet(context, comp),
-                        style: TextButton.styleFrom(padding: EdgeInsets.zero, minimumSize: Size.zero),
-                        child: Text(
-                          'Extend Plan →',
-                          style: GoogleFonts.poppins(fontSize: 11, fontWeight: FontWeight.bold, color: const Color(0xFF062AAE)),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ],
-            ),
-          ),
-        ],
+                  ],
+                ),
+              )
+            else
+              Text(
+                'Secretarial compliance & statutory reviews actively covered.',
+                style: GoogleFonts.poppins(fontSize: 11.5, color: const Color(0xFF475569)),
+              ),
+          ],
+        ),
       ),
     );
   }
 
-  void _showPlanRenewalSheet(BuildContext context, Company comp) {
-    int selectedMonths = 1;
-    double monthlyFee = 50.0;
-    String paymentMethod = 'FPX Online Banking';
-
-    showModalBottomSheet(
+  void _showPlanInfoDialog(BuildContext context, String title, String message) {
+    showDialog(
       context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.white,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (sheetCtx) {
-        return StatefulBuilder(
-          builder: (ctx, setModalState) {
-            final total = selectedMonths == 12 ? 500.0 : (selectedMonths * monthlyFee);
-
-            return Padding(
-              padding: EdgeInsets.only(
-                left: 20,
-                right: 20,
-                top: 16,
-                bottom: MediaQuery.of(sheetCtx).viewInsets.bottom + 24,
+      builder: (dialogContext) {
+        return AlertDialog(
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          title: Row(
+            children: [
+              const Icon(Icons.info_outline_rounded, color: Color(0xFF062AAE), size: 22),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  title,
+                  style: GoogleFonts.poppins(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                    color: const Color(0xFF0F172A),
+                  ),
+                ),
               ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Center(
-                    child: Container(
-                      width: 40,
-                      height: 4,
-                      decoration: BoxDecoration(color: Colors.grey.shade300, borderRadius: BorderRadius.circular(2)),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  Row(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFEFF6FF),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: const Icon(Icons.verified_user_rounded, color: Color(0xFF062AAE), size: 24),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Monthly Secretarial Plan',
-                              style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.bold, color: const Color(0xFF0F172A)),
-                            ),
-                            Text(
-                              comp.name,
-                              style: GoogleFonts.poppins(fontSize: 11, color: Colors.grey.shade600),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 14),
-                  Container(
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFF8FAFC),
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: const Color(0xFFE2E8F0)),
-                    ),
-                    child: Text(
-                      'Appointed secretary: ${comp.assignedSecretary} (${comp.assignedFirmName}). In compliance with professional guidelines, secretarial service is maintained only while your plan is active.',
-                      style: GoogleFonts.poppins(fontSize: 11, color: const Color(0xFF475569), height: 1.35),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  Text('Select Extension Period:', style: GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.w600)),
-                  const SizedBox(height: 8),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: InkWell(
-                          onTap: () => setModalState(() => selectedMonths = 1),
-                          child: Container(
-                            padding: const EdgeInsets.all(12),
-                            decoration: BoxDecoration(
-                              color: selectedMonths == 1 ? const Color(0xFFEFF6FF) : Colors.white,
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(
-                                color: selectedMonths == 1 ? const Color(0xFF062AAE) : const Color(0xFFE2E8F0),
-                                width: selectedMonths == 1 ? 1.5 : 1,
-                              ),
-                            ),
-                            child: Column(
-                              children: [
-                                Text('1 Month', style: GoogleFonts.poppins(fontSize: 13, fontWeight: FontWeight.bold)),
-                                const SizedBox(height: 2),
-                                Text('RM 50.00', style: GoogleFonts.poppins(fontSize: 12, color: const Color(0xFF062AAE), fontWeight: FontWeight.w600)),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: InkWell(
-                          onTap: () => setModalState(() => selectedMonths = 12),
-                          child: Container(
-                            padding: const EdgeInsets.all(12),
-                            decoration: BoxDecoration(
-                              color: selectedMonths == 12 ? const Color(0xFFEFF6FF) : Colors.white,
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(
-                                color: selectedMonths == 12 ? const Color(0xFF062AAE) : const Color(0xFFE2E8F0),
-                                width: selectedMonths == 12 ? 1.5 : 1,
-                              ),
-                            ),
-                            child: Column(
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text('1 Year', style: GoogleFonts.poppins(fontSize: 13, fontWeight: FontWeight.bold)),
-                                    const SizedBox(width: 4),
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
-                                      decoration: BoxDecoration(color: const Color(0xFF10B981), borderRadius: BorderRadius.circular(4)),
-                                      child: Text('SAVE RM100', style: GoogleFonts.poppins(fontSize: 8.5, color: Colors.white, fontWeight: FontWeight.bold)),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 2),
-                                Text('RM 500.00', style: GoogleFonts.poppins(fontSize: 12, color: const Color(0xFF062AAE), fontWeight: FontWeight.w600)),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  Text('Payment Method:', style: GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.w600)),
-                  const SizedBox(height: 8),
-                  DropdownButtonFormField<String>(
-                    initialValue: paymentMethod,
-                    isExpanded: true,
-                    decoration: InputDecoration(
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                      filled: true,
-                      fillColor: const Color(0xFFF8FAFC),
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: const BorderSide(color: Color(0xFFE2E8F0))),
-                    ),
-                    items: const [
-                      DropdownMenuItem(value: 'FPX Online Banking', child: Text('FPX Online Banking (Maybank, CIMB, Public Bank)')),
-                      DropdownMenuItem(value: 'Corporate Credit/Debit Card', child: Text('Corporate Credit/Debit Card')),
-                    ],
-                    onChanged: (val) {
-                      if (val != null) setModalState(() => paymentMethod = val);
-                    },
-                  ),
-                  const SizedBox(height: 20),
-                  SizedBox(
-                    width: double.infinity,
-                    height: 48,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF062AAE),
-                        foregroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                      ),
-                      onPressed: () {
-                        Navigator.pop(sheetCtx);
-                        CompanyService.instance.renewSubscription(comp.id, additionalMonths: selectedMonths);
-                        setState(() {});
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Row(
-                              children: [
-                                const Icon(Icons.check_circle_rounded, color: Colors.white, size: 18),
-                                const SizedBox(width: 8),
-                                Expanded(
-                                  child: Text(
-                                    'Secretarial plan renewed! Services are now active for ${comp.name}.',
-                                    style: GoogleFonts.poppins(fontSize: 12),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            backgroundColor: const Color(0xFF059669),
-                            duration: const Duration(seconds: 4),
-                          ),
-                        );
-                      },
-                      child: Text(
-                        'Pay RM ${total.toStringAsFixed(2)} & Renew Plan',
-                        style: GoogleFonts.poppins(fontSize: 13, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-                ],
+            ],
+          ),
+          content: Text(
+            message,
+            style: GoogleFonts.poppins(
+              fontSize: 13,
+              color: const Color(0xFF475569),
+              height: 1.45,
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(dialogContext),
+              child: Text(
+                'Close',
+                style: GoogleFonts.poppins(
+                  fontWeight: FontWeight.w600,
+                  color: const Color(0xFF062AAE),
+                ),
               ),
-            );
-          },
+            ),
+          ],
         );
       },
     );
@@ -1409,15 +1232,18 @@ class _HomePageState extends State<HomePage> {
                 child: Center(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       const RepeatingStrokeLogoLoader(
                         width: 90,
-                        height: 60,
+                        height: 32,
                         cycleDuration: Duration(milliseconds: 750),
                       ),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: 6),
                       Text(
                         'Loading...',
+                        textAlign: TextAlign.center,
                         style: GoogleFonts.poppins(
                           fontSize: 11,
                           fontWeight: FontWeight.w600,
