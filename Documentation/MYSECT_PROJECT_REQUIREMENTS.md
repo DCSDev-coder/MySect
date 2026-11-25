@@ -3,8 +3,37 @@
 **Document Reference:** SEC-REQ-2026-V2  
 **Classification:** Confidential — Internal & Stakeholder Review  
 **Effective Date:** 9 November 2026  
-**Target Delivery Window:** Q1 2027 (12-Week Production MVP)  
+**Target Delivery Window:** Approximately 12 weeks, subject to scope and resource approval  
 **Stakeholder Audience:** Project Owner, Executive Board, Lead Architect, Frontend Engineering Team, Backend Engineering Team, Legal & Compliance Advisors, and Partner Secretarial Firms  
+
+---
+
+## Decision status and reading guide — 25 November 2026
+
+This document is a planning draft, not evidence that the described backend or controls have been implemented. Where older sections below conflict with this decision register, this register takes precedence. Detailed technical examples are proposals and need review before implementation.
+
+**Confirmed project direction**
+
+- Separate customer, secretary and admin applications will share a backend. The current applications are prototypes and need real backend integration.
+- The application backend and MySQL database are intended to run on the organisation's own Windows Server using Docker and a suitable, verified container runtime. MySQL stores application records and document metadata; phpMyAdmin is a management tool, not the database.
+- Company files will be stored on our own server for now. TM Cloud is **on hold** and may be reconsidered when the customer base supports it. Its quotations are options, not an approved purchase.
+- Customers begin new inquiries through AI-assisted intake. The secretary receives the case and initiates the human conversation. Professional decisions remain with the secretary.
+
+**Proposed for review**
+
+- A private storage adapter, potentially backed by self-hosted MinIO, with a replaceable interface for a future provider. The storage product, infrastructure and migration approach have not been approved.
+- A shared backend with company-level access controls, audit records and a replaceable AI integration. AI model, hosting location, provider, hardware and cost are undecided. Cloud AI would be a separate decision from TM Cloud storage.
+- A focused first release covering sign-in, company access, request intake, secretary queue, documents and essential administration. The 12-week schedule is a planning target, not a delivery commitment.
+- Manual identity verification initially; commercial e-KYC is optional and subject to business and legal review. The form of any document approval or signature also needs review.
+
+**Needs approval or verification**
+
+- Boss and secretary approval of screens, MVP scope, customer and secretary mobile/web capabilities, permissions, assignment rules and subscription flows.
+- Server capacity, supported Docker runtime, storage capacity, encryption, off-server backups, restore testing, recovery targets and operating ownership.
+- AI provider and privacy terms; filing, identity verification, retention and electronic signature requirements with qualified advisers; any external SSM integration.
+- MySQL version, schema, API contracts, deployment configuration and rollout plan. No capacity for 200 or 500 companies is guaranteed without workload assumptions and testing.
+
+The prototype includes mock data and local development endpoints. Its screens do not establish that authentication, isolation, persistence, AI or production security already work.
 
 ---
 
@@ -12,10 +41,12 @@
 
 **MySect** is an enterprise-grade digital operating platform designed to modernize and automate the Malaysian corporate secretarial (CoSec) industry. Operating under the regulatory jurisdiction of the **Companies Act 2016** and guidelines enforced by the **Suruhanjaya Syarikat Malaysia (SSM)**, MySect connects corporate business owners and company directors with licensed secretarial firms via an integrated, multi-role digital ecosystem.
 
-The ecosystem comprises three dedicated client interfaces powered by a unified, secure backend and an on-premise/hybrid AI reasoning gateway:
+The proposed ecosystem comprises three dedicated client interfaces and a shared backend. The backend and AI gateway are not yet implemented:
 1. **MySect Client (`mysect_app`)**: Native Flutter mobile application for company owners, directors, and authorized corporate representatives.
 2. **Secretary Workspace (`mysect_secretary`)**: Responsive, high-density Flutter desktop and tablet workspace engineered for licensed company secretaries (MAICSA / MIA) and compliance review teams.
 3. **Platform Operations (`mysect_admin`)**: React & Vite single-page management application for platform operators, multi-tenant governance, billing oversight, firm onboarding, and audit logging.
+
+The following diagram is conceptual; product names and versions are examples awaiting approval. The admin website also connects to the shared backend.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -76,14 +107,12 @@ All frontends connect strictly to a central versioned API (`/api/v1/*`). Direct 
 ### 1.4 Private Document Storage Adapter (`mysect_storage`)
 Corporate statutory files (Form 9/13, Form 24/49, Section 14, Board Resolutions, Director NRIC/Passport copies) carry severe legal and privacy liabilities under the Malaysian Personal Data Protection Act 2010 (PDPA).
 * **Zero Binary Ingestion in MySQL**: Storing binary large objects (BLOBs) in MySQL degrades query caching, bloats index tables, and increases backup latency. MySQL stores only file metadata: SHA-256 integrity hash, MIME type, payload byte size, uploading user ID, timestamp, and an opaque storage UUID.
-* **100% Self-Hosted S3 Storage Architecture (MinIO)**: Following management review of commercial cloud quotations (which incur heavy 3-year lock-in and consulting markups), MySect deploys a **Self-Hosted, S3-Compatible Object Store (MinIO)** running containerized on DCS's Windows Server environment.
-  * **Zero External Cloud Costs**: Completely eliminates third-party cloud subscriptions, setup fees, and multi-year vendor lock-in.
-  * **Standard S3 REST API**: Operates with standard S3 protocols, allowing pluggable compatibility with external cloud providers in the future if required.
-  * **100% On-Premise Data Residency**: Files remain physically within DCS's secure data center in Malaysia, satisfying the strictest interpretation of PDPA Section 129.
-* **Time-Limited Ephemeral Pre-Signed URLs**: Clients never receive direct file system paths or public S3 URLs. Access is granted exclusively via cryptographically signed tokens with a 5-minute time-to-live (TTL).
+* **Own-server storage — confirmed direction**: Store files privately on our own infrastructure. Self-hosted MinIO and an S3-compatible adapter are proposed, pending technical and management approval. TM Cloud storage is on hold.
+* **Costs and recovery**: Own-server storage still incurs hardware, electricity, administration and backup costs. A separate backup and tested restore process are required; storage redundancy alone is not a backup.
+* **Controlled access**: Backend authorization and short-lived access links are proposed; the link lifetime and access method need security review. Physical location and legal compliance must be verified rather than assumed.
 
 ### 1.5 Host & Deployment Architecture (Windows Server + Docker)
-The enterprise infrastructure resides on the organization’s Windows Server environment:
+Windows Server is the intended host. The following runtime and service configuration are proposals, not a verified deployment. Confirm supported server and container configurations before implementation:
 * **Production Runtime Engine**: Production containers run on a supported Linux container subsystem (WSL2 backend with Ubuntu LTS or dedicated Hyper-V Linux VM running Docker CE Engine). Docker Desktop is prohibited for production runtime due to licensing, resource management, and daemon restart limitations.
 * **Docker Compose Orchestration**: Service topologies (`mysect_backend`, `mysect_admin`, `mysect_secretary_web`, `mysect_database`, `mysect_ai_gateway`, `mysect_reverse_proxy`) are declared in declarative compose manifests with strict resource limits (CPU/Memory quotas) and persistent data volume mounts.
 * **Reverse Proxy & TLS Termination**: An automated reverse proxy (Caddy or Nginx) enforces HTTPS/TLS 1.3, HTTP Strict Transport Security (HSTS), rate-limiting, and WebSocket connection upgrades for real-time notifications.
@@ -99,7 +128,9 @@ The AI subsystem serves as a high-precision corporate secretarial triage and ext
 * **Executive Case Summarization**: Generates standardized secretarial dossiers for the assigned secretary, reducing case triage time from 20 minutes to under 60 seconds.
 * **Safety Boundaries**: The AI is strictly barred from making legal filings, executing statutory signatures, approving legal drafts, or communicating cross-company data.
 
-### 2.2 Comprehensive AI Model Comparison & Cost Matrix
+### 2.2 Historical AI options — unverified, not approved
+
+The following model names, prices, hardware figures and performance claims are historical examples only. Do not use them for procurement or as compliance guarantees. Availability, costs, capacity and privacy terms require fresh verification. No model or GPU purchase has been approved.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -123,7 +154,7 @@ The table below outlines real-world price ranges, hardware demands, and operatio
 | **Local On-Premises** *(Target Production Tier)* | **DeepSeek-R1-Distill-Qwen-14B** or **Qwen 2.5-14B / Gemma 2-27B** | 32,000 - 64,000 tokens | **\$0.00** (Free Open Source) | Minimum 32GB RAM + 1x NVIDIA RTX 4090 (24GB VRAM) or RTX 3090 | **~\$1,600** one-time hardware investment | **Complete PDPA & Statutory Confidentiality Guarantee.** Enterprise data privacy for banking/audit stakeholders. | **Highly Recommended Local Target.** Superb bilingual reasoning (English & Bahasa Malaysia), high extraction accuracy for SSM Forms, excellent local response latency. |
 | **Local On-Premises** *(Enterprise Deep Tier)* | **DeepSeek-R1-Distill-32B** or **Qwen 2.5-32B (Q4_K_M)** | 64,000 - 128,000 tokens | **\$0.00** (Free Open Source) | 64GB RAM + 2x RTX 4090 (48GB VRAM) or 1x RTX A5000/A6000 | **~\$3,800 - \$5,000** one-time hardware investment | **Maximum Legal & Compliance Security.** Fully self-contained on-premise AI cluster. | **Long-Term Enterprise Scaling.** Capable of comprehensive legal constitution analysis and historical resolution indexing across thousands of client companies. |
 
-### 2.3 Local AI Runtime Architecture: Ollama / vLLM Gateway
+### 2.3 Illustrative AI runtime — subject to approval
 To run local models without destabilizing the Windows Server:
 1. **Containerized Engine**: Deploy **Ollama** or **vLLM** inside a GPU-accelerated Docker container mapped to host NVIDIA CUDA drivers.
 2. **Provider-Agnostic Adapter Pattern**: The backend interacts exclusively with an abstraction layer adhering to the standard OpenAI-compatible REST API specification (`/v1/chat/completions`):
@@ -137,7 +168,7 @@ To run local models without destabilizing the Windows Server:
           ├─► Mode "local": Routes to on-prem Ollama daemon (Zero token bill, strict privacy)
           └─► Mode "cloud": Routes to Gemini / DeepSeek API (Zero local GPU load)
 ```
-*Benefit: The engineering team can switch from cloud prototyping to on-premise local inference with zero application code changes, simply altering environment configuration variables.*
+An adapter can reduce the work needed to change providers, but compatibility, configuration and testing will still be required.
 
 ---
 
@@ -155,7 +186,7 @@ To run local models without destabilizing the Windows Server:
 * **Audit & Defect Analysis**:
   1. *Filing Lifecycle Gaps*: Displays filing records but lacks explicit UI states for: *Requesting Missing Statutory Info*, *Issuing Board Resolution for Signature*, and *Marking SSM Submission Acknowledged*.
   2. *Document Preview Limitation*: Lacks an integrated, high-speed split-pane PDF viewer necessary for desktop secretaries to review director IDs side-by-side with generated filing forms.
-  3. *Dual-Form-Factor Complexity*: Responsive layout supports mobile and desktop. For Phase 1 MVP, the team must prioritize the **desktop/web view** where real secretarial work occurs, locking mobile view to read-only oversight.
+  3. *Dual-Form-Factor Complexity*: Responsive layout supports mobile and desktop. Desktop/web prioritisation is proposed; secretary mobile features and whether mobile access is read-only require approval.
 
 ### 3.3 Platform Administration Portal (`mysect_admin`)
 * **Current State**: Built with React 18, Vite, and TailwindCSS. Implements mock APIs via Vite plugin middleware (`apiServerPlugin.js`) and in-memory mock data (`mockData.js`).
@@ -168,7 +199,7 @@ To run local models without destabilizing the Windows Server:
 
 ## 4. Malaysian Legal & Regulatory Framework
 
-To ensure legal viability in Malaysia, MySect must operate within the statutory boundaries established by regulatory authorities:
+**Unverified discussion points:** The following historical table is not legal advice or confirmed requirements. Specific qualification, filing API, signature, identity and data protection claims must be checked with qualified advisers and the relevant authorities before design or implementation. No signature method or integration is approved by this table.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -201,7 +232,7 @@ To ensure legal viability in Malaysia, MySect must operate within the statutory 
 
 ## 5. End-to-End Operating Workflow
 
-The diagram below details the operational trajectory of a client request through the MySect architecture:
+The diagram below is an illustrative workflow, subject to secretary and legal review. Electronic signing, filing method and retention are not yet approved. For new inquiries, the secretary initiates the human conversation after AI intake and notification.
 
 ```
 [Customer / Company Director]
@@ -243,7 +274,7 @@ The diagram below details the operational trajectory of a client request through
 
 ## 6. Functional Scope: MVP Commitments vs. Post-MVP Deferrals
 
-To ensure delivery within the 12-week schedule, non-essential modules identified in the prototype audit are categorized into strict phases:
+The following is a proposed prioritisation, not an approved commitment. Features, secretary mobile scope, e-KYC, billing and the delivery schedule require stakeholder approval. In particular, an annual return filing or electronic signature is not yet an agreed MVP deliverable.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -266,7 +297,7 @@ To ensure delivery within the 12-week schedule, non-essential modules identified
 
 ## 7. Data Model & Relational Schema (MySQL 8.4 LTS)
 
-The core relational database schema encapsulates multi-tenant segregation, statutory data, and compliance records:
+The SQL below is an illustrative draft only, not a migration or approved data model. It needs redesign and review for firm/company memberships, permissions, privacy, retention and real workflows; do not deploy it as written. The MySQL version remains to be verified.
 
 ```sql
 -- Multi-Tenant Core: Secretarial Firms
@@ -375,6 +406,8 @@ CREATE TABLE platform_audit_logs (
 
 ## 8. Twelve-Week Implementation Roadmap (Gantt Schedule)
 
+This is an indicative sequence, dependent on approved scope, staffing and technical decisions; the dates and features are not commitments. Signing and named AI providers remain undecided.
+
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                       12-WEEK PRODUCTION MVP SCHEDULE                       │
@@ -399,7 +432,7 @@ CREATE TABLE platform_audit_logs (
 
 ## 9. Pilot Acceptance & Verification Gateways
 
-Before transitioning from staging to live production pilot with real corporate data, all twelve verification gateways must be certified:
+The following are proposed checks, not completed tests. Numerical latency, signed-link and recovery targets are placeholders requiring approval and measurement. In particular, a signed URL may be usable by anyone holding it until expiry; access design needs review. Staging arrangements also need approval.
 
 1. **Strict Multi-Tenant Isolation**: Verified that under no circumstance can a user from Firm A view, search, or access companies, filings, or documents belonging to Firm B.
 2. **Elimination of Hardcoded Client Credentials**: Confirmed zero database connection strings, secret keys, or cloud access tokens inside compiled Flutter binaries or web asset bundles.
