@@ -686,14 +686,18 @@ class _SecretaryVerificationPageState extends State<SecretaryVerificationPage> {
                   keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
                   padding: EdgeInsets.fromLTRB(
                     20.0,
-                    isKeyboardOpen ? 4.0 : 20.0,
+                    isKeyboardOpen ? 4.0 : 0.0,
                     20.0,
                     20.0 + (isKeyboardOpen ? 12 : bottomInset),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      SizedBox(height: isKeyboardOpen ? 0 : 24),
+                      SizedBox(
+                        height: isKeyboardOpen
+                            ? 0
+                            : (constraints.maxHeight * 0.10).clamp(32.0, 90.0),
+                      ),
                       AnimatedContainer(
                         duration: const Duration(milliseconds: 200),
                         curve: Curves.easeOut,
@@ -711,7 +715,7 @@ class _SecretaryVerificationPageState extends State<SecretaryVerificationPage> {
                           ),
                         ),
                       ),
-                      SizedBox(height: isKeyboardOpen ? 8 : 20),
+                      SizedBox(height: isKeyboardOpen ? 8 : 16),
                       Text(
                         'Enter verification code',
                         textAlign: TextAlign.center,
