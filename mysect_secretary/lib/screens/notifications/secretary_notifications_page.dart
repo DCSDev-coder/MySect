@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../services/secretary_notification_service.dart';
 import '../../services/secretary_document_service.dart';
-import '../../widgets/app_top_header.dart';
 import '../review_queue/document_review_detail_page.dart';
 
 class SecretaryNotificationsPage extends StatelessWidget {
@@ -39,49 +38,7 @@ class SecretaryNotificationsPage extends StatelessWidget {
                     ),
                     title: 'Notifications & Statutory Alerts',
                     badgeText: 'SSM LICENSED',
-                  )
-                else ...[
-                  const AppTopHeader(showNotificationBell: false),
-                  Container(
-                    color: Colors.white,
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    child: Row(
-                      children: [
-                        IconButton(
-                          icon: const Icon(Icons.arrow_back_ios_new, size: 18, color: Colors.black87),
-                          onPressed: () => Navigator.pop(context),
-                          padding: EdgeInsets.zero,
-                          constraints: const BoxConstraints(),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Text(
-                            'Notifications',
-                            style: GoogleFonts.poppins(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ),
-                        if (service.unreadCount > 0)
-                          TextButton.icon(
-                            onPressed: () => service.markAllAsRead(),
-                            icon: const Icon(Icons.done_all_rounded, size: 16, color: Color(0xFF062AAE)),
-                            label: Text(
-                              'Mark all read',
-                              style: GoogleFonts.poppins(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w600,
-                                color: const Color(0xFF062AAE),
-                              ),
-                            ),
-                          ),
-                      ],
-                    ),
                   ),
-                  Divider(height: 1, color: Colors.grey.shade200),
-                ],
                 if (isDesktop && service.unreadCount > 0)
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -174,11 +131,46 @@ class SecretaryNotificationsPage extends StatelessWidget {
 
             return Scaffold(
               backgroundColor: Colors.white,
-              body: SafeArea(
-                top: false,
-                bottom: false,
-                child: mainContent,
+              appBar: AppBar(
+                title: Text(
+                  'Notifications',
+                  style: GoogleFonts.poppins(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: const Color(0xFF0F172A),
+                  ),
+                ),
+                backgroundColor: Colors.white,
+                elevation: 0.5,
+                leading: IconButton(
+                  icon: const Icon(
+                    Icons.arrow_back_ios_new_rounded,
+                    color: Color(0xFF0F172A),
+                    size: 18,
+                  ),
+                  onPressed: () => Navigator.pop(context),
+                ),
+                actions: [
+                  if (service.unreadCount > 0)
+                    TextButton.icon(
+                      onPressed: () => service.markAllAsRead(),
+                      icon: const Icon(
+                        Icons.done_all_rounded,
+                        size: 16,
+                        color: Color(0xFF062AAE),
+                      ),
+                      label: Text(
+                        'Mark all read',
+                        style: GoogleFonts.poppins(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          color: const Color(0xFF062AAE),
+                        ),
+                      ),
+                    ),
+                ],
               ),
+              body: mainContent,
             );
           },
         );
@@ -220,37 +212,37 @@ class SecretaryNotificationsPage extends StatelessWidget {
         SecretaryNotificationService.instance.removeNotification(notif.id);
       },
       background: Container(
-        margin: const EdgeInsets.only(bottom: 12),
+        margin: const EdgeInsets.only(bottom: 8),
         decoration: BoxDecoration(
           color: Colors.red.shade400,
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(12),
         ),
         alignment: Alignment.centerRight,
-        padding: const EdgeInsets.only(right: 20),
-        child: const Icon(Icons.delete_outline_rounded, color: Colors.white, size: 24),
+        padding: const EdgeInsets.only(right: 16),
+        child: const Icon(Icons.delete_outline_rounded, color: Colors.white, size: 20),
       ),
       child: Container(
-        margin: const EdgeInsets.only(bottom: 12),
+        margin: const EdgeInsets.only(bottom: 8),
         decoration: BoxDecoration(
           color: notif.isRead ? Colors.white : const Color(0xFFF0F7FF),
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: notif.isRead ? Colors.grey.shade200 : const Color(0xFF93C5FD),
-            width: notif.isRead ? 1.0 : 1.5,
+            width: 1.0,
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.03),
-              blurRadius: 6,
-              offset: const Offset(0, 2),
+              color: Colors.black.withValues(alpha: 0.02),
+              blurRadius: 4,
+              offset: const Offset(0, 1),
             ),
           ],
         ),
         child: Material(
           color: Colors.transparent,
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(12),
           child: InkWell(
-            borderRadius: BorderRadius.circular(14),
+            borderRadius: BorderRadius.circular(12),
             onTap: () {
               SecretaryNotificationService.instance.markAsRead(notif.id);
               if (notif.documentId != null) {
@@ -268,19 +260,19 @@ class SecretaryNotificationsPage extends StatelessWidget {
               }
             },
             child: Padding(
-              padding: const EdgeInsets.all(14),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    padding: const EdgeInsets.all(8),
+                    padding: const EdgeInsets.all(6),
                     decoration: BoxDecoration(
                       color: categoryBg,
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(8),
                     ),
-                    child: Icon(categoryIcon, size: 20, color: categoryColor),
+                    child: Icon(categoryIcon, size: 16, color: categoryColor),
                   ),
-                  const SizedBox(width: 12),
+                  const SizedBox(width: 10),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -289,10 +281,10 @@ class SecretaryNotificationsPage extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1.5),
                               decoration: BoxDecoration(
                                 color: categoryBg,
-                                borderRadius: BorderRadius.circular(6),
+                                borderRadius: BorderRadius.circular(5),
                               ),
                               child: Text(
                                 notif.category,
@@ -305,36 +297,41 @@ class SecretaryNotificationsPage extends StatelessWidget {
                             ),
                             Text(
                               notif.timestamp,
-                              style: GoogleFonts.poppins(fontSize: 10, color: Colors.grey.shade500),
+                              style: GoogleFonts.poppins(fontSize: 9.5, color: Colors.grey.shade500),
                             ),
                           ],
                         ),
-                        const SizedBox(height: 6),
+                        const SizedBox(height: 4),
                         Text(
                           notif.title,
                           style: GoogleFonts.poppins(
-                            fontSize: 13,
+                            fontSize: 12,
                             fontWeight: notif.isRead ? FontWeight.w600 : FontWeight.bold,
                             color: Colors.black87,
                           ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
-                        const SizedBox(height: 3),
+                        const SizedBox(height: 2),
                         Text(
                           notif.body,
                           style: GoogleFonts.poppins(
-                            fontSize: 11,
+                            fontSize: 10.5,
                             color: Colors.grey.shade700,
-                            height: 1.35,
+                            height: 1.3,
                           ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ],
                     ),
                   ),
                   if (!notif.isRead) ...[
-                    const SizedBox(width: 8),
+                    const SizedBox(width: 6),
                     Container(
-                      width: 8,
-                      height: 8,
+                      width: 7,
+                      height: 7,
+                      margin: const EdgeInsets.only(top: 4),
                       decoration: const BoxDecoration(
                         color: Color(0xFF062AAE),
                         shape: BoxShape.circle,

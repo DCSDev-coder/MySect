@@ -233,8 +233,8 @@ class SecretarySidebar extends StatelessWidget {
                     Center(
                       child: Image.asset(
                         'assets/mysect_logo.png',
-                        height: 52,
-                        width: 175,
+                        height: 32,
+                        width: 64,
                         fit: BoxFit.contain,
                       ),
                     ),

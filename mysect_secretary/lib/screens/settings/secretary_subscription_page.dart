@@ -19,83 +19,6 @@ class _SecretarySubscriptionPageState extends State<SecretarySubscriptionPage> {
   String _searchQuery = '';
   String _paymentFilter = 'All'; // 'All', 'Paid', 'Unpaid'
 
-  void _showCompanyReceiptDialog(BuildContext context, SsmBillingCompany comp) {
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: Colors.white,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: Row(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: const Color(0xFFECFDF5),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: const Icon(Icons.receipt_long_rounded, color: Color(0xFF059669), size: 20),
-            ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Text(
-                'Official Billing Receipt',
-                style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.bold, color: const Color(0xFF0F172A)),
-              ),
-            ),
-          ],
-        ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: const Color(0xFFF8FAFC),
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: const Color(0xFFE2E8F0)),
-              ),
-              child: Column(
-                children: [
-                  _buildDetailRow('Entity Name', comp.name),
-                  const Divider(height: 14),
-                  _buildDetailRow('SSM Registration', comp.registrationNo),
-                  const Divider(height: 14),
-                  _buildDetailRow('Billing Cycle', 'May 2026'),
-                  const Divider(height: 14),
-                  _buildDetailRow('Invoice Ref', comp.invoiceNo ?? 'INV-2026-05-01'),
-                  const Divider(height: 14),
-                  _buildDetailRow('Payment Date', comp.paymentDate ?? '02 May 2026'),
-                  const Divider(height: 14),
-                  _buildDetailRow('Channel', comp.paymentMethod ?? 'FPX Online Banking'),
-                  const Divider(height: 14),
-                  _buildDetailRow('Amount Paid', 'MYR 50.00'),
-                ],
-              ),
-            ),
-            const SizedBox(height: 10),
-            Row(
-              children: [
-                const Icon(Icons.verified_user_rounded, color: Color(0xFF059669), size: 14),
-                const SizedBox(width: 4),
-                Text(
-                  'SSM Licensed Secretarial Plan • Verified Settlement',
-                  style: GoogleFonts.poppins(fontSize: 10.5, color: const Color(0xFF059669), fontWeight: FontWeight.w500),
-                ),
-              ],
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx),
-            child: Text('Close', style: GoogleFonts.poppins(color: const Color(0xFF64748B))),
-          ),
-        ],
-      ),
-    );
-  }
-
   @override
   void dispose() {
     _searchController.dispose();
@@ -407,13 +330,14 @@ class _SecretarySubscriptionPageState extends State<SecretarySubscriptionPage> {
       builder: (ctx) {
         return Dialog(
           backgroundColor: Colors.white,
+          insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 440),
             child: Padding(
-              padding: const EdgeInsets.all(24),
+              padding: const EdgeInsets.all(20),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -421,26 +345,29 @@ class _SecretarySubscriptionPageState extends State<SecretarySubscriptionPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            invoice.invoiceNo,
-                            style: GoogleFonts.poppins(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: const Color(0xFF0F172A),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              invoice.invoiceNo,
+                              style: GoogleFonts.poppins(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: const Color(0xFF0F172A),
+                              ),
                             ),
-                          ),
-                          Text(
-                            'Period: ${invoice.billingPeriod}',
-                            style: GoogleFonts.poppins(
-                              fontSize: 11,
-                              color: const Color(0xFF64748B),
+                            Text(
+                              'Period: ${invoice.billingPeriod}',
+                              style: GoogleFonts.poppins(
+                                fontSize: 11,
+                                color: const Color(0xFF64748B),
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
+                      const SizedBox(width: 8),
                       Container(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 10,
@@ -482,14 +409,17 @@ class _SecretarySubscriptionPageState extends State<SecretarySubscriptionPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        'Total Paid (MYR)',
-                        style: GoogleFonts.poppins(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: const Color(0xFF0F172A),
+                      Expanded(
+                        child: Text(
+                          'Total Paid (MYR)',
+                          style: GoogleFonts.poppins(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: const Color(0xFF0F172A),
+                          ),
                         ),
                       ),
+                      const SizedBox(width: 8),
                       Text(
                         'RM ${invoice.amount.toStringAsFixed(2)}',
                         style: GoogleFonts.poppins(
@@ -545,6 +475,7 @@ class _SecretarySubscriptionPageState extends State<SecretarySubscriptionPage> {
 
   Widget _buildDetailRow(String label, String value) {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
@@ -554,12 +485,16 @@ class _SecretarySubscriptionPageState extends State<SecretarySubscriptionPage> {
             color: const Color(0xFF64748B),
           ),
         ),
-        Text(
-          value,
-          style: GoogleFonts.poppins(
-            fontSize: 11.5,
-            fontWeight: FontWeight.w600,
-            color: const Color(0xFF1E293B),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Text(
+            value,
+            textAlign: TextAlign.right,
+            style: GoogleFonts.poppins(
+              fontSize: 11.5,
+              fontWeight: FontWeight.w600,
+              color: const Color(0xFF1E293B),
+            ),
           ),
         ),
       ],
@@ -585,55 +520,40 @@ class _SecretarySubscriptionPageState extends State<SecretarySubscriptionPage> {
 
         final totalMonthly = service.monthlyBillingTotal;
 
+        final isCompactScreen = MediaQuery.sizeOf(context).width < 700;
+
+        final onboardButton = ElevatedButton.icon(
+          onPressed: () => _showOnboardCompanyDialog(context),
+          icon: const Icon(Icons.add_rounded, size: 18),
+          label: Text(
+            'Onboard Company (+RM 50/mo)',
+            style: GoogleFonts.poppins(
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color(0xFF062AAE),
+            foregroundColor: Colors.white,
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 12,
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            elevation: 1,
+          ),
+        );
+
         final bodyContent = SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+          padding: EdgeInsets.symmetric(
+            horizontal: isCompactScreen ? 16 : 24,
+            vertical: isCompactScreen ? 16 : 24,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Page Header & Quick Action
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: Text(
-                      'Flat RM 50.00 / month per active SSM company • Zero tiers, unlimited cloud vault & statutory MBRS filing tracking.',
-                      style: GoogleFonts.poppins(
-                        fontSize: 12.5,
-                        fontWeight: FontWeight.w500,
-                        color: const Color(0xFF64748B),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 14),
-                  ElevatedButton.icon(
-                    onPressed: () => _showOnboardCompanyDialog(context),
-                    icon: const Icon(Icons.add_rounded, size: 18),
-                    label: Text(
-                      '+ Onboard Company (+RM 50/mo)',
-                      style: GoogleFonts.poppins(
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF062AAE),
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 12,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      elevation: 1,
-                    ),
-                  ),
-                ],
-              ),
-
-              const SizedBox(height: 20),
-
               // 1. HERO BANNER: Flat Rate Billing Architecture
               Container(
                 width: double.infinity,
@@ -657,8 +577,10 @@ class _SecretarySubscriptionPageState extends State<SecretarySubscriptionPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Badge row
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      alignment: WrapAlignment.spaceBetween,
                       children: [
                         Container(
                           padding: const EdgeInsets.symmetric(
@@ -681,13 +603,15 @@ class _SecretarySubscriptionPageState extends State<SecretarySubscriptionPage> {
                                 size: 14,
                               ),
                               const SizedBox(width: 6),
-                              Text(
-                                'FLAT RATE BILLING MODEL • ACTIVE',
-                                style: GoogleFonts.poppins(
-                                  fontSize: 10.5,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                  letterSpacing: 0.5,
+                              Flexible(
+                                child: Text(
+                                  'FLAT RATE BILLING MODEL • ACTIVE',
+                                  style: GoogleFonts.poppins(
+                                    fontSize: 10.5,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                    letterSpacing: 0.5,
+                                  ),
                                 ),
                               ),
                             ],
@@ -722,9 +646,10 @@ class _SecretarySubscriptionPageState extends State<SecretarySubscriptionPage> {
                     const SizedBox(height: 18),
 
                     // Big Price Callout
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.baseline,
-                      textBaseline: TextBaseline.alphabetic,
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 4,
+                      crossAxisAlignment: WrapCrossAlignment.end,
                       children: [
                         Text(
                           'RM 50.00',
@@ -735,7 +660,6 @@ class _SecretarySubscriptionPageState extends State<SecretarySubscriptionPage> {
                             letterSpacing: -1,
                           ),
                         ),
-                        const SizedBox(width: 8),
                         Text(
                           '/ active SSM company / month',
                           style: GoogleFonts.poppins(
@@ -791,10 +715,13 @@ class _SecretarySubscriptionPageState extends State<SecretarySubscriptionPage> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    _buildFormulaText(
-                                      service.billingCompanies.length,
-                                      totalMonthly,
+                                    Expanded(
+                                      child: _buildFormulaText(
+                                        service.billingCompanies.length,
+                                        totalMonthly,
+                                      ),
                                     ),
+                                    const SizedBox(width: 12),
                                     _buildPillarsRow(),
                                   ],
                                 );
@@ -806,25 +733,34 @@ class _SecretarySubscriptionPageState extends State<SecretarySubscriptionPage> {
 
                     // Real-time Monthly Collection Tracker
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
                       decoration: BoxDecoration(
                         color: Colors.white.withValues(alpha: 0.12),
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(color: Colors.white.withValues(alpha: 0.16)),
                       ),
-                      child: Row(
+                      child: Wrap(
+                        spacing: 10,
+                        runSpacing: 8,
+                        crossAxisAlignment: WrapCrossAlignment.center,
                         children: [
-                          const Icon(Icons.account_balance_wallet_rounded, size: 16, color: Color(0xFF67E8F9)),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: Text(
-                              'May 2026 Plan Collection: RM ${service.collectedMonthlyTotal.toStringAsFixed(2)} / RM ${totalMonthly.toStringAsFixed(2)} (${service.paidCompaniesCount} of ${service.billingCompanies.length} Companies Settled)',
-                              style: GoogleFonts.poppins(
-                                fontSize: 11.5,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.white,
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Icon(Icons.account_balance_wallet_rounded, size: 16, color: Color(0xFF67E8F9)),
+                              const SizedBox(width: 8),
+                              Flexible(
+                                child: Text(
+                                  'May 2026 Plan Collection: RM ${service.collectedMonthlyTotal.toStringAsFixed(2)} / RM ${totalMonthly.toStringAsFixed(2)} (${service.paidCompaniesCount} of ${service.billingCompanies.length} Settled)',
+                                  style: GoogleFonts.poppins(
+                                    fontSize: 11.5,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.white,
+                                  ),
+                                ),
                               ),
-                            ),
+                            ],
                           ),
                           if (service.unpaidCompaniesCount > 0)
                             Container(
@@ -850,7 +786,14 @@ class _SecretarySubscriptionPageState extends State<SecretarySubscriptionPage> {
                 ),
               ),
 
-              const SizedBox(height: 28),
+              const SizedBox(height: 16),
+
+              SizedBox(
+                width: isCompactScreen ? double.infinity : null,
+                child: onboardButton,
+              ),
+
+              const SizedBox(height: 24),
 
               // 2. VALUE PROPOSITION PILLARS (Included with every SSM company)
               Text(
@@ -938,18 +881,18 @@ class _SecretarySubscriptionPageState extends State<SecretarySubscriptionPage> {
                   children: [
                     // Header with Search
                     Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 20,
-                        vertical: 18,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: isCompactScreen ? 14 : 20,
+                        vertical: isCompactScreen ? 14 : 18,
                       ),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                      child: isCompactScreen
+                          ? Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
-                                Row(
+                                Wrap(
+                                  spacing: 8,
+                                  runSpacing: 4,
+                                  crossAxisAlignment: WrapCrossAlignment.center,
                                   children: [
                                     Text(
                                       'Active SSM Portfolio',
@@ -959,7 +902,6 @@ class _SecretarySubscriptionPageState extends State<SecretarySubscriptionPage> {
                                         color: const Color(0xFF0F172A),
                                       ),
                                     ),
-                                    const SizedBox(width: 8),
                                     Container(
                                       padding: const EdgeInsets.symmetric(
                                         horizontal: 8,
@@ -980,6 +922,7 @@ class _SecretarySubscriptionPageState extends State<SecretarySubscriptionPage> {
                                     ),
                                   ],
                                 ),
+                                const SizedBox(height: 4),
                                 Text(
                                   'Each entity billed at flat RM 50.00 / month • Monthly Total: RM ${totalMonthly.toStringAsFixed(2)} / mo',
                                   style: GoogleFonts.poppins(
@@ -987,52 +930,137 @@ class _SecretarySubscriptionPageState extends State<SecretarySubscriptionPage> {
                                     color: const Color(0xFF64748B),
                                   ),
                                 ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(width: 14),
-                          ConstrainedBox(
-                            constraints: const BoxConstraints(maxWidth: 240),
-                            child: TextField(
-                              controller: _searchController,
-                              onChanged: (val) =>
-                                  setState(() => _searchQuery = val.trim()),
-                              decoration: InputDecoration(
-                                hintText: 'Search company or SSM...',
-                                hintStyle: GoogleFonts.poppins(
-                                  fontSize: 11.5,
-                                  color: const Color(0xFF94A3B8),
-                                ),
-                                prefixIcon: const Icon(
-                                  Icons.search_rounded,
-                                  size: 18,
-                                  color: Color(0xFF94A3B8),
-                                ),
-                                isDense: true,
-                                contentPadding: const EdgeInsets.symmetric(
-                                  horizontal: 12,
-                                  vertical: 10,
-                                ),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide: const BorderSide(
-                                    color: Color(0xFFE2E8F0),
+                                const SizedBox(height: 12),
+                                TextField(
+                                  controller: _searchController,
+                                  onChanged: (val) =>
+                                      setState(() => _searchQuery = val.trim()),
+                                  decoration: InputDecoration(
+                                    hintText: 'Search company or SSM...',
+                                    hintStyle: GoogleFonts.poppins(
+                                      fontSize: 11.5,
+                                      color: const Color(0xFF94A3B8),
+                                    ),
+                                    prefixIcon: const Icon(
+                                      Icons.search_rounded,
+                                      size: 18,
+                                      color: Color(0xFF94A3B8),
+                                    ),
+                                    isDense: true,
+                                    contentPadding: const EdgeInsets.symmetric(
+                                      horizontal: 12,
+                                      vertical: 10,
+                                    ),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                      borderSide: const BorderSide(
+                                        color: Color(0xFFE2E8F0),
+                                      ),
+                                    ),
+                                    filled: true,
+                                    fillColor: const Color(0xFFF8FAFC),
                                   ),
                                 ),
-                                filled: true,
-                                fillColor: const Color(0xFFF8FAFC),
-                              ),
+                              ],
+                            )
+                          : Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Text(
+                                            'Active SSM Portfolio',
+                                            style: GoogleFonts.poppins(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.bold,
+                                              color: const Color(0xFF0F172A),
+                                            ),
+                                          ),
+                                          const SizedBox(width: 8),
+                                          Container(
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 8,
+                                              vertical: 2,
+                                            ),
+                                            decoration: BoxDecoration(
+                                              color: const Color(0xFFEFF6FF),
+                                              borderRadius: BorderRadius.circular(6),
+                                            ),
+                                            child: Text(
+                                              '${service.billingCompanies.length} Entities',
+                                              style: GoogleFonts.poppins(
+                                                fontSize: 11,
+                                                fontWeight: FontWeight.bold,
+                                                color: const Color(0xFF062AAE),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Text(
+                                        'Each entity billed at flat RM 50.00 / month • Monthly Total: RM ${totalMonthly.toStringAsFixed(2)} / mo',
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 11.5,
+                                          color: const Color(0xFF64748B),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(width: 14),
+                                ConstrainedBox(
+                                  constraints: const BoxConstraints(maxWidth: 240),
+                                  child: TextField(
+                                    controller: _searchController,
+                                    onChanged: (val) =>
+                                        setState(() => _searchQuery = val.trim()),
+                                    decoration: InputDecoration(
+                                      hintText: 'Search company or SSM...',
+                                      hintStyle: GoogleFonts.poppins(
+                                        fontSize: 11.5,
+                                        color: const Color(0xFF94A3B8),
+                                      ),
+                                      prefixIcon: const Icon(
+                                        Icons.search_rounded,
+                                        size: 18,
+                                        color: Color(0xFF94A3B8),
+                                      ),
+                                      isDense: true,
+                                      contentPadding: const EdgeInsets.symmetric(
+                                        horizontal: 12,
+                                        vertical: 10,
+                                      ),
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                        borderSide: const BorderSide(
+                                          color: Color(0xFFE2E8F0),
+                                        ),
+                                      ),
+                                      filled: true,
+                                      fillColor: const Color(0xFFF8FAFC),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                        ],
-                      ),
                     ),
 
                     // Payment Filter Buttons Bar
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                      width: double.infinity,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: isCompactScreen ? 14 : 20,
+                        vertical: 10,
+                      ),
                       color: Colors.white,
-                      child: Row(
+                      child: Wrap(
+                        spacing: 8,
+                        runSpacing: 8,
+                        crossAxisAlignment: WrapCrossAlignment.center,
                         children: [
                           Text(
                             'Filter Status:',
@@ -1042,7 +1070,6 @@ class _SecretarySubscriptionPageState extends State<SecretarySubscriptionPage> {
                               color: const Color(0xFF475569),
                             ),
                           ),
-                          const SizedBox(width: 10),
                           InkWell(
                             onTap: () => setState(() => _paymentFilter = 'All'),
                             borderRadius: BorderRadius.circular(20),
@@ -1062,7 +1089,6 @@ class _SecretarySubscriptionPageState extends State<SecretarySubscriptionPage> {
                               ),
                             ),
                           ),
-                          const SizedBox(width: 6),
                           InkWell(
                             onTap: () => setState(() => _paymentFilter = 'Paid'),
                             borderRadius: BorderRadius.circular(20),
@@ -1074,7 +1100,7 @@ class _SecretarySubscriptionPageState extends State<SecretarySubscriptionPage> {
                                 border: Border.all(color: const Color(0xFFA7F3D0)),
                               ),
                               child: Text(
-                                '✓ Paid This Month (${service.paidCompaniesCount})',
+                                'Paid This Month (${service.paidCompaniesCount})',
                                 style: GoogleFonts.poppins(
                                   fontSize: 10.5,
                                   fontWeight: FontWeight.w600,
@@ -1083,7 +1109,6 @@ class _SecretarySubscriptionPageState extends State<SecretarySubscriptionPage> {
                               ),
                             ),
                           ),
-                          const SizedBox(width: 6),
                           InkWell(
                             onTap: () => setState(() => _paymentFilter = 'Unpaid'),
                             borderRadius: BorderRadius.circular(20),
@@ -1095,7 +1120,7 @@ class _SecretarySubscriptionPageState extends State<SecretarySubscriptionPage> {
                                 border: Border.all(color: const Color(0xFFFDE68A)),
                               ),
                               child: Text(
-                                '⚠️ Unpaid / Due (${service.unpaidCompaniesCount})',
+                                'Unpaid / Due (${service.unpaidCompaniesCount})',
                                 style: GoogleFonts.poppins(
                                   fontSize: 10.5,
                                   fontWeight: FontWeight.w600,
@@ -1110,83 +1135,84 @@ class _SecretarySubscriptionPageState extends State<SecretarySubscriptionPage> {
 
                     const Divider(height: 1, color: Color(0xFFE2E8F0)),
 
-                    // Table Header
-                    Container(
-                      color: const Color(0xFFF8FAFC),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 20,
-                        vertical: 11,
+                    // Table Header (Desktop only)
+                    if (!isCompactScreen) ...[
+                      Container(
+                        color: const Color(0xFFF8FAFC),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 11,
+                        ),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              flex: 4,
+                              child: Text(
+                                'COMPANY & SSM REGISTRATION',
+                                style: GoogleFonts.poppins(
+                                  fontSize: 10.5,
+                                  fontWeight: FontWeight.bold,
+                                  color: const Color(0xFF64748B),
+                                  letterSpacing: 0.4,
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 2,
+                              child: Text(
+                                'DATE ONBOARDED',
+                                style: GoogleFonts.poppins(
+                                  fontSize: 10.5,
+                                  fontWeight: FontWeight.bold,
+                                  color: const Color(0xFF64748B),
+                                  letterSpacing: 0.4,
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 2,
+                              child: Text(
+                                'NEXT SSM DUE',
+                                style: GoogleFonts.poppins(
+                                  fontSize: 10.5,
+                                  fontWeight: FontWeight.bold,
+                                  color: const Color(0xFF64748B),
+                                  letterSpacing: 0.4,
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 3,
+                              child: Text(
+                                'MAY 2026 BILLING STATUS',
+                                style: GoogleFonts.poppins(
+                                  fontSize: 10.5,
+                                  fontWeight: FontWeight.bold,
+                                  color: const Color(0xFF64748B),
+                                  letterSpacing: 0.4,
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 2,
+                              child: Text(
+                                'ACTIONS / RECEIPT',
+                                textAlign: TextAlign.right,
+                                style: GoogleFonts.poppins(
+                                  fontSize: 10.5,
+                                  fontWeight: FontWeight.bold,
+                                  color: const Color(0xFF64748B),
+                                  letterSpacing: 0.4,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            flex: 4,
-                            child: Text(
-                              'COMPANY & SSM REGISTRATION',
-                              style: GoogleFonts.poppins(
-                                fontSize: 10.5,
-                                fontWeight: FontWeight.bold,
-                                color: const Color(0xFF64748B),
-                                letterSpacing: 0.4,
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            flex: 2,
-                            child: Text(
-                              'DATE ONBOARDED',
-                              style: GoogleFonts.poppins(
-                                fontSize: 10.5,
-                                fontWeight: FontWeight.bold,
-                                color: const Color(0xFF64748B),
-                                letterSpacing: 0.4,
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            flex: 2,
-                            child: Text(
-                              'NEXT SSM DUE',
-                              style: GoogleFonts.poppins(
-                                fontSize: 10.5,
-                                fontWeight: FontWeight.bold,
-                                color: const Color(0xFF64748B),
-                                letterSpacing: 0.4,
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            flex: 3,
-                            child: Text(
-                              'MAY 2026 BILLING STATUS',
-                              style: GoogleFonts.poppins(
-                                fontSize: 10.5,
-                                fontWeight: FontWeight.bold,
-                                color: const Color(0xFF64748B),
-                                letterSpacing: 0.4,
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            flex: 2,
-                            child: Text(
-                              'ACTIONS / RECEIPT',
-                              textAlign: TextAlign.right,
-                              style: GoogleFonts.poppins(
-                                fontSize: 10.5,
-                                fontWeight: FontWeight.bold,
-                                color: const Color(0xFF64748B),
-                                letterSpacing: 0.4,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                      const Divider(height: 1, color: Color(0xFFE2E8F0)),
+                    ],
 
-                    const Divider(height: 1, color: Color(0xFFE2E8F0)),
-
-                    // Table rows
+                    // Table rows / Mobile cards
                     if (companies.isEmpty)
                       Padding(
                         padding: const EdgeInsets.all(32),
@@ -1209,6 +1235,218 @@ class _SecretarySubscriptionPageState extends State<SecretarySubscriptionPage> {
                             const Divider(height: 1, color: Color(0xFFF1F5F9)),
                         itemBuilder: (context, index) {
                           final c = companies[index];
+                          if (isCompactScreen) {
+                            return Padding(
+                              padding: const EdgeInsets.all(14),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        padding: const EdgeInsets.all(8),
+                                        decoration: BoxDecoration(
+                                          color: const Color(0xFFEFF6FF),
+                                          borderRadius: BorderRadius.circular(8),
+                                        ),
+                                        child: const Icon(
+                                          Icons.apartment_rounded,
+                                          color: Color(0xFF062AAE),
+                                          size: 18,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 10),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              c.name,
+                                              style: GoogleFonts.poppins(
+                                                fontSize: 13,
+                                                fontWeight: FontWeight.bold,
+                                                color: const Color(0xFF0F172A),
+                                              ),
+                                            ),
+                                            const SizedBox(height: 2),
+                                            Wrap(
+                                              spacing: 6,
+                                              runSpacing: 4,
+                                              crossAxisAlignment: WrapCrossAlignment.center,
+                                              children: [
+                                                Text(
+                                                  'SSM: ${c.registrationNo}',
+                                                  style: GoogleFonts.poppins(
+                                                    fontSize: 11,
+                                                    color: const Color(0xFF64748B),
+                                                  ),
+                                                ),
+                                                Container(
+                                                  padding: const EdgeInsets.symmetric(
+                                                    horizontal: 6,
+                                                    vertical: 1,
+                                                  ),
+                                                  decoration: BoxDecoration(
+                                                    color: const Color(0xFFF1F5F9),
+                                                    borderRadius: BorderRadius.circular(4),
+                                                  ),
+                                                  child: Text(
+                                                    c.entityType,
+                                                    style: GoogleFonts.poppins(
+                                                      fontSize: 9.5,
+                                                      fontWeight: FontWeight.w600,
+                                                      color: const Color(0xFF475569),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 10),
+                                  Wrap(
+                                    spacing: 12,
+                                    runSpacing: 4,
+                                    children: [
+                                      Text(
+                                        'Onboarded: ${c.onboardedDate}',
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 10.5,
+                                          color: const Color(0xFF64748B),
+                                        ),
+                                      ),
+                                      Text(
+                                        'Next Due: ${c.nextFilingDate}',
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 10.5,
+                                          fontWeight: FontWeight.w600,
+                                          color: const Color(0xFF062AAE),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 10),
+                                  SizedBox(
+                                    width: double.infinity,
+                                    child: Wrap(
+                                      spacing: 8,
+                                      runSpacing: 8,
+                                      alignment: WrapAlignment.spaceBetween,
+                                      crossAxisAlignment: WrapCrossAlignment.center,
+                                      children: [
+                                        Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Container(
+                                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                                              decoration: BoxDecoration(
+                                                color: c.isPaidForMonth
+                                                    ? const Color(0xFFECFDF5)
+                                                    : const Color(0xFFFFFBEB),
+                                                borderRadius: BorderRadius.circular(6),
+                                                border: Border.all(
+                                                  color: c.isPaidForMonth
+                                                      ? const Color(0xFFA7F3D0)
+                                                      : const Color(0xFFFDE68A),
+                                                ),
+                                              ),
+                                              child: Row(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  Icon(
+                                                    c.isPaidForMonth
+                                                        ? Icons.check_circle_rounded
+                                                        : Icons.warning_amber_rounded,
+                                                    size: 12,
+                                                    color: c.isPaidForMonth
+                                                        ? const Color(0xFF059669)
+                                                        : const Color(0xFFD97706),
+                                                  ),
+                                                  const SizedBox(width: 4),
+                                                  Text(
+                                                    c.isPaidForMonth
+                                                        ? 'PAID (RM 50.00)'
+                                                        : 'UNPAID (RM 50.00)',
+                                                    style: GoogleFonts.poppins(
+                                                      fontSize: 10,
+                                                      fontWeight: FontWeight.bold,
+                                                      color: c.isPaidForMonth
+                                                          ? const Color(0xFF065F46)
+                                                          : const Color(0xFF92400E),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            const SizedBox(height: 3),
+                                            Text(
+                                              c.isPaidForMonth
+                                                  ? '${c.paymentDate ?? "02 May 2026"} • ${c.paymentMethod ?? "FPX"}'
+                                                  : 'Due ${c.dueDate ?? "07 May 2026"} • Outstanding',
+                                              style: GoogleFonts.poppins(
+                                                fontSize: 10,
+                                                color: c.isPaidForMonth
+                                                    ? const Color(0xFF64748B)
+                                                    : const Color(0xFFDC2626),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        if (!c.isPaidForMonth)
+                                          Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              ElevatedButton(
+                                                onPressed: () {
+                                                  service.toggleCompanyPaymentStatus(c.id);
+                                                  ScaffoldMessenger.of(context).showSnackBar(
+                                                    SnackBar(
+                                                      content: Text(
+                                                        'Settled May 2026 plan fee for ${c.name} (RM 50.00 received)',
+                                                        style: GoogleFonts.poppins(fontSize: 12),
+                                                      ),
+                                                      backgroundColor: const Color(0xFF059669),
+                                                    ),
+                                                  );
+                                                },
+                                                style: ElevatedButton.styleFrom(
+                                                  backgroundColor: const Color(0xFF062AAE),
+                                                  foregroundColor: Colors.white,
+                                                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                                  elevation: 0,
+                                                ),
+                                                child: Text('Mark Paid', style: GoogleFonts.poppins(fontSize: 11, fontWeight: FontWeight.bold)),
+                                              ),
+                                              IconButton(
+                                                onPressed: () {
+                                                  ScaffoldMessenger.of(context).showSnackBar(
+                                                    SnackBar(
+                                                      content: Text(
+                                                        'Payment reminder dispatched to ${c.name} directors email.',
+                                                        style: GoogleFonts.poppins(fontSize: 12),
+                                                      ),
+                                                      backgroundColor: const Color(0xFF0284C7),
+                                                    ),
+                                                  );
+                                                },
+                                                icon: const Icon(Icons.forward_to_inbox_rounded, size: 16, color: Color(0xFF64748B)),
+                                                tooltip: 'Send Reminder to Director',
+                                              ),
+                                            ],
+                                          ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }
                           return Padding(
                             padding: const EdgeInsets.symmetric(
                               horizontal: 20,
@@ -1248,7 +1486,10 @@ class _SecretarySubscriptionPageState extends State<SecretarySubscriptionPage> {
                                               ),
                                             ),
                                             const SizedBox(height: 2),
-                                            Row(
+                                            Wrap(
+                                              spacing: 8,
+                                              runSpacing: 4,
+                                              crossAxisAlignment: WrapCrossAlignment.center,
                                               children: [
                                                 Text(
                                                   'SSM: ${c.registrationNo}',
@@ -1258,7 +1499,6 @@ class _SecretarySubscriptionPageState extends State<SecretarySubscriptionPage> {
                                                         const Color(0xFF64748B),
                                                   ),
                                                 ),
-                                                const SizedBox(width: 8),
                                                 Container(
                                                   padding: const EdgeInsets
                                                       .symmetric(
@@ -1376,17 +1616,7 @@ class _SecretarySubscriptionPageState extends State<SecretarySubscriptionPage> {
                                   child: Align(
                                     alignment: Alignment.centerRight,
                                     child: c.isPaidForMonth
-                                        ? OutlinedButton.icon(
-                                            onPressed: () => _showCompanyReceiptDialog(context, c),
-                                            icon: const Icon(Icons.receipt_rounded, size: 13),
-                                            label: Text('Receipt', style: GoogleFonts.poppins(fontSize: 11)),
-                                            style: OutlinedButton.styleFrom(
-                                              foregroundColor: const Color(0xFF062AAE),
-                                              side: const BorderSide(color: Color(0xFFBFDBFE)),
-                                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                                            ),
-                                          )
+                                        ? const SizedBox.shrink()
                                         : Row(
                                             mainAxisSize: MainAxisSize.min,
                                             children: [
@@ -1442,28 +1672,33 @@ class _SecretarySubscriptionPageState extends State<SecretarySubscriptionPage> {
 
                     // Portfolio Total Footer
                     Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 20,
+                      width: double.infinity,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: isCompactScreen ? 14 : 20,
                         vertical: 14,
                       ),
                       color: const Color(0xFFF8FAFC),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            'Portfolio Total (${service.billingCompanies.length} Active SSM Entities)',
-                            style: GoogleFonts.poppins(
-                              fontSize: 13,
-                              fontWeight: FontWeight.bold,
-                              color: const Color(0xFF0F172A),
+                          Expanded(
+                            child: Text(
+                              'Portfolio Total (${service.billingCompanies.length} Active SSM Entities)',
+                              style: GoogleFonts.poppins(
+                                fontSize: isCompactScreen ? 12 : 13,
+                                fontWeight: FontWeight.bold,
+                                color: const Color(0xFF0F172A),
+                              ),
                             ),
                           ),
+                          const SizedBox(width: 8),
                           Row(
+                            mainAxisSize: MainAxisSize.min,
                             children: [
                               Text(
                                 'RM ${totalMonthly.toStringAsFixed(2)}',
                                 style: GoogleFonts.poppins(
-                                  fontSize: 16,
+                                  fontSize: isCompactScreen ? 14.5 : 16,
                                   fontWeight: FontWeight.w800,
                                   color: const Color(0xFF062AAE),
                                 ),
@@ -1488,154 +1723,153 @@ class _SecretarySubscriptionPageState extends State<SecretarySubscriptionPage> {
               const SizedBox(height: 32),
 
               // 4. BILLING STATEMENTS & INVOICES
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Invoices List
-                  Expanded(
-                    flex: 3,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: const Color(0xFFE2E8F0)),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 20,
-                              vertical: 16,
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  'Monthly Invoices & Receipts',
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 14.5,
-                                    fontWeight: FontWeight.bold,
-                                    color: const Color(0xFF0F172A),
-                                  ),
-                                ),
-                                Text(
-                                  'Billed Monthly via FPX',
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 11,
-                                    color: const Color(0xFF64748B),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const Divider(height: 1, color: Color(0xFFE2E8F0)),
-                          ListView.separated(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: service.billingInvoices.length,
-                            separatorBuilder: (context, index) => const Divider(
-                              height: 1,
-                              color: Color(0xFFF1F5F9),
-                            ),
-                            itemBuilder: (context, i) {
-                              final inv = service.billingInvoices[i];
-                              return ListTile(
-                                dense: true,
-                                contentPadding: const EdgeInsets.symmetric(
-                                  horizontal: 20,
-                                  vertical: 4,
-                                ),
-                                leading: Container(
-                                  padding: const EdgeInsets.all(7),
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xFFEFF6FF),
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  child: const Icon(
-                                    Icons.receipt_rounded,
-                                    color: Color(0xFF062AAE),
-                                    size: 18,
-                                  ),
-                                ),
-                                title: Text(
-                                  '${inv.invoiceNo} • ${inv.billingPeriod}',
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 12.5,
-                                    fontWeight: FontWeight.bold,
-                                    color: const Color(0xFF0F172A),
-                                  ),
-                                ),
-                                subtitle: Text(
-                                  '${inv.activeCompaniesCount} SSM Companies • ${inv.paymentMethod}',
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 11,
-                                    color: const Color(0xFF64748B),
-                                  ),
-                                ),
-                                trailing: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Text(
-                                      'RM ${inv.amount.toStringAsFixed(2)}',
-                                      style: GoogleFonts.poppins(
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.bold,
-                                        color: const Color(0xFF0F172A),
-                                      ),
-                                    ),
-                                    const SizedBox(width: 10),
-                                    IconButton(
-                                      icon: const Icon(
-                                        Icons.description_outlined,
-                                        size: 18,
-                                        color: Color(0xFF062AAE),
-                                      ),
-                                      tooltip: 'View Invoice',
-                                      onPressed: () =>
-                                          _showInvoiceDetails(context, inv),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
-                          ),
-                        ],
-                      ),
+              Builder(
+                builder: (context) {
+                  final invoicesCard = Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(color: const Color(0xFFE2E8F0)),
                     ),
-                  ),
-
-                  const SizedBox(width: 18),
-
-                  // Payment Method & Direct Debit Details
-                  Expanded(
-                    flex: 2,
-                    child: Container(
-                      padding: const EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: const Color(0xFFE2E8F0)),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: isCompactScreen ? 14 : 20,
+                            vertical: 16,
+                          ),
+                          child: Wrap(
+                            spacing: 8,
+                            runSpacing: 4,
+                            alignment: WrapAlignment.spaceBetween,
+                            crossAxisAlignment: WrapCrossAlignment.center,
                             children: [
-                              Container(
-                                padding: const EdgeInsets.all(8),
+                              Text(
+                                'Monthly Invoices & Receipts',
+                                style: GoogleFonts.poppins(
+                                  fontSize: 14.5,
+                                  fontWeight: FontWeight.bold,
+                                  color: const Color(0xFF0F172A),
+                                ),
+                              ),
+                              Text(
+                                'Billed Monthly via FPX',
+                                style: GoogleFonts.poppins(
+                                  fontSize: 11,
+                                  color: const Color(0xFF64748B),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const Divider(height: 1, color: Color(0xFFE2E8F0)),
+                        ListView.separated(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: service.billingInvoices.length,
+                          separatorBuilder: (context, index) => const Divider(
+                            height: 1,
+                            color: Color(0xFFF1F5F9),
+                          ),
+                          itemBuilder: (context, i) {
+                            final inv = service.billingInvoices[i];
+                            return ListTile(
+                              dense: true,
+                              contentPadding: EdgeInsets.symmetric(
+                                horizontal: isCompactScreen ? 14 : 20,
+                                vertical: 4,
+                              ),
+                              leading: Container(
+                                padding: const EdgeInsets.all(7),
                                 decoration: BoxDecoration(
-                                  color: const Color(0xFFFEF3C7),
+                                  color: const Color(0xFFEFF6FF),
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                                 child: const Icon(
-                                  Icons.account_balance_rounded,
-                                  color: Color(0xFFD97706),
+                                  Icons.receipt_rounded,
+                                  color: Color(0xFF062AAE),
                                   size: 18,
                                 ),
                               ),
-                              const SizedBox(width: 10),
-                              Text(
+                              title: Text(
+                                '${inv.invoiceNo} • ${inv.billingPeriod}',
+                                style: GoogleFonts.poppins(
+                                  fontSize: 12.5,
+                                  fontWeight: FontWeight.bold,
+                                  color: const Color(0xFF0F172A),
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              subtitle: Text(
+                                '${inv.activeCompaniesCount} SSM Companies • ${inv.paymentMethod}',
+                                style: GoogleFonts.poppins(
+                                  fontSize: 11,
+                                  color: const Color(0xFF64748B),
+                                ),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              trailing: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    'RM ${inv.amount.toStringAsFixed(2)}',
+                                    style: GoogleFonts.poppins(
+                                      fontSize: 12.5,
+                                      fontWeight: FontWeight.bold,
+                                      color: const Color(0xFF0F172A),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 4),
+                                  IconButton(
+                                    icon: const Icon(
+                                      Icons.description_outlined,
+                                      size: 18,
+                                      color: Color(0xFF062AAE),
+                                    ),
+                                    tooltip: 'View Invoice',
+                                    onPressed: () =>
+                                        _showInvoiceDetails(context, inv),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  );
+
+                  final paymentMethodCard = Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.all(isCompactScreen ? 16 : 20),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(color: const Color(0xFFE2E8F0)),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFFEF3C7),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: const Icon(
+                                Icons.account_balance_rounded,
+                                color: Color(0xFFD97706),
+                                size: 18,
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: Text(
                                 'Payment Method',
                                 style: GoogleFonts.poppins(
                                   fontSize: 14.5,
@@ -1643,26 +1877,28 @@ class _SecretarySubscriptionPageState extends State<SecretarySubscriptionPage> {
                                   color: const Color(0xFF0F172A),
                                 ),
                               ),
-                            ],
-                          ),
-                          const SizedBox(height: 14),
-                          Container(
-                            padding: const EdgeInsets.all(12),
-                            decoration: BoxDecoration(
-                              color: const Color(0xFFF8FAFC),
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(
-                                color: const Color(0xFFE2E8F0),
-                              ),
                             ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
+                          ],
+                        ),
+                        const SizedBox(height: 14),
+                        Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFF8FAFC),
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                              color: const Color(0xFFE2E8F0),
+                            ),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    child: Text(
                                       'Maybank Corporate Direct Debit',
                                       style: GoogleFonts.poppins(
                                         fontSize: 12,
@@ -1670,13 +1906,15 @@ class _SecretarySubscriptionPageState extends State<SecretarySubscriptionPage> {
                                         color: const Color(0xFF0F172A),
                                       ),
                                     ),
-                                    const Icon(
-                                      Icons.check_circle_rounded,
-                                      color: Color(0xFF16A34A),
-                                      size: 16,
-                                    ),
-                                  ],
-                                ),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  const Icon(
+                                    Icons.check_circle_rounded,
+                                    color: Color(0xFF16A34A),
+                                    size: 16,
+                                  ),
+                                ],
+                              ),
                                 const SizedBox(height: 4),
                                 Text(
                                   'Account: •••• 8820 (FPX Autodebit)',
@@ -1717,9 +1955,28 @@ class _SecretarySubscriptionPageState extends State<SecretarySubscriptionPage> {
                           ),
                         ],
                       ),
-                    ),
-                  ),
-                ],
+                    );
+
+                  if (isCompactScreen) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        invoicesCard,
+                        const SizedBox(height: 16),
+                        paymentMethodCard,
+                      ],
+                    );
+                  }
+
+                  return Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(flex: 3, child: invoicesCard),
+                      const SizedBox(width: 18),
+                      Expanded(flex: 2, child: paymentMethodCard),
+                    ],
+                  );
+                },
               ),
             ],
           ),
@@ -1759,7 +2016,7 @@ class _SecretarySubscriptionPageState extends State<SecretarySubscriptionPage> {
             }
 
             return Scaffold(
-              backgroundColor: const Color(0xFFF8FAFC),
+              backgroundColor: Colors.white,
               appBar: AppBar(
                 title: Text(
                   'Company Billing',
@@ -1790,16 +2047,21 @@ class _SecretarySubscriptionPageState extends State<SecretarySubscriptionPage> {
 
   Widget _buildFormulaText(int count, double total) {
     return Row(
-      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Icon(Icons.calculate_outlined, color: Colors.white70, size: 16),
+        const Padding(
+          padding: EdgeInsets.only(top: 2),
+          child: Icon(Icons.calculate_outlined, color: Colors.white70, size: 16),
+        ),
         const SizedBox(width: 8),
-        Text(
-          '$count Active Entities × RM 50.00 = RM ${total.toStringAsFixed(2)} / month',
-          style: GoogleFonts.poppins(
-            fontSize: 12.5,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
+        Flexible(
+          child: Text(
+            '$count Active Entities × RM 50.00 = RM ${total.toStringAsFixed(2)} / month',
+            style: GoogleFonts.poppins(
+              fontSize: 12.5,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
           ),
         ),
       ],
@@ -1807,13 +2069,12 @@ class _SecretarySubscriptionPageState extends State<SecretarySubscriptionPage> {
   }
 
   Widget _buildPillarsRow() {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
+    return Wrap(
+      spacing: 6,
+      runSpacing: 6,
       children: [
         _buildPillarChip('Unlimited Secure Cloud Vault'),
-        const SizedBox(width: 6),
         _buildPillarChip('Unlimited Staff Seats'),
-        const SizedBox(width: 6),
         _buildPillarChip('Full MBRS Engine'),
       ],
     );

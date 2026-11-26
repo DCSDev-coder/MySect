@@ -426,7 +426,7 @@ class _SecretaryLoginPageState extends State<SecretaryLoginPage> {
     final isKeyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF9FAFB),
+      backgroundColor: Colors.white,
       body: SafeArea(
         top: false,
         bottom: false,

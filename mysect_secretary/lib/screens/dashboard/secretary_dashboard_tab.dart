@@ -40,7 +40,7 @@ class _SecretaryDashboardTabState extends State<SecretaryDashboardTab> {
         final companies = service.clientCompanies;
 
         return Scaffold(
-          backgroundColor: const Color(0xFFF8FAFC),
+          backgroundColor: isMobile ? Colors.white : const Color(0xFFF8FAFC),
           body: RefreshIndicator(
             onRefresh: () => service.syncFromBackend(),
             color: const Color(0xFF062AAE),
@@ -224,6 +224,8 @@ class _SecretaryDashboardTabState extends State<SecretaryDashboardTab> {
                       final isMobileKpi = constraints.maxWidth < 620;
                       final card1 = _buildKpiCard(
                         icon: Icons.apartment_rounded,
+                        iconColor: const Color(0xFF062AAE),
+                        iconBg: const Color(0xFFDBEAFE),
                         value: '4',
                         label: 'Companies',
                         trendIcon: Icons.trending_up_rounded,
@@ -234,6 +236,8 @@ class _SecretaryDashboardTabState extends State<SecretaryDashboardTab> {
                       );
                       final card2 = _buildKpiCard(
                         icon: Icons.checklist_rounded,
+                        iconColor: const Color(0xFF2563EB),
+                        iconBg: const Color(0xFFEFF6FF),
                         value: '5',
                         label: 'Pending Tasks',
                         trendIcon: Icons.trending_up_rounded,
@@ -244,6 +248,8 @@ class _SecretaryDashboardTabState extends State<SecretaryDashboardTab> {
                       );
                       final card3 = _buildKpiCard(
                         icon: Icons.warning_amber_rounded,
+                        iconColor: const Color(0xFF0284C7),
+                        iconBg: const Color(0xFFE0F2FE),
                         value: '4',
                         label: 'Overdue Items',
                         trendIcon: Icons.warning_amber_rounded,
@@ -254,6 +260,8 @@ class _SecretaryDashboardTabState extends State<SecretaryDashboardTab> {
                       );
                       final card4 = _buildKpiCard(
                         icon: Icons.calendar_today_rounded,
+                        iconColor: const Color(0xFF0891B2),
+                        iconBg: const Color(0xFFCFFAFE),
                         value: '0',
                         label: 'Upcoming Deadlines',
                         trendIcon: Icons.trending_up_rounded,
@@ -337,6 +345,8 @@ class _SecretaryDashboardTabState extends State<SecretaryDashboardTab> {
   // Top KPI Card Widget
   Widget _buildKpiCard({
     required IconData icon,
+    Color iconColor = const Color(0xFF062AAE),
+    Color iconBg = const Color(0xFFDBEAFE),
     required String value,
     required String label,
     required IconData trendIcon,
@@ -379,13 +389,13 @@ class _SecretaryDashboardTabState extends State<SecretaryDashboardTab> {
                         width: isCompact ? 26 : 32,
                         height: isCompact ? 26 : 32,
                         decoration: BoxDecoration(
-                          color: const Color(0xFF0F172A),
+                          color: iconBg,
                           borderRadius: BorderRadius.circular(isCompact ? 7 : 8),
                         ),
                         child: Center(
                           child: Icon(
                             icon,
-                            color: Colors.white,
+                            color: iconColor,
                             size: isCompact ? 13 : 16,
                           ),
                         ),
@@ -888,7 +898,7 @@ class _SecretaryDashboardTabState extends State<SecretaryDashboardTab> {
         _buildActionTaskItem(
           icon: Icons.rate_review_rounded,
           iconColor: const Color(0xFF062AAE),
-          iconBg: const Color(0xFFEFF6FF),
+          iconBg: const Color(0xFFDBEAFE),
           title: 'Review Section 68 CTCs',
           company: 'Data Center Specialists • 2 Pending',
           actionLabel: 'Review →',
@@ -898,12 +908,12 @@ class _SecretaryDashboardTabState extends State<SecretaryDashboardTab> {
         const SizedBox(height: 8),
         _buildActionTaskItem(
           icon: Icons.upload_file_rounded,
-          iconColor: const Color(0xFF2563EB),
-          iconBg: const Color(0xFFEFF6FF),
+          iconColor: const Color(0xFF7C3AED),
+          iconBg: const Color(0xFFF3E8FF),
           title: 'Section 68 Lodgement',
           company: 'Data Center Specialists • Due 14 May',
           actionLabel: 'Lodge →',
-          actionColor: const Color(0xFF2563EB),
+          actionColor: const Color(0xFF7C3AED),
           onAction: widget.onNavigateToQueue,
         ),
         const SizedBox(height: 8),
@@ -942,76 +952,92 @@ class _SecretaryDashboardTabState extends State<SecretaryDashboardTab> {
     required Color actionColor,
     required VoidCallback onAction,
   }) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-      decoration: BoxDecoration(
-        color: const Color(0xFFF8FAFC),
+    final isMobile = MediaQuery.sizeOf(context).width < 768;
+
+    return Material(
+      color: const Color(0xFFF8FAFC),
+      borderRadius: BorderRadius.circular(10),
+      child: InkWell(
+        onTap: onAction,
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: const Color(0xFFF1F5F9)),
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 32,
-            height: 32,
-            decoration: BoxDecoration(
-              color: iconBg,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Center(
-              child: Icon(icon, color: iconColor, size: 16),
-            ),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: const Color(0xFFF1F5F9)),
           ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: GoogleFonts.poppins(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                    color: const Color(0xFF0F172A),
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+          child: Row(
+            children: [
+              Container(
+                width: 32,
+                height: 32,
+                decoration: BoxDecoration(
+                  color: iconBg,
+                  borderRadius: BorderRadius.circular(8),
                 ),
-                Text(
-                  company,
-                  style: GoogleFonts.poppins(
-                    fontSize: 10.5,
-                    color: const Color(0xFF64748B),
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+                child: Center(
+                  child: Icon(icon, color: iconColor, size: 16),
                 ),
-              ],
-            ),
-          ),
-          const SizedBox(width: 8),
-          ElevatedButton(
-            onPressed: onAction,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: actionColor,
-              foregroundColor: Colors.white,
-              elevation: 0,
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-              minimumSize: Size.zero,
-              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(6),
               ),
-            ),
-            child: Text(
-              actionLabel,
-              style: GoogleFonts.poppins(
-                fontSize: 10,
-                fontWeight: FontWeight.bold,
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: GoogleFonts.poppins(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        color: const Color(0xFF0F172A),
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    Text(
+                      company,
+                      style: GoogleFonts.poppins(
+                        fontSize: 10.5,
+                        color: const Color(0xFF64748B),
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
               ),
-            ),
+              const SizedBox(width: 8),
+              if (isMobile)
+                const Icon(
+                  Icons.chevron_right_rounded,
+                  size: 16,
+                  color: Color(0xFF94A3B8),
+                )
+              else
+                ElevatedButton(
+                  onPressed: onAction,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: actionColor,
+                    foregroundColor: Colors.white,
+                    elevation: 0,
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    minimumSize: Size.zero,
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                  ),
+                  child: Text(
+                    actionLabel,
+                    style: GoogleFonts.poppins(
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

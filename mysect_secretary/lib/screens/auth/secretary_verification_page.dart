@@ -681,41 +681,48 @@ class _SecretaryVerificationPageState extends State<SecretaryVerificationPage> {
                 backgroundColor: Colors.transparent,
               ),
               Expanded(
-                child: SingleChildScrollView(
-                  physics: const ClampingScrollPhysics(),
-                  keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-                  padding: EdgeInsets.fromLTRB(
-                    20.0,
-                    isKeyboardOpen ? 4.0 : 0.0,
-                    20.0,
-                    20.0 + (isKeyboardOpen ? 12 : bottomInset),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      SizedBox(
-                        height: isKeyboardOpen
-                            ? 0
-                            : (constraints.maxHeight * 0.10).clamp(32.0, 90.0),
+                child: LayoutBuilder(
+                  builder: (context, box) {
+                    return SingleChildScrollView(
+                      physics: const ClampingScrollPhysics(),
+                      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+                      padding: EdgeInsets.fromLTRB(
+                        20.0,
+                        isKeyboardOpen ? 4.0 : 0.0,
+                        20.0,
+                        20.0 + (isKeyboardOpen ? 12 : bottomInset),
                       ),
-                      AnimatedContainer(
-                        duration: const Duration(milliseconds: 200),
-                        curve: Curves.easeOut,
-                        height: isKeyboardOpen ? 0 : 170,
-                        clipBehavior: Clip.hardEdge,
-                        decoration: const BoxDecoration(),
-                        child: OverflowBox(
-                          minHeight: 0,
-                          maxHeight: 170,
-                          alignment: Alignment.center,
-                          child: Image.asset(
-                            'assets/verify_code.png',
-                            height: 170,
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: isKeyboardOpen ? 8 : 16),
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(minHeight: box.maxHeight),
+                        child: Column(
+                          mainAxisAlignment: isKeyboardOpen
+                              ? MainAxisAlignment.center
+                              : MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            SizedBox(
+                              height: isKeyboardOpen
+                                  ? 0
+                                  : (constraints.maxHeight * 0.10).clamp(32.0, 90.0),
+                            ),
+                            AnimatedContainer(
+                              duration: const Duration(milliseconds: 200),
+                              curve: Curves.easeOut,
+                              height: isKeyboardOpen ? 0 : 170,
+                              clipBehavior: Clip.hardEdge,
+                              decoration: const BoxDecoration(),
+                              child: OverflowBox(
+                                minHeight: 0,
+                                maxHeight: 170,
+                                alignment: Alignment.center,
+                                child: Image.asset(
+                                  'assets/verify_code.png',
+                                  height: 170,
+                                  fit: BoxFit.contain,
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: isKeyboardOpen ? 8 : 16),
                       Text(
                         'Enter verification code',
                         textAlign: TextAlign.center,
@@ -823,6 +830,9 @@ class _SecretaryVerificationPageState extends State<SecretaryVerificationPage> {
                       const SizedBox(height: 16),
                     ],
                   ),
+                ),
+              );
+                  },
                 ),
               ),
             ],

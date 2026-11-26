@@ -239,13 +239,8 @@ class SecretaryProfileTab extends StatelessWidget {
                       'Sec. 235(2) Companies Act 2016',
                     ),
                     _buildInfoRow(
-                      'Digital Signature',
-                      'SSM MBRS Certified Token Active',
-                      statusColor: const Color(0xFF047857),
-                    ),
-                    _buildInfoRow(
                       'License Validity',
-                      '31 Dec 2026 (Good Standing)',
+                      '31 Dec 2026',
                       isLast: true,
                     ),
                   ],
@@ -306,21 +301,19 @@ class SecretaryProfileTab extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
+                          Wrap(
+                            spacing: 6,
+                            runSpacing: 4,
+                            crossAxisAlignment: WrapCrossAlignment.center,
                             children: [
-                              Flexible(
-                                child: Text(
-                                  service.currentPlan.name,
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.bold,
-                                    color: const Color(0xFF0F172A),
-                                  ),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
+                              Text(
+                                service.currentPlan.name,
+                                style: GoogleFonts.poppins(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.bold,
+                                  color: const Color(0xFF0F172A),
                                 ),
                               ),
-                              const SizedBox(width: 6),
                               Container(
                                 padding: const EdgeInsets.symmetric(
                                   horizontal: 6,
@@ -348,6 +341,8 @@ class SecretaryProfileTab extends StatelessWidget {
                               fontSize: 11,
                               color: const Color(0xFF64748B),
                             ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ],
                       ),

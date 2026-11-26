@@ -38,7 +38,7 @@ class SecretaryProfile {
       firmRegistrationNo: 'SSM/COSEC/2020/00481',
       email: 'Dcs2026@gmail.com',
       phone: '+60 3-2148 9920',
-      officeAddress: 'Level 18, Menara Binjai, No. 2 Jalan Binjai, 50450 Kuala Lumpur',
+      officeAddress: 'Eco Majestic, 43500 Semenyih, Selangor',
       totalAssignedCompanies: 14,
       avatarUrl: '',
     );

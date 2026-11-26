@@ -258,58 +258,31 @@ class _SecretarySettingsPageState extends State<SecretarySettingsPage> {
         final isDesktop = constraints.maxWidth >= 800;
 
         final bodyScroll = SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (!widget.isEmbedded && !isDesktop) ...[
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 12),
-                  child: Row(
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 18),
-                        onPressed: () => Navigator.pop(context),
-                      ),
-                      const SizedBox(width: 8),
-                      Text(
-                        'Firm Settings & Security',
-                        style: GoogleFonts.poppins(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: const Color(0xFF0F172A),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-                    const SizedBox(height: 12),
-                    Text(
-                      'NOTIFICATIONS',
-                      style: GoogleFonts.poppins(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    Material(
-                      color: Colors.white,
-                      shape: RoundedRectangleBorder(
+                    _buildSectionHeader('NOTIFICATIONS'),
+                    const SizedBox(height: 8),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
                         borderRadius: BorderRadius.circular(16),
-                        side: BorderSide(color: Colors.grey.shade200),
+                        border: Border.all(color: const Color(0xFFE2E8F0)),
                       ),
                       child: Column(
                         children: [
                           _buildListTile(
-                            icon: Icons.chat_outlined,
+                            icon: Icons.chat_rounded,
+                            iconColor: const Color(0xFF059669),
+                            iconBg: const Color(0xFFECFDF5),
                             title: 'Whatsapp update',
                             trailing: Switch(
                               value: _whatsappEnabled,
                               onChanged: (val) =>
                                   setState(() => _whatsappEnabled = val),
-                              activeThumbColor: Colors.black,
+                              activeThumbColor: Colors.white,
+                              activeTrackColor: const Color(0xFF062AAE),
                             ),
                             onTap: () {
                               setState(
@@ -317,15 +290,18 @@ class _SecretarySettingsPageState extends State<SecretarySettingsPage> {
                               );
                             },
                           ),
-                          Divider(color: Colors.grey.shade200, height: 1),
+                          const Divider(color: Color(0xFFF1F5F9), height: 1),
                           _buildListTile(
-                            icon: Icons.mark_email_unread_outlined,
+                            icon: Icons.mark_email_unread_rounded,
+                            iconColor: const Color(0xFF062AAE),
+                            iconBg: const Color(0xFFEFF6FF),
                             title: 'Email notifications',
                             trailing: Switch(
                               value: _emailEnabled,
                               onChanged: (val) =>
                                   setState(() => _emailEnabled = val),
-                              activeThumbColor: Colors.black,
+                              activeThumbColor: Colors.white,
+                              activeTrackColor: const Color(0xFF062AAE),
                             ),
                             onTap: () {
                               setState(() => _emailEnabled = !_emailEnabled);
@@ -334,41 +310,40 @@ class _SecretarySettingsPageState extends State<SecretarySettingsPage> {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 24),
-                    Text(
-                      'SECURITY',
-                      style: GoogleFonts.poppins(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    Material(
-                      color: Colors.white,
-                      shape: RoundedRectangleBorder(
+                    const SizedBox(height: 20),
+                    _buildSectionHeader('SECURITY'),
+                    const SizedBox(height: 8),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
                         borderRadius: BorderRadius.circular(16),
-                        side: BorderSide(color: Colors.grey.shade200),
+                        border: Border.all(color: const Color(0xFFE2E8F0)),
                       ),
                       child: Column(
                         children: [
                           _buildListTile(
-                            icon: Icons.lock_outline,
+                            icon: Icons.lock_outline_rounded,
+                            iconColor: const Color(0xFF062AAE),
+                            iconBg: const Color(0xFFEFF6FF),
                             title: 'Change password',
                             trailing: const Icon(
-                              Icons.chevron_right,
-                              color: Colors.black,
+                              Icons.chevron_right_rounded,
+                              size: 18,
+                              color: Color(0xFF94A3B8),
                             ),
                             onTap: _showChangePasswordSheet,
                           ),
-                          Divider(color: Colors.grey.shade200, height: 1),
+                          const Divider(color: Color(0xFFF1F5F9), height: 1),
                           _buildListTile(
-                            icon: Icons.security_outlined,
+                            icon: Icons.verified_user_outlined,
+                            iconColor: const Color(0xFF2563EB),
+                            iconBg: const Color(0xFFEFF6FF),
                             title: 'Two-Factor Authentication',
                             subtitle: 'Send email',
                             trailing: const Icon(
-                              Icons.chevron_right,
-                              color: Colors.black,
+                              Icons.chevron_right_rounded,
+                              size: 18,
+                              color: Color(0xFF94A3B8),
                             ),
                             onTap: () {
                               Navigator.push(
@@ -380,43 +355,47 @@ class _SecretarySettingsPageState extends State<SecretarySettingsPage> {
                               );
                             },
                           ),
-                          Divider(color: Colors.grey.shade200, height: 1),
+                          const Divider(color: Color(0xFFF1F5F9), height: 1),
                           _buildListTile(
                             icon: Icons.pin_outlined,
+                            iconColor: const Color(0xFF7C3AED),
+                            iconBg: const Color(0xFFF3E8FF),
                             title: 'Passcode protection',
                             subtitle: _passcodeEnabled ? 'Enabled' : 'Disabled',
+                            trailing: const Icon(
+                              Icons.chevron_right_rounded,
+                              size: 18,
+                              color: Color(0xFF94A3B8),
+                            ),
                             onTap: _togglePasscode,
                           ),
                         ],
                       ),
                     ),
-                    const SizedBox(height: 24),
-                    Text(
-                      'ACCOUNT',
-                      style: GoogleFonts.poppins(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    Material(
-                      color: Colors.white,
-                      shape: RoundedRectangleBorder(
+                    const SizedBox(height: 20),
+                    _buildSectionHeader('ACCOUNT'),
+                    const SizedBox(height: 8),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
                         borderRadius: BorderRadius.circular(16),
-                        side: BorderSide(color: Colors.grey.shade200),
+                        border: Border.all(color: const Color(0xFFE2E8F0)),
                       ),
                       child: _buildListTile(
-                        icon: Icons.delete_outline,
+                        icon: Icons.delete_outline_rounded,
+                        iconColor: const Color(0xFFDC2626),
+                        iconBg: const Color(0xFFFEE2E2),
                         title: 'Delete account',
+                        titleColor: const Color(0xFFDC2626),
                         trailing: const Icon(
-                          Icons.chevron_right,
-                          color: Colors.black,
+                          Icons.chevron_right_rounded,
+                          size: 18,
+                          color: Color(0xFFDC2626),
                         ),
                         onTap: _confirmDeleteAccount,
                       ),
                     ),
-                    const SizedBox(height: 40),
+                    const SizedBox(height: 32),
                   ],
                 ),
               );
@@ -472,21 +451,54 @@ class _SecretarySettingsPageState extends State<SecretarySettingsPage> {
         }
 
         return Scaffold(
-          backgroundColor: const Color(0xFFFAFAFA),
-          body: SafeArea(
-            top: true,
-            bottom: false,
-            child: bodyScroll,
+          backgroundColor: Colors.white,
+          appBar: AppBar(
+            title: Text(
+              'Firm Settings & Security',
+              style: GoogleFonts.poppins(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: const Color(0xFF0F172A),
+              ),
+            ),
+            backgroundColor: Colors.white,
+            elevation: 0.5,
+            leading: IconButton(
+              icon: const Icon(
+                Icons.arrow_back_ios_new_rounded,
+                color: Color(0xFF0F172A),
+                size: 18,
+              ),
+              onPressed: () => Navigator.pop(context),
+            ),
           ),
+          body: bodyScroll,
         );
       },
     );
   }
 
+  Widget _buildSectionHeader(String title) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 4),
+      child: Text(
+        title,
+        style: GoogleFonts.poppins(
+          fontSize: 11,
+          fontWeight: FontWeight.bold,
+          color: const Color(0xFF64748B),
+          letterSpacing: 0.8,
+        ),
+      ),
+    );
+  }
+
   Widget _buildListTile({
     IconData? icon,
-    String? imagePath,
+    Color iconColor = const Color(0xFF062AAE),
+    Color iconBg = const Color(0xFFEFF6FF),
     required String title,
+    Color titleColor = const Color(0xFF0F172A),
     String? subtitle,
     Widget? trailing,
     VoidCallback? onTap,
@@ -495,14 +507,22 @@ class _SecretarySettingsPageState extends State<SecretarySettingsPage> {
       onTap: onTap,
       borderRadius: BorderRadius.circular(16),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
         child: Row(
           children: [
-            if (imagePath != null)
-              Image.asset(imagePath, width: 28, height: 28)
-            else if (icon != null)
-              Icon(icon, color: Colors.black, size: 28),
-            const SizedBox(width: 16),
+            if (icon != null)
+              Container(
+                width: 36,
+                height: 36,
+                decoration: BoxDecoration(
+                  color: iconBg,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Center(
+                  child: Icon(icon, color: iconColor, size: 18),
+                ),
+              ),
+            const SizedBox(width: 12),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -510,18 +530,18 @@ class _SecretarySettingsPageState extends State<SecretarySettingsPage> {
                   Text(
                     title,
                     style: GoogleFonts.poppins(
-                      color: Colors.black,
-                      fontSize: 14,
+                      color: titleColor,
+                      fontSize: 13,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
                   if (subtitle != null) ...[
-                    const SizedBox(height: 4),
+                    const SizedBox(height: 1),
                     Text(
                       subtitle,
                       style: GoogleFonts.poppins(
-                        color: Colors.black87,
-                        fontSize: 12,
+                        color: const Color(0xFF64748B),
+                        fontSize: 11,
                       ),
                     ),
                   ],

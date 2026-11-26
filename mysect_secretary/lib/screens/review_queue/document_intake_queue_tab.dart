@@ -13,8 +13,40 @@ class DocumentIntakeQueueTab extends StatefulWidget {
 
 class _DocumentIntakeQueueTabState extends State<DocumentIntakeQueueTab> {
   final SecretaryDocumentService _service = SecretaryDocumentService.instance;
+  final ScrollController _scrollController = ScrollController();
 
   String _searchQuery = '';
+  bool _showScrollToTop = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    final shouldShow = _scrollController.hasClients && _scrollController.offset > 160;
+    if (shouldShow != _showScrollToTop) {
+      setState(() => _showScrollToTop = shouldShow);
+    }
+  }
+
+  void _scrollToTop() {
+    if (_scrollController.hasClients) {
+      _scrollController.animateTo(
+        0,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeOutCubic,
+      );
+    }
+  }
 
   Color _getStatusColor(DocumentReviewStatus status) {
     switch (status) {
@@ -65,6 +97,17 @@ class _DocumentIntakeQueueTabState extends State<DocumentIntakeQueueTab> {
 
         return Scaffold(
           backgroundColor: Colors.white,
+          floatingActionButton: _showScrollToTop
+              ? FloatingActionButton.small(
+                  heroTag: 'review_queue_scroll_top',
+                  onPressed: _scrollToTop,
+                  backgroundColor: const Color(0xFF062AAE),
+                  foregroundColor: Colors.white,
+                  elevation: 3,
+                  tooltip: 'Scroll to top',
+                  child: const Icon(Icons.arrow_upward_rounded, size: 20),
+                )
+              : null,
           body: LayoutBuilder(
             builder: (context, constraints) {
               final isDesktop = constraints.maxWidth >= 768;
@@ -73,6 +116,7 @@ class _DocumentIntakeQueueTabState extends State<DocumentIntakeQueueTab> {
                 onRefresh: () => _service.syncFromBackend(),
                 color: const Color(0xFF062AAE),
                 child: CustomScrollView(
+                  controller: _scrollController,
                   slivers: [
                     // Search Header Section
                     SliverToBoxAdapter(
@@ -192,7 +236,7 @@ class _DocumentIntakeQueueTabState extends State<DocumentIntakeQueueTab> {
                   ),
                 ),
                 const SizedBox(width: 8),
-                Expanded(
+                Flexible(
                   child: Text(
                     companyName,
                     style: GoogleFonts.poppins(

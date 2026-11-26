@@ -17,8 +17,40 @@ class ClientCompaniesTab extends StatefulWidget {
 class _ClientCompaniesTabState extends State<ClientCompaniesTab> {
   final SecretaryDocumentService _docService = SecretaryDocumentService.instance;
   final SecretaryComplianceService _compService = SecretaryComplianceService.instance;
+  final ScrollController _scrollController = ScrollController();
   String _searchQuery = '';
   String _selectedFilter = 'All';
+  bool _showScrollToTop = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    final shouldShow = _scrollController.hasClients && _scrollController.offset > 160;
+    if (shouldShow != _showScrollToTop) {
+      setState(() => _showScrollToTop = shouldShow);
+    }
+  }
+
+  void _scrollToTop() {
+    if (_scrollController.hasClients) {
+      _scrollController.animateTo(
+        0,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeOutCubic,
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -111,6 +143,17 @@ class _ClientCompaniesTabState extends State<ClientCompaniesTab> {
 
         return Scaffold(
           backgroundColor: Colors.white,
+          floatingActionButton: _showScrollToTop
+              ? FloatingActionButton.small(
+                  heroTag: 'company_vaults_scroll_top',
+                  onPressed: _scrollToTop,
+                  backgroundColor: const Color(0xFF062AAE),
+                  foregroundColor: Colors.white,
+                  elevation: 3,
+                  tooltip: 'Scroll to top',
+                  child: const Icon(Icons.arrow_upward_rounded, size: 20),
+                )
+              : null,
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -236,6 +279,7 @@ class _ClientCompaniesTabState extends State<ClientCompaniesTab> {
 
                     if (isDesktop) {
                       return GridView.builder(
+                        controller: _scrollController,
                         padding: const EdgeInsets.fromLTRB(16, 6, 16, 24),
                         gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                           maxCrossAxisExtent: 460,
@@ -251,6 +295,7 @@ class _ClientCompaniesTabState extends State<ClientCompaniesTab> {
                       );
                     } else {
                       return ListView.builder(
+                        controller: _scrollController,
                         padding: const EdgeInsets.fromLTRB(16, 6, 16, 20),
                         itemCount: filteredCompanies.length,
                         itemBuilder: (context, index) {
