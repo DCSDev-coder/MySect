@@ -301,7 +301,7 @@ class _CorporatePageState extends State<CorporatePage> {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Image.asset('assets/pdf.png', width: 48, height: 48),
+                Image.asset('assets/PDF.png', width: 48, height: 48),
                 const SizedBox(width: 16),
                 Expanded(
                   child: Column(
@@ -403,7 +403,7 @@ class _CorporatePageState extends State<CorporatePage> {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Image.asset('assets/pdf.png', width: 48, height: 48),
+                Image.asset('assets/PDF.png', width: 48, height: 48),
                 const SizedBox(width: 16),
                 Expanded(
                   child: Column(

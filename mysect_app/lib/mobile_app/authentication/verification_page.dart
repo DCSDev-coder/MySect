@@ -81,6 +81,8 @@ class _VerificationPageState extends State<VerificationPage> {
           focusNode: _focusNodes[index],
           onChanged: (value) => _onChanged(value, index),
           keyboardType: TextInputType.number,
+          textInputAction: TextInputAction.done,
+          onSubmitted: (_) => FocusManager.instance.primaryFocus?.unfocus(),
           textAlign: TextAlign.center,
           maxLength: 1,
           style: GoogleFonts.poppins(
@@ -137,10 +139,7 @@ class _VerificationPageState extends State<VerificationPage> {
           const SizedBox(height: 36),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: List.generate(
-              6,
-              (index) => _buildOtpBox(index),
-            ),
+            children: List.generate(6, (index) => _buildOtpBox(index)),
           ),
           const SizedBox(height: 36),
           Center(
@@ -154,9 +153,7 @@ class _VerificationPageState extends State<VerificationPage> {
                             widget.email != null && widget.email!.isNotEmpty
                                 ? 'A new 6-digit verification code has been sent to ${widget.email}.'
                                 : 'A new 6-digit verification code has been sent to your email.',
-                            style: GoogleFonts.poppins(
-                              color: Colors.white,
-                            ),
+                            style: GoogleFonts.poppins(color: Colors.white),
                           ),
                           backgroundColor: const Color(0xFF062AAE),
                           duration: const Duration(seconds: 2),
@@ -199,9 +196,7 @@ class _VerificationPageState extends State<VerificationPage> {
                   SnackBar(
                     content: Text(
                       'Please enter the 6-digit code',
-                      style: GoogleFonts.poppins(
-                        color: Colors.white,
-                      ),
+                      style: GoogleFonts.poppins(color: Colors.white),
                     ),
                     backgroundColor: Colors.red,
                   ),
@@ -209,9 +204,7 @@ class _VerificationPageState extends State<VerificationPage> {
                 return;
               }
               Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(
-                  builder: (context) => const HomePage(),
-                ),
+                MaterialPageRoute(builder: (context) => const HomePage()),
                 (route) => false,
               );
             },

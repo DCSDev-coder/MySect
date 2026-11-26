@@ -227,7 +227,7 @@ class AttentionPage extends StatelessWidget {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Image.asset('assets/pdf.png', width: 44, height: 44),
+              Image.asset('assets/PDF.png', width: 44, height: 44),
               const SizedBox(width: 14),
               Expanded(
                 child: Column(

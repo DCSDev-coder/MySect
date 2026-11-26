@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'auth_page_shell.dart';
 
 class SlideTransitionRoute extends PageRouteBuilder {
   final Widget page;
@@ -33,15 +34,24 @@ class SlideTransitionRoute extends PageRouteBuilder {
             end: 0.0,
           ).animate(secondaryCurve);
 
-          return SlideTransition(
-            position: outgoingSlide,
-            child: FadeTransition(
-              opacity: outgoingFade,
-              child: SlideTransition(
-                position: incomingSlide,
-                child: FadeTransition(opacity: primaryCurve, child: child),
-              ),
-            ),
+          return ValueListenableBuilder<bool>(
+            valueListenable: AuthTransitionRoute.isTransitioning,
+            builder: (context, isAuthTransitioning, _) {
+              if (isAuthTransitioning &&
+                  secondaryAnimation.status != AnimationStatus.dismissed) {
+                return child;
+              }
+              return SlideTransition(
+                position: outgoingSlide,
+                child: FadeTransition(
+                  opacity: outgoingFade,
+                  child: SlideTransition(
+                    position: incomingSlide,
+                    child: FadeTransition(opacity: primaryCurve, child: child),
+                  ),
+                ),
+              );
+            },
           );
         },
         transitionDuration: const Duration(milliseconds: 320),
