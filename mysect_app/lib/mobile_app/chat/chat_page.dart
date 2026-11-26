@@ -21,6 +21,7 @@ class _ChatConversation {
   final List<ChatMessage> messages;
   final int unreadCount;
   final bool isAssistant;
+  final DateTime sortTime;
 
   const _ChatConversation({
     required this.id,
@@ -28,6 +29,7 @@ class _ChatConversation {
     required this.time,
     required this.lastMessage,
     required this.messages,
+    required this.sortTime,
     this.unreadCount = 0,
     this.isAssistant = false,
   });
@@ -42,6 +44,7 @@ class _ChatPageState extends State<ChatPage> {
       title: 'General Support',
       time: '10:05 AM',
       lastMessage: 'Sure, I can help with that. What seems to be the issue?',
+      sortTime: DateTime(2026, 11, 26, 10, 5),
       unreadCount: 1,
       isAssistant: true,
       messages: [
@@ -64,170 +67,16 @@ class _ChatPageState extends State<ChatPage> {
     ),
   ];
 
-  void _startNewConversationSheet() {
-    final topicController = TextEditingController();
-    final topics = [
-      ('Ask About My Files', 'Ask AI about your uploaded MySect documents', Icons.folder_outlined),
-      ('SSM Deadlines & Rules', 'Get instant answers on statutory compliance', Icons.event_note_rounded),
-      ('Document Checklist', 'Check what forms or documents are required', Icons.checklist_rounded),
-      ('General AI Help', 'Ask any general question to MySect AI Assistant', Icons.auto_awesome),
-    ];
-
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.white,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-      ),
-      builder: (sheetContext) {
-        return Padding(
-          padding: EdgeInsets.only(
-            left: 20,
-            right: 20,
-            top: 16,
-            bottom: MediaQuery.of(sheetContext).viewInsets.bottom + 24,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Center(
-                child: Container(
-                  width: 40,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    color: Colors.grey.shade300,
-                    borderRadius: BorderRadius.circular(2),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16),
-              Row(
-                children: [
-                  const Icon(Icons.auto_awesome, color: Color(0xFF062AAE), size: 20),
-                  const SizedBox(width: 8),
-                  Text(
-                    'Ask MySect AI Assistant',
-                    style: GoogleFonts.poppins(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.black,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 4),
-              Text(
-                'Start a new AI chat. Secretary chats appear automatically when your secretary messages you.',
-                style: GoogleFonts.poppins(
-                  fontSize: 12,
-                  color: Colors.grey.shade600,
-                ),
-              ),
-              const SizedBox(height: 14),
-              ...topics.map((t) {
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 8),
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.pop(sheetContext);
-                      _openNewConversation(t.$1);
-                    },
-                    borderRadius: BorderRadius.circular(12),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFF8FAFC),
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: const Color(0xFFE2E8F0)),
-                      ),
-                      child: Row(
-                        children: [
-                          Icon(t.$3, color: const Color(0xFF062AAE), size: 20),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  t.$1,
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.black87,
-                                  ),
-                                ),
-                                Text(
-                                  t.$2,
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 11,
-                                    color: Colors.grey.shade600,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const Icon(Icons.chevron_right, color: Color(0xFF062AAE)),
-                        ],
-                      ),
-                    ),
-                  ),
-                );
-              }),
-              const SizedBox(height: 6),
-              Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: topicController,
-                      style: GoogleFonts.poppins(fontSize: 13),
-                      decoration: InputDecoration(
-                        hintText: 'Or type a custom topic...',
-                        hintStyle: GoogleFonts.poppins(fontSize: 12, color: Colors.grey.shade500),
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(color: Colors.grey.shade300),
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  ElevatedButton(
-                    onPressed: () {
-                      final custom = topicController.text.trim();
-                      Navigator.pop(sheetContext);
-                      _openNewConversation(custom.isNotEmpty ? custom : 'New Conversation');
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF062AAE),
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                    ),
-                    child: Text(
-                      'Start',
-                      style: GoogleFonts.poppins(fontSize: 13, fontWeight: FontWeight.w600),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
   void _openNewConversation(String title) {
+    final nowDt = DateTime.now();
     final now = TimeOfDay.now().format(context);
-    final id = 'ai-${DateTime.now().millisecondsSinceEpoch}';
+    final id = 'ai-${nowDt.millisecondsSinceEpoch}';
     final newConv = _ChatConversation(
       id: id,
       title: title,
       time: now,
       lastMessage: 'Hi! Ask me anything about your files or compliance.',
+      sortTime: nowDt,
       messages: [
         ChatMessage(
           text: 'Hi! I am MySect AI Assistant. How can I help you with $title?',
@@ -290,6 +139,7 @@ class _ChatPageState extends State<ChatPage> {
           title: filing.title,
           time: lastTime,
           lastMessage: lastMsg,
+          sortTime: filing.submittedDate,
           messages: msgs,
           unreadCount: unread,
         ),
@@ -309,6 +159,7 @@ class _ChatPageState extends State<ChatPage> {
           title: c.title,
           time: c.time,
           lastMessage: c.lastMessage,
+          sortTime: c.sortTime,
           messages: c.messages,
           unreadCount: unread,
           isAssistant: c.isAssistant,
@@ -316,8 +167,10 @@ class _ChatPageState extends State<ChatPage> {
       );
     }
 
-    final pinned = list.where((c) => _pinnedConversationIds.contains(c.id)).toList();
-    final unpinned = list.where((c) => !_pinnedConversationIds.contains(c.id)).toList();
+    final pinned = list.where((c) => _pinnedConversationIds.contains(c.id)).toList()
+      ..sort((a, b) => b.sortTime.compareTo(a.sortTime));
+    final unpinned = list.where((c) => !_pinnedConversationIds.contains(c.id)).toList()
+      ..sort((a, b) => b.sortTime.compareTo(a.sortTime));
     return [...pinned, ...unpinned];
   }
 
@@ -457,7 +310,7 @@ class _ChatPageState extends State<ChatPage> {
       ),
       floatingActionButton: FloatingActionButton(
         heroTag: 'chat_fab',
-        onPressed: _startNewConversationSheet,
+        onPressed: () => _openNewConversation('MySect AI Assistant'),
         backgroundColor: const Color(0xFF062AAE),
         shape: const CircleBorder(),
         child: const Icon(
