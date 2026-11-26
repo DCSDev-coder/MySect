@@ -20,359 +20,6 @@ class _ClientCompaniesTabState extends State<ClientCompaniesTab> {
   String _searchQuery = '';
   String _selectedFilter = 'All';
 
-  void _showSetDatelineBottomSheet(BuildContext context, String companyName) {
-    final titleController = TextEditingController();
-    final subtitleController = TextEditingController();
-    final instructionsController = TextEditingController();
-
-    DateTime selectedDueDate = DateTime.now().add(const Duration(days: 14));
-    String selectedCategory = 'General Statutory';
-
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.white,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-      ),
-      builder: (modalCtx) {
-        return StatefulBuilder(
-          builder: (ctx, setModalState) {
-            final existingTasks = _compService.getTasksForCompany(companyName);
-
-            return Padding(
-              padding: EdgeInsets.only(
-                left: 20,
-                right: 20,
-                top: 16,
-                bottom: MediaQuery.of(modalCtx).viewInsets.bottom + 24,
-              ),
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Center(
-                      child: Container(
-                        width: 44,
-                        height: 4,
-                        decoration: BoxDecoration(
-                          color: Colors.grey.shade300,
-                          borderRadius: BorderRadius.circular(2),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    Row(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF062AAE).withValues(alpha: 0.1),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: const Icon(
-                            Icons.calendar_month_rounded,
-                            color: Color(0xFF062AAE),
-                            size: 24,
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Set Calendar Dateline',
-                                style: GoogleFonts.poppins(
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black87,
-                                ),
-                              ),
-                              Text(
-                                companyName,
-                                style: GoogleFonts.poppins(
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.w600,
-                                  color: const Color(0xFF062AAE),
-                                ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-
-                    // Existing Tasks list for this company
-                    if (existingTasks.isNotEmpty) ...[
-                      Text(
-                        'Scheduled Datelines (${existingTasks.length})',
-                        style: GoogleFonts.poppins(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.grey.shade700,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      ...existingTasks.map((t) {
-                        return Container(
-                          margin: const EdgeInsets.only(bottom: 8),
-                          padding: const EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFF8FAFC),
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(color: Colors.grey.shade200),
-                          ),
-                          child: Row(
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                                decoration: BoxDecoration(
-                                  color: t.pillBgColor,
-                                  borderRadius: BorderRadius.circular(6),
-                                ),
-                                child: Text(
-                                  DateFormat('dd MMM yyyy').format(t.dueDate),
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.bold,
-                                    color: t.pillTextColor,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 10),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      t.title,
-                                      style: GoogleFonts.poppins(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black87,
-                                      ),
-                                    ),
-                                    Text(
-                                      t.timeRemainingText,
-                                      style: GoogleFonts.poppins(
-                                        fontSize: 10,
-                                        color: Colors.grey.shade600,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              IconButton(
-                                icon: const Icon(Icons.send_rounded, size: 16, color: Color(0xFF059669)),
-                                tooltip: 'Send Reminder to Director',
-                                onPressed: () {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Row(
-                                        children: [
-                                          const Icon(Icons.check_circle_rounded, color: Colors.white, size: 16),
-                                          const SizedBox(width: 8),
-                                          Expanded(
-                                            child: Text(
-                                              'Statutory reminder for ${t.title} sent to $companyName directors.',
-                                              style: GoogleFonts.poppins(fontSize: 12),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      backgroundColor: const Color(0xFF062AAE),
-                                    ),
-                                  );
-                                },
-                                padding: EdgeInsets.zero,
-                                constraints: const BoxConstraints(),
-                              ),
-                              const SizedBox(width: 8),
-                              IconButton(
-                                icon: const Icon(Icons.delete_outline_rounded, size: 18, color: Colors.red),
-                                onPressed: () {
-                                  _compService.deleteTask(t.id);
-                                  setModalState(() {});
-                                },
-                                padding: EdgeInsets.zero,
-                                constraints: const BoxConstraints(),
-                              ),
-                            ],
-                          ),
-                        );
-                      }),
-                      const SizedBox(height: 16),
-                      Divider(color: Colors.grey.shade200),
-                      const SizedBox(height: 8),
-                    ],
-
-
-
-                    // Task Title Field
-                    Text(
-                      'Task / Lodgement Title',
-                      style: GoogleFonts.poppins(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.black87),
-                    ),
-                    const SizedBox(height: 6),
-                    TextField(
-                      controller: titleController,
-                      style: GoogleFonts.poppins(fontSize: 12),
-                      decoration: InputDecoration(
-                        isDense: true,
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                        hintText: 'e.g., Section 68 Annual Return',
-                        hintStyle: GoogleFonts.poppins(fontSize: 12, color: Colors.grey.shade400),
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-
-                    // Due Date Picker Field
-                    Text(
-                      'Statutory Deadline (Due Date)',
-                      style: GoogleFonts.poppins(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.black87),
-                    ),
-                    const SizedBox(height: 6),
-                    InkWell(
-                      onTap: () async {
-                        final picked = await showDatePicker(
-                          context: context,
-                          initialDate: selectedDueDate,
-                          firstDate: DateTime(2024),
-                          lastDate: DateTime(2035),
-                          builder: (context, child) {
-                            return Theme(
-                              data: Theme.of(context).copyWith(
-                                colorScheme: const ColorScheme.light(
-                                  primary: Color(0xFF062AAE),
-                                ),
-                              ),
-                              child: child!,
-                            );
-                          },
-                        );
-                        if (picked != null) {
-                          setModalState(() {
-                            selectedDueDate = picked;
-                          });
-                        }
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: const Color(0xFF062AAE), width: 1.2),
-                          borderRadius: BorderRadius.circular(10),
-                          color: const Color(0xFF062AAE).withValues(alpha: 0.04),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                const Icon(Icons.calendar_today_rounded, size: 16, color: Color(0xFF062AAE)),
-                                const SizedBox(width: 8),
-                                Text(
-                                  DateFormat('EEEE, dd MMMM yyyy').format(selectedDueDate),
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.bold,
-                                    color: const Color(0xFF062AAE),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Text(
-                              'Change',
-                              style: GoogleFonts.poppins(fontSize: 11, fontWeight: FontWeight.w600, color: const Color(0xFF062AAE)),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-
-                    // Instructions / Subtitle
-                    Text(
-                      'Client Filing Instructions',
-                      style: GoogleFonts.poppins(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.black87),
-                    ),
-                    const SizedBox(height: 6),
-                    TextField(
-                      controller: instructionsController,
-                      maxLines: 2,
-                      style: GoogleFonts.poppins(fontSize: 11),
-                      decoration: InputDecoration(
-                        isDense: true,
-                        hintText: 'Enter filing instructions for client...',
-                        hintStyle: GoogleFonts.poppins(fontSize: 11, color: Colors.grey.shade400),
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-                      ),
-                    ),
-                    const SizedBox(height: 18),
-
-                    // Submit Button
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton.icon(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF062AAE),
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(vertical: 12),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                          elevation: 0,
-                        ),
-                        onPressed: () async {
-                          if (titleController.text.trim().isEmpty) return;
-
-                          await _compService.addOrUpdateTask(
-                            companyName: companyName,
-                            title: titleController.text.trim(),
-                            subtitle: subtitleController.text.trim(),
-                            dueDate: selectedDueDate,
-                            category: selectedCategory,
-                            instructions: instructionsController.text.trim(),
-                          );
-
-                          if (modalCtx.mounted) {
-                            Navigator.pop(modalCtx);
-                          }
-
-                          if (context.mounted) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                backgroundColor: const Color(0xFF059669),
-                                content: Text(
-                                  'Dateline set for $companyName on ${DateFormat('dd MMM yyyy').format(selectedDueDate)}! Pushed to client mobile calendar.',
-                                  style: GoogleFonts.poppins(color: Colors.white, fontSize: 12),
-                                ),
-                                duration: const Duration(seconds: 3),
-                              ),
-                            );
-                          }
-                        },
-                        icon: const Icon(Icons.send_rounded, size: 16),
-                        label: Text(
-                          'Push Dateline to Client Calendar',
-                          style: GoogleFonts.poppins(fontSize: 13, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          },
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
@@ -835,62 +482,40 @@ class _ClientCompaniesTabState extends State<ClientCompaniesTab> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 8),
-                Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2.5),
-                      decoration: BoxDecoration(
-                        color: billingCo.isPaidForMonth
-                            ? const Color(0xFFECFDF5)
-                            : const Color(0xFFFFFBEB),
-                        borderRadius: BorderRadius.circular(5),
-                        border: Border.all(
-                          color: billingCo.isPaidForMonth
-                              ? const Color(0xFFA7F3D0)
-                              : const Color(0xFFFDE68A),
+                if (!billingCo.isPaidForMonth) ...[
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2.5),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFFFFBEB),
+                          borderRadius: BorderRadius.circular(5),
+                          border: Border.all(color: const Color(0xFFFDE68A)),
                         ),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            billingCo.isPaidForMonth
-                                ? Icons.check_circle_rounded
-                                : Icons.warning_amber_rounded,
-                            size: 11,
-                            color: billingCo.isPaidForMonth
-                                ? const Color(0xFF059669)
-                                : const Color(0xFFD97706),
-                          ),
-                          const SizedBox(width: 4),
-                          Text(
-                            billingCo.isPaidForMonth
-                                ? 'May 2026 Plan: Paid (RM 50)'
-                                : 'May 2026 Plan: RM 50 Due',
-                            style: GoogleFonts.poppins(
-                              fontSize: 9.5,
-                              fontWeight: FontWeight.w600,
-                              color: billingCo.isPaidForMonth
-                                  ? const Color(0xFF065F46)
-                                  : const Color(0xFF92400E),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(
+                              Icons.warning_amber_rounded,
+                              size: 11,
+                              color: Color(0xFFD97706),
                             ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    if (billingCo.paymentDate != null) ...[
-                      const SizedBox(width: 6),
-                      Text(
-                        'Paid on ${billingCo.paymentDate}',
-                        style: GoogleFonts.poppins(
-                          fontSize: 9.5,
-                          color: Colors.grey.shade500,
+                            const SizedBox(width: 4),
+                            Text(
+                              'May 2026 Plan: RM 50 Due',
+                              style: GoogleFonts.poppins(
+                                fontSize: 9.5,
+                                fontWeight: FontWeight.w600,
+                                color: const Color(0xFF92400E),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ],
-                  ],
-                ),
+                  ),
+                ],
                 const SizedBox(height: 8),
 
                 // Next Upcoming Statutory Milestone or Empty Placeholder in Grid
@@ -950,55 +575,6 @@ class _ClientCompaniesTabState extends State<ClientCompaniesTab> {
                     ),
                   ),
                 ],
-                const SizedBox(height: 8),
-
-                // Action Buttons
-                Row(
-                  children: [
-                    Expanded(
-                      child: OutlinedButton.icon(
-                        onPressed: () => _showSetDatelineBottomSheet(context, compName),
-                        style: OutlinedButton.styleFrom(
-                          side: BorderSide(color: Colors.grey.shade300),
-                          padding: const EdgeInsets.symmetric(vertical: 6),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                        ),
-                        icon: const Icon(Icons.calendar_month_outlined, size: 13, color: Color(0xFF062AAE)),
-                        label: Text(
-                          companyTasks.isNotEmpty ? '${companyTasks.length} Deadlines' : 'Set Deadline',
-                          style: GoogleFonts.poppins(fontSize: 10.5, fontWeight: FontWeight.w600, color: Colors.black87),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: ElevatedButton.icon(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => CompanyDocumentsFolderPage(companyName: compName),
-                            ),
-                          );
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF062AAE),
-                          foregroundColor: Colors.white,
-                          elevation: 0,
-                          padding: const EdgeInsets.symmetric(vertical: 6),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                        ),
-                        icon: const Icon(Icons.folder_open_rounded, size: 13),
-                        label: Text(
-                          compDocs.isNotEmpty ? '${compDocs.length} Documents' : 'Open Folder',
-                          style: GoogleFonts.poppins(fontSize: 10.5, fontWeight: FontWeight.w600),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
               ],
             ),
           ),

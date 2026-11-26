@@ -5,7 +5,6 @@ import '../tasks/document_needed_page.dart';
 import '../tasks/replies_needed_page.dart';
 import '../transactions/ssm_filing_detail_page.dart';
 import '../more/calendar_page.dart';
-import '../widgets/app_top_header.dart';
 
 class NotificationsPage extends StatefulWidget {
   const NotificationsPage({super.key});
@@ -22,10 +21,8 @@ class _NotificationsPageState extends State<NotificationsPage> {
     return Scaffold(
       backgroundColor: const Color(0xFFFAFAFA),
       body: SafeArea(
-        top: false,
         child: Column(
           children: [
-            const AppTopHeader(showNotificationBell: false),
             Expanded(
               child: AnimatedBuilder(
                 animation: NotificationService.instance,

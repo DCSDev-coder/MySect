@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../home/home_page.dart';
-import '../widgets/custom_bottom_nav_bar.dart';
 import '../services/company_service.dart';
 import '../models/company_model.dart';
 import 'calendar_page.dart';
 import 'company_shares_page.dart';
 import 'company_documents_page.dart';
-import '../widgets/app_top_header.dart';
 
 class CompanyPage extends StatefulWidget {
   const CompanyPage({super.key});
@@ -18,7 +15,6 @@ class CompanyPage extends StatefulWidget {
 }
 
 class _CompanyPageState extends State<CompanyPage> {
-  final int _selectedIndex = 4;
   final CompanyService _companyService = CompanyService.instance;
 
   @override
@@ -35,14 +31,6 @@ class _CompanyPageState extends State<CompanyPage> {
 
   void _onServiceUpdate() {
     if (mounted) setState(() {});
-  }
-
-  void _onItemTapped(int index) {
-    if (index == _selectedIndex) return;
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (context) => HomePage(initialIndex: index)),
-      (route) => false,
-    );
   }
 
   void _copyToClipboard(String text, String label) {
@@ -75,11 +63,8 @@ class _CompanyPageState extends State<CompanyPage> {
     return Scaffold(
       backgroundColor: const Color(0xFFFAFAFA),
       body: SafeArea(
-        top: false,
         child: Column(
           children: [
-            const AppTopHeader(),
-
             const SizedBox(height: 12),
 
             // Header with back button & Sync button
@@ -499,10 +484,6 @@ class _CompanyPageState extends State<CompanyPage> {
             ),
           ],
         ),
-      ),
-      bottomNavigationBar: CustomBottomNavBar(
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
       ),
     );
   }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../home/home_page.dart';
 import '../models/ssm_filing_model.dart';
 import '../models/company_model.dart';
 import '../services/ssm_filing_service.dart';
@@ -8,8 +7,6 @@ import '../services/company_service.dart';
 import '../chat/active_chat_page.dart';
 import '../transactions/ssm_filing_detail_page.dart';
 import '../transactions/submit_ssm_filing_page.dart';
-import '../widgets/app_top_header.dart';
-import '../widgets/custom_bottom_nav_bar.dart';
 
 class CalendarPage extends StatefulWidget {
   const CalendarPage({super.key});
@@ -19,16 +16,7 @@ class CalendarPage extends StatefulWidget {
 }
 
 class _CalendarPageState extends State<CalendarPage> {
-  final int _selectedIndex = 4;
   String _selectedTab = 'Current';
-
-  void _onItemTapped(int index) {
-    if (index == _selectedIndex) return;
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (context) => HomePage(initialIndex: index)),
-      (route) => false,
-    );
-  }
 
   DateTime _parseDate(String dateStr, [DateTime? fallback]) {
     try {
@@ -61,10 +49,8 @@ class _CalendarPageState extends State<CalendarPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        top: false,
         child: Column(
           children: [
-            const AppTopHeader(),
             const SizedBox(height: 12),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -197,10 +183,6 @@ class _CalendarPageState extends State<CalendarPage> {
             ),
           ],
         ),
-      ),
-      bottomNavigationBar: CustomBottomNavBar(
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
       ),
     );
   }

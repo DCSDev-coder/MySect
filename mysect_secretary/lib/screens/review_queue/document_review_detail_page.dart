@@ -1709,28 +1709,30 @@ class _DocumentReviewDetailPageState extends State<DocumentReviewDetailPage> {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                // Reject Button
-                Expanded(
-                  child: OutlinedButton.icon(
-                    style: OutlinedButton.styleFrom(
-                      side: const BorderSide(color: Color(0xFFDC2626)),
-                      foregroundColor: const Color(0xFFDC2626),
-                      padding: const EdgeInsets.symmetric(horizontal: 4),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
+                if (_doc.status != DocumentReviewStatus.approved) ...[
+                  // Reject Button
+                  Expanded(
+                    child: OutlinedButton.icon(
+                      style: OutlinedButton.styleFrom(
+                        side: const BorderSide(color: Color(0xFFDC2626)),
+                        foregroundColor: const Color(0xFFDC2626),
+                        padding: const EdgeInsets.symmetric(horizontal: 4),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      onPressed: _showRejectBottomSheet,
+                      icon: const Icon(Icons.close_rounded, size: 16),
+                      label: Text(
+                        'Reject',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.bold),
                       ),
                     ),
-                    onPressed: _showRejectBottomSheet,
-                    icon: const Icon(Icons.close_rounded, size: 16),
-                    label: Text(
-                      'Reject',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.bold),
-                    ),
                   ),
-                ),
-                const SizedBox(width: 8),
+                  const SizedBox(width: 8),
+                ],
 
                 // Ask Details Button
                 Expanded(

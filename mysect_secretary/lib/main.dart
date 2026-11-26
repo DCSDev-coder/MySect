@@ -15,7 +15,7 @@ class MySectSecretaryApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'MySect Secretary',
+      title: 'Mysect for Secretary',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(

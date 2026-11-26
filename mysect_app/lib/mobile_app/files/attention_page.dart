@@ -179,20 +179,20 @@ class AttentionPage extends StatelessWidget {
         : (doc.reviewDetails?.requestedDetails ?? 'Additional details requested.');
 
     return Container(
-      margin: const EdgeInsets.only(bottom: 16),
-      padding: const EdgeInsets.all(16),
+      margin: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(14),
         border: Border.all(
           color: isRejected ? Colors.red.shade200 : Colors.blue.shade200,
-          width: 1.5,
+          width: 1.2,
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
+            color: Colors.black.withValues(alpha: 0.04),
+            blurRadius: 8,
+            offset: const Offset(0, 3),
           ),
         ],
       ),
@@ -203,48 +203,50 @@ class AttentionPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                 decoration: BoxDecoration(
                   color: isRejected ? Colors.red.shade100 : Colors.blue.shade100,
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(10),
                 ),
                 child: Text(
                   isRejected ? 'Rejected' : 'More Details Needed',
                   style: GoogleFonts.poppins(
                     color: isRejected ? Colors.red.shade800 : Colors.blue.shade800,
-                    fontSize: 10,
+                    fontSize: 9.5,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
               Text(
                 doc.uploadedAt,
-                style: GoogleFonts.poppins(color: Colors.grey[600], fontSize: 12),
+                style: GoogleFonts.poppins(color: Colors.grey[600], fontSize: 11),
               ),
             ],
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 8),
           Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Image.asset('assets/PDF.png', width: 44, height: 44),
-              const SizedBox(width: 14),
+              Image.asset('assets/PDF.png', width: 34, height: 34),
+              const SizedBox(width: 10),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       doc.title,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       style: GoogleFonts.poppins(
                         fontWeight: FontWeight.w700,
-                        fontSize: 14,
+                        fontSize: 13,
                         color: Colors.black,
                       ),
                     ),
-                    const SizedBox(height: 3),
+                    const SizedBox(height: 2),
                     Text(
                       '${doc.fileSize} • ${doc.companyName}',
-                      style: GoogleFonts.poppins(fontSize: 12, color: Colors.grey[600]),
+                      style: GoogleFonts.poppins(fontSize: 11, color: Colors.grey[600]),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -253,12 +255,12 @@ class AttentionPage extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 8),
           Container(
-            padding: const EdgeInsets.all(12),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
             decoration: BoxDecoration(
               color: isRejected ? const Color(0xFFFEF2F2) : const Color(0xFFEFF6FF),
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(8),
               border: Border.all(
                 color: isRejected ? const Color(0xFFFECACA) : const Color(0xFFBFDBFE),
               ),
@@ -270,21 +272,23 @@ class AttentionPage extends StatelessWidget {
                 message: feedback,
                 isRejected: isRejected,
               ),
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(8),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Icon(
                     isRejected ? Icons.error_outline : Icons.help_outline,
-                    size: 18,
+                    size: 16,
                     color: isRejected ? Colors.red.shade700 : const Color(0xFF2563EB),
                   ),
-                  const SizedBox(width: 8),
+                  const SizedBox(width: 6),
                   Expanded(
                     child: Text(
                       'Secretary ($reviewer)',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       style: GoogleFonts.poppins(
-                        fontSize: 12,
+                        fontSize: 11.5,
                         fontWeight: FontWeight.bold,
                         color: isRejected ? Colors.red.shade900 : const Color(0xFF1E40AF),
                       ),
@@ -294,12 +298,12 @@ class AttentionPage extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 8),
           Row(
             children: [
               Expanded(
                 child: SizedBox(
-                  height: 40,
+                  height: 34,
                   child: OutlinedButton.icon(
                     onPressed: () {
                       Navigator.push(
@@ -309,11 +313,11 @@ class AttentionPage extends StatelessWidget {
                         ),
                       );
                     },
-                    icon: const Icon(Icons.visibility_outlined, size: 15),
+                    icon: const Icon(Icons.visibility_outlined, size: 14),
                     label: Text(
                       'View File',
                       style: GoogleFonts.poppins(
-                        fontSize: 12,
+                        fontSize: 11.5,
                         fontWeight: FontWeight.w600,
                       ),
                       maxLines: 1,
@@ -322,16 +326,16 @@ class AttentionPage extends StatelessWidget {
                     style: OutlinedButton.styleFrom(
                       foregroundColor: const Color(0xFF062AAE),
                       side: const BorderSide(color: Color(0xFF062AAE), width: 1.2),
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                     ),
                   ),
                 ),
               ),
-              const SizedBox(width: 10),
+              const SizedBox(width: 8),
               Expanded(
                 child: SizedBox(
-                  height: 40,
+                  height: 34,
                   child: ElevatedButton.icon(
                     onPressed: () async {
                       final result = await FilePicker.pickFile();
@@ -351,11 +355,11 @@ class AttentionPage extends StatelessWidget {
                         );
                       }
                     },
-                    icon: const Icon(Icons.upload_file_rounded, size: 15, color: Colors.white),
+                    icon: const Icon(Icons.upload_file_rounded, size: 14, color: Colors.white),
                     label: Text(
                       'Re-upload',
                       style: GoogleFonts.poppins(
-                        fontSize: 12,
+                        fontSize: 11.5,
                         fontWeight: FontWeight.w600,
                         color: Colors.white,
                       ),

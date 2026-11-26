@@ -48,7 +48,7 @@ class AppTopHeader extends StatelessWidget {
             children: [
               Image.asset(
                 'assets/mysect_logo.png',
-                width: 105,
+                width: 56,
                 fit: BoxFit.contain,
               ),
               if (trailing != null)

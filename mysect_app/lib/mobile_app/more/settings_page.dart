@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../home/home_page.dart';
-import '../widgets/custom_bottom_nav_bar.dart';
 import 'two_factor_auth_page.dart';
 import '../authentication/signup_page.dart';
-import '../widgets/app_top_header.dart';
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
 
@@ -13,19 +10,9 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  final int _selectedIndex = 4;
-
   bool _whatsappEnabled = true;
   bool _emailEnabled = true;
   bool _passcodeEnabled = true;
-
-  void _onItemTapped(int index) {
-    if (index == _selectedIndex) return;
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (context) => HomePage(initialIndex: index)),
-      (route) => false,
-    );
-  }
 
 
 
@@ -258,11 +245,8 @@ class _SettingsPageState extends State<SettingsPage> {
     return Scaffold(
       backgroundColor: const Color(0xFFFAFAFA),
       body: SafeArea(
-        top: false,
         child: Column(
           children: [
-            const AppTopHeader(),
-
             const SizedBox(height: 16),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -442,10 +426,6 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
           ],
         ),
-      ),
-      bottomNavigationBar: CustomBottomNavBar(
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
       ),
     );
   }

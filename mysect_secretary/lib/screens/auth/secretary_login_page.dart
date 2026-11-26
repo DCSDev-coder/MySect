@@ -445,7 +445,7 @@ class _SecretaryLoginPageState extends State<SecretaryLoginPage> {
                       showNotificationBell: false,
                       backgroundColor: Colors.transparent,
                     ),
-                    SizedBox(height: isKeyboardOpen ? 4 : 12),
+                    SizedBox(height: isKeyboardOpen ? 4 : 44),
                     AnimatedContainer(
                       duration: const Duration(milliseconds: 200),
                       curve: Curves.easeOut,

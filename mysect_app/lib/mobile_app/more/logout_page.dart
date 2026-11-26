@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import '../home/home_page.dart';
-import '../widgets/custom_bottom_nav_bar.dart';
-import '../widgets/app_top_header.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../authentication/login_page.dart';
 
@@ -13,26 +10,13 @@ class LogoutPage extends StatefulWidget {
 }
 
 class _LogoutPageState extends State<LogoutPage> {
-  final int _selectedIndex = 4;
-
-  void _onItemTapped(int index) {
-    if (index == _selectedIndex) return;
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (context) => HomePage(initialIndex: index)),
-      (route) => false,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        top: false,
         child: Column(
           children: [
-            const AppTopHeader(),
-
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -166,10 +150,6 @@ class _LogoutPageState extends State<LogoutPage> {
             ),
           ],
         ),
-      ),
-      bottomNavigationBar: CustomBottomNavBar(
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
       ),
     );
   }

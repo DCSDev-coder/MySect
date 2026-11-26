@@ -324,7 +324,7 @@ class _SecretaryForgotPasswordPageState extends State<SecretaryForgotPasswordPag
                       showNotificationBell: false,
                       backgroundColor: Colors.transparent,
                     ),
-                    SizedBox(height: isKeyboardOpen ? 4 : 16),
+                    SizedBox(height: isKeyboardOpen ? 4 : 44),
                     AnimatedContainer(
                       duration: const Duration(milliseconds: 200),
                       curve: Curves.easeOut,

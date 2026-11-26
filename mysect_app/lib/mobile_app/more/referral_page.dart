@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../chat/chat_page.dart';
-import '../home/home_page.dart';
-import '../widgets/app_top_header.dart';
-import '../widgets/custom_bottom_nav_bar.dart';
 
 class _FaqItem {
   final String question;
@@ -25,7 +22,6 @@ class ReferralPage extends StatefulWidget {
 }
 
 class _ReferralPageState extends State<ReferralPage> {
-  final int _selectedIndex = 4;
   final String _referralCode = 'MYSECT-5EST5';
   final String _referralLink = 'https://mysect.com/ref/MYSECT-5EST5';
 
@@ -68,14 +64,6 @@ class _ReferralPageState extends State<ReferralPage> {
     ];
   }
 
-  void _onItemTapped(int index) {
-    if (index == _selectedIndex) return;
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (context) => HomePage(initialIndex: index)),
-      (route) => false,
-    );
-  }
-
   void _copyToClipboard(String text, String label) {
     Clipboard.setData(ClipboardData(text: text)).then((_) {
       if (!mounted) return;
@@ -103,10 +91,8 @@ class _ReferralPageState extends State<ReferralPage> {
     return Scaffold(
       backgroundColor: const Color(0xFFF8FAFC),
       body: SafeArea(
-        top: false,
         child: Column(
           children: [
-            const AppTopHeader(),
             Expanded(
               child: SingleChildScrollView(
                 physics: const AlwaysScrollableScrollPhysics(),
@@ -625,10 +611,6 @@ class _ReferralPageState extends State<ReferralPage> {
             ),
           ],
         ),
-      ),
-      bottomNavigationBar: CustomBottomNavBar(
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
       ),
     );
   }

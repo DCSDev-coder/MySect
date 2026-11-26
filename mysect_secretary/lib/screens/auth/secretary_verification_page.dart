@@ -693,20 +693,20 @@ class _SecretaryVerificationPageState extends State<SecretaryVerificationPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      SizedBox(height: isKeyboardOpen ? 0 : 12),
+                      SizedBox(height: isKeyboardOpen ? 0 : 24),
                       AnimatedContainer(
                         duration: const Duration(milliseconds: 200),
                         curve: Curves.easeOut,
-                        height: isKeyboardOpen ? 0 : 155,
+                        height: isKeyboardOpen ? 0 : 170,
                         clipBehavior: Clip.hardEdge,
                         decoration: const BoxDecoration(),
                         child: OverflowBox(
                           minHeight: 0,
-                          maxHeight: 155,
+                          maxHeight: 170,
                           alignment: Alignment.center,
                           child: Image.asset(
                             'assets/verify_code.png',
-                            height: 155,
+                            height: 170,
                             fit: BoxFit.contain,
                           ),
                         ),

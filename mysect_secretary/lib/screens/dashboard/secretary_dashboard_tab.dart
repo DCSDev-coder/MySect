@@ -265,6 +265,7 @@ class _SecretaryDashboardTabState extends State<SecretaryDashboardTab> {
                   // TOP 4 KPI STAT CARDS
                   LayoutBuilder(
                     builder: (context, constraints) {
+                      final isMobileKpi = constraints.maxWidth < 620;
                       final card1 = _buildKpiCard(
                         icon: Icons.apartment_rounded,
                         value: '4',
@@ -272,6 +273,7 @@ class _SecretaryDashboardTabState extends State<SecretaryDashboardTab> {
                         trendIcon: Icons.trending_up_rounded,
                         trendColor: const Color(0xFF10B981),
                         valueColor: const Color(0xFF0F172A),
+                        isCompact: isMobileKpi,
                         onTap: widget.onNavigateToCompanies ?? () {},
                       );
                       final card2 = _buildKpiCard(
@@ -281,6 +283,7 @@ class _SecretaryDashboardTabState extends State<SecretaryDashboardTab> {
                         trendIcon: Icons.trending_up_rounded,
                         trendColor: const Color(0xFF10B981),
                         valueColor: const Color(0xFF0F172A),
+                        isCompact: isMobileKpi,
                         onTap: widget.onNavigateToQueue,
                       );
                       final card3 = _buildKpiCard(
@@ -290,6 +293,7 @@ class _SecretaryDashboardTabState extends State<SecretaryDashboardTab> {
                         trendIcon: Icons.warning_amber_rounded,
                         trendColor: const Color(0xFFDC2626),
                         valueColor: const Color(0xFFDC2626),
+                        isCompact: isMobileKpi,
                         onTap: widget.onNavigateToQueue,
                       );
                       final card4 = _buildKpiCard(
@@ -299,15 +303,16 @@ class _SecretaryDashboardTabState extends State<SecretaryDashboardTab> {
                         trendIcon: Icons.trending_up_rounded,
                         trendColor: const Color(0xFF10B981),
                         valueColor: const Color(0xFF0F172A),
+                        isCompact: isMobileKpi,
                         onTap: widget.onNavigateToCompanies ?? () {},
                       );
 
-                      if (constraints.maxWidth < 620) {
+                      if (isMobileKpi) {
                         return Column(
                           children: [
-                            Row(children: [card1, const SizedBox(width: 10), card2]),
-                            const SizedBox(height: 10),
-                            Row(children: [card3, const SizedBox(width: 10), card4]),
+                            Row(children: [card1, const SizedBox(width: 8), card2]),
+                            const SizedBox(height: 8),
+                            Row(children: [card3, const SizedBox(width: 8), card4]),
                           ],
                         );
                       }
@@ -382,12 +387,13 @@ class _SecretaryDashboardTabState extends State<SecretaryDashboardTab> {
     required Color trendColor,
     required Color valueColor,
     required VoidCallback onTap,
+    bool isCompact = false,
   }) {
     return Expanded(
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(isCompact ? 12 : 14),
           border: Border.all(color: const Color(0xFFE2E8F0)),
           boxShadow: [
             BoxShadow(
@@ -401,9 +407,12 @@ class _SecretaryDashboardTabState extends State<SecretaryDashboardTab> {
           color: Colors.transparent,
           child: InkWell(
             onTap: onTap,
-            borderRadius: BorderRadius.circular(14),
+            borderRadius: BorderRadius.circular(isCompact ? 12 : 14),
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+              padding: EdgeInsets.symmetric(
+                horizontal: isCompact ? 10 : 12,
+                vertical: isCompact ? 8 : 12,
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -411,34 +420,42 @@ class _SecretaryDashboardTabState extends State<SecretaryDashboardTab> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
-                        width: 32,
-                        height: 32,
+                        width: isCompact ? 26 : 32,
+                        height: isCompact ? 26 : 32,
                         decoration: BoxDecoration(
                           color: const Color(0xFF0F172A),
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(isCompact ? 7 : 8),
                         ),
                         child: Center(
-                          child: Icon(icon, color: Colors.white, size: 16),
+                          child: Icon(
+                            icon,
+                            color: Colors.white,
+                            size: isCompact ? 13 : 16,
+                          ),
                         ),
                       ),
-                      Icon(trendIcon, color: trendColor, size: 20),
+                      Icon(
+                        trendIcon,
+                        color: trendColor,
+                        size: isCompact ? 16 : 20,
+                      ),
                     ],
                   ),
-                  const SizedBox(height: 8),
+                  SizedBox(height: isCompact ? 6 : 8),
                   Text(
                     value,
                     style: GoogleFonts.poppins(
-                      fontSize: 24,
+                      fontSize: isCompact ? 19 : 24,
                       fontWeight: FontWeight.w700,
                       color: valueColor,
                       height: 1,
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: isCompact ? 2 : 4),
                   Text(
                     label,
                     style: GoogleFonts.poppins(
-                      fontSize: 10.5,
+                      fontSize: isCompact ? 10 : 10.5,
                       fontWeight: FontWeight.w500,
                       color: const Color(0xFF64748B),
                       letterSpacing: -0.2,
@@ -532,10 +549,10 @@ class _SecretaryDashboardTabState extends State<SecretaryDashboardTab> {
     );
   }
 
-  // Company Health Card (Distinct Portfolio style with navigation arrows)
+  // Company Status Card (Distinct Portfolio style with navigation arrows)
   Widget _buildCompanyHealthCard(BuildContext context) {
     return _buildSectionCard(
-      title: 'Company Health',
+      title: 'Company Status',
       actionText: 'View all',
       onAction: widget.onNavigateToCompanies,
       content: Column(
@@ -614,33 +631,40 @@ class _SecretaryDashboardTabState extends State<SecretaryDashboardTab> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(
-                padding: const EdgeInsets.all(3),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFF1F5F9),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    _buildSegmentButton(
-                      title: 'Deadlines',
-                      count: '4',
-                      icon: Icons.calendar_month_rounded,
-                      isSelected: _selectedMilestoneTab == 0,
-                      onTap: () => setState(() => _selectedMilestoneTab = 0),
+              Flexible(
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  alignment: Alignment.centerLeft,
+                  child: Container(
+                    padding: const EdgeInsets.all(3),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFF1F5F9),
+                      borderRadius: BorderRadius.circular(8),
                     ),
-                    const SizedBox(width: 4),
-                    _buildSegmentButton(
-                      title: 'My Tasks',
-                      count: '4',
-                      icon: Icons.check_circle_outline_rounded,
-                      isSelected: _selectedMilestoneTab == 1,
-                      onTap: () => setState(() => _selectedMilestoneTab = 1),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        _buildSegmentButton(
+                          title: 'Deadlines',
+                          count: '4',
+                          icon: Icons.calendar_month_rounded,
+                          isSelected: _selectedMilestoneTab == 0,
+                          onTap: () => setState(() => _selectedMilestoneTab = 0),
+                        ),
+                        const SizedBox(width: 4),
+                        _buildSegmentButton(
+                          title: 'My Tasks',
+                          count: '4',
+                          icon: Icons.check_circle_outline_rounded,
+                          isSelected: _selectedMilestoneTab == 1,
+                          onTap: () => setState(() => _selectedMilestoneTab = 1),
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
               ),
+              const SizedBox(width: 8),
               InkWell(
                 onTap: _selectedMilestoneTab == 0
                     ? widget.onNavigateToCompanies
@@ -1056,34 +1080,49 @@ class _SecretaryDashboardTabState extends State<SecretaryDashboardTab> {
     );
   }
 
-  // 3. RECENT ACTIVITY: Distinct Chronological Timeline Trail
+  // 3. RECENT ACTIVITY: Distinct Activity Feed with Icons
   Widget _buildRecentActivityCard({bool showAll = true}) {
     final activities = [
       (
         'Share Transfer marked as completed',
         'Sarah Ahmad',
         '25 Apr, 5:30 PM',
+        Icons.swap_horiz_rounded,
+        const Color(0xFF059669),
+        const Color(0xFFECFDF5),
       ),
       (
         'New director added for Data Center Specialists',
         'Lim Mei Ling',
         '24 Apr, 10:15 PM',
+        Icons.person_add_alt_1_rounded,
+        const Color(0xFF062AAE),
+        const Color(0xFFEFF6FF),
       ),
       (
         'Board Resolution uploaded — C2 Coffee + Candle',
         'Azman bin Ibrahim',
         '23 Apr, 7:00 PM',
+        Icons.description_rounded,
+        const Color(0xFF2563EB),
+        const Color(0xFFEFF6FF),
       ),
       if (showAll) ...[
         (
           'AGM Preparation started for 5Luxe Scents Co.',
           'David Wong',
           '23 Apr, 12:45 AM',
+          Icons.event_note_rounded,
+          const Color(0xFFD97706),
+          const Color(0xFFFEF3C7),
         ),
         (
           'Statutory compliance lock audit — Test Enterprise',
           'Lim Mei Ling',
           '21 Apr, 6:20 PM',
+          Icons.verified_user_rounded,
+          const Color(0xFFDC2626),
+          const Color(0xFFFEE2E2),
         ),
       ],
     ];
@@ -1097,6 +1136,9 @@ class _SecretaryDashboardTabState extends State<SecretaryDashboardTab> {
               title: activities[i].$1,
               author: activities[i].$2,
               time: activities[i].$3,
+              icon: activities[i].$4,
+              iconColor: activities[i].$5,
+              iconBg: activities[i].$6,
               isLast: i == activities.length - 1,
             ),
         ],
@@ -1108,59 +1150,49 @@ class _SecretaryDashboardTabState extends State<SecretaryDashboardTab> {
     required String title,
     required String author,
     required String time,
+    required IconData icon,
+    required Color iconColor,
+    required Color iconBg,
     required bool isLast,
   }) {
-    return IntrinsicHeight(
+    return Padding(
+      padding: EdgeInsets.only(bottom: isLast ? 0 : 12),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Timeline indicator
-          Column(
-            children: [
-              Container(
-                width: 8,
-                height: 8,
-                margin: const EdgeInsets.only(top: 5),
-                decoration: const BoxDecoration(
-                  color: Color(0xFF062AAE),
-                  shape: BoxShape.circle,
-                ),
-              ),
-              if (!isLast)
-                Expanded(
-                  child: Container(
-                    width: 1.5,
-                    color: const Color(0xFFE2E8F0),
-                    margin: const EdgeInsets.symmetric(vertical: 2),
-                  ),
-                ),
-            ],
+          Container(
+            width: 32,
+            height: 32,
+            decoration: BoxDecoration(
+              color: iconBg,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Center(
+              child: Icon(icon, color: iconColor, size: 16),
+            ),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: 10),
           Expanded(
-            child: Padding(
-              padding: EdgeInsets.only(bottom: isLast ? 0 : 12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: GoogleFonts.poppins(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                      color: const Color(0xFF0F172A),
-                    ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: GoogleFonts.poppins(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: const Color(0xFF0F172A),
                   ),
-                  const SizedBox(height: 1),
-                  Text(
-                    '$author • $time',
-                    style: GoogleFonts.poppins(
-                      fontSize: 10.5,
-                      color: const Color(0xFF64748B),
-                    ),
+                ),
+                const SizedBox(height: 1),
+                Text(
+                  '$author • $time',
+                  style: GoogleFonts.poppins(
+                    fontSize: 10.5,
+                    color: const Color(0xFF64748B),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ],
