@@ -308,12 +308,16 @@ class SecretaryProfileTab extends StatelessWidget {
                         children: [
                           Row(
                             children: [
-                              Text(
-                                service.currentPlan.name,
-                                style: GoogleFonts.poppins(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.bold,
-                                  color: const Color(0xFF0F172A),
+                              Flexible(
+                                child: Text(
+                                  service.currentPlan.name,
+                                  style: GoogleFonts.poppins(
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.bold,
+                                    color: const Color(0xFF0F172A),
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ),
                               const SizedBox(width: 6),

@@ -4,7 +4,6 @@ import '../../models/client_document_model.dart';
 import '../../services/secretary_document_service.dart';
 import '../../models/ssm_filing_model.dart';
 import '../../services/secretary_filing_service.dart';
-import '../../widgets/app_top_header.dart';
 import '../../widgets/secretary_sidebar.dart';
 import '../../widgets/secretary_desktop_top_bar.dart';
 import '../shell/main_navigation_shell.dart';
@@ -1297,10 +1296,14 @@ class _DocumentReviewDetailPageState extends State<DocumentReviewDetailPage> {
                     onSync: () => _service.syncFromBackend(),
                   )
                 else ...[
-                  const AppTopHeader(),
                   Container(
                     color: Colors.white,
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                    padding: EdgeInsets.fromLTRB(
+                      16,
+                      MediaQuery.of(context).padding.top + 10,
+                      16,
+                      10,
+                    ),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [

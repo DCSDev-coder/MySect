@@ -1,7 +1,6 @@
 import '../../widgets/secretary_sidebar.dart';
 import '../shell/main_navigation_shell.dart';
 import '../../widgets/secretary_desktop_top_bar.dart';
-import '../../widgets/app_top_header.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -151,70 +150,73 @@ class _CompanyDocumentsFolderPageState
                     isSyncing: _docService.isSyncing,
                     onSync: () => _docService.syncFromBackend(),
                   )
-                else ...[
-                      const AppTopHeader(backgroundColor: Colors.white),
-                      Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
-                          border: Border(
-                            bottom: BorderSide(color: Color(0xFFE2E8F0), width: 1),
+                else
+                  Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.fromLTRB(
+                      16,
+                      MediaQuery.of(context).padding.top + 10,
+                      16,
+                      10,
+                    ),
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      border: Border(
+                        bottom: BorderSide(color: Color(0xFFE2E8F0), width: 1),
+                      ),
+                    ),
+                    child: Row(
+                      children: [
+                        IconButton(
+                          icon: const Icon(
+                            Icons.arrow_back_ios_new_rounded,
+                            size: 18,
+                            color: Color(0xFF0F172A),
+                          ),
+                          onPressed: () => Navigator.pop(context),
+                          padding: EdgeInsets.zero,
+                          constraints: const BoxConstraints(),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Text(
+                            'Back to Companies',
+                            style: GoogleFonts.poppins(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: const Color(0xFF0F172A),
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
-                        child: Row(
-                          children: [
-                            IconButton(
-                              icon: const Icon(
-                                Icons.arrow_back_ios_new_rounded,
-                                size: 18,
-                                color: Color(0xFF0F172A),
-                              ),
-                              onPressed: () => Navigator.pop(context),
-                              padding: EdgeInsets.zero,
-                              constraints: const BoxConstraints(),
-                            ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: Text(
-                                'Back to Companies',
-                                style: GoogleFonts.poppins(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
-                                  color: const Color(0xFF0F172A),
+                        const SizedBox(width: 8),
+                        IconButton(
+                          icon: const Icon(
+                            Icons.sync_rounded,
+                            size: 20,
+                            color: Color(0xFF062AAE),
+                          ),
+                          tooltip: 'Sync Company Vault',
+                          onPressed: () async {
+                            await _docService.syncFromBackend();
+                            if (context.mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    'Synced files for ${widget.companyName}',
+                                    style: GoogleFonts.poppins(fontSize: 12),
+                                  ),
+                                  backgroundColor: const Color(0xFF062AAE),
+                                  duration: const Duration(seconds: 2),
                                 ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                            const SizedBox(width: 8),
-                            IconButton(
-                              icon: const Icon(
-                                Icons.sync_rounded,
-                                size: 20,
-                                color: Color(0xFF062AAE),
-                              ),
-                              tooltip: 'Sync Company Vault',
-                              onPressed: () async {
-                                await _docService.syncFromBackend();
-                                if (context.mounted) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(
-                                        'Synced files for ${widget.companyName}',
-                                        style: GoogleFonts.poppins(fontSize: 12),
-                                      ),
-                                      backgroundColor: const Color(0xFF062AAE),
-                                      duration: const Duration(seconds: 2),
-                                    ),
-                                  );
-                                }
-                              },
-                            ),
-                          ],
+                              );
+                            }
+                          },
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
+                  ),
 
                 // Scrollable Document Content
                 Expanded(
@@ -849,21 +851,23 @@ class _CompanyDocumentsFolderPageState
                       const SizedBox(height: 4),
                       Row(
                         children: [
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                            decoration: BoxDecoration(
-                              color: const Color(0xFFEFF6FF),
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                            child: Text(
-                              doc.category,
-                              style: GoogleFonts.poppins(
-                                fontSize: 9.5,
-                                fontWeight: FontWeight.w600,
-                                color: const Color(0xFF1D4ED8),
+                          Flexible(
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFEFF6FF),
+                                borderRadius: BorderRadius.circular(4),
                               ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
+                              child: Text(
+                                doc.category,
+                                style: GoogleFonts.poppins(
+                                  fontSize: 9.5,
+                                  fontWeight: FontWeight.w600,
+                                  color: const Color(0xFF1D4ED8),
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
                             ),
                           ),
                           if (doc.linkedFilingRef.isNotEmpty) ...[

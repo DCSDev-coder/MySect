@@ -85,50 +85,6 @@ class _SecretaryDashboardTabState extends State<SecretaryDashboardTab> {
                             ],
                           ),
                         ),
-                        if (widget.onNavigateToSubscription != null) ...[
-                          const SizedBox(width: 8),
-                          InkWell(
-                            onTap: widget.onNavigateToSubscription,
-                            borderRadius: BorderRadius.circular(10),
-                            child: Container(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: isMobile ? 10 : 12,
-                                vertical: isMobile ? 6 : 7,
-                              ),
-                              decoration: BoxDecoration(
-                                color: const Color(0xFF062AAE),
-                                borderRadius: BorderRadius.circular(10),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: const Color(0xFF062AAE)
-                                        .withValues(alpha: 0.20),
-                                    blurRadius: 8,
-                                    offset: const Offset(0, 2),
-                                  ),
-                                ],
-                              ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  const Icon(
-                                    Icons.bolt_rounded,
-                                    size: 14,
-                                    color: Colors.white,
-                                  ),
-                                  const SizedBox(width: 4),
-                                  Text(
-                                    'RM 50 / SSM Co.',
-                                    style: GoogleFonts.poppins(
-                                      fontSize: isMobile ? 10.5 : 11.5,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
                       ],
                     ),
                   ),
