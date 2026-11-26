@@ -15,6 +15,55 @@ class SsmFilingService extends ChangeNotifier {
   List<SsmFiling> _filings = [];
   List<SsmFiling> get filings => List.unmodifiable(_filings);
 
+  final Set<String> _readChatIds = {};
+  final Set<String> _manuallyUnreadChatIds = {};
+
+  bool isChatRead(String id) => _readChatIds.contains(id);
+  bool isChatManuallyUnread(String id) => _manuallyUnreadChatIds.contains(id);
+
+  void markChatRead(String id) {
+    _readChatIds.add(id);
+    _manuallyUnreadChatIds.remove(id);
+    notifyListeners();
+  }
+
+  void markChatUnread(String id) {
+    _readChatIds.remove(id);
+    _manuallyUnreadChatIds.add(id);
+    notifyListeners();
+  }
+
+  int unreadCountForFiling(SsmFiling filing) {
+    if (filing.status == SsmFilingStatus.completed ||
+        !filing.messages.any((m) => m.isFromSecretary) ||
+        _readChatIds.contains(filing.id)) {
+      return 0;
+    }
+    int unread = 0;
+    for (int i = filing.messages.length - 1; i >= 0; i--) {
+      if (filing.messages[i].isFromSecretary) {
+        unread++;
+      } else {
+        break;
+      }
+    }
+    if (unread == 0 && _manuallyUnreadChatIds.contains(filing.id)) {
+      unread = 1;
+    }
+    return unread;
+  }
+
+  int get totalUnreadChatsCount {
+    int total = _filings.fold<int>(
+      0,
+      (sum, f) => sum + unreadCountForFiling(f),
+    );
+    if (!_readChatIds.contains('general-support')) {
+      total += 1;
+    }
+    return total;
+  }
+
   int get waitingSecretaryCount =>
       _filings.where((f) => f.status == SsmFilingStatus.waitingSecretaryReview).length;
 
@@ -122,15 +171,6 @@ class SsmFilingService extends ChangeNotifier {
           'Draft_Board_Resolution_Director.docx (420 KB)',
         ],
         messages: [
-          const SsmMessage(
-            id: 'm-03',
-            senderName: 'Adam Bin Hamzah',
-            senderRole: 'Managing Director (Client)',
-            text:
-                'Submitting the appointment documentation for Dato Adam to join the board.',
-            time: '18 Oct 2026, 10:00 AM',
-            isFromSecretary: false,
-          ),
           const SsmMessage(
             id: 'm-04',
             senderName: 'Lim Mei Ling (MIA)',

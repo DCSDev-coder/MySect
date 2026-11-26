@@ -324,7 +324,10 @@ class _SettingsPageState extends State<SettingsPage> {
                               value: _whatsappEnabled,
                               onChanged: (val) =>
                                   setState(() => _whatsappEnabled = val),
-                              activeThumbColor: Colors.black,
+                              activeThumbColor: Colors.white,
+                              activeTrackColor: const Color(0xFF062AAE),
+                              inactiveThumbColor: Colors.white,
+                              inactiveTrackColor: Colors.grey.shade300,
                             ),
                             onTap: () {
                               setState(
@@ -340,7 +343,10 @@ class _SettingsPageState extends State<SettingsPage> {
                               value: _emailEnabled,
                               onChanged: (val) =>
                                   setState(() => _emailEnabled = val),
-                              activeThumbColor: Colors.black,
+                              activeThumbColor: Colors.white,
+                              activeTrackColor: const Color(0xFF062AAE),
+                              inactiveThumbColor: Colors.white,
+                              inactiveTrackColor: Colors.grey.shade300,
                             ),
                             onTap: () {
                               setState(() => _emailEnabled = !_emailEnabled);

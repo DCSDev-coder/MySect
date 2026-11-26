@@ -246,7 +246,7 @@ class _CompanyPageState extends State<CompanyPage> {
                                       ),
                                       const SizedBox(width: 5),
                                       Text(
-                                        'Connected',
+                                        'Active',
                                         style: GoogleFonts.poppins(
                                           color: Colors.white,
                                           fontSize: 10,
@@ -273,41 +273,6 @@ class _CompanyPageState extends State<CompanyPage> {
                               style: GoogleFonts.poppins(
                                 color: Colors.white.withValues(alpha: 0.85),
                                 fontSize: 12,
-                              ),
-                            ),
-                            const SizedBox(height: 12),
-                            Container(
-                              padding: const EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                color: Colors.black.withValues(alpha: 0.15),
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Row(
-                                    children: [
-                                      const Icon(Icons.hub_outlined, color: Colors.white70, size: 14),
-                                      const SizedBox(width: 6),
-                                      Text(
-                                        'Admin Website Platform: Active',
-                                        style: GoogleFonts.poppins(
-                                          color: Colors.white,
-                                          fontSize: 11,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Text(
-                                    'SLA: 98.4%',
-                                    style: GoogleFonts.poppins(
-                                      color: const Color(0xFF34D399),
-                                      fontSize: 11,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
                               ),
                             ),
                           ],

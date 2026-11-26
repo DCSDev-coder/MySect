@@ -33,9 +33,6 @@ class _SignupPageState extends State<SignupPage> {
   Widget build(BuildContext context) {
     return AuthPageShell(
       illustrationAsset: 'assets/signup.png',
-      illustrationTopSpace: 10,
-      illustrationHeight: 160,
-      illustrationBottomSpace: 16,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -239,110 +236,92 @@ class _SignupPageState extends State<SignupPage> {
             ),
           ),
           const SizedBox(height: 16),
-          SizedBox(
-            width: double.infinity,
-            height: 52,
-            child: ElevatedButton(
-              onPressed: () {
-                final name = _nameController.text.trim();
-                final email = _emailController.text.trim();
-                final password = _passwordController.text;
+          AuthPrimaryButton(
+            label: 'Sign Up',
+            onPressed: () {
+              final name = _nameController.text.trim();
+              final email = _emailController.text.trim();
+              final password = _passwordController.text;
 
-                if (name.isEmpty || email.isEmpty || password.isEmpty) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        'Please fill in all fields',
-                        style: GoogleFonts.poppins(color: Colors.white),
-                      ),
-                      backgroundColor: Colors.red,
+              if (name.isEmpty || email.isEmpty || password.isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      'Please fill in all fields',
+                      style: GoogleFonts.poppins(color: Colors.white),
                     ),
-                  );
-                  return;
-                }
-
-                if (!RegExp(
-                  r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
-                ).hasMatch(email)) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        'Please enter a valid email address',
-                        style: GoogleFonts.poppins(color: Colors.white),
-                      ),
-                      backgroundColor: Colors.red,
-                    ),
-                  );
-                  return;
-                }
-
-                if (password.length < 8) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        'Password must be at least 8 characters',
-                        style: GoogleFonts.poppins(color: Colors.white),
-                      ),
-                      backgroundColor: Colors.red,
-                    ),
-                  );
-                  return;
-                }
-
-                if (!RegExp(r'[A-Z]').hasMatch(password)) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        'Password must contain at least 1 capital letter',
-                        style: GoogleFonts.poppins(color: Colors.white),
-                      ),
-                      backgroundColor: Colors.red,
-                    ),
-                  );
-                  return;
-                }
-
-                if (!RegExp(
-                  r'[!@#\$%\^&\*\(\),\.\?":{}|<>]',
-                ).hasMatch(password)) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        'Password must contain at least 1 special character',
-                        style: GoogleFonts.poppins(color: Colors.white),
-                      ),
-                      backgroundColor: Colors.red,
-                    ),
-                  );
-                  return;
-                }
-
-                Navigator.of(context).push(
-                  SlideTransitionRoute(
-                    page: VerificationPage(
-                      email: _emailController.text.trim().isNotEmpty
-                          ? _emailController.text.trim()
-                          : null,
-                    ),
+                    backgroundColor: Colors.red,
                   ),
                 );
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF062AAE),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+                return;
+              }
+
+              if (!RegExp(
+                r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
+              ).hasMatch(email)) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      'Please enter a valid email address',
+                      style: GoogleFonts.poppins(color: Colors.white),
+                    ),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+                return;
+              }
+
+              if (password.length < 8) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      'Password must be at least 8 characters',
+                      style: GoogleFonts.poppins(color: Colors.white),
+                    ),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+                return;
+              }
+
+              if (!RegExp(r'[A-Z]').hasMatch(password)) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      'Password must contain at least 1 capital letter',
+                      style: GoogleFonts.poppins(color: Colors.white),
+                    ),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+                return;
+              }
+
+              if (!RegExp(
+                r'[!@#\$%\^&\*\(\),\.\?":{}|<>]',
+              ).hasMatch(password)) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      'Password must contain at least 1 special character',
+                      style: GoogleFonts.poppins(color: Colors.white),
+                    ),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+                return;
+              }
+
+              Navigator.of(context).push(
+                SlideTransitionRoute(
+                  page: VerificationPage(
+                    email: _emailController.text.trim().isNotEmpty
+                        ? _emailController.text.trim()
+                        : null,
+                  ),
                 ),
-                elevation: 0,
-              ),
-              child: Text(
-                'Sign Up',
-                style: GoogleFonts.poppins(
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-            ),
+              );
+            },
           ),
           const SizedBox(height: 24),
           Center(

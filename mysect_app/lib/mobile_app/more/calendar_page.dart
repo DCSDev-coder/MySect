@@ -5,6 +5,7 @@ import '../models/ssm_filing_model.dart';
 import '../models/company_model.dart';
 import '../services/ssm_filing_service.dart';
 import '../services/company_service.dart';
+import '../chat/active_chat_page.dart';
 import '../transactions/ssm_filing_detail_page.dart';
 import '../transactions/submit_ssm_filing_page.dart';
 import '../widgets/app_top_header.dart';
@@ -189,43 +190,6 @@ class _CalendarPageState extends State<CalendarPage> {
                       },
                     ),
 
-                    const SizedBox(height: 24),
-
-                    // Quick Action: Upload SSM Filing
-                    SizedBox(
-                      width: double.infinity,
-                      child: OutlinedButton.icon(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const SubmitSsmFilingPage(),
-                            ),
-                          );
-                        },
-                        icon: const Icon(
-                          Icons.cloud_upload_outlined,
-                          size: 18,
-                          color: Color(0xFF062AAE),
-                        ),
-                        label: Text(
-                          'Upload New SSM Filing',
-                          style: GoogleFonts.poppins(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w600,
-                            color: const Color(0xFF062AAE),
-                          ),
-                        ),
-                        style: OutlinedButton.styleFrom(
-                          side: const BorderSide(color: Color(0xFF062AAE)),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          padding: const EdgeInsets.symmetric(vertical: 14),
-                        ),
-                      ),
-                    ),
-
                     const SizedBox(height: 32),
                   ],
                 ),
@@ -280,7 +244,6 @@ class _CalendarPageState extends State<CalendarPage> {
           String timeRemaining;
           Color pillBgColor;
           Color pillTextColor;
-          String actionText;
           Color actionColor;
 
           switch (filing.status) {
@@ -288,69 +251,70 @@ class _CalendarPageState extends State<CalendarPage> {
               timeRemaining = 'Action Required';
               pillBgColor = const Color(0xFFFEE2E2);
               pillTextColor = const Color(0xFFDC2626);
-              actionText = 'Update Now';
               actionColor = const Color(0xFFDC2626);
               break;
             case SsmFilingStatus.waitingSecretaryReview:
               timeRemaining = 'Waiting for Secretary';
               pillBgColor = const Color(0xFFFEF3C7);
               pillTextColor = const Color(0xFFD97706);
-              actionText = 'Track Filing';
               actionColor = const Color(0xFF062AAE);
               break;
             case SsmFilingStatus.waitingClientApproval:
               timeRemaining = 'Approval Needed';
               pillBgColor = const Color(0xFFEFF6FF);
               pillTextColor = const Color(0xFF2563EB);
-              actionText = 'Review & Sign';
               actionColor = const Color(0xFF2563EB);
               break;
             case SsmFilingStatus.lodgedToSsm:
               timeRemaining = 'Submitted to SSM';
               pillBgColor = const Color(0xFFF5F3FF);
               pillTextColor = const Color(0xFF7C3AED);
-              actionText = 'Track SSM';
               actionColor = const Color(0xFF7C3AED);
               break;
             case SsmFilingStatus.completed:
               timeRemaining = 'Completed';
               pillBgColor = const Color(0xFFECFDF5);
               pillTextColor = const Color(0xFF059669);
-              actionText = 'View Receipt';
               actionColor = const Color(0xFF059669);
               break;
           }
 
-          // If secretary replied with clarification, show the snippet
-          String? clarificationSnippet;
-          if (filing.status == SsmFilingStatus.secretaryReplied) {
-            final secMsg = filing.messages.lastWhere(
-              (m) => m.isFromSecretary,
-              orElse: () => filing.messages.last,
-            );
-            clarificationSnippet = secMsg.text;
-          }
+          final String conciseSubtitle =
+              filing.status == SsmFilingStatus.secretaryReplied
+                  ? 'Secretary sent a message • ${filing.referenceNo}'
+                  : 'Ref: ${filing.referenceNo}';
 
           return Padding(
-            padding: const EdgeInsets.only(bottom: 16.0),
+            padding: const EdgeInsets.only(bottom: 14.0),
             child: _buildDeadlineCard(
               month: month,
               day: day,
               title: filing.title,
-              subtitle: clarificationSnippet != null
-                  ? 'Secretary Query: $clarificationSnippet'
-                  : 'Statutory filing for ${filing.companyName} (${filing.referenceNo})',
+              subtitle: conciseSubtitle,
               timeRemaining: timeRemaining,
               pillBgColor: pillBgColor,
               pillTextColor: pillTextColor,
-              actionText: actionText,
+              actionText: null,
               actionColor: actionColor,
               onTap: () {
+                final chatMessages = filing.messages
+                    .map(
+                      (m) => ChatMessage(
+                        text: m.text,
+                        fileName: m.attachments.isNotEmpty ? m.attachments.first : null,
+                        isMe: !m.isFromSecretary,
+                        time: m.time,
+                      ),
+                    )
+                    .toList();
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) =>
-                        SsmFilingDetailPage(filingId: filing.id),
+                    builder: (context) => ActiveChatPage(
+                      title: filing.title,
+                      initialMessages: chatMessages,
+                      isResolved: false,
+                    ),
                   ),
                 );
               },
@@ -650,7 +614,7 @@ class _CalendarPageState extends State<CalendarPage> {
     required String timeRemaining,
     Color pillBgColor = const Color(0xFFFFF7A3),
     Color pillTextColor = const Color(0xFFFF8A00),
-    String actionText = 'File Now',
+    String? actionText = 'File Now',
     Color actionColor = const Color(0xFF062AAE),
     VoidCallback? onTap,
   }) {
@@ -751,6 +715,8 @@ class _CalendarPageState extends State<CalendarPage> {
                       const SizedBox(height: 4),
                       Text(
                         subtitle,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.poppins(
                           fontSize: 12,
                           color: Colors.black87,
@@ -803,21 +769,22 @@ class _CalendarPageState extends State<CalendarPage> {
                   ),
                 ),
 
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      actionText,
-                      style: GoogleFonts.poppins(
-                        color: actionColor,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
+                if (actionText != null)
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        actionText,
+                        style: GoogleFonts.poppins(
+                          color: actionColor,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
-                    ),
-                    const SizedBox(width: 4),
-                    Icon(Icons.arrow_forward, color: actionColor, size: 18),
-                  ],
-                ),
+                      const SizedBox(width: 4),
+                      Icon(Icons.arrow_forward, color: actionColor, size: 18),
+                    ],
+                  ),
               ],
             ),
           ],

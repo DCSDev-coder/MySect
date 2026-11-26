@@ -1,6 +1,6 @@
 {
-    "name": "mysect",
-    "short_name": "mysect",
+    "name": "MySect",
+    "short_name": "MySect",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#ffffff",

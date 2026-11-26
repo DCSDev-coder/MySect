@@ -263,40 +263,35 @@ class AttentionPage extends StatelessWidget {
                 color: isRejected ? const Color(0xFFFECACA) : const Color(0xFFBFDBFE),
               ),
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Icon(
-                      isRejected ? Icons.error_outline : Icons.help_outline,
-                      size: 16,
-                      color: isRejected ? Colors.red.shade700 : const Color(0xFF2563EB),
-                    ),
-                    const SizedBox(width: 6),
-                    Expanded(
-                      child: Text(
-                        'Secretary ($reviewer):',
-                        style: GoogleFonts.poppins(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                          color: isRejected ? Colors.red.shade900 : const Color(0xFF1E40AF),
-                        ),
+            child: InkWell(
+              onTap: () => _showFeedbackDialog(
+                context,
+                title: 'Secretary ($reviewer)',
+                message: feedback,
+                isRejected: isRejected,
+              ),
+              borderRadius: BorderRadius.circular(10),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(
+                    isRejected ? Icons.error_outline : Icons.help_outline,
+                    size: 18,
+                    color: isRejected ? Colors.red.shade700 : const Color(0xFF2563EB),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      'Secretary ($reviewer)',
+                      style: GoogleFonts.poppins(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                        color: isRejected ? Colors.red.shade900 : const Color(0xFF1E40AF),
                       ),
                     ),
-                  ],
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  feedback,
-                  style: GoogleFonts.poppins(
-                    fontSize: 12,
-                    color: isRejected ? Colors.red.shade800 : const Color(0xFF1E3A8A),
-                    height: 1.3,
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
           const SizedBox(height: 12),
@@ -456,6 +451,64 @@ class AttentionPage extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  void _showFeedbackDialog(
+    BuildContext context, {
+    required String title,
+    required String message,
+    required bool isRejected,
+  }) {
+    final Color accentColor = isRejected ? Colors.red.shade700 : const Color(0xFF062AAE);
+    showDialog(
+      context: context,
+      builder: (dialogContext) {
+        return AlertDialog(
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          title: Row(
+            children: [
+              Icon(
+                isRejected ? Icons.error_outline : Icons.help_outline,
+                color: accentColor,
+                size: 20,
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  title,
+                  style: GoogleFonts.poppins(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: const Color(0xFF0F172A),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          content: Text(
+            message,
+            style: GoogleFonts.poppins(
+              fontSize: 13,
+              color: const Color(0xFF334155),
+              height: 1.45,
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(dialogContext),
+              child: Text(
+                'Close',
+                style: GoogleFonts.poppins(
+                  fontWeight: FontWeight.w600,
+                  color: accentColor,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

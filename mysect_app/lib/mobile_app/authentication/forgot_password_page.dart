@@ -32,9 +32,6 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   Widget build(BuildContext context) {
     return AuthPageShell(
       illustrationAsset: 'assets/forgot_password.png',
-      illustrationTopSpace: 16,
-      illustrationHeight: 170,
-      illustrationBottomSpace: 16,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -100,44 +97,26 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
             ),
           ),
           const SizedBox(height: 32),
-          SizedBox(
-            width: double.infinity,
-            height: 52,
-            child: ElevatedButton(
-              onPressed: () {
-                final email = _emailController.text.trim();
-                if (email.isEmpty) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        'Please enter your email address.',
-                        style: GoogleFonts.poppins(color: Colors.white),
-                      ),
-                      backgroundColor: Colors.red,
+          AuthPrimaryButton(
+            label: 'Send 6-Digit Code',
+            onPressed: () {
+              final email = _emailController.text.trim();
+              if (email.isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      'Please enter your email address.',
+                      style: GoogleFonts.poppins(color: Colors.white),
                     ),
-                  );
-                  return;
-                }
-                Navigator.of(context).push(
-                  SlideTransitionRoute(page: VerificationPage(email: email)),
+                    backgroundColor: Colors.red,
+                  ),
                 );
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF062AAE),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                elevation: 0,
-              ),
-              child: Text(
-                'Send 6-Digit Code',
-                style: GoogleFonts.poppins(
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-            ),
+                return;
+              }
+              Navigator.of(context).push(
+                SlideTransitionRoute(page: VerificationPage(email: email)),
+              );
+            },
           ),
           const SizedBox(height: 24),
           Center(

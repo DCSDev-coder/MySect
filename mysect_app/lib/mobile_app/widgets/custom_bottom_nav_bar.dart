@@ -97,6 +97,8 @@ class CustomBottomNavBar extends StatelessWidget {
       builder: (context, _) {
         final repliesNeeded =
             SsmFilingService.instance.secretaryRepliesNeededCount;
+        final unreadChats =
+            SsmFilingService.instance.totalUnreadChatsCount;
 
         return Container(
           decoration: BoxDecoration(
@@ -135,6 +137,7 @@ class CustomBottomNavBar extends StatelessWidget {
                     Icons.chat_bubble_outline,
                     Icons.chat_bubble,
                     'Chats',
+                    badgeCount: unreadChats,
                   ),
                   _buildNavItem(4, Icons.more_horiz, Icons.more_horiz, 'More'),
                 ],

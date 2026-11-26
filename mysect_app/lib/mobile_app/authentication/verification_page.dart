@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../home/home_page.dart';
-import '../widgets/app_top_header.dart';
+import 'auth_page_shell.dart';
 
 class VerificationPage extends StatefulWidget {
   final String? email;
@@ -107,158 +107,116 @@ class _VerificationPageState extends State<VerificationPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      resizeToAvoidBottomInset: false,
-      body: SafeArea(
-        top: false,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const AppTopHeader(showNotificationBell: false),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(24.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
+    return AuthPageShell(
+      illustrationAsset: 'assets/verify_code.png',
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const SizedBox(height: 8),
+          Text(
+            'Enter verification code',
+            textAlign: TextAlign.center,
+            style: GoogleFonts.poppins(
+              fontSize: 24,
+              fontWeight: FontWeight.w700,
+              color: Colors.black,
+            ),
+          ),
+          const SizedBox(height: 16),
+          Text(
+            widget.email != null && widget.email!.isNotEmpty
+                ? 'Enter the 6-digit code we sent to\nyour email to verify your account.\n${widget.email}'
+                : 'Enter the 6-digit code we sent to\nyour email to verify your account.',
+            textAlign: TextAlign.center,
+            style: GoogleFonts.poppins(
+              fontSize: 14,
+              color: Colors.grey[700],
+              height: 1.5,
+            ),
+          ),
+          const SizedBox(height: 36),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: List.generate(
+              6,
+              (index) => _buildOtpBox(index),
+            ),
+          ),
+          const SizedBox(height: 36),
+          Center(
+            child: GestureDetector(
+              onTap: _secondsRemaining == 0
+                  ? () {
+                      _startTimer();
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            widget.email != null && widget.email!.isNotEmpty
+                                ? 'A new 6-digit verification code has been sent to ${widget.email}.'
+                                : 'A new 6-digit verification code has been sent to your email.',
+                            style: GoogleFonts.poppins(
+                              color: Colors.white,
+                            ),
+                          ),
+                          backgroundColor: const Color(0xFF062AAE),
+                          duration: const Duration(seconds: 2),
+                        ),
+                      );
+                    }
+                  : null,
+              child: RichText(
+                text: TextSpan(
+                  text: "Didn't receive the code? ",
+                  style: GoogleFonts.poppins(
+                    fontSize: 14,
+                    color: Colors.grey[600],
+                  ),
                   children: [
-                    const Spacer(flex: 1),
-                    Center(
-                      child: Image.asset(
-                        'assets/verify_code.png',
-                        height: 180,
-                        fit: BoxFit.contain,
-                      ),
-                    ),
-                    const SizedBox(height: 24),
-                    Text(
-                      'Enter verification code',
-                      textAlign: TextAlign.center,
-                      style: GoogleFonts.poppins(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.black,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    Text(
-                      widget.email != null && widget.email!.isNotEmpty
-                          ? 'Enter the 6-digit code we sent to\nyour email to verify your account.\n${widget.email}'
-                          : 'Enter the 6-digit code we sent to\nyour email to verify your account.',
-                      textAlign: TextAlign.center,
+                    TextSpan(
+                      text: _secondsRemaining > 0
+                          ? 'Resend code in ${_secondsRemaining}s'
+                          : 'Resend code',
                       style: GoogleFonts.poppins(
                         fontSize: 14,
-                        color: Colors.grey[700],
-                        height: 1.5,
+                        fontWeight: FontWeight.w700,
+                        color: _secondsRemaining > 0
+                            ? Colors.grey[500]
+                            : const Color(0xFF062AAE),
                       ),
                     ),
-                    const SizedBox(height: 40),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: List.generate(
-                        6,
-                        (index) => _buildOtpBox(index),
-                      ),
-                    ),
-                    const SizedBox(height: 40),
-                    Center(
-                      child: GestureDetector(
-                        onTap: _secondsRemaining == 0
-                            ? () {
-                                _startTimer();
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(
-                                      widget.email != null &&
-                                              widget.email!.isNotEmpty
-                                          ? 'A new 6-digit verification code has been sent to ${widget.email}.'
-                                          : 'A new 6-digit verification code has been sent to your email.',
-                                      style: GoogleFonts.poppins(
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    backgroundColor: const Color(0xFF062AAE),
-                                    duration: const Duration(seconds: 2),
-                                  ),
-                                );
-                              }
-                            : null,
-                        child: RichText(
-                          text: TextSpan(
-                            text: "Didn't receive the code? ",
-                            style: GoogleFonts.poppins(
-                              fontSize: 14,
-                              color: Colors.grey[600],
-                            ),
-                            children: [
-                              TextSpan(
-                                text: _secondsRemaining > 0
-                                    ? 'Resend code in ${_secondsRemaining}s'
-                                    : 'Resend code',
-                                style: GoogleFonts.poppins(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w700,
-                                  color: _secondsRemaining > 0
-                                      ? Colors.grey[500]
-                                      : const Color(0xFF062AAE),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 24),
-                    SizedBox(
-                      height: 52,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          final code = _controllers.map((c) => c.text).join();
-                          if (code.length != 6) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(
-                                  'Please enter the 6-digit code',
-                                  style: GoogleFonts.poppins(
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                backgroundColor: Colors.red,
-                              ),
-                            );
-                            return;
-                          }
-                          Navigator.of(context).pushAndRemoveUntil(
-                            MaterialPageRoute(
-                              builder: (context) => const HomePage(),
-                            ),
-                            (route) => false,
-                          );
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF062AAE),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          elevation: 0,
-                        ),
-                        child: Text(
-                          'Verify and continue',
-                          style: GoogleFonts.poppins(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                    const Spacer(flex: 3),
                   ],
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+          const SizedBox(height: 24),
+          AuthPrimaryButton(
+            label: 'Verify and continue',
+            onPressed: () {
+              final code = _controllers.map((c) => c.text).join();
+              if (code.length != 6) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      'Please enter the 6-digit code',
+                      style: GoogleFonts.poppins(
+                        color: Colors.white,
+                      ),
+                    ),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+                return;
+              }
+              Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(
+                  builder: (context) => const HomePage(),
+                ),
+                (route) => false,
+              );
+            },
+          ),
+        ],
       ),
     );
   }

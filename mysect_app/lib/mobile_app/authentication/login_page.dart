@@ -30,9 +30,6 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return AuthPageShell(
       illustrationAsset: 'assets/login.png',
-      illustrationTopSpace: 12,
-      illustrationHeight: 170,
-      illustrationBottomSpace: 16,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -174,92 +171,74 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
           const SizedBox(height: 26),
-          SizedBox(
-            width: double.infinity,
-            height: 52,
-            child: ElevatedButton(
-              onPressed: () {
-                final email = _emailController.text.trim();
-                final password = _passwordController.text;
+          AuthPrimaryButton(
+            label: 'Login',
+            onPressed: () {
+              final email = _emailController.text.trim();
+              final password = _passwordController.text;
 
-                if (email.isEmpty) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        'Please enter email address',
-                        style: GoogleFonts.poppins(color: Colors.white),
-                      ),
-                      backgroundColor: Colors.red,
+              if (email.isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      'Please enter email address',
+                      style: GoogleFonts.poppins(color: Colors.white),
                     ),
-                  );
-                  return;
-                }
-
-                if (password.isEmpty) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        'Please enter password',
-                        style: GoogleFonts.poppins(color: Colors.white),
-                      ),
-                      backgroundColor: Colors.red,
-                    ),
-                  );
-                  return;
-                }
-
-                if (email != 'test@gmail.com') {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        'Account not found with this email',
-                        style: GoogleFonts.poppins(color: Colors.white),
-                      ),
-                      backgroundColor: Colors.red,
-                    ),
-                  );
-                  return;
-                }
-
-                if (password != 'Dtct+1234') {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        'Incorrect password',
-                        style: GoogleFonts.poppins(color: Colors.white),
-                      ),
-                      backgroundColor: Colors.red,
-                    ),
-                  );
-                  return;
-                }
-
-                Navigator.of(context).push(
-                  SlideTransitionRoute(
-                    page: VerificationPage(
-                      email: _emailController.text.trim().isNotEmpty
-                          ? _emailController.text.trim()
-                          : null,
-                    ),
+                    backgroundColor: Colors.red,
                   ),
                 );
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF062AAE),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+                return;
+              }
+
+              if (password.isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      'Please enter password',
+                      style: GoogleFonts.poppins(color: Colors.white),
+                    ),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+                return;
+              }
+
+              if (email != 'test@gmail.com') {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      'Account not found with this email',
+                      style: GoogleFonts.poppins(color: Colors.white),
+                    ),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+                return;
+              }
+
+              if (password != 'Dtct+1234') {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      'Incorrect password',
+                      style: GoogleFonts.poppins(color: Colors.white),
+                    ),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+                return;
+              }
+
+              Navigator.of(context).push(
+                SlideTransitionRoute(
+                  page: VerificationPage(
+                    email: _emailController.text.trim().isNotEmpty
+                        ? _emailController.text.trim()
+                        : null,
+                  ),
                 ),
-                elevation: 0,
-              ),
-              child: Text(
-                'Login',
-                style: GoogleFonts.poppins(
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-            ),
+              );
+            },
           ),
           const SizedBox(height: 24),
           Center(

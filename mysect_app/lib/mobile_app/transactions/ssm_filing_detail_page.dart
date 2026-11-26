@@ -190,42 +190,49 @@ class _SsmFilingDetailPageState extends State<SsmFilingDetailPage> {
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFF5F3FF),
-                        borderRadius: BorderRadius.circular(10),
+                Expanded(
+                  child: Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFF5F3FF),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: const Icon(Icons.approval_rounded, color: Color(0xFF7C3AED), size: 20),
                       ),
-                      child: const Icon(Icons.approval_rounded, color: Color(0xFF7C3AED), size: 20),
-                    ),
-                    const SizedBox(width: 10),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'OFFICIAL LHDN STAMPING',
-                          style: GoogleFonts.poppins(
-                            fontSize: 10,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 0.8,
-                            color: const Color(0xFF7C3AED),
-                          ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'OFFICIAL LHDN STAMPING',
+                              style: GoogleFonts.poppins(
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 0.8,
+                                color: const Color(0xFF7C3AED),
+                              ),
+                            ),
+                            _ExpandableHoverText(
+                              text: filing.stampingCategory ?? 'Document Stamping',
+                              collapsedMaxLines: 1,
+                              style: GoogleFonts.poppins(
+                                fontSize: 13,
+                                fontWeight: FontWeight.bold,
+                                color: const Color(0xFF0F172A),
+                              ),
+                            ),
+                          ],
                         ),
-                        Text(
-                          filing.stampingCategory ?? 'Document Stamping',
-                          style: GoogleFonts.poppins(
-                            fontSize: 13,
-                            fontWeight: FontWeight.bold,
-                            color: const Color(0xFF0F172A),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
+                      ),
+                    ],
+                  ),
                 ),
+                const SizedBox(width: 8),
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                   decoration: BoxDecoration(
@@ -357,7 +364,7 @@ class _SsmFilingDetailPageState extends State<SsmFilingDetailPage> {
                   style: GoogleFonts.poppins(fontSize: 12.5, fontWeight: FontWeight.bold, color: const Color(0xFF0F172A)),
                 ),
                 Text(
-                  'Add LHDN stamp duty adjudication with additional payment.',
+                  'Add LHDN stamp duty adjudication to this submission.',
                   style: GoogleFonts.poppins(fontSize: 11, color: Colors.grey.shade600),
                 ),
               ],
@@ -373,7 +380,7 @@ class _SsmFilingDetailPageState extends State<SsmFilingDetailPage> {
             ),
             onPressed: () => _showAddStampingDialog(filing),
             child: Text(
-              '+ Add (RM 100)',
+              '+ Add',
               style: GoogleFonts.poppins(fontSize: 11, fontWeight: FontWeight.bold),
             ),
           ),
@@ -475,14 +482,14 @@ class _SsmFilingDetailPageState extends State<SsmFilingDetailPage> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              opt['title'] as String,
-                              style: GoogleFonts.poppins(fontSize: 11.5, fontWeight: isSelected ? FontWeight.bold : FontWeight.w500),
+                            Expanded(
+                              child: Text(
+                                opt['title'] as String,
+                                style: GoogleFonts.poppins(fontSize: 11.5, fontWeight: isSelected ? FontWeight.bold : FontWeight.w500),
+                              ),
                             ),
-                            Text(
-                              'RM ${(opt['fee'] as double).toStringAsFixed(2)}',
-                              style: GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.bold, color: const Color(0xFF7C3AED)),
-                            ),
+                            if (isSelected)
+                              const Icon(Icons.check_circle_rounded, size: 16, color: Color(0xFF7C3AED)),
                           ],
                         ),
                       ),
@@ -535,7 +542,7 @@ class _SsmFilingDetailPageState extends State<SsmFilingDetailPage> {
                                 const SizedBox(width: 8),
                                 Expanded(
                                   child: Text(
-                                    'LHDN Stamping added! RM ${fee.toStringAsFixed(2)} processed via $paymentMethod.',
+                                    'LHDN Stamping added via $paymentMethod.',
                                     style: GoogleFonts.poppins(fontSize: 12),
                                   ),
                                 ),
@@ -546,7 +553,7 @@ class _SsmFilingDetailPageState extends State<SsmFilingDetailPage> {
                         );
                       },
                       child: Text(
-                        'Pay RM ${fee.toStringAsFixed(2)} & Attach Stamping',
+                        'Attach Stamping',
                         style: GoogleFonts.poppins(fontSize: 13, fontWeight: FontWeight.bold),
                       ),
                     ),
@@ -1206,6 +1213,45 @@ class _SsmFilingDetailPageState extends State<SsmFilingDetailPage> {
             );
           }),
         ],
+      ),
+    );
+  }
+}
+
+/// Displays [text] truncated to [collapsedMaxLines] by default, showing the full
+/// text in a tooltip on hover and toggling inline expansion when clicked/tapped.
+class _ExpandableHoverText extends StatefulWidget {
+  final String text;
+  final TextStyle style;
+  final int collapsedMaxLines;
+
+  const _ExpandableHoverText({
+    required this.text,
+    required this.style,
+    this.collapsedMaxLines = 1,
+  });
+
+  @override
+  State<_ExpandableHoverText> createState() => _ExpandableHoverTextState();
+}
+
+class _ExpandableHoverTextState extends State<_ExpandableHoverText> {
+  bool _isExpanded = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Tooltip(
+      message: widget.text,
+      waitDuration: const Duration(milliseconds: 250),
+      child: InkWell(
+        onTap: () => setState(() => _isExpanded = !_isExpanded),
+        borderRadius: BorderRadius.circular(4),
+        child: Text(
+          widget.text,
+          maxLines: _isExpanded ? null : widget.collapsedMaxLines,
+          overflow: _isExpanded ? TextOverflow.visible : TextOverflow.ellipsis,
+          style: widget.style,
+        ),
       ),
     );
   }

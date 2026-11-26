@@ -5,6 +5,59 @@ import 'package:image_picker/image_picker.dart';
 
 import '../services/secretary_document_service.dart';
 import '../services/company_service.dart';
+import 'unsorted_page.dart';
+
+void _handleUploadedFile(
+  BuildContext context, {
+  required String fileName,
+  required String category,
+  required String fileSize,
+  required String notes,
+  String? targetFolder,
+}) {
+  if (!context.mounted) return;
+  final activeComp = CompanyService.instance.selectedCompany;
+  final destinationFolder = targetFolder ?? 'Unsorted';
+
+  SecretaryDocumentService.instance.addClientDocument(
+    title: fileName,
+    category: category,
+    fileSize: fileSize,
+    companyId: activeComp?.id ?? 'comp-01',
+    companyName: activeComp?.name ?? 'Data Center Specialists Sdn Bhd (M)',
+    companySsmNo: activeComp?.ssmNo ?? '202101039281 (1429581-X)',
+    uploadedBy: 'Adam Bin Hamzah',
+    uploadedByRole: 'Managing Director (Client)',
+    notes: notes,
+    folder: destinationFolder,
+  );
+
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text(
+        targetFolder != null
+            ? '$fileName uploaded to $targetFolder'
+            : '$fileName uploaded to Unsorted',
+        style: GoogleFonts.poppins(),
+      ),
+      backgroundColor: const Color(0xFF062AAE),
+      action: targetFolder == null
+          ? SnackBarAction(
+              label: 'Sort Now',
+              textColor: Colors.white,
+              onPressed: () {
+                if (context.mounted) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const UnsortedPage()),
+                  );
+                }
+              },
+            )
+          : null,
+    ),
+  );
+}
 
 void showAddMenu(
   BuildContext context, {
@@ -66,27 +119,15 @@ void showAddMenu(
                       onFilePicked(fileName, 'Photo Library');
                       return;
                     }
-                    if (context.mounted) {
-                      final activeComp = CompanyService.instance.selectedCompany;
-                      SecretaryDocumentService.instance.addClientDocument(
-                        title: fileName,
-                        category: targetFolder != null ? '$targetFolder Document' : 'Supporting Document',
-                        fileSize: '1.8 MB',
-                        companyId: activeComp?.id ?? 'comp-01',
-                        companyName: activeComp?.name ?? 'Data Center Specialists Sdn Bhd (M)',
-                        companySsmNo: activeComp?.ssmNo ?? '202101039281 (1429581-X)',
-                        uploadedBy: 'Adam Bin Hamzah',
-                        uploadedByRole: 'Managing Director (Client)',
-                        notes: 'Uploaded from photo library for secretary review.',
-                        folder: targetFolder,
-                      );
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('$fileName uploaded & queued for Secretary review', style: GoogleFonts.poppins()),
-                          backgroundColor: const Color(0xFF062AAE),
-                        ),
-                      );
-                    }
+                    if (!context.mounted) return;
+                    _handleUploadedFile(
+                      context,
+                      fileName: fileName,
+                      category: targetFolder != null ? '$targetFolder Document' : 'Supporting Document',
+                      fileSize: '1.8 MB',
+                      notes: 'Uploaded from photo library for secretary review.',
+                      targetFolder: targetFolder,
+                    );
                   },
                 ),
                 _buildUploadOption(
@@ -111,27 +152,15 @@ void showAddMenu(
                       onFilePicked(fileName, 'Uploaded Document');
                       return;
                     }
-                    if (context.mounted) {
-                      final activeComp = CompanyService.instance.selectedCompany;
-                      SecretaryDocumentService.instance.addClientDocument(
-                        title: fileName,
-                        category: targetFolder != null ? '$targetFolder Document' : 'Corporate Document',
-                        fileSize: '1.4 MB',
-                        companyId: activeComp?.id ?? 'comp-01',
-                        companyName: activeComp?.name ?? 'Data Center Specialists Sdn Bhd (M)',
-                        companySsmNo: activeComp?.ssmNo ?? '202101039281 (1429581-X)',
-                        uploadedBy: 'Adam Bin Hamzah',
-                        uploadedByRole: 'Managing Director (Client)',
-                        notes: 'Uploaded by client via MySect Mobile App.',
-                        folder: targetFolder,
-                      );
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('Uploaded $fileName - sent to Secretary for review', style: GoogleFonts.poppins()),
-                          backgroundColor: const Color(0xFF062AAE),
-                        ),
-                      );
-                    }
+                    if (!context.mounted) return;
+                    _handleUploadedFile(
+                      context,
+                      fileName: fileName,
+                      category: targetFolder != null ? '$targetFolder Document' : 'Corporate Document',
+                      fileSize: '1.4 MB',
+                      notes: 'Uploaded by client via MySect Mobile App.',
+                      targetFolder: targetFolder,
+                    );
                   },
                 ),
                 _buildUploadOption(
@@ -140,16 +169,18 @@ void showAddMenu(
                   label: 'Scan',
                   onTap: () {
                     Navigator.pop(sheetContext);
+                    final scannedName = 'Scanned_Doc_${DateTime.now().millisecondsSinceEpoch % 10000}.pdf';
                     if (onFilePicked != null) {
-                      final scannedName = 'Scanned_Doc_${DateTime.now().millisecondsSinceEpoch % 10000}.pdf';
                       onFilePicked(scannedName, 'Scanned Document');
                       return;
                     }
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('Opening scanner...', style: GoogleFonts.poppins()),
-                        backgroundColor: const Color(0xFF062AAE),
-                      ),
+                    _handleUploadedFile(
+                      context,
+                      fileName: scannedName,
+                      category: targetFolder != null ? '$targetFolder Document' : 'Scanned Document',
+                      fileSize: '1.2 MB',
+                      notes: 'Scanned via MySect Mobile App.',
+                      targetFolder: targetFolder,
                     );
                   },
                 ),

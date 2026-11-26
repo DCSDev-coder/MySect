@@ -12,6 +12,27 @@ void main() {
     expect(find.byType(LoadingPage), findsOneWidget);
   });
 
+  testWidgets('LoadingPage plays sticker application animation and triggers onLoaded', (WidgetTester tester) async {
+    var loaded = false;
+    await tester.pumpWidget(
+      MaterialApp(
+        home: LoadingPage(
+          duration: const Duration(milliseconds: 1000),
+          onLoaded: () => loaded = true,
+        ),
+      ),
+    );
+
+    expect(find.byType(Image), findsAtLeastNWidgets(2));
+    expect(loaded, isFalse);
+
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(loaded, isFalse);
+
+    await tester.pump(const Duration(milliseconds: 550));
+    expect(loaded, isTrue);
+  });
+
   testWidgets('Tapping Log out in MorePage shows confirmatory popup', (WidgetTester tester) async {
     await tester.pumpWidget(
       const MaterialApp(
@@ -67,5 +88,33 @@ void main() {
     await tester.pump(const Duration(milliseconds: 1000));
     await tester.pump();
     expect(find.byType(RepeatingStrokeLogoLoader), findsNothing);
+  });
+
+  testWidgets('HomePage lays out REQUIRED TASKS responsively on desktop width', (WidgetTester tester) async {
+    tester.view.physicalSize = const Size(1200, 900);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: HomePage(),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('Request LHDN Document Stamping'), findsOneWidget);
+    expect(find.text('File That Needs to be Submitted'), findsOneWidget);
+    expect(find.text('Waiting for Secretary Review'), findsOneWidget);
+    expect(find.text('Secretary Replies (Action Needed)'), findsOneWidget);
+
+    // On 1200px desktop width, first 3 cards share the same row (same top Y)
+    final y1 = tester.getTopLeft(find.text('Request LHDN Document Stamping')).dy;
+    final y2 = tester.getTopLeft(find.text('File That Needs to be Submitted')).dy;
+    final y3 = tester.getTopLeft(find.text('Waiting for Secretary Review')).dy;
+    final y4 = tester.getTopLeft(find.text('Secretary Replies (Action Needed)')).dy;
+    expect((y1 - y2).abs(), lessThan(12.0));
+    expect((y2 - y3).abs(), lessThan(12.0));
+    expect(y4, greaterThan(y1));
   });
 }

@@ -36,7 +36,10 @@ class _UnsortedPageState extends State<UnsortedPage> {
     });
   }
 
-  void _showMoveBottomSheet() {
+  void _showMoveBottomSheet({List<String>? docIds}) {
+    final targetIds = docIds ?? _selectedDocIds.toList();
+    if (targetIds.isEmpty) return;
+
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.white,
@@ -79,7 +82,7 @@ class _UnsortedPageState extends State<UnsortedPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Move ${_selectedDocIds.length} files',
+                          'Move ${targetIds.length} ${targetIds.length == 1 ? 'file' : 'files'}',
                           style: GoogleFonts.poppins(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
@@ -99,13 +102,13 @@ class _UnsortedPageState extends State<UnsortedPage> {
                 ],
               ),
               const SizedBox(height: 24),
-              _buildMoveOption('Personal', 'Individual files, IC & director records', Icons.person_outline),
+              _buildMoveOption('Personal', 'Individual files, IC & director records', Icons.person_outline, targetIds),
               const SizedBox(height: 12),
-              _buildMoveOption('Corporate', 'Business, SSM & returns', Icons.business_outlined),
+              _buildMoveOption('Corporate', 'Business, SSM & returns', Icons.business_outlined, targetIds),
               const SizedBox(height: 12),
-              _buildMoveOption('Accounting', 'Financial & tax statements, invoices', Icons.account_balance_wallet_outlined),
+              _buildMoveOption('Accounting', 'Financial & tax statements, invoices', Icons.account_balance_wallet_outlined, targetIds),
               const SizedBox(height: 12),
-              _buildMoveOption('Other', 'Agreements, tenancy & miscellaneous', Icons.folder_open_outlined),
+              _buildMoveOption('Other', 'Agreements, tenancy & miscellaneous', Icons.folder_open_outlined, targetIds),
             ],
           ),
         );
@@ -113,11 +116,11 @@ class _UnsortedPageState extends State<UnsortedPage> {
     );
   }
 
-  Widget _buildMoveOption(String title, String subtitle, IconData icon) {
+  Widget _buildMoveOption(String title, String subtitle, IconData icon, List<String> targetIds) {
     return InkWell(
       onTap: () {
-        final count = _selectedDocIds.length;
-        SecretaryDocumentService.instance.moveDocuments(_selectedDocIds.toList(), title);
+        final count = targetIds.length;
+        SecretaryDocumentService.instance.moveDocuments(targetIds, title);
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -132,7 +135,7 @@ class _UnsortedPageState extends State<UnsortedPage> {
         );
         setState(() {
           _isSelectionMode = false;
-          _selectedDocIds.clear();
+          _selectedDocIds.removeAll(targetIds);
         });
       },
       borderRadius: BorderRadius.circular(16),

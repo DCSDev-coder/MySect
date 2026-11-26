@@ -136,12 +136,14 @@ class _HomePageState extends State<HomePage> {
     required String title,
     required String subtitle,
     VoidCallback? onTap,
+    EdgeInsetsGeometry margin = const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+    bool isCompact = false,
   }) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        padding: const EdgeInsets.all(16),
+        margin: margin,
+        padding: EdgeInsets.all(isCompact ? 14 : 16),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
@@ -156,8 +158,8 @@ class _HomePageState extends State<HomePage> {
         child: Row(
           children: [
             Container(
-              width: 40,
-              height: 40,
+              width: isCompact ? 36 : 40,
+              height: isCompact ? 36 : 40,
               decoration: BoxDecoration(
                 color: color.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(8),
@@ -166,40 +168,96 @@ class _HomePageState extends State<HomePage> {
                 child: Text(
                   number,
                   style: GoogleFonts.poppins(
-                    fontSize: 18,
+                    fontSize: isCompact ? 15 : 18,
                     fontWeight: FontWeight.bold,
                     color: color,
                   ),
                 ),
               ),
             ),
-            const SizedBox(width: 16),
+            SizedBox(width: isCompact ? 12 : 16),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     title,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                     style: GoogleFonts.poppins(
-                      fontSize: 16,
+                      fontSize: isCompact ? 14 : 16,
                       fontWeight: FontWeight.w600,
                       color: Colors.black,
                     ),
                   ),
+                  const SizedBox(height: 2),
                   Text(
                     subtitle,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                     style: GoogleFonts.poppins(
-                      fontSize: 12,
-                      color: Colors.black,
+                      fontSize: isCompact ? 11.5 : 12,
+                      color: Colors.black87,
                     ),
                   ),
                 ],
               ),
             ),
+            const SizedBox(width: 4),
             Icon(Icons.chevron_right, color: Colors.blue.shade900),
           ],
         ),
       ),
+    );
+  }
+
+  /// Lays out task cards in 1 column on mobile, 2 on tablet (>= 600px),
+  /// and 3 on desktop (>= 1000px).
+  Widget _buildResponsiveTaskGrid(List<Widget Function(bool isCompact)> cardBuilders) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final double width = constraints.maxWidth;
+        final int columns = width >= 1000 ? 3 : (width >= 600 ? 2 : 1);
+
+        if (columns == 1) {
+          return Column(
+            children: cardBuilders.map((buildCard) => buildCard(false)).toList(),
+          );
+        }
+
+        final List<Widget> rows = [];
+        for (int i = 0; i < cardBuilders.length; i += columns) {
+          final List<Widget> rowChildren = [];
+          for (int col = 0; col < columns; col++) {
+            final int index = i + col;
+            if (col > 0) {
+              rowChildren.add(const SizedBox(width: 12));
+            }
+            if (index < cardBuilders.length) {
+              rowChildren.add(Expanded(child: cardBuilders[index](true)));
+            } else {
+              rowChildren.add(const Expanded(child: SizedBox.shrink()));
+            }
+          }
+          rows.add(
+            Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: IntrinsicHeight(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: rowChildren,
+                ),
+              ),
+            ),
+          );
+        }
+
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Column(children: rows),
+        );
+      },
     );
   }
 
@@ -395,6 +453,10 @@ class _HomePageState extends State<HomePage> {
 
     final isExpired = comp.isSubscriptionExpired;
     final isExpiringSoon = comp.isSubscriptionExpiringSoon;
+    // Keep Home uncluttered when the plan is active; only surface the banner
+    // at the top when action is needed (expiring soon or expired).
+    if (!isExpired && !isExpiringSoon) return const SizedBox.shrink();
+
     final days = comp.daysUntilSubscriptionExpiry;
 
     Color bgColor;
@@ -411,7 +473,7 @@ class _HomePageState extends State<HomePage> {
       badgeBg = const Color(0xFFFEE2E2);
       badgeText = const Color(0xFFB91C1C);
       badgeTitle = 'EXPIRED • HANDLING SUSPENDED';
-      icon = Icons.cancel_schedule_send_rounded;
+      icon = Icons.payments_rounded;
       iconColor = const Color(0xFFDC2626);
     } else if (isExpiringSoon) {
       bgColor = const Color(0xFFFFFBEB);
@@ -876,11 +938,15 @@ class _HomePageState extends State<HomePage> {
                         ),
                       )
                     else ...[
-                      const SizedBox(height: 12),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                        child: _buildSecretarialPlanCard(_companyService.selectedCompany),
-                      ),
+                      if (_companyService.selectedCompany != null &&
+                          (_companyService.selectedCompany!.isSubscriptionExpired ||
+                              _companyService.selectedCompany!.isSubscriptionExpiringSoon)) ...[
+                        const SizedBox(height: 12),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: _buildSecretarialPlanCard(_companyService.selectedCompany),
+                        ),
+                      ],
                       const SizedBox(height: 16),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -946,22 +1012,23 @@ class _HomePageState extends State<HomePage> {
                             calendarBuilders: CalendarBuilders(
                               markerBuilder: (context, date, events) {
                                 if (events.isNotEmpty) {
-                                  return Positioned(
-                                    right: 6,
-                                    top: 6,
-                                    child: Container(
-                                      width: 8,
-                                      height: 8,
-                                      decoration: const BoxDecoration(
-                                        color: Color(0xFFD71920),
-                                        shape: BoxShape.circle,
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: Colors.black26,
-                                            blurRadius: 2,
-                                            offset: Offset(0, 1),
-                                          ),
-                                        ],
+                                  return Center(
+                                    child: Transform.translate(
+                                      offset: const Offset(13, -10),
+                                      child: Container(
+                                        width: 7,
+                                        height: 7,
+                                        decoration: const BoxDecoration(
+                                          color: Color(0xFFD71920),
+                                          shape: BoxShape.circle,
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: Colors.black26,
+                                              blurRadius: 2,
+                                              offset: Offset(0, 1),
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   );
@@ -1061,67 +1128,85 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                       const SizedBox(height: 8),
-                      _buildTaskCard(
-                        number: 'RM',
-                        color: const Color(0xFF7C3AED),
-                        title: 'Request LHDN Document Stamping',
-                        subtitle: 'Official stamp duty adjudication & certificate',
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const SubmitSsmFilingPage(
-                                initialFilingType: 'LHDN Document Stamping',
-                                initialTitle: 'Official LHDN Document Stamping Service',
-                                initialDescription: 'Commercial agreement or share transfer instrument for LHDN digital stamp certificate.',
-                              ),
+                      _buildResponsiveTaskGrid([
+                        (isCompact) => _buildTaskCard(
+                              number: 'RM',
+                              color: const Color(0xFF7C3AED),
+                              title: 'Request LHDN Document Stamping',
+                              subtitle: 'Official stamp duty adjudication & certificate',
+                              margin: isCompact
+                                  ? EdgeInsets.zero
+                                  : const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                              isCompact: isCompact,
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const SubmitSsmFilingPage(
+                                      initialFilingType: 'LHDN Document Stamping',
+                                      initialTitle: 'Official LHDN Document Stamping Service',
+                                      initialDescription:
+                                          'Commercial agreement or share transfer instrument for LHDN digital stamp certificate.',
+                                    ),
+                                  ),
+                                );
+                              },
                             ),
-                          );
-                        },
-                      ),
-
-                      _buildTaskCard(
-                        number: '1',
-                        color: const Color(0xFF062AAE),
-                        title: 'File That Needs to be Submitted',
-                        subtitle: 'Upload files for secretary review',
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const SubmitSsmFilingPage(),
+                        (isCompact) => _buildTaskCard(
+                              number: '1',
+                              color: const Color(0xFF062AAE),
+                              title: 'File That Needs to be Submitted',
+                              subtitle: 'Upload files for secretary review',
+                              margin: isCompact
+                                  ? EdgeInsets.zero
+                                  : const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                              isCompact: isCompact,
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const SubmitSsmFilingPage(),
+                                  ),
+                                );
+                              },
                             ),
-                          );
-                        },
-                      ),
-                      _buildTaskCard(
-                        number: '${SsmFilingService.instance.waitingSecretaryCount}',
-                        color: Colors.blue.shade700,
-                        title: 'Waiting for Secretary Review',
-                        subtitle: 'Files sent to your secretary for review',
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const DocumentNeededPage(),
+                        (isCompact) => _buildTaskCard(
+                              number: '${SsmFilingService.instance.waitingSecretaryCount}',
+                              color: Colors.blue.shade700,
+                              title: 'Waiting for Secretary Review',
+                              subtitle: 'Files sent to your secretary for review',
+                              margin: isCompact
+                                  ? EdgeInsets.zero
+                                  : const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                              isCompact: isCompact,
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const DocumentNeededPage(),
+                                  ),
+                                );
+                              },
                             ),
-                          );
-                        },
-                      ),
-                      _buildTaskCard(
-                        number: '${SsmFilingService.instance.secretaryRepliesNeededCount}',
-                        color: Colors.red.shade400,
-                        title: 'Secretary Replies (Action Needed)',
-                        subtitle: 'Clarifications & missing docs requested',
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const RepliesNeededPage(),
+                        (isCompact) => _buildTaskCard(
+                              number: '${SsmFilingService.instance.secretaryRepliesNeededCount}',
+                              color: Colors.red.shade400,
+                              title: 'Secretary Replies (Action Needed)',
+                              subtitle: 'Clarifications & missing docs requested',
+                              margin: isCompact
+                                  ? EdgeInsets.zero
+                                  : const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                              isCompact: isCompact,
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const RepliesNeededPage(),
+                                  ),
+                                );
+                              },
                             ),
-                          );
-                        },
-                      ),
+                      ]),
                       const SizedBox(height: 32),
                       Center(
                         child: Text(
